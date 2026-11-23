@@ -54,7 +54,7 @@ Nothing is shared with calnkt: own logins, own databases, own file storage.
 ## Rules
 - Changes to the production databases need Brian's explicit OK in the conversation first.
 - Never show the word "subcontractor" (English or Thai); a test enforces this. Say "site team".
-- Never paste or ask for passwords, keys or tokens. Brian's own setup code comes from `tools/setup/owner-setup-code.mjs`, run by him.
+- Never paste or ask for passwords, keys or tokens. Brian's own setup code comes from `tools/setup/owner-first-login.mjs`, run by him.
 - No email or LINE notifications from the site.
 - The live people list is in the database (Admin page). Starting list (23 Nov 2026): SPP Brian, Ming, Keng, Praew, Boss;
   Caltex Thada (PM, "P.Ex"), Oat, Bas. `tasks/src/roster.mjs` is NTI test data only.

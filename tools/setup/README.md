@@ -22,7 +22,7 @@ BRIAN does once (about 10 minutes):
   4. R2 -> calwwt-backups -> Settings -> Bucket lock: 90 days (same as calnkt).
   5. Your own login: in this repository folder on your computer (PowerShell)
        npx wrangler login
-       node tools/setup/owner-setup-code.mjs
+       node tools/setup/owner-first-login.mjs
      It shows a one-time code on your screen. Open https://calwwt.sppwork.com/sign-in.html -> "setup code",
      choose username brian and your new password. Then Account -> set up 2-step (needed for Admin changes).
   6. Admin page -> People & logins: make logins for Ming, Keng, Praew, Boss, Thada, Oat, Bas (each gets a setup code).
