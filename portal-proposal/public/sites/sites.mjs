@@ -35,5 +35,7 @@ async function main() {
     const ul = el('ul'); for (const n of s.notes[l]) ul.append(el('li', null, n)); a.append(ul);
     grid.append(a);
   }
+  // Map above the cards (map.mjs). If it cannot load (no connection to the map pictures), the cards still work.
+  import('/sites/map.mjs').then((m) => m.showMap(document.getElementById('map'), data.sites, l)).catch((e) => { console.warn('map', e); document.getElementById('map').hidden = true; });
 }
 main().catch((e) => { console.warn('sites', e); });

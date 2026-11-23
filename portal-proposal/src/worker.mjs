@@ -5,7 +5,7 @@ import software from './software.mjs';
 import {releaseObject} from './release-object.mjs';
 import {routeTasks,stagingSetup} from './tasks-portal.mjs';
 import {siteAccess,landingPath,VIEW_AS_COOKIE,signViewAs} from './site-access.mjs';
-import {routeSites} from './sites.mjs';
+import {routeSites,SITES_CSP} from './sites.mjs';
 import {gate} from '../../schedule/gate-core.mjs';
 import {routeFiles} from './files.mjs';
 import {routeTrackers} from './trackers.mjs';
@@ -404,7 +404,7 @@ export function createHandler(authenticateOverride=authenticate) {
         return secure(await env.ASSETS.fetch(new Request(target,request)));
       }
       // Sites (calwwt): the 8 Caltex sites, each with its 3D model, timeline, photos and notes. See src/sites.mjs.
-      {const sitesResponse=await routeSites(request,env,actor,access);if(sitesResponse)return secure(sitesResponse);}
+      {const sitesResponse=await routeSites(request,env,actor,access);if(sitesResponse)return secure(sitesResponse,p0.startsWith('/api/')?undefined:SITES_CSP);}
       // Project files: /files (screens) and /api/files (list, upload, download). Own checks inside; see src/files.mjs.
       if(p0==='/files'||p0.startsWith('/files/')||p0==='/api/files'||p0.startsWith('/api/files/')){
         // The viewer and Excel code (no data) is also used by Safety -> HES plan and the tracker downloads

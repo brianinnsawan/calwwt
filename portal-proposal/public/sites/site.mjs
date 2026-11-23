@@ -49,7 +49,12 @@ async function main() {
     $('hNotes').textContent = w.notes;
     for (const n of site.notes[l]) $('notes').append(el('li', {}, n));
     link('/sites/', '← ' + w.all);
+    if (Number.isFinite(site.lat)) {
+      const a = el('a', { href: `https://www.google.com/maps?q=${site.lat},${site.lng}`, target: '_blank', rel: 'noopener' }, 'Google Maps ↗');
+      links.append(a);
+    }
     for (const x of site.links || []) link(x.href, x[l] || x.en);
+    if (site.company) $('sub').textContent += ` · ${site.company}`;
   }
   link('/files/', w.files); link('/tasks.html', w.tasks); link('/meetings/', w.meetings);
 

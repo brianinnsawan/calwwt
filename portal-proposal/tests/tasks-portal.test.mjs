@@ -266,6 +266,10 @@ test('Admin page: page levels per group and person, enforced by the server', asy
   assert.equal(sites.status, 200);
   assert.equal(await sites.text(), 'portal asset /sites/index.html');
   assert.match(sites.headers.get('content-security-policy'), /script-src 'self' 'wasm-unsafe-eval';/);
+  // Map pictures (OpenStreetMap) are allowed on the Sites pages only.
+  assert.match(sites.headers.get('content-security-policy'), /img-src 'self' data: blob: https:\/\/tile\.openstreetmap\.org;/);
+  assert.doesNotMatch((await w.handler(get('/files/', brian, 'text/html'), w.env)).headers.get('content-security-policy') || '', /openstreetmap/);
+  assert.doesNotMatch((await w.handler(get('/tasks.html', brian, 'text/html'), w.env)).headers.get('content-security-policy'), /openstreetmap/);
   assert.equal(await (await w.handler(get('/sites/1703/', brian, 'text/html'), w.env)).text(), 'portal asset /sites/site.html');
   assert.equal(await (await w.handler(get('/sites/programme/', brian, 'text/html'), w.env)).text(), 'portal asset /sites/site.html');
   const bare = await w.handler(get('/sites/1703', brian, 'text/html'), w.env);
@@ -535,6 +539,7 @@ test('Sites data: 8 sites, starting timelines valid, every layout has its PDF an
   for (const code of [...SITE_CODES, 'all']) assert.ok(validTimeline(JSON.parse(readFileSync(new URL(`../public/sites/data/timelines/${code}.json`, import.meta.url), 'utf8'))), code);
   for (const s of data.sites) {
     assert.ok(s.name.en && s.name.th && s.notes.en.length === s.notes.th.length, s.code);
+    assert.ok(s.lat > 5 && s.lat < 21 && s.lng > 97 && s.lng < 106, `${s.code} map pin is in Thailand`);
     for (const x of s.layouts || []) for (const ext of ['pdf', 'png']) assert.ok(existsSync(new URL(`../public/sites/layouts/${x.file}.${ext}`, import.meta.url)), `${x.file}.${ext}`);
   }
 });

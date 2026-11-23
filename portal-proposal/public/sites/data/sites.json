@@ -1,5 +1,5 @@
 {
- "note": "The 8 SPP sites of the Caltex 2027 wastewater improvement programme. Starting notes set up 23 Nov 2026 from Brian's site visits; edit this file to change what the Sites pages show. model = file name in public/sites/models/ (null = no 3D model yet). sampled: dates for the 20-21 Nov visits are approximate. layouts = wastewater (SN) drawings in public/sites/layouts/<code>/ (.pdf + .png page image); source = where the original is in the 2027 Wastewater folder.",
+ "note": "The 8 SPP sites of the Caltex 2027 wastewater improvement programme. Starting notes set up 23 Nov 2026 from Brian's site visits; edit this file to change what the Sites pages show. model = file name in public/sites/models/ (null = no 3D model yet). sampled: dates for the 20-21 Nov visits are approximate. layouts = wastewater (SN) drawings in public/sites/layouts/<code>/ (.pdf + .png page image); source = where the original is in the 2027 Wastewater folder. lat/lng/company from Brian's Google My Maps 'Caltex 2027 Wastewater - SPP Sites' (23 Nov 2026).",
  "deliverBy": "2026-12-10",
  "sites": [
   {
@@ -35,7 +35,10 @@
    "sampledLabel": {
     "en": "20–21 Nov 2026",
     "th": "20–21 พ.ย. 2026"
-   }
+   },
+   "lat": 7.9101123,
+   "lng": 98.3331178,
+   "company": "Saengartit Phuket Petroleum Co.,Ltd"
   },
   {
    "code": "1156",
@@ -63,7 +66,10 @@
    "layoutNote": {
     "en": "Layout requested from Caltex (Thada).",
     "th": "ขอแบบจาก Caltex (คุณธาดา) แล้ว"
-   }
+   },
+   "lat": 13.64117,
+   "lng": 100.60475,
+   "company": "Hitex Theppratarn Company Limited Branch 1"
   },
   {
    "code": "1588",
@@ -110,7 +116,10 @@
    "sampledLabel": {
     "en": "20–21 Nov 2026",
     "th": "20–21 พ.ย. 2026"
-   }
+   },
+   "lat": 13.5158113,
+   "lng": 100.1606246,
+   "company": "Hitecx Theppratarn Co.,Ltd"
   },
   {
    "code": "1622",
@@ -147,7 +156,10 @@
      "th": "แบบขยายถังบำบัด-บ่อพัก rev 2",
      "source": "Chevron As-build 14-07-63/PDF/SN"
     }
-   ]
+   ],
+   "lat": 13.812461,
+   "lng": 100.70942,
+   "company": "Panislachon Company Limited Branch 00002"
   },
   {
    "code": "1642",
@@ -179,7 +191,10 @@
    "sampledLabel": {
     "en": "20–21 Nov 2026",
     "th": "20–21 พ.ย. 2026"
-   }
+   },
+   "lat": 7.878903,
+   "lng": 98.385202,
+   "company": "Phuket Phoonphol Energy Limited Partnership"
   },
   {
    "code": "1687",
@@ -220,7 +235,10 @@
    "sampledLabel": {
     "en": "20–21 Nov 2026",
     "th": "20–21 พ.ย. 2026"
-   }
+   },
+   "lat": 13.062856,
+   "lng": 99.945462,
+   "company": "Starrobinson Phetchaburi Co., Ltd."
   },
   {
    "code": "1703",
@@ -259,7 +277,10 @@
      "th": "GN-SEP-01 แบบบ่อดักไขมัน 3 ตอน",
      "source": "แบบAs-BUILTS/General Drawing"
     }
-   ]
+   ],
+   "lat": 13.7075911,
+   "lng": 100.7368988,
+   "company": "Panislachon Company Limited Branch 00001"
   },
   {
    "code": "1750",
@@ -287,7 +308,10 @@
    "layoutNote": {
     "en": "No drawings in the folder yet.",
     "th": "ยังไม่มีแบบในโฟลเดอร์"
-   }
+   },
+   "lat": 14.573519,
+   "lng": 100.987598,
+   "company": "Daoyada 2019 Company Limited Branch 1 Kaengkoi"
   }
  ]
 }
