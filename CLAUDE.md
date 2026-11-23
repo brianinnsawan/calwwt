@@ -30,6 +30,9 @@ Nothing is shared with calnkt: own logins, own databases, own file storage.
   `gantt.js` = timeline (copied from calcr). Data: `data/sites.json`, starting timelines `data/timelines/<code>.json`.
   Layouts: `layouts/<code>/<name>.pdf` + `.png` (page 1, for quick viewing). 3D models go in `models/<code>.glb` and are named
   in sites.json `"model"`.
+- Map on the Sites overview: `public/sites/map.mjs` (Leaflet in `vendor/leaflet/`), pins from `lat`/`lng` in sites.json
+  (from Brian's Google My Maps). Backgrounds: OpenStreetMap (Map) and Esri World Imagery (Satellite); those two hosts are allowed
+  in the Sites pages' security rules only (`SITES_CSP` in `src/sites.mjs`). Click a pin: Open site page / Zoom to site / Google Maps.
 - Server side of Sites: `portal-proposal/src/sites.mjs` (pages + `/api/sites/<code>/timeline`, saved in `site_timelines`).
 - `tasks/`: the Tasks app (`src/policy.mjs`, `src/service.mjs`, `src/pages.mjs` = page list and default access, `public/` screens,
   `schema/` database changes). After changing `tasks/public/*`: `cd tasks && node scripts/build-ui-module.mjs`.

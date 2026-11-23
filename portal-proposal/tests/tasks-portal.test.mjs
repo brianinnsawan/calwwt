@@ -267,8 +267,8 @@ test('Admin page: page levels per group and person, enforced by the server', asy
   assert.equal(await sites.text(), 'portal asset /sites/index.html');
   assert.match(sites.headers.get('content-security-policy'), /script-src 'self' 'wasm-unsafe-eval';/);
   // Map pictures (OpenStreetMap) are allowed on the Sites pages only.
-  assert.match(sites.headers.get('content-security-policy'), /img-src 'self' data: blob: https:\/\/tile\.openstreetmap\.org;/);
-  assert.doesNotMatch((await w.handler(get('/files/', brian, 'text/html'), w.env)).headers.get('content-security-policy') || '', /openstreetmap/);
+  assert.match(sites.headers.get('content-security-policy'), /img-src 'self' data: blob: https:\/\/tile\.openstreetmap\.org https:\/\/server\.arcgisonline\.com;/);
+  assert.doesNotMatch((await w.handler(get('/files/', brian, 'text/html'), w.env)).headers.get('content-security-policy') || '', /openstreetmap|arcgis/);
   assert.doesNotMatch((await w.handler(get('/tasks.html', brian, 'text/html'), w.env)).headers.get('content-security-policy'), /openstreetmap/);
   assert.equal(await (await w.handler(get('/sites/1703/', brian, 'text/html'), w.env)).text(), 'portal asset /sites/site.html');
   assert.equal(await (await w.handler(get('/sites/programme/', brian, 'text/html'), w.env)).text(), 'portal asset /sites/site.html');

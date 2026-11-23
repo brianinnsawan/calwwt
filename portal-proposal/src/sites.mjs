@@ -10,9 +10,10 @@
 import { HttpError } from './auth.mjs';
 
 // The Sites pages show a map (public/sites/map.mjs, Leaflet in vendor/) whose background pictures ("tiles") come from
-// OpenStreetMap. Only these pages may load pictures from there; everything else keeps the site's normal rules (src/worker.mjs).
-export const MAP_TILES = 'https://tile.openstreetmap.org';
-export const SITES_CSP = "default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: " + MAP_TILES + "; font-src 'self' data:; connect-src 'self'; worker-src 'self' blob:; frame-src 'self'; frame-ancestors 'self'; object-src 'none'; base-uri 'self'; form-action 'self'";
+// OpenStreetMap (map) and Esri World Imagery (satellite). Only these pages may load pictures from there; everything else
+// keeps the site's normal rules (src/worker.mjs).
+export const MAP_TILES = ['https://tile.openstreetmap.org', 'https://server.arcgisonline.com'];
+export const SITES_CSP = "default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: " + MAP_TILES.join(' ') + "; font-src 'self' data:; connect-src 'self'; worker-src 'self' blob:; frame-src 'self'; frame-ancestors 'self'; object-src 'none'; base-uri 'self'; form-action 'self'";
 export const SITE_CODES = ['0589', '1156', '1588', '1622', '1642', '1687', '1703', '1750'];
 const ALL = 'all';
 const CODE = new RegExp(`^(${[...SITE_CODES, ALL].join('|')})$`);
