@@ -1,0 +1,278 @@
+{
+ "note": "Starting timeline set up 23 Nov 2026 - dates to confirm. Saved changes on the site replace this for everyone.",
+ "title": {
+  "en": "Programme · Caltex 2027 wastewater improvement (8 sites)",
+  "th": "แผนงานรวม · ปรับปรุงระบบน้ำเสีย Caltex 2027 (8 สถานี)"
+ },
+ "from": "2026-11-16",
+ "to": "2027-03-05",
+ "week": "mf",
+ "milestones": [
+  {
+   "date": "2026-12-10",
+   "en": "Everything to Caltex",
+   "th": "ส่งงานทั้งหมดให้ Caltex"
+  },
+  {
+   "date": "2027-01-04",
+   "en": "2027 work package starts",
+   "th": "เริ่มงานปี 2027"
+  }
+ ],
+ "phases": [
+  {
+   "en": "2026 survey – all sites",
+   "th": "สำรวจปี 2026 – ทุกสถานี",
+   "color": "#3b6fd4",
+   "ink": "#ffffff",
+   "groups": [
+    {
+     "en": "0589 Kathu, Phuket",
+     "th": "0589 กะทู้ ภูเก็ต",
+     "tasks": [
+      {
+       "ms": true,
+       "date": "2026-11-21",
+       "en": "Sampling",
+       "th": "เก็บตัวอย่าง"
+      },
+      {
+       "start": "2026-11-21",
+       "end": "2026-12-04",
+       "dur": 10,
+       "pct": 0,
+       "en": "Lab results",
+       "th": "ผลแล็บ"
+      },
+      {
+       "start": "2026-11-23",
+       "end": "2026-12-09",
+       "dur": 13,
+       "pct": 10,
+       "en": "BOQ and pricing",
+       "th": "BOQ และราคา"
+      }
+     ]
+    },
+    {
+     "en": "1156 Samut Prakan",
+     "th": "1156 สมุทรปราการ",
+     "tasks": [
+      {
+       "ms": true,
+       "date": "2026-11-19",
+       "en": "Sampling",
+       "th": "เก็บตัวอย่าง"
+      },
+      {
+       "start": "2026-11-19",
+       "end": "2026-12-04",
+       "dur": 12,
+       "pct": 0,
+       "en": "Lab results",
+       "th": "ผลแล็บ"
+      },
+      {
+       "start": "2026-11-23",
+       "end": "2026-12-09",
+       "dur": 13,
+       "pct": 10,
+       "en": "BOQ and pricing",
+       "th": "BOQ และราคา"
+      }
+     ]
+    },
+    {
+     "en": "1588 Samut Sakhon (Porto Go)",
+     "th": "1588 สมุทรสาคร (Porto Go)",
+     "tasks": [
+      {
+       "ms": true,
+       "date": "2026-11-20",
+       "en": "Sampling",
+       "th": "เก็บตัวอย่าง"
+      },
+      {
+       "start": "2026-11-20",
+       "end": "2026-12-04",
+       "dur": 11,
+       "pct": 0,
+       "en": "Lab results",
+       "th": "ผลแล็บ"
+      },
+      {
+       "start": "2026-11-23",
+       "end": "2026-12-09",
+       "dur": 13,
+       "pct": 10,
+       "en": "BOQ and pricing",
+       "th": "BOQ และราคา"
+      }
+     ]
+    },
+    {
+     "en": "1622 Ram Intra",
+     "th": "1622 รามอินทรา",
+     "tasks": [
+      {
+       "ms": true,
+       "date": "2026-11-19",
+       "en": "Sampling",
+       "th": "เก็บตัวอย่าง"
+      },
+      {
+       "start": "2026-11-19",
+       "end": "2026-12-04",
+       "dur": 12,
+       "pct": 0,
+       "en": "Lab results",
+       "th": "ผลแล็บ"
+      },
+      {
+       "start": "2026-11-23",
+       "end": "2026-12-09",
+       "dur": 13,
+       "pct": 10,
+       "en": "BOQ and pricing",
+       "th": "BOQ และราคา"
+      }
+     ]
+    },
+    {
+     "en": "1642 Phun Phon, Phuket",
+     "th": "1642 พูนผล ภูเก็ต",
+     "tasks": [
+      {
+       "ms": true,
+       "date": "2026-11-21",
+       "en": "Sampling",
+       "th": "เก็บตัวอย่าง"
+      },
+      {
+       "start": "2026-11-21",
+       "end": "2026-12-04",
+       "dur": 10,
+       "pct": 0,
+       "en": "Lab results",
+       "th": "ผลแล็บ"
+      },
+      {
+       "start": "2026-11-23",
+       "end": "2026-12-09",
+       "dur": 13,
+       "pct": 10,
+       "en": "BOQ and pricing",
+       "th": "BOQ และราคา"
+      }
+     ]
+    },
+    {
+     "en": "1687 Phetchaburi",
+     "th": "1687 เพชรบุรี",
+     "tasks": [
+      {
+       "ms": true,
+       "date": "2026-11-20",
+       "en": "Sampling",
+       "th": "เก็บตัวอย่าง"
+      },
+      {
+       "start": "2026-11-20",
+       "end": "2026-12-04",
+       "dur": 11,
+       "pct": 0,
+       "en": "Lab results",
+       "th": "ผลแล็บ"
+      },
+      {
+       "start": "2026-11-23",
+       "end": "2026-12-09",
+       "dur": 13,
+       "pct": 10,
+       "en": "BOQ and pricing",
+       "th": "BOQ และราคา"
+      }
+     ]
+    },
+    {
+     "en": "1703 King Kaew",
+     "th": "1703 กิ่งแก้ว",
+     "tasks": [
+      {
+       "ms": true,
+       "date": "2026-11-19",
+       "en": "Sampling",
+       "th": "เก็บตัวอย่าง"
+      },
+      {
+       "start": "2026-11-19",
+       "end": "2026-12-04",
+       "dur": 12,
+       "pct": 0,
+       "en": "Lab results",
+       "th": "ผลแล็บ"
+      },
+      {
+       "start": "2026-11-23",
+       "end": "2026-12-09",
+       "dur": 13,
+       "pct": 10,
+       "en": "BOQ and pricing",
+       "th": "BOQ และราคา"
+      }
+     ]
+    },
+    {
+     "en": "1750 Kaeng Khoi, Saraburi",
+     "th": "1750 แก่งคอย สระบุรี",
+     "tasks": [
+      {
+       "ms": true,
+       "date": "2026-11-24",
+       "en": "Sampling (to confirm)",
+       "th": "เก็บตัวอย่าง (รอยืนยัน)"
+      },
+      {
+       "start": "2026-11-24",
+       "end": "2026-12-04",
+       "dur": 9,
+       "pct": 0,
+       "en": "Lab results",
+       "th": "ผลแล็บ"
+      },
+      {
+       "start": "2026-11-23",
+       "end": "2026-12-09",
+       "dur": 13,
+       "pct": 10,
+       "en": "BOQ and pricing",
+       "th": "BOQ และราคา"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "en": "2027",
+   "th": "ปี 2027",
+   "color": "#2a9d8f",
+   "ink": "#ffffff",
+   "groups": [
+    {
+     "en": "All sites",
+     "th": "ทุกสถานี",
+     "tasks": [
+      {
+       "start": "2027-01-04",
+       "end": "2027-02-26",
+       "dur": 40,
+       "pct": 0,
+       "en": "Design and permit drawings (TBC)",
+       "th": "ออกแบบและแบบขออนุญาต (รอยืนยัน)"
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

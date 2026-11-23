@@ -1,0 +1,40 @@
+# Dependencies
+node_modules/
+
+# Cloudflare / Wrangler local state
+.wrangler/
+.dev.vars
+.dev.vars.*
+
+# Environment & secrets
+.env
+.env.*
+*.env
+*.pem
+*.key
+*.p12
+id_rsa*
+*oauth*token*
+*credentials*
+*client_secret*
+
+# Setup / recovery / backup codes
+*setup-code*
+*recovery-code*
+*backup-code*
+
+# Database exports / dumps (schema & migration .sql are intentionally committed)
+*.sqlite
+*.sqlite3
+*.db
+*.d1
+*-dump.sql
+*-export.sql
+*.dump
+
+# Large binary assets over GitHub limits (none currently exceed 50 MB)
+*.ifc
+
+# OS cruft
+.DS_Store
+Thumbs.db

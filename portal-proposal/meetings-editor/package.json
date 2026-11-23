@@ -1,0 +1,30 @@
+{
+  "name": "calnkt-meetings-editor",
+  "private": true,
+  "description": "Live meeting pages (Meetings tab): TipTap editor + Yjs, bundled into ../public/meetings/vendor/ (browser) and ../src/vendor/ (Worker). Build: npm ci && npm run build",
+  "type": "module",
+  "scripts": {
+    "build": "node build.mjs"
+  },
+  "dependencies": {
+    "@tiptap/core": "3.32.0",
+    "@tiptap/pm": "3.32.0",
+    "@tiptap/starter-kit": "3.32.0",
+    "@tiptap/extension-collaboration": "3.32.0",
+    "@tiptap/extension-collaboration-caret": "3.32.0",
+    "@tiptap/extension-list": "3.32.0",
+    "@tiptap/extension-highlight": "3.32.0",
+    "@tiptap/extension-table": "3.32.0",
+    "@tiptap/extensions": "3.32.0",
+    "yjs": "13.6.33",
+    "y-protocols": "1.0.7",
+    "lib0": "0.2.119",
+    "@tiptap/y-tiptap": "3.0.10"
+  },
+  "devDependencies": {
+    "esbuild": "0.28.2"
+  },
+  "overrides": {
+    "@tiptap/y-tiptap": "3.0.10"
+  }
+}

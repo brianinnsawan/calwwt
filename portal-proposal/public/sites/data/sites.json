@@ -1,0 +1,293 @@
+{
+ "note": "The 8 SPP sites of the Caltex 2027 wastewater improvement programme. Starting notes set up 23 Nov 2026 from Brian's site visits; edit this file to change what the Sites pages show. model = file name in public/sites/models/ (null = no 3D model yet). sampled: dates for the 20-21 Nov visits are approximate. layouts = wastewater (SN) drawings in public/sites/layouts/<code>/ (.pdf + .png page image); source = where the original is in the 2027 Wastewater folder.",
+ "deliverBy": "2026-12-10",
+ "sites": [
+  {
+   "code": "0589",
+   "name": {
+    "en": "Kathu, Phuket",
+    "th": "กะทู้ ภูเก็ต"
+   },
+   "region": "Phuket",
+   "sampled": "2026-11-21",
+   "improvement": {
+    "en": "Improvement needed: at least a sump, or septic pump-out and cleaning (BOQ in progress).",
+    "th": "ต้องปรับปรุง: อย่างน้อยติดตั้งบ่อพัก หรือสูบและล้างบ่อเกรอะ (กำลังทำ BOQ)"
+   },
+   "notes": {
+    "en": [
+     "Visited with the Aqua technicians on 20–21 Nov 2026 (station with KFC)."
+    ],
+    "th": [
+     "เข้าพื้นที่พร้อมช่างของ Aqua วันที่ 20–21 พ.ย. 2026 (สถานีมี KFC)"
+    ]
+   },
+   "model": null,
+   "links": [],
+   "layouts": [
+    {
+     "file": "0589/0589-septic-as-built-drainage-layout",
+     "en": "Drainage system layout for master plan (SPP as-built, with pumps) · 2 sheets",
+     "th": "ผังระบบระบายน้ำ (แบบก่อสร้างจริง SPP พร้อมปั๊ม) · 2 แผ่น",
+     "source": "Septic As Built-Pumps.pdf"
+    }
+   ],
+   "sampledLabel": {
+    "en": "20–21 Nov 2026",
+    "th": "20–21 พ.ย. 2026"
+   }
+  },
+  {
+   "code": "1156",
+   "name": {
+    "en": "Samut Prakan",
+    "th": "สมุทรปราการ"
+   },
+   "region": "Samut Prakan",
+   "sampled": "2026-11-19",
+   "improvement": {
+    "en": "Improvement needed: at least a sump, or septic pump-out and cleaning (BOQ in progress).",
+    "th": "ต้องปรับปรุง: อย่างน้อยติดตั้งบ่อพัก หรือสูบและล้างบ่อเกรอะ (กำลังทำ BOQ)"
+   },
+   "notes": {
+    "en": [
+     "Treatment system needs a reset."
+    ],
+    "th": [
+     "ระบบบำบัดต้องรีเซ็ตใหม่"
+    ]
+   },
+   "model": null,
+   "links": [],
+   "layouts": [],
+   "layoutNote": {
+    "en": "Layout requested from Caltex (Thada).",
+    "th": "ขอแบบจาก Caltex (คุณธาดา) แล้ว"
+   }
+  },
+  {
+   "code": "1588",
+   "name": {
+    "en": "Samut Sakhon (Porto Go)",
+    "th": "สมุทรสาคร (Porto Go)"
+   },
+   "region": "Samut Sakhon",
+   "sampled": "2026-11-20",
+   "improvement": {
+    "en": "Improvement needed: at least a sump, or septic pump-out and cleaning (BOQ in progress).",
+    "th": "ต้องปรับปรุง: อย่างน้อยติดตั้งบ่อพัก หรือสูบและล้างบ่อเกรอะ (กำลังทำ BOQ)"
+   },
+   "notes": {
+    "en": [
+     "Visited with the Aqua technicians on 20–21 Nov 2026."
+    ],
+    "th": [
+     "เข้าพื้นที่พร้อมช่างของ Aqua วันที่ 20–21 พ.ย. 2026"
+    ]
+   },
+   "model": null,
+   "links": [],
+   "layouts": [
+    {
+     "file": "1588/1588-SN-103-wastewater-layout",
+     "en": "SN-103 Wastewater collection layout",
+     "th": "SN-103 ผังบริเวณงานระบบรวบรวมน้ำเสีย",
+     "source": "SN-CALTEX_THACHIN.pdf, sheet SN-103 (issued for submission)"
+    },
+    {
+     "file": "1588/1588-SN-101-drainage-layout",
+     "en": "SN-101 Drainage layout",
+     "th": "SN-101 ผังบริเวณงานระบบระบายน้ำ",
+     "source": "SN-CALTEX_THACHIN.pdf, sheet SN-101 (issued for submission)"
+    },
+    {
+     "file": "1588/1588-LAY-SN-101-drainage-layout",
+     "en": "LAY-SN-101 Drainage layout (layout set)",
+     "th": "LAY-SN-101 ผังบริเวณระบบระบายน้ำ (ชุดผังบริเวณ)",
+     "source": "LAY-OUT/PDF/SN-LAYOUT.pdf, sheet LAY-SN-101"
+    }
+   ],
+   "sampledLabel": {
+    "en": "20–21 Nov 2026",
+    "th": "20–21 พ.ย. 2026"
+   }
+  },
+  {
+   "code": "1622",
+   "name": {
+    "en": "Ram Intra",
+    "th": "รามอินทรา"
+   },
+   "region": "Bangkok",
+   "sampled": "2026-11-19",
+   "improvement": {
+    "en": "Improvement needed: at least a sump, or septic pump-out and cleaning (BOQ in progress).",
+    "th": "ต้องปรับปรุง: อย่างน้อยติดตั้งบ่อพัก หรือสูบและล้างบ่อเกรอะ (กำลังทำ BOQ)"
+   },
+   "notes": {
+    "en": [
+     "Looked good on site; waiting for the lab results."
+    ],
+    "th": [
+     "หน้างานดูดี รอผลแล็บ"
+    ]
+   },
+   "model": null,
+   "links": [],
+   "layouts": [
+    {
+     "file": "1622/1622-layout-grease-trap-addition-2020",
+     "en": "Site layout with the grease trap added after handover (Oct 2020)",
+     "th": "ผังบริเวณ เพิ่มถังดักไขมัน (ต.ค. 2020)",
+     "source": "Septic Tank addition after handover Oct 2020"
+    },
+    {
+     "file": "1622/1622-septic-tank-manhole-details-rev2",
+     "en": "Septic tank and manhole details (as-built rev 2)",
+     "th": "แบบขยายถังบำบัด-บ่อพัก rev 2",
+     "source": "Chevron As-build 14-07-63/PDF/SN"
+    }
+   ]
+  },
+  {
+   "code": "1642",
+   "name": {
+    "en": "Phun Phon, Phuket",
+    "th": "พูนผล ภูเก็ต"
+   },
+   "region": "Phuket",
+   "sampled": "2026-11-21",
+   "improvement": {
+    "en": "Improvement needed: at least a sump, or septic pump-out and cleaning (BOQ in progress).",
+    "th": "ต้องปรับปรุง: อย่างน้อยติดตั้งบ่อพัก หรือสูบและล้างบ่อเกรอะ (กำลังทำ BOQ)"
+   },
+   "notes": {
+    "en": [
+     "Visited with the Aqua technicians on 20–21 Nov 2026."
+    ],
+    "th": [
+     "เข้าพื้นที่พร้อมช่างของ Aqua วันที่ 20–21 พ.ย. 2026"
+    ]
+   },
+   "model": null,
+   "links": [],
+   "layouts": [],
+   "layoutNote": {
+    "en": "Layout requested from Caltex (Thada).",
+    "th": "ขอแบบจาก Caltex (คุณธาดา) แล้ว"
+   },
+   "sampledLabel": {
+    "en": "20–21 Nov 2026",
+    "th": "20–21 พ.ย. 2026"
+   }
+  },
+  {
+   "code": "1687",
+   "name": {
+    "en": "Phetchaburi",
+    "th": "เพชรบุรี"
+   },
+   "region": "Phetchaburi",
+   "sampled": "2026-11-20",
+   "improvement": {
+    "en": "Improvement needed: at least a sump, or septic pump-out and cleaning (BOQ in progress).",
+    "th": "ต้องปรับปรุง: อย่างน้อยติดตั้งบ่อพัก หรือสูบและล้างบ่อเกรอะ (กำลังทำ BOQ)"
+   },
+   "notes": {
+    "en": [
+     "Visited with the Aqua technicians on 20–21 Nov 2026."
+    ],
+    "th": [
+     "เข้าพื้นที่พร้อมช่างของ Aqua วันที่ 20–21 พ.ย. 2026"
+    ]
+   },
+   "model": null,
+   "links": [],
+   "layouts": [
+    {
+     "file": "1687/1687-septic-3000L-as-built-layout",
+     "en": "Septic tank 3,000 L – as-built layout",
+     "th": "ผังงานถังบำบัด 3,000 ลิตร – แบบก่อสร้างจริง",
+     "source": "Phetchaburi Robinson"
+    },
+    {
+     "file": "1687/1687-septic-pipe-slope",
+     "en": "Septic tank piping slope",
+     "th": "ความลาดเอียงท่อถังบำบัด",
+     "source": "Phetchaburi Robinson"
+    }
+   ],
+   "sampledLabel": {
+    "en": "20–21 Nov 2026",
+    "th": "20–21 พ.ย. 2026"
+   }
+  },
+  {
+   "code": "1703",
+   "name": {
+    "en": "King Kaew",
+    "th": "กิ่งแก้ว"
+   },
+   "region": "Samut Prakan",
+   "sampled": "2026-11-19",
+   "improvement": {
+    "en": "Improvement needed: at least a sump, or septic pump-out and cleaning (BOQ in progress).",
+    "th": "ต้องปรับปรุง: อย่างน้อยติดตั้งบ่อพัก หรือสูบและล้างบ่อเกรอะ (กำลังทำ BOQ)"
+   },
+   "notes": {
+    "en": [
+     "Treatment system needs a reset.",
+     "Pipe from the oil–water separator to the sewer is probably broken or blocked."
+    ],
+    "th": [
+     "ระบบบำบัดต้องรีเซ็ตใหม่",
+     "ท่อจากบ่อดักไขมัน/น้ำมันไปท่อระบายสาธารณะน่าจะแตกหรืออุดตัน"
+    ]
+   },
+   "model": null,
+   "links": [],
+   "layouts": [
+    {
+     "file": "1703/1703-LAY-ME-02-wastewater-layout",
+     "en": "LAY-ME-02 Wastewater drainage layout",
+     "th": "LAY-ME-02 ผังบริเวณแสดงระบบระบายน้ำเสีย",
+     "source": "แบบAs-BUILTS/LAYOUT/ME"
+    },
+    {
+     "file": "1703/1703-GN-SEP-01-grease-trap",
+     "en": "GN-SEP-01 Grease trap, 3 compartments",
+     "th": "GN-SEP-01 แบบบ่อดักไขมัน 3 ตอน",
+     "source": "แบบAs-BUILTS/General Drawing"
+    }
+   ]
+  },
+  {
+   "code": "1750",
+   "name": {
+    "en": "Kaeng Khoi, Saraburi",
+    "th": "แก่งคอย สระบุรี"
+   },
+   "region": "Saraburi",
+   "sampled": null,
+   "improvement": {
+    "en": "No improvement for now.",
+    "th": "ยังไม่ต้องปรับปรุง"
+   },
+   "notes": {
+    "en": [
+     "No improvement work needed for now."
+    ],
+    "th": [
+     "ยังไม่ต้องปรับปรุงในตอนนี้"
+    ]
+   },
+   "model": null,
+   "links": [],
+   "layouts": [],
+   "layoutNote": {
+    "en": "No drawings in the folder yet.",
+    "th": "ยังไม่มีแบบในโฟลเดอร์"
+   }
+  }
+ ]
+}

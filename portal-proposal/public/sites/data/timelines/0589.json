@@ -1,0 +1,104 @@
+{
+ "note": "Starting timeline set up 23 Nov 2026 - dates to confirm. Saved changes on the site replace this for everyone.",
+ "title": {
+  "en": "Timeline · 0589 Kathu, Phuket",
+  "th": "แผนงาน · 0589 กะทู้ ภูเก็ต"
+ },
+ "from": "2026-11-16",
+ "to": "2027-03-05",
+ "week": "mf",
+ "milestones": [
+  {
+   "date": "2026-12-10",
+   "en": "Everything to Caltex",
+   "th": "ส่งงานทั้งหมดให้ Caltex"
+  },
+  {
+   "date": "2027-01-04",
+   "en": "2027 work package starts",
+   "th": "เริ่มงานปี 2027"
+  }
+ ],
+ "phases": [
+  {
+   "en": "2026 survey",
+   "th": "สำรวจปี 2026",
+   "color": "#3b6fd4",
+   "ink": "#ffffff",
+   "groups": [
+    {
+     "en": "Survey and sampling",
+     "th": "สำรวจและเก็บตัวอย่าง",
+     "tasks": [
+      {
+       "ms": true,
+       "date": "2026-11-21",
+       "en": "Site visit and water sampling",
+       "th": "เข้าพื้นที่และเก็บตัวอย่างน้ำ"
+      },
+      {
+       "start": "2026-11-21",
+       "end": "2026-12-04",
+       "dur": 10,
+       "pct": 0,
+       "en": "Lab results (Aqua Nishihara, Caltex parameters)",
+       "th": "ผลแล็บ (Aqua Nishihara ตามพารามิเตอร์ของ Caltex)"
+      },
+      {
+       "start": "2026-11-21",
+       "end": "2026-11-28",
+       "dur": 5,
+       "pct": 50,
+       "en": "Preliminary report to Caltex",
+       "th": "รายงานเบื้องต้นถึง Caltex"
+      }
+     ]
+    },
+    {
+     "en": "Improvement proposal",
+     "th": "ข้อเสนอการปรับปรุง",
+     "tasks": [
+      {
+       "start": "2026-11-23",
+       "end": "2026-12-09",
+       "dur": 13,
+       "pct": 10,
+       "en": "Improvement BOQ and pricing",
+       "th": "BOQ และราคาสำหรับการปรับปรุง"
+      },
+      {
+       "start": "2026-12-07",
+       "end": "2026-12-10",
+       "dur": 4,
+       "pct": 0,
+       "en": "Results, drawings and pricing to Caltex",
+       "th": "ส่งผลแล็บ แบบ และราคาให้ Caltex"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "en": "2027",
+   "th": "ปี 2027",
+   "color": "#2a9d8f",
+   "ink": "#ffffff",
+   "groups": [
+    {
+     "en": "2027 work package (next year)",
+     "th": "งานปี 2027 (ปีหน้า)",
+     "tasks": [
+      {
+       "start": "2027-01-04",
+       "end": "2027-02-26",
+       "dur": 40,
+       "pct": 0,
+       "en": "Design and permit drawings (TBC)",
+       "th": "ออกแบบและแบบขออนุญาต (รอยืนยัน)"
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,59 @@
+/* calwwt.sppwork.com navigation bar. Same navy and yellow as the task app. */
+.cnb{--cnb-bg:#1D3557;--cnb-line:#34507A;--cnb-ink:#F2F5F9;--cnb-muted:#A9B8CC;--cnb-accent:#F4B400;
+  display:flex;align-items:stretch;gap:0;min-height:48px;background:var(--cnb-bg);color:var(--cnb-ink);border-bottom:3px solid var(--cnb-accent);
+  padding:0 max(12px,env(safe-area-inset-right,0px)) 0 max(12px,env(safe-area-inset-left,0px));
+  font:500 14px/1.2 'IBM Plex Sans','IBM Plex Sans Thai',system-ui,-apple-system,'Segoe UI',Roboto,'Leelawadee UI','Sukhumvit Set','Thonburi','Noto Sans Thai',Tahoma,sans-serif;
+  position:relative;z-index:1000;box-sizing:border-box;width:100%}
+.cnb *{box-sizing:border-box}
+.cnb a{color:inherit;text-decoration:none}
+.cnb-brand{display:flex;align-items:center;gap:10px;padding:0 16px 0 0;margin-right:4px;border-right:1px solid var(--cnb-line);flex:none}
+.cnb-mark{width:30px;height:30px;border:2px solid var(--cnb-accent);display:grid;place-items:center;font-weight:700;font-size:14px;color:var(--cnb-accent)}
+.cnb-name{font-weight:700;font-size:16px;letter-spacing:.04em;text-transform:uppercase;white-space:nowrap}
+.cnb-tabs{display:flex;align-items:stretch;gap:2px;overflow-x:auto;scrollbar-width:none;flex:1 1 auto;min-width:0}
+.cnb-tabs::-webkit-scrollbar{display:none}
+.cnb-tabs a{display:flex;align-items:center;padding:0 14px;color:var(--cnb-muted);white-space:nowrap;border-bottom:3px solid transparent;margin-bottom:-3px;font-size:15px}
+.cnb-tabs a:hover{color:var(--cnb-ink);background:rgba(255,255,255,.06)}
+.cnb-tabs a[aria-current="page"]{color:var(--cnb-ink);font-weight:600;border-bottom-color:var(--cnb-accent);background:rgba(255,255,255,.08)}
+.cnb a:focus-visible,.cnb button:focus-visible{outline:2px solid var(--cnb-accent);outline-offset:-2px}
+.cnb-right{display:flex;align-items:center;gap:8px;padding-left:10px;flex:none}
+.cnb-lang{display:flex;border:1px solid var(--cnb-line);border-radius:5px;overflow:hidden}
+.cnb-lang button,.cnb-out{font:inherit;font-size:12.5px;color:var(--cnb-muted);background:transparent;border:0;padding:5px 9px;cursor:pointer;min-height:32px}
+.cnb-lang button[aria-pressed="true"]{background:var(--cnb-line);color:var(--cnb-ink)}
+.cnb-account{font-size:13px;color:var(--cnb-ink);padding:5px 4px;max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cnb-out{border:1px solid var(--cnb-line);border-radius:5px}
+.cnb-theme{font:inherit;font-size:16px;line-height:1;color:var(--cnb-ink);background:transparent;border:1px solid var(--cnb-line);border-radius:5px;min-width:34px;min-height:32px;cursor:pointer}
+.cnb-theme:hover{background:rgba(255,255,255,.08)}
+.cnb-out:hover,.cnb-lang button:hover{color:var(--cnb-ink)}
+@media (max-width:760px){
+  .cnb{flex-wrap:wrap}
+  .cnb-name{display:none}
+  .cnb-brand{padding-right:10px}
+  .cnb-right{margin-left:auto}
+  .cnb-account{display:none}
+  .cnb-tabs{order:3;flex-basis:100%;border-top:1px solid var(--cnb-line);min-height:44px}
+}
+/* Second row: the parts of the current tab (Schedule: Plan & S-curve | Milestones). */
+.cnb-subs{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;background:#24406A;padding:0 max(12px,env(safe-area-inset-left,0px));position:relative;z-index:999;
+  font:500 13.5px/1.2 'IBM Plex Sans','IBM Plex Sans Thai',system-ui,-apple-system,'Segoe UI',Roboto,'Leelawadee UI','Sukhumvit Set','Thonburi','Noto Sans Thai',Tahoma,sans-serif;box-sizing:border-box;width:100%}
+.cnb-subs::-webkit-scrollbar{display:none}
+.cnb-subs a{display:flex;align-items:center;min-height:36px;padding:0 12px;color:#C3D0E0;text-decoration:none;white-space:nowrap;border-bottom:2px solid transparent}
+.cnb-subs a:hover{color:#fff;background:rgba(255,255,255,.06)}
+.cnb-subs a[aria-current="page"]{color:#fff;font-weight:600;border-bottom-color:#F4B400}
+.cnb-subs a:focus-visible{outline:2px solid #F4B400;outline-offset:-2px}
+@media print{.cnb,.cnb-subs{display:none}}
+
+/* Safety library: the bar's language switch replaces the page's own. */
+.tabs .language-switch{display:none}
+
+/* Admin viewing the site as someone else */
+.cnb-viewas{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;background:#F4B400;color:#1F1800;padding:7px 14px;font:600 14px/1.3 'IBM Plex Sans','IBM Plex Sans Thai',system-ui,-apple-system,'Segoe UI',Roboto,'Leelawadee UI','Sukhumvit Set','Thonburi','Noto Sans Thai',Tahoma,sans-serif;position:relative;z-index:1000}
+.cnb-viewas button{font:inherit;font-size:13px;background:#1D3557;color:#fff;border:0;border-radius:5px;padding:5px 12px;cursor:pointer}
+
+/* Safety library, Linked view: "Suggested for this period" starts closed (Brian, 1 Nov 2026). */
+.phase-toggle{margin:0 0 16px}
+.phase-toggle[hidden]{display:none!important}
+.phase-toggle>summary{cursor:pointer;display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border:1px solid #62747d;border-radius:8px;font-weight:600;font-size:14px;list-style:none}
+.phase-toggle>summary::-webkit-details-marker{display:none}
+.phase-toggle>summary::before{content:'▸';font-size:12px}
+.phase-toggle[open]>summary{margin-bottom:10px}
+.phase-toggle[open]>summary::before{content:'▾'}

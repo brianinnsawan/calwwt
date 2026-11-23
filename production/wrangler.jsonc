@@ -1,0 +1,66 @@
+// LIVE Caltex 2027 wastewater project site at https://calwwt.sppwork.com (Brian, 23 Nov 2026).
+// Built from the calnkt.sppwork.com portal (brianinnsawan/nti-city-park-portal), with its own logins, people, tasks,
+// files and meetings: nothing is shared with calnkt. The 8 sites (Sites tab) come from calcr.sppwork.com's viewer + timeline.
+// Deployed by Cloudflare Workers Builds from the main branch:
+//   deploy command: npx wrangler deploy --config production/wrangler.jsonc
+// Secret (set once in the Cloudflare dashboard, never in this file):
+//   AUTH_RATE_KEY   random text, 32+ characters
+// The custom domain calwwt.sppwork.com is attached by the "routes" entry below on the first deploy.
+// Emergency off switch for the task app: set TASKS_ENABLED to "false" and redeploy.
+{
+  "name": "calwwt",
+  "main": "../portal-proposal/src/worker.mjs",
+  "compatibility_date": "2026-09-01",
+  "compatibility_flags": ["nodejs_compat"],
+  "workers_dev": false,
+  "preview_urls": false,
+  "routes": [{ "pattern": "calwwt.sppwork.com", "custom_domain": true }],
+  "assets": {
+    "directory": "../portal-proposal/public",
+    "binding": "ASSETS",
+    "run_worker_first": true,
+    "html_handling": "none",
+    "not_found_handling": "none"
+  },
+  "d1_databases": [
+    // DB: the owner's login record (users table). AUTH_DB: logins. TASKS_DB: people, tasks, files, meetings, site timelines.
+    { "binding": "DB", "database_name": "calwwt-portal", "database_id": "efc8cd7f-493d-440e-ad9d-75bf9ab852bb" },
+    { "binding": "AUTH_DB", "database_name": "calwwt-identity", "database_id": "887a55ef-9e16-4df4-9673-e9238b21dc56" },
+    { "binding": "TASKS_DB", "database_name": "calwwt-tasks", "database_id": "bba26309-c326-4afb-89cb-a95d9c7ca315" }
+  ],
+  // Visit logging (Thailand gate), the same service calnkt and the S-curve use; shown as "calwwt".
+  "services": [
+    { "binding": "SITE_STATS", "service": "site-stats", "entrypoint": "Logger" }
+  ],
+  "r2_buckets": [
+    // Project files (Files tab, keys under files/). Private.
+    { "binding": "DRAWINGS", "bucket_name": "calwwt-files" },
+    // Weekly copy of data and files (src/backup.mjs). Private; set a 90-day bucket lock in the dashboard.
+    { "binding": "BACKUPS", "bucket_name": "calwwt-backups" }
+  ],
+  // Sunday 02:00 Bangkok (Saturday 19:00 UTC): backup + sign-in record cleanup. Daily 06:00 Bangkok: repeating tasks.
+  "triggers": { "crons": ["0 19 * * 6", "0 23 * * *"] },
+  "vars": {
+    "APP_ORIGIN": "https://calwwt.sppwork.com",
+    "LOCAL_AUTH_ENABLED": "true",
+    "TASKS_ENABLED": "true",
+    "TASKS_ONLY": "false",
+    "SITE_READY": "true",
+    "VIEWER_READY": "true",
+    "EDITOR_READY": "false",
+    "SHARING_ENABLED": "false",
+    "SITE_VIEWER_EMAILS": "",
+    "OWNER_RECOVERY_COOKIE_ENABLED": "false",
+    // Brian's owner login (tools/setup/README.md). Not a secret: it only names the account.
+    "LOCAL_AUTH_OWNER_ID": "owner-6fa9e9e2-e9e9-4551-a752-89763be98c27",
+    "LOCAL_AUTH_READER_ID": "",
+    "PORTAL_URL": "/sites/",
+    // Admin changes need 2-step sign-in (same as calnkt). Emergency off switch: "false" and redeploy.
+    "TWO_STEP_FOR_ADMINS": "true",
+    "CHIEF_OWNER": "brian"
+  },
+  // Live meeting pages (Meetings tab): one Durable Object per meeting part. src/meeting-room.mjs.
+  "durable_objects": { "bindings": [{ "name": "MEETING_ROOMS", "class_name": "MeetingRoom" }] },
+  "migrations": [{ "tag": "v1-meeting-rooms", "new_sqlite_classes": ["MeetingRoom"] }],
+  "observability": { "enabled": true }
+}

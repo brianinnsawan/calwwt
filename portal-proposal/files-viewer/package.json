@@ -1,0 +1,23 @@
+{
+  "name": "calnkt-files-viewer",
+  "private": true,
+  "description": "In-browser viewers for the Files area (Word, Excel, PowerPoint) and the 2-step QR code. Build: npm ci && npm run build -> ../public/files/vendor/ and ../public/__identity/vendor/",
+  "type": "module",
+  "scripts": {
+    "build": "node build.mjs"
+  },
+  "dependencies": {
+    "docx-preview": "0.4.1",
+    "exceljs": "4.4.0",
+    "jszip": "3.10.1",
+    "pptx-preview": "1.0.7",
+    "qrcode-generator": "2.0.4"
+  },
+  "devDependencies": {
+    "esbuild": "0.28.2"
+  },
+  "overrides": {
+    "echarts": "6.1.0",
+    "uuid": "11.1.1"
+  }
+}
