@@ -14,7 +14,8 @@ BRIAN does once (about 10 minutes):
        Project name:    calwwt
        Build command:   (empty)
        Deploy command:  npx wrangler deploy --config production/wrangler.jsonc
-     The first build creates the Worker "calwwt" and connects calwwt.sppwork.com.
+     The first build creates the Worker "calwwt".
+     Then Worker calwwt -> Settings -> Domains & Routes -> Add -> Custom domain -> calwwt.sppwork.com
   3. Worker calwwt -> Settings -> Variables and Secrets -> add Secret
        AUTH_RATE_KEY = any random text, 32+ characters (keep it; do not reuse calnkt's)
      then Deployments -> Retry / redeploy once.

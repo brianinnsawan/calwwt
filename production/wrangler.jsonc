@@ -5,7 +5,8 @@
 //   deploy command: npx wrangler deploy --config production/wrangler.jsonc
 // Secret (set once in the Cloudflare dashboard, never in this file):
 //   AUTH_RATE_KEY   random text, 32+ characters
-// The custom domain calwwt.sppwork.com is attached by the "routes" entry below on the first deploy.
+// Custom domain calwwt.sppwork.com is added in the dashboard (Worker calwwt -> Settings -> Domains & Routes), as for calnkt:
+// the Workers Builds token cannot attach domains, so a "routes" entry here makes the build fail.
 // Emergency off switch for the task app: set TASKS_ENABLED to "false" and redeploy.
 {
   "name": "calwwt",
@@ -14,7 +15,6 @@
   "compatibility_flags": ["nodejs_compat"],
   "workers_dev": false,
   "preview_urls": false,
-  "routes": [{ "pattern": "calwwt.sppwork.com", "custom_domain": true }],
   "assets": {
     "directory": "../portal-proposal/public",
     "binding": "ASSETS",
