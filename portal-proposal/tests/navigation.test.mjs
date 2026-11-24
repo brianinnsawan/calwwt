@@ -9,7 +9,8 @@ test('tabs follow page access: Sites needs the Sites page; only admins and obser
  assert.deepEqual(tabsFor({pages:{...P('view','view','view','view','view','edit'),files:'view',meetings:'edit'},accessView:true}).map(t=>t.id),['sites','schedule','files','meetings','tasks','admin']);
  assert.deepEqual(tabsFor({}).map(t=>t.id),[]);
  assert.equal(landingFor({pages:P('none','none','view','view','none','none')}),'/milestones/');
- assert.equal(landingFor({pages:P('view','view','view','view','view','edit')}),'/tasks.html');
+ assert.equal(landingFor({pages:P('view','view','view','view','view','edit')}),'/sites/');
+ assert.equal(landingFor({pages:P('none','none','view','view','none','edit')}),'/tasks.html','no Sites access: Tasks');
 });
 test('every tab stays on this site and has Thai and English names',()=>{
  for(const t of TABS){assert.ok(t.href.startsWith('/')&&!t.href.startsWith('//'),t.href);assert.ok(t.th&&t.en)}

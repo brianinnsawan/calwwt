@@ -74,10 +74,11 @@ async function realAccess(env, actor) {
 
 export const cachedAccess = (actor) => actor?.[KEY] || null;
 
-// Where to go after sign-in or on "/": Tasks if allowed, else the first page the person may open.
+// Where to go after sign-in or on "/": the Sites page for everybody who may open it (Brian, 25 Nov 2026),
+// else Tasks, else the first page the person may open.
 export function landingPath(access) {
-  if (access.areas.has('tasks')) return '/tasks.html';
   if (access.areas.has('drawings')) return '/sites/';
+  if (access.areas.has('tasks')) return '/tasks.html';
   if (access.areas.has('timeline')) return '/milestones/';
   if (access.view) return '/admin';
   return '/account.html';
