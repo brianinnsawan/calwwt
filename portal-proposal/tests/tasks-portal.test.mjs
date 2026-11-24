@@ -92,7 +92,7 @@ test('admin creates a login for Gift; Gift sets a password and is limited to the
   }
   for (const p of ['/', '/project-home.html']) {
     const r = await w.handler(get(p, gift, 'text/html'), w.env);
-    assert.equal(r.status, 302); assert.equal(r.headers.get('location'), '/tasks.html', 'no home page: Gift lands on Tasks');
+    assert.equal(r.status, 302); assert.equal(r.headers.get('location'), '/sites/', 'Sites is the home page: Gift lands on Sites');
   }
   assert.equal((await w.handler(get('/admin', gift, 'text/html'), w.env)).status, 404);
   const me = await (await w.handler(get('/api/me', gift), w.env)).json();

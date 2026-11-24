@@ -54,7 +54,8 @@ export function subsFor(me, tab) {
 /** First page to open after sign-in: Tasks if allowed, else the first tab. */
 export function landingFor(me) {
   const tabs = tabsFor(me);
-  return (tabs.find((t) => t.id === 'tasks') || tabs[0])?.href || '/account.html';
+  // Sites is everybody's home page (Brian, 25 Nov 2026); Tasks next; else the first tab they have.
+  return (tabs.find((t) => t.id === 'sites') || tabs.find((t) => t.id === 'tasks') || tabs[0])?.href || '/account.html';
 }
 
 const langKey = (me) => `tasks.lang.${me?.person || ''}`;
