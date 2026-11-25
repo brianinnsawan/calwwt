@@ -1,0 +1,8 @@
+{
+  "name": "calwwt-site-models",
+  "private": true,
+  "type": "module",
+  "description": "Builds the 3D site models (public/sites/models/<code>.glb) for calwwt.sppwork.com",
+  "scripts": { "build": "node build.mjs 0589" },
+  "dependencies": { "delaunator": "5.0.1", "three": "0.170.0" }
+}

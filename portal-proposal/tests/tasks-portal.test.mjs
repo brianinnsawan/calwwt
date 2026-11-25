@@ -543,3 +543,25 @@ test('Sites data: 8 sites, starting timelines valid, every layout has its PDF an
     for (const x of s.layouts || []) for (const ext of ['pdf', 'png']) assert.ok(existsSync(new URL(`../public/sites/layouts/${x.file}.${ext}`, import.meta.url)), `${x.file}.${ext}`);
   }
 });
+
+test('Sites data: a site that names a 3D model has the file, with layers and names the viewer can show', async () => {
+  const data = JSON.parse(readFileSync(new URL('../public/sites/data/sites.json', import.meta.url), 'utf8'));
+  const withModel = data.sites.filter((s) => s.model);
+  assert.ok(withModel.some((s) => s.code === '0589'), '0589 Kathu has a model');
+  for (const s of withModel) {
+    assert.match(s.model, /^\d{4}\.glb$/, `${s.code}: the model is public/sites/models/<code>.glb`);
+    const glb = readFileSync(new URL(`../public/sites/models/${s.model}`, import.meta.url));
+    assert.equal(glb.toString('latin1', 0, 4), 'glTF', `${s.model} is a .glb file`);
+    assert.ok(glb.length < 8e6, `${s.model} stays small enough for a phone`);
+    const text = glb.toString('utf8', 20, 20 + glb.readUInt32LE(12)), gltf = JSON.parse(text);
+    assert.doesNotMatch(text, /subcontractor|ผู้รับเหมาช่วง/i, 'no "subcontractor" wording inside the model');
+    const scene = gltf.scenes[0].extras;
+    assert.ok(scene.views.length && scene.views.every((v) => v.en && v.th && v.pos.length === 3 && v.target.length === 3), 'ready-made views');
+    assert.ok(scene.datum.en && scene.datum.th && scene.note.en && scene.note.th, 'datum and "check on site" note in both languages');
+    const layers = gltf.nodes.filter((n) => n.extras?.layer);
+    assert.ok(layers.length >= 3 && layers.every((n) => n.extras.en && n.extras.th), 'layers named in English and Thai');
+    const items = gltf.nodes.filter((n) => n.extras?.infoEn);
+    assert.ok(items.length > 10, 'objects carry notes');
+    for (const n of items) assert.ok(n.extras.en && n.extras.th && n.extras.infoTh.length === n.extras.infoEn.length, n.name);
+  }
+});

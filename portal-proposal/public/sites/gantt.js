@@ -4,6 +4,8 @@
 // Timeline tab - project Gantt chart (23.11.2026). Loaded from index.html by its own small script:
 //   <script type="module"> import('./gantt.js').then(m => m.init({ getLang })) - independent of the 3D viewer
 // Adds a "3D model / Timeline" tab switch to the panel header and a full-view Gantt over the 3D view (Thai / English).
+// calwwt: a site can have more than one tab before Timeline (views = [{ id, en, th }], e.g. Layouts and 3D model);
+// onView(id) is called when one of them is chosen, and the page shows that one (public/sites/site.mjs).
 // Data: the last saved version from /api/sites/<code>/timeline (tasks database, shared by everyone); if nothing was saved yet,
 // public/sites/data/timelines/<code>.json.
 // "Edit dates": Start / Days / End / % per task (Days = working days; Start or Days moves End, End changes Days),
@@ -119,7 +121,7 @@ const CSS = `
 
 const clone = o => JSON.parse(JSON.stringify(o));
 
-export async function init({ getLang, api = '/api/timeline', defaultUrl = 'timeline.json', canEdit = true, onlyTimeline = false, modelTab = null }) {
+export async function init({ getLang, api = '/api/timeline', defaultUrl = 'timeline.json', canEdit = true, onlyTimeline = false, modelTab = null, views = null, onView = null }) {
   const orig = await fetch(defaultUrl, { cache: 'no-store' }).then(r => r.json());
   let saved = null;                    // { data, ver, savedAt, by } from the server
   let canSave = true;
@@ -139,7 +141,9 @@ export async function init({ getLang, api = '/api/timeline', defaultUrl = 'timel
 
   // tab switch in the panel header
   const tabs = document.createElement('div'); tabs.id = 'tabs'; tabs.setAttribute('role', 'tablist');
-  tabs.innerHTML = '<button type="button" role="tab" data-tab="model"></button><button type="button" role="tab" data-tab="time"></button>';
+  const viewIds = views?.length ? views.map(v => v.id) : ['model'];
+  let lastView = viewIds[0];
+  tabs.innerHTML = [...viewIds, 'time'].map(id => `<button type="button" role="tab" data-tab="${id}"></button>`).join('');
   const hdr = document.querySelector('#rail header'), sub = hdr.querySelector('.sub');
   sub ? sub.after(tabs) : hdr.append(tabs);
 
@@ -567,26 +571,27 @@ export async function init({ getLang, api = '/api/timeline', defaultUrl = 'timel
 
   function setTab(which) {
     const on = which === 'time';
+    if (!on) { lastView = which; onView?.(which); }
     box.hidden = !on;
     if (on) { const s = document.getElementById('sect'); if (s) s.hidden = true; render(); }
     tabs.querySelectorAll('button').forEach(b => { const a = b.dataset.tab === which; b.classList.toggle('on', a); b.setAttribute('aria-selected', a); });
-    try { history.replaceState(null, '', on ? '#timeline' : location.pathname + location.search); } catch (e) {}
+    try { history.replaceState(null, '', on ? '#timeline' : which !== viewIds[0] ? '#' + which : location.pathname + location.search); } catch (e) {}
   }
   function relang() {
-    tabs.querySelectorAll('button').forEach(b => b.textContent = (b.dataset.tab === 'model' && modelTab?.[L()]) || T()[b.dataset.tab]);
+    tabs.querySelectorAll('button').forEach(b => b.textContent = views?.find(v => v.id === b.dataset.tab)?.[L()] || (b.dataset.tab === 'model' && modelTab?.[L()]) || T()[b.dataset.tab]);
     if (!box.hidden) render();
   }
 
   tabs.querySelectorAll('button').forEach(b => b.onclick = () => setTab(b.dataset.tab));
-  $('#gantt-x').onclick = () => setTab('model');
-  document.addEventListener('keydown', e => { if (e.key === 'Escape' && !box.hidden && !edit && !onlyTimeline) setTab('model'); });
+  $('#gantt-x').onclick = () => setTab(lastView);
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && !box.hidden && !edit && !onlyTimeline) setTab(lastView); });
   new MutationObserver(relang).observe(document.documentElement, { attributes: true, attributeFilter: ['lang'] });
   new ResizeObserver(() => { if (!box.hidden && !box.contains(document.activeElement?.closest?.('foreignObject') || null)) render(); }).observe(body);
   document.fonts?.ready.then(() => { if (!box.hidden) render(); });
   relang();
-  setTab(onlyTimeline || location.hash === '#timeline' ? 'time' : 'model');
+  setTab(onlyTimeline || location.hash === '#timeline' ? 'time' : viewIds.includes(location.hash.slice(1)) ? location.hash.slice(1) : viewIds[0]);
   if (onlyTimeline) { tabs.hidden = true; $('#gantt-x').hidden = true; }
-  addEventListener('hashchange', () => { if (location.hash === '#timeline' && box.hidden) setTab('time'); });
-  window.calwwtGantt = { open: () => setTab('time'), close: () => setTab('model'), edit: () => { setTab('time'); startEdit(); } };
+  addEventListener('hashchange', () => { if (location.hash === '#timeline' && box.hidden) setTab('time'); else if (viewIds.length > 1 && viewIds.includes(location.hash.slice(1)) && (location.hash.slice(1) !== lastView || !box.hidden)) setTab(location.hash.slice(1)); });
+  window.calwwtGantt = { open: () => setTab('time'), close: () => setTab(lastView), view: (id) => { if (viewIds.includes(id)) setTab(id); }, edit: () => { setTab('time'); startEdit(); } };
   return window.calwwtGantt;
 }

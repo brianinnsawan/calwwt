@@ -29,7 +29,9 @@ Nothing is shared with calnkt: own logins, own databases, own file storage.
   (and `/sites/programme/`). `layouts.mjs` = wastewater layout viewer, `viewer.mjs` = 3D model (three.js in `vendor/`),
   `gantt.js` = timeline (copied from calcr). Data: `data/sites.json`, starting timelines `data/timelines/<code>.json`.
   Layouts: `layouts/<code>/<name>.pdf` + `.png` (page 1, for quick viewing). 3D models go in `models/<code>.glb` and are named
-  in sites.json `"model"`.
+  in sites.json `"model"`. A site page has the tabs Layouts / 3D model / Timeline (3D model only when the site has one).
+- `tools/models/`: makes the 3D models (`node build.mjs <code>` from `<code>/site.mjs`; see its README.md). The model
+  carries its own names, notes, layers and views; `viewer.mjs` only shows them.
 - Map on the Sites overview: `public/sites/map.mjs` (Leaflet in `vendor/leaflet/`), pins from `lat`/`lng` in sites.json
   (from Brian's Google My Maps). Backgrounds: OpenStreetMap (Map) and Esri World Imagery (Satellite); those two hosts are allowed
   in the Sites pages' security rules only (`SITES_CSP` in `src/sites.mjs`). Click a pin: Open site page / Zoom to site / Google Maps.
@@ -68,5 +70,7 @@ Nothing is shared with calnkt: own logins, own databases, own file storage.
 
 ## Open items (23 Nov 2026)
 - Layouts still missing: 1642 Phun Phon and 1156 Samut Prakan (Brian asked Thada), 1750 Saraburi (not needed yet).
-- No 3D models yet for any site.
+- 3D models: 0589 Kathu done (first version 25 Nov 2026, from the as-built DWG; gaps listed in tools/models/README.md).
+  The other sites are still to do; Brian wants them all. calcr.sppwork.com is his reference for what the viewer should
+  grow into (measure tool, drainage long sections, find by ID, flow arrows).
 - Site notes and starting timelines in `data/sites.json` / `data/timelines/` were written from Brian's site-visit notes; dates to confirm.
