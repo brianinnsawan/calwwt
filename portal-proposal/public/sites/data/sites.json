@@ -302,13 +302,22 @@
      "ยังไม่ต้องปรับปรุงในตอนนี้"
     ]
    },
-   "model": null,
+   "model": "1750.glb",
    "links": [],
-   "layouts": [],
-   "layoutNote": {
-    "en": "No drawings in the folder yet.",
-    "th": "ยังไม่มีแบบในโฟลเดอร์"
-   },
+   "layouts": [
+    {
+     "file": "1750/1750-LAY-SN-02-wastewater-layout",
+     "en": "LAY-SN-02 Wastewater and drainage layout (SPP as-built, 2022)",
+     "th": "LAY-SN-02 ผังบริเวณแสดงระบบน้ำทิ้งโครงการ (แบบก่อสร้างจริง SPP ปี 2022)",
+     "source": "As Built Saraburi/1.Layout/PDF/SN"
+    },
+    {
+     "file": "1750/1750-LAY-ST-03-site-levels",
+     "en": "LAY-ST-03 Site levels (SPP as-built, 2022)",
+     "th": "LAY-ST-03 ผังบริเวณแสดงค่าระดับโครงการ (แบบก่อสร้างจริง SPP ปี 2022)",
+     "source": "As Built Saraburi/1.Layout/PDF/ST"
+    }
+   ],
    "lat": 14.573519,
    "lng": 100.987598,
    "company": "Daoyada 2019 Company Limited Branch 1 Kaengkoi"

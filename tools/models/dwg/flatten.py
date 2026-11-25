@@ -57,7 +57,11 @@ def walk(ents,A,path,layer0,depth=0):
             A2=mul(A,M(e)); inserts.append((lay,path,e['name'],ap(A,e['insertionPoint']['x'],e['insertionPoint']['y']),e.get('xScale'),e.get('rotation'),len(b['entities']) if b else -1))
             if b and depth<8: walk(b['entities'],A2,path+'/'+e['name'],lay,depth+1)
         elif t=='MULTILEADER':
-            texts.append((lay,path,None,json.dumps(e)[:600]))
+            # a leader with its own text (levels are often written this way): position = the arrow tip
+            try: v=e['leaderSections'][0]['leaderLines'][0]['vertices'][0]; pos=ap(A,v['x'],v['y'])
+            except Exception: pos=None
+            ta=e.get('textAnchor') or e.get('contentBasePosition'); tpos=ap(A,ta['x'],ta['y']) if ta else None
+            texts.append((lay,path,pos,'ML '+str(e.get('textContent','')),tpos))
 I=(1,0,0,1,0,0)
 walk(db['entities'],I,'',None)
 pickle.dump((segs,texts,inserts,circles),open(sys.argv[2],'wb'))
