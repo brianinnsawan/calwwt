@@ -56,3 +56,34 @@ Known gaps: air pumps (LAY-EE-09) not placed; tank depth is worked out from the 
 drain pipe size per run (drawn 0.40 m); the round tank at the office is not named on the layout; interior plumbing of
 Star Park, toilets and shops is only in the plan linework; the layout shows the Star Park drain line along the west
 edge of the DLFN-15Q tank (kept as drawn, flagged in the tank's notes); no site photos used.
+
+## 1588 Samut Sakhon (first version, 25 Nov 2026, from PDFs)
+Sources: `LAY-SN-101` (SPP as-built, 13/09/2019: drains, manholes, pipe sizes, 1:200 slopes, buildings, four fuel tank
+outlines, and four tank outlines with no names) and `SN-103` (2019 design sheet for submission: the named tanks and the
+wastewater pipes). `SN-101` (design) only for flow direction.
+The two sheets do not agree: the as-built shows one lying tank in front of building A where the design has two upright
+tanks. Both are in the model, the as-built outlines in their own layer. No sheet has any level: the ground is flat at
+±0.00 and every depth is assumed. No north arrow.
+
+## 1622 Ram Intra (first version, 25 Nov 2026, from PDFs)
+Sources: layout `A-07` and details `A-14` to `A-17` ("FOR AS-BUILD", 2020): positions, pipe sizes, 1:200 slopes, ground
+levels, tank model (Biotech BO-6000), road pit size and levels.
+Assumed: every drain pipe and manhole depth (0.40 m cover at the start, falling 1:200), grease trap sizes, wastewater pipe
+levels. North is taken as up the sheet from the road labels (Lak Si left, Min Buri right); the small north symbol on the
+sheet reads the other way, so confirm against the map. The layout shows no canopy, pump islands or fuel tanks.
+
+## 1687 Phetchaburi (first version, 25 Nov 2026, from PDFs)
+Sources: plan `SN-01` and the pipe slope sheet (2024, stamped FOR CONSTRUCTION, so design, not as-built). They cover one
+corner of the station only: shop building, office toilet, two existing tanks, grease trap, the two new 2,500 L tanks,
+manholes, the 3-compartment trap and the public drain connection.
+Assumed: existing tank depths, all site drain levels and sizes, manhole and trap depths, flat ground. The sheet is plotted
+at about 1:114, not the 1:100 written on it (the model follows its scale bar). The plan says 2,500 L, the slope sheet
+title says 3,000 L. No north arrow.
+
+## 1703 King Kaew (first version, 25 Nov 2026, from PDFs)
+Sources: `LAY-ME-02` (SPP as-built, Nov 2021: positions, pipe routes and the written "inv" levels) and `GN-SEP-01` (oil
+trap size and depth).
+Assumed: the ground. The layout has no ground levels; from the trap detail the whole site is taken flat at -0.85. Also
+tank depths, round tank sizes, manhole floors, drain size. Nine manholes have no written level (interpolated and flagged).
+To check on site: at SP-T-20,000 the inlet (-1.75) is lower than the outlet (-1.65); the north-east corner manhole says
+-1.40 where the written falls give about -1.66. No north arrow.

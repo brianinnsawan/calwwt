@@ -71,12 +71,18 @@ Nothing is shared with calnkt: own logins, own databases, own file storage.
 ## Open items (23 Nov 2026)
 - Layouts still missing: 1642 Phun Phon and 1156 Samut Prakan (Brian asked Thada). 1750 Saraburi has LAY-SN-02 and LAY-ST-03
   (from Brian's separate folder `Chevron Hub Site - NTI Saraburi CPF 2022\01. Drawings\As Built Saraburi`, a full SPP as-built set).
-- 3D models: 0589 Kathu and 1750 Saraburi done (first versions 25 Nov 2026, from the as-built DWGs; gaps listed in
-  tools/models/README.md). The other sites are still to do; Brian wants them all. calcr.sppwork.com is his reference for what the viewer should
-  grow into (measure tool, drainage long sections, find by ID, flow arrows).
+- 3D models (first versions, 25 Nov 2026; sources and gaps per site in tools/models/README.md): 0589 Kathu, 1750 Saraburi
+  (as-built DWGs), 1588 Samut Sakhon, 1622 Ram Intra, 1687 Phetchaburi, 1703 King Kaew (from the PDF layouts). Still to do:
+  1642 Phun Phon and 1156 Samut Prakan (no drawings: rough models from satellite, Street View and site photos, which need
+  Brian's computer connected). calcr.sppwork.com is his reference for what the viewer should grow into (measure tool,
+  drainage long sections, find by ID, flow arrows).
 - All models share one look: `tools/models/style.mjs` (colours, layer names and order, view names, note wording). Brian asked
   for this on 25 Nov 2026; do not give a site its own colours or layer names.
 - For the models still to build, from Brian (25 Nov 2026): at 1642 Phun Phon the main sales building is TWO storeys (other
   sites are one storey); the office on the entrance side is one storey. At 0589 Kathu the underground 25,000 L clean-water
   tank in front of the toilets by the firewall is in the model (layer "Clean-water tank and pumps").
+- Fuel tanks on every site are 30,000 L capsule tanks (`fuelTank()` in tools/models/build.mjs), placed from the drawings;
+  long lying tanks are capsules (`capsuleGeo`), never boxes (Brian, 25 Nov 2026). Depth of the fuel tanks is assumed: the
+  Saraburi as-built set has fuel-system tank drawings (Brian's `As Built Saraburi` folder) that should give the real size
+  and depth; read them when his computer is connected and update `FUEL_TANK` in style.mjs or the 1750 site file.
 - Site notes and starting timelines in `data/sites.json` / `data/timelines/` were written from Brian's site-visit notes; dates to confirm.
