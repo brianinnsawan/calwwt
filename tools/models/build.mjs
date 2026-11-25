@@ -13,7 +13,7 @@ import Delaunator from 'delaunator';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { MATERIALS, LAYERS, VIEWS, SRC, notes } from './style.mjs';   // one look for every site
+import { MATERIALS, LAYERS, VIEWS, SRC, FUEL_TANK, notes } from './style.mjs';   // one look for every site
 
 // GLTFExporter writes its binary file through the browser's FileReader; Node has Blob but not FileReader.
 globalThis.FileReader = class {
@@ -105,6 +105,13 @@ const boxGeo = (w, d, h, x, y, base, rot = 0) => {
 };
 const cylGeo = (r, h, x, y, base, seg = 32) => { const g = new THREE.CylinderGeometry(r, r, h, seg); const c = V(x, y, base + h / 2); g.translate(c.x, c.y, c.z); return g; };
 const hcylGeo = (r, len, x, y, axisLevel, rot = 0) => { const g = new THREE.CylinderGeometry(r, r, len, 32); g.rotateZ(Math.PI / 2); g.rotateY(rad(rot)); const c = V(x, y, axisLevel); g.translate(c.x, c.y, c.z); return g; };
+/** A lying capsule tank: radius r, overall length len (ends included), ends dished by `dish` (slightly rounded, not a ball). */
+const capsuleGeo = (r, len, x, y, axisLevel, rot = 0, dish = r * 0.24) => {
+  const pts = [], n = 8, half = len / 2 - dish;
+  for (let i = 0; i <= n; i++) { const t = (i / n) * Math.PI / 2; pts.push(new THREE.Vector2(r * Math.sin(t), -half - dish * Math.cos(t))); }
+  for (let i = n; i >= 0; i--) { const t = (i / n) * Math.PI / 2; pts.push(new THREE.Vector2(r * Math.sin(t), half + dish * Math.cos(t))); }
+  const g = new THREE.LatheGeometry(pts, 32); g.rotateZ(Math.PI / 2); g.rotateY(rad(rot)); const c = V(x, y, axisLevel); g.translate(c.x, c.y, c.z); return g;
+};
 const latheGeo = (profile, x, y, base, seg = 40) => {
   const g = new THREE.LatheGeometry(profile.map(([r, h]) => new THREE.Vector2(r, h)), seg); const c = V(x, y, base); g.translate(c.x, c.y, c.z); return g;
 };
@@ -135,7 +142,16 @@ const pipeGeo = (pts, r) => {
 };
 const lv = (n) => (Math.abs(n) < 0.0005 ? '±0.00' : (n > 0 ? '+' : '-') + Math.abs(n).toFixed(Math.abs(n * 100 - Math.round(n * 100)) > 0.01 ? 3 : 2));
 
-const api = { notes, SRC, V, ground, lv, add, boxGeo, cylGeo, hcylGeo, latheGeo, prismGeo, pipeGeo, merge: (list) => mergeGeometries(list.every((g) => g.index) ? list : list.map((g) => (g.index ? g.toNonIndexed() : g))), THREE };
+/** An underground fuel tank, the same on every site: fuelTank('T1 · G91', x, y, rot of the long axis, { dia, len, en: [...], th: [...] }). */
+const fuelTank = (label, x, y, rot = 0, o = {}) => {
+  const F = FUEL_TANK, dia = o.dia || F.dia, len = o.len || F.len, g0 = ground(x, y), axis = g0 - F.cover - dia / 2;
+  return add('fuel', capsuleGeo(dia / 2, len, x, y, axis, rot, F.dish), 'fuel', { en: `Fuel tank ${label} · 30,000 L`, th: `ถังน้ำมัน ${label} · 30,000 ลิตร`, tag: label, tagTh: label, kind: 'fuel',
+    info: notes([`Underground fuel tank ${label}: a lying 30,000 litre capsule tank with slightly rounded ends, ${dia.toFixed(2)} m across and ${len.toFixed(1)} m long.`, ...(o.en || []),
+      `The depth is not on these drawings: the top is shown ${F.cover.toFixed(1)} m below ground (about ${lv(g0 - F.cover)}).`, 'Keep clear when planning any digging.'],
+    [`ถังน้ำมันใต้ดิน ${label}: ถังแคปซูลแบบนอน 30,000 ลิตร ปลายโค้งเล็กน้อย กว้าง ${dia.toFixed(2)} ม. ยาว ${len.toFixed(1)} ม.`, ...(o.th || []),
+      `ในแบบชุดนี้ไม่มีความลึก แสดงหลังถังต่ำกว่าพื้น ${F.cover.toFixed(1)} ม. (ประมาณ ${lv(g0 - F.cover)})`, 'เว้นระยะเมื่อวางแผนงานขุด'], 'part') }, V(x, y, g0 + 0.5));
+};
+const api = { notes, SRC, FUEL_TANK, fuelTank, capsuleGeo, V, ground, lv, add, boxGeo, cylGeo, hcylGeo, latheGeo, prismGeo, pipeGeo, merge: (list) => mergeGeometries(list.every((g) => g.index) ? list : list.map((g) => (g.index ? g.toNonIndexed() : g))), THREE };
 
 // ---- ground surface and plan linework
 {

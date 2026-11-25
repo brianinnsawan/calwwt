@@ -72,10 +72,11 @@ export default {
     { id: 'starpark', en: 'Star Park tank', th: 'ถังที่ Star Park', from: [2244, -376, 10], to: [2256, -362, -1] },
     { id: 'toilets', en: 'Toilet tank', th: 'ถังที่ห้องน้ำ', from: [2276, -447, 9], to: [2286, -434, -1] },
     { id: 'shops', en: 'Shop grease traps and tank', th: 'ถังดักไขมันและถังของร้านค้า', from: [2318, -520, 16], to: [2299, -488, -1] },
+    { id: 'fuel', from: [2272, -461, 6], to: [2259.8, -447.6, -1.8] },
     { id: 'under', en: 'From below ground', th: 'มองจากใต้ดิน', from: [2262, -528, -9], to: [2296, -500, -0.5] },
   ],
 
-  build({ notes, V, ground, lv, add, boxGeo, cylGeo, hcylGeo, prismGeo, pipeGeo, merge }) {
+  build({ notes, fuelTank, capsuleGeo, V, ground, lv, add, boxGeo, cylGeo, hcylGeo, prismGeo, pipeGeo, merge }) {
     const r2 = (n) => Math.round(n * 100) / 100;   // worked-out levels are shown to the centimetre
     const lines = notes;   // (en lines, th lines, 'drawn' | 'part' | 'context')
     const pipe = (layer, pts, r, material, o) => { const g = pipeGeo(pts, r); if (typeof o.info === 'function') o = { ...o, info: o.info(Math.round(g.length)) }; add(layer, g.geometry, material, o, o.tag ? g.mid.clone().setY(g.mid.y + 0.6) : null); return g; };
@@ -85,10 +86,7 @@ export default {
     const slabs = [];
     for (const t of TANKS) {
       const r = 1.25, top = r2(t.inL + 0.475), axis = top - r, g0 = r2(ground(t.x, t.y)), [ux, uy] = unit(t.rot);
-      const parts = [hcylGeo(r, t.len - 2 * 0.6, t.x, t.y, axis, t.rot)];
-      for (const s of [-1, 1]) { // rounded ends
-        const e = hcylGeo(r * 0.82, 0.6, t.x + s * ux * (t.len / 2 - 0.3), t.y + s * uy * (t.len / 2 - 0.3), axis, t.rot); parts.push(e);
-      }
+      const parts = [capsuleGeo(r, t.len, t.x, t.y, axis, t.rot, 0.3)];   // lying capsule, slightly rounded ends
       add('tanks', merge(parts), 'tank', { en: `${t.id} treatment tank · ${t.where.en}`, th: `ถังบำบัด ${t.id} · ${t.where.th}`, tag: t.id, tagTh: t.id, kind: 'tank',
         info: lines([`Package wastewater treatment tank ${t.id}, lying down: ${t.len.toFixed(2)} m long, 2.50 m across.`,
           `Pipe in (PVC 6") ${lv(t.inL)} at the ${t.inAt} end · pipe out (PVC 6") ${lv(t.outL)} at the ${t.outAt} end.`,
@@ -181,11 +179,10 @@ export default {
     pipe('drains', [[2243.96, -511.0, -1.40], [2243.96, -513.4, -1.42]], 0.15, 'drain', { en: 'West outfall to the public drain', th: 'ท่อออกด้านตะวันตกลงท่อสาธารณะ', kind: 'drain', info: lines(['0.30 m concrete pipe from the oil trap to the public manhole (COM-02). Level -1.40 at the trap; the far end is not on the layout.'], ['ท่อคอนกรีต 0.30 ม. จากบ่อดักน้ำมันไปบ่อพักสาธารณะ (COM-02) ระดับ -1.40 ที่บ่อดัก ปลายทางไม่มีในผัง'], P) });
     pipe('drains', [[2308.66, -511.08, -1.40], [2309.3, -513.3, -1.42]], 0.15, 'drain', { en: 'East outfall to the public drain', th: 'ท่อออกด้านตะวันออกลงท่อสาธารณะ', kind: 'drain', info: lines(['0.30 m concrete pipe from the oil trap to the public manhole (COM-02). Level -1.40 at the trap; the far end is not on the layout.'], ['ท่อคอนกรีต 0.30 ม. จากบ่อดักน้ำมันไปบ่อพักสาธารณะ (COM-02) ระดับ -1.40 ที่บ่อดัก ปลายทางไม่มีในผัง'], P) });
 
-    // ---------- underground fuel tanks: plan outline only
-    for (const [label, x0, y0, x1, y1] of [['T6 · G91', 2257.0, -443.4, 2259.4, -439.6], ['T4 · G95', 2260.4, -443.4, 2262.8, -439.6], ['T5 · PD', 2257.0, -447.2, 2259.4, -443.6], ['T3 · E20', 2260.4, -447.2, 2262.8, -443.6], ['T1 · B7', 2257.0, -455.6, 2259.4, -448.1], ['T2 · B10', 2260.4, -455.6, 2262.8, -448.1]]) {
-      const cx = (x0 + x1) / 2, cy = (y0 + y1) / 2;
-      add('fuel', boxGeo(x1 - x0, y1 - y0, 3.2, cx, cy, ground(cx, cy) - 3.2, 0), 'fuel', { en: `Fuel tank area ${label}`, th: `บริเวณถังน้ำมัน ${label}`, kind: 'fuel',
-        info: lines(['Underground fuel tank compartment (30,000 L tanks, drawings TYI-04 to TYI-07). Only the plan outline is used here; the depth shown is not real.', 'Keep clear when planning any digging.'], ['ช่องถังน้ำมันใต้ดิน (ถัง 30,000 ลิตร แบบ TYI-04 ถึง TYI-07) ใช้เฉพาะแนวผัง ความลึกที่แสดงไม่ใช่ค่าจริง', 'เว้นระยะเมื่อวางแผนงานขุด'], C) });
+    // ---------- underground fuel tanks: the layout draws four 7.5 x 2.35 m tanks (blocks T1, T2, T4, T6 "Tank PSE");
+    // the T4 and T6 blocks each carry two product names, so each is one tank with two compartments.
+    for (const [label, cx, cy, two] of [['T6 · G91 + T5 · PD', 2258.13, -443.35, 1], ['T4 · G95 + T3 · E20', 2261.50, -443.35, 1], ['T1 · B7', 2258.15, -451.85, 0], ['T2 · B10', 2261.50, -451.85, 0]]) {
+      fuelTank(label, cx, cy, 90, { dia: 2.35, en: two ? ['The layout draws this as one tank carrying two products, so it is shown as one tank with two compartments.'] : [], th: two ? ['ในผังเป็นถังใบเดียวที่ระบุน้ำมัน 2 ชนิด จึงแสดงเป็นถังใบเดียวแบ่ง 2 ช่อง'] : [] });
     }
 
     // ---------- buildings and canopy (context)

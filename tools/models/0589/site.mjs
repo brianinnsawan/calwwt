@@ -80,10 +80,11 @@ export default {
     { id: 'plan', en: 'Plan', th: 'ผัง', from: [338, 87.9, 125], to: [338, 88, 0] },
     { id: 'new', en: 'New tanks at the toilets', th: 'ถังใหม่ข้างห้องน้ำ', from: [372.5, 95.5, 8], to: [364.3, 103.8, -0.3] },
     { id: 'kfc', en: 'KFC tanks', th: 'ถังของ KFC', from: [289, 117, 12], to: [297, 101.5, -0.5] },
+    { id: 'fuel', from: [341, 66, 6], to: [328.35, 82.5, -1.8] },
     { id: 'under', en: 'From below ground', th: 'มองจากใต้ดิน', from: [352, 90, -7], to: [366, 103.5, 0.2] },
   ],
 
-  build({ notes, V, ground, lv, add, boxGeo, cylGeo, hcylGeo, latheGeo, prismGeo, pipeGeo, merge }) {
+  build({ notes, fuelTank, capsuleGeo, V, ground, lv, add, boxGeo, cylGeo, hcylGeo, latheGeo, prismGeo, pipeGeo, merge }) {
     const lines = notes;   // (en lines, th lines, 'drawn' | 'part' | 'context')
 
     // ---------- the four new tanks, their base and piles
@@ -144,12 +145,17 @@ export default {
     // ---------- underground clean-water tank and booster pumps (water-supply layer of the combined as-built DWG, block
     // "cold water system": "underground water storage tank 25,000 litres" and "PACKAGE BOOSTER PUMP SET"). Brian, 25 Nov 2026:
     // it is in front of the toilets by the firewall, next to the four new tanks.
-    add('water', boxGeo(6.40, 3.51, 2.0, 366.46, 107.81, TANK_GROUND - 2.0, 7.1), 'waterTank', { en: 'Underground water tank · 25,000 L', th: 'ถังเก็บน้ำใต้ดิน 25,000 ลิตร', tag: 'Water tank 25,000 L', tagTh: 'ถังเก็บน้ำ 25,000 ลิตร', kind: 'tank',
-      info: lines(['Underground storage tank for clean water (not wastewater), 25,000 litres, in front of the toilets by the firewall.', 'Outline 6.40 × 3.50 m with two access covers, from the water-supply drawing.',
-        'It is right beside the four new tanks: on the drawing about 0.8 m from Tank 4 and 1.4 m from Tanks 1 to 3. Keep clear when digging.', 'Depth is not on the drawing: shown 2.0 m deep from ground level.'],
-      ['ถังเก็บน้ำดีใต้ดิน (ไม่ใช่น้ำเสีย) ขนาด 25,000 ลิตร อยู่หน้าห้องน้ำติดกำแพงกันไฟ', 'แนวถัง 6.40 × 3.50 ม. มีฝาเปิด 2 จุด จากแบบระบบน้ำดี',
-        'อยู่ติดกับถังใหม่ทั้ง 4 ใบ: ในแบบห่างจากถัง 4 ประมาณ 0.8 ม. และห่างจากถัง 1 ถึง 3 ประมาณ 1.4 ม. ต้องเว้นระยะเมื่อขุด', 'ในแบบไม่มีความลึก แสดงลึก 2.0 ม. จากระดับพื้น'], P) }, V(366.46, 107.81, TANK_GROUND + 0.5));
-    for (const [mx, my] of [[368.39, 108.04], [364.52, 107.56]]) add('water', cylGeo(0.3, 0.04, mx, my, TANK_GROUND), 'cover', { en: 'Water tank cover', th: 'ฝาถังเก็บน้ำ', nopick: 1 });
+    { // the drawing shows a lying capsule tank 2.50 m across, 4.90 m shell + dished ends = 5.40 m, on a 6.40 x 3.50 m base
+      const top = TANK_GROUND - 0.6, axis = top - 1.25;
+      add('water', capsuleGeo(1.25, 5.40, 366.46, 107.80, axis, 7.1, 0.25), 'waterTank', { en: 'Underground water tank · 25,000 L', th: 'ถังเก็บน้ำใต้ดิน 25,000 ลิตร', tag: 'Water tank 25,000 L', tagTh: 'ถังเก็บน้ำ 25,000 ลิตร', kind: 'tank',
+        info: lines(['Underground storage tank for clean water (not wastewater), 25,000 litres, in front of the toilets by the firewall.', 'A lying capsule tank with slightly rounded ends: 2.50 m across and 5.40 m long, with two access covers, on a 6.40 × 3.50 m base. Shape and size are from the water-supply drawing.',
+          'It is right beside the four new tanks: on the drawing its base is about 0.8 m from Tank 4 and 1.4 m from Tanks 1 to 3. Keep clear when digging.', `Depth is not on the drawing: the top is shown 0.6 m below ground (about ${lv(top)}), underside about ${lv(top - 2.5)}.`],
+        ['ถังเก็บน้ำดีใต้ดิน (ไม่ใช่น้ำเสีย) ขนาด 25,000 ลิตร อยู่หน้าห้องน้ำติดกำแพงกันไฟ', 'ถังแคปซูลแบบนอน ปลายโค้งเล็กน้อย กว้าง 2.50 ม. ยาว 5.40 ม. มีฝาเปิด 2 จุด วางบนฐาน 6.40 × 3.50 ม. รูปทรงและขนาดมาจากแบบระบบน้ำดี',
+          'อยู่ติดกับถังใหม่ทั้ง 4 ใบ: ในแบบ ฐานถังห่างจากถัง 4 ประมาณ 0.8 ม. และห่างจากถัง 1 ถึง 3 ประมาณ 1.4 ม. ต้องเว้นระยะเมื่อขุด', `ในแบบไม่มีความลึก แสดงหลังถังต่ำกว่าพื้น 0.6 ม. (ประมาณ ${lv(top)}) ใต้ถังประมาณ ${lv(top - 2.5)}`], P) }, V(366.46, 107.80, TANK_GROUND + 0.5));
+      add('water', boxGeo(6.40, 3.50, 0.30, 366.46, 107.80, top - 2.5 - 0.30, 7.1), 'slab', { en: 'Water tank base', th: 'ฐานถังเก็บน้ำ', kind: 'slab',
+        info: lines(['Base under the water tank, 6.40 × 3.50 m on the drawing. Thickness (0.30 m) and level are assumed.'], ['ฐานใต้ถังเก็บน้ำ ขนาด 6.40 × 3.50 ม. ตามแบบ ความหนา (0.30 ม.) และระดับเป็นค่าสมมติ'], P) });
+      for (const [mx, my] of [[368.39, 108.04], [364.52, 107.56]]) { add('water', cylGeo(0.3, 0.6, mx, my, top - 0.02), 'waterTank', { en: 'Water tank access', th: 'ช่องเปิดถังเก็บน้ำ', nopick: 1 }); add('water', cylGeo(0.32, 0.04, mx, my, TANK_GROUND), 'cover', { en: 'Water tank cover', th: 'ฝาถังเก็บน้ำ', nopick: 1 }); }
+    }
     add('water', boxGeo(1.50, 1.20, 1.0, 373.68, 111.20, 1.108, 7.1), 'waterTank', { en: 'Booster pump set', th: 'ชุดปั๊มเพิ่มแรงดันน้ำ', tag: 'Water pumps', tagTh: 'ปั๊มน้ำ', kind: 'air',
       info: lines(['Package booster pump set for the clean-water supply, behind the toilets by the firewall. It draws from the underground water tank.', 'Shown as a 1.5 × 1.2 m block, 1.0 m high.'],
         ['ชุดปั๊มเพิ่มแรงดันสำหรับระบบน้ำดี อยู่หลังห้องน้ำติดกำแพงกันไฟ สูบน้ำจากถังเก็บน้ำใต้ดิน', 'แสดงเป็นแท่นขนาด 1.5 × 1.2 ม. สูง 1.0 ม.'], P) }, V(373.68, 111.20, 2.7));
@@ -188,7 +194,7 @@ export default {
     const gAt = (x, y) => ground(x, y);
     { // WTT-1: long tank behind KFC, four access covers
       const x = 294.5, y = 102.55, rot = 5, len = 6.5, r = 1.2, cover = 1.0, top = gAt(x, y) - cover;
-      const g = hcylGeo(r, len, x, y, top - r, rot);
+      const g = capsuleGeo(r, len, x, y, top - r, rot);
       add('tanks', g, 'tankOlder', { en: 'WTT-1 · KFC treatment tank', th: 'WTT-1 · ถังบำบัดของ KFC', tag: 'WTT-1 (KFC)', tagTh: 'WTT-1 (KFC)', kind: 'tank',
         info: lines(['Package wastewater treatment tank 1, 10 m³/day. Long tank lying behind KFC with four access covers.', 'Drawn about 6.5 m long and 2.4 m across, 1.0 m below ground.'], ['ถังบำบัดน้ำเสียสำเร็จรูป 1 ขนาด 10 ลบ.ม./วัน ถังนอนด้านหลัง KFC มีฝาเปิด 4 จุด', 'แสดงยาวประมาณ 6.5 ม. กว้าง 2.4 ม. หลังถังต่ำกว่าพื้น 1.0 ม.'], P) }, V(x, y, gAt(x, y) + 0.5));
       for (const [mx, my] of [[291.93, 102.35], [293.37, 102.50], [295.52, 102.68], [296.92, 102.80]]) {
@@ -222,11 +228,8 @@ export default {
       info: lines(['Out of commission. Waste removed and the tank filled with fresh water. The new pipe joins the existing pipe at this tank\'s inlet.', 'Drawn 2.2 × 3.3 m and 2.0 m deep.'], ['เลิกใช้งานแล้ว สูบของเสียออกและเติมน้ำสะอาดไว้ ท่อใหม่ต่อกับท่อเดิมที่ทางเข้าของถังนี้', 'แสดงขนาด 2.2 × 3.3 ม. ลึก 2.0 ม.'], P) }, V(383.8, 106.85, 1.108 + 0.5));
     pipe('old', [[384.14, 103.49, 0.158], [385.94, 102.09, 0.158]], 0.075, 'tankOld', { en: 'Old outlet pipe to manhole R0', th: 'ท่อออกเดิมไปบ่อพัก R0', kind: 'pipe', info: lines(['Old outlet from the treatment tank, +0.158 at the manhole.'], ['ท่อออกเดิมจากถังบำบัด ระดับ +0.158 ที่บ่อพัก'], D) });
 
-    // ---------- underground fuel tanks: plan outline only
-    for (const [label, y0] of [['B10 / PD', 88.4], ['T4 · D', 85.0], ['T3 · E20', 81.7], ['T2 · G95', 78.3], ['T1 · G91', 74.9]]) {
-      add('fuel', boxGeo(7.5, 2.3, 3.2, 328.35, y0 + 1.15, gAt(328.35, y0 + 1.15) - 3.2, 0), 'fuel', { en: `Fuel tank area ${label}`, th: `บริเวณถังน้ำมัน ${label}`, kind: 'fuel',
-        info: lines(['Underground fuel tank. Only the plan outline is on this drawing; the depth shown is not real.', 'Keep clear when planning any digging.'], ['ถังน้ำมันใต้ดิน ในแบบนี้มีเฉพาะแนวผัง ความลึกที่แสดงไม่ใช่ค่าจริง', 'เว้นระยะเมื่อวางแผนงานขุด'], C) });
-    }
+    // ---------- underground fuel tanks: 30,000 L capsule tanks where the as-built plan draws them (7.5 x 2.3 m outlines)
+    for (const [label, y0] of [['B10 / PD', 88.4], ['T4 · D', 85.0], ['T3 · E20', 81.7], ['T2 · G95', 78.3], ['T1 · G91', 74.9]]) fuelTank(label, 328.35, y0 + 1.15, 0);
 
     // ---------- buildings and canopy (context)
     const building = (poly, floor, h, o) => add('buildings', prismGeo(poly, floor, h), 'building', { ...o, kind: 'building', info: lines(o.lines || [], o.linesTh || [], C) }, V(poly.reduce((a, p) => a + p[0], 0) / poly.length, poly.reduce((a, p) => a + p[1], 0) / poly.length, floor + h + 0.6));

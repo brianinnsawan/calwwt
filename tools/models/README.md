@@ -36,7 +36,10 @@ Sources: `Spp Caltex Kathu Septic As Built Combined.dwg` (plan, manhole levels, 
 `Elevations on lift day.xlsx` (tank in / out levels), `Section Tank actual april 4.pdf` and
 `Tank air pumps and elevations.pdf` (tank size, depth, base and piles).
 The underground 25,000 L clean-water tank and the booster pump set (block "cold water system" in the same DWG) are in
-the layer "Clean-water tank and pumps": outline from the drawing, depth assumed 2.0 m (not on the drawing).
+the layer "Clean-water tank and pumps": a lying capsule tank 2.50 x 5.40 m on a 6.40 x 3.50 m base, as drawn; the depth
+is not on the drawing (top shown 0.6 m below ground).
+Fuel tanks (every site): `fuelTank()` in build.mjs draws a 30,000 L capsule tank where the drawing shows the tank;
+depth is assumed (top 1.0 m below ground). Long lying tanks are capsules (`capsuleGeo`), never boxes.
 Not yet used: site photos, 360 videos and Street View (building heights and what is on the surface are assumed).
 Known gaps: sizes and depths of WTT-1, WTT-2, WTT-4, the two Biotech tanks, the grease traps and the old tank; pipe
 routes for KFC and the middle building; which drain runs are pipe and which are channel; fuel tank depths.

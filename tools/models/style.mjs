@@ -23,7 +23,7 @@ export const MATERIALS = {
   waterTank: [0x58b7e6, 0.5],    // clean-water storage tank and its pumps (light blue): not wastewater, shown because it is in the way of digging
   // structure and context
   slab: [0xb7b1a8, 0.9], pile: [0x8c857b],
-  fuel: [0xf2a51a, 0.18], building: [0xc4ccd4, 0.22], roof: [0xdfe5ea, 0.3], column: [0x9aa5b1],
+  fuel: [0xf2a51a, 0.6], building: [0xc4ccd4, 0.22], roof: [0xdfe5ea, 0.3], column: [0x9aa5b1],
 };
 
 /** Layers, in the order they are listed in the viewer. A site uses the ones it needs. */
@@ -35,16 +35,17 @@ export const LAYERS = [
   { id: 'base', en: 'Tank base slabs and piles', th: 'ฐานถังและเสาเข็ม' },
   { id: 'water', en: 'Clean-water tank and pumps', th: 'ถังเก็บน้ำดีและปั๊มน้ำ' },
   { id: 'old', en: 'Tanks and pipes out of use', th: 'ถังและท่อที่เลิกใช้' },
-  { id: 'fuel', en: 'Fuel tank area', th: 'บริเวณถังน้ำมันใต้ดิน' },
+  { id: 'fuel', en: 'Fuel tanks', th: 'ถังน้ำมันใต้ดิน' },
   { id: 'buildings', en: 'Buildings and canopy', th: 'อาคารและหลังคาคลุมหัวจ่าย' },
   { id: 'plan', en: 'Drawing on the ground', th: 'แบบบนพื้น' },
   { id: 'ground', en: 'Ground surface', th: 'ผิวพื้น' },
 ];
 
-/** Standard views. Every site has site, plan and under, in this order: site, plan, close-ups..., under. */
+/** Standard views. Every site has site, plan and under, and fuel when it has fuel tanks, in this order: site, plan, close-ups..., fuel, under. */
 export const VIEWS = {
   site: { en: 'Whole site', th: 'ทั้งสถานี' },
   plan: { en: 'Plan', th: 'ผัง' },
+  fuel: { en: 'Fuel tanks', th: 'ถังน้ำมัน' },
   under: { en: 'From below ground', th: 'มองจากใต้ดิน' },
 };
 
@@ -54,6 +55,11 @@ export const SRC = {
   part: { en: 'Position is from the drawings. Size or depth is assumed or from a standard detail.', th: 'ตำแหน่งมาจากแบบ ขนาดหรือความลึกเป็นค่าสมมติหรือมาจากแบบมาตรฐาน' },
   context: { en: 'Outline is from the drawings. Height is assumed, for context only.', th: 'แนวมาจากแบบ ความสูงเป็นค่าสมมติ ใช้ดูประกอบเท่านั้น' },
 };
+/** Underground fuel tanks, the same on every site (Brian, 25 Nov 2026): a lying 30,000 litre capsule tank with slightly
+ *  rounded ends, placed where the drawing shows it. 2.3 m across and 7.5 m long is the outline on the Kathu and Saraburi
+ *  as-built drawings. The depth is not on the wastewater drawings: the top is shown `cover` below ground. */
+export const FUEL_TANK = { litres: 30000, dia: 2.3, len: 7.5, dish: 0.28, cover: 1.0 };
+
 /** notes(en lines, th lines, 'drawn' | 'part' | 'context') -> the info object for add(). */
 export const notes = (en, th, kind) => ({ en: [...en, SRC[kind].en], th: [...th, SRC[kind].th] });
 
@@ -62,5 +68,7 @@ export const notes = (en, th, kind) => ({ en: [...en, SRC[kind].en], th: [...th,
 //   treatment tanks:     tag = the tank's model or name on the drawing ("DLFN-15Q", "Tank 1", "WTT-1")
 //   grease traps:        tag "Grease traps" on the first of a row; oil traps: tag "Oil trap (west outfall)"
 //   treated-water pipes: tag "Treated water out"
+//   fuel tanks:          always fuelTank(label, x, y, rot) from build.mjs, never a box
+//   long lying tanks:    capsuleGeo(...) (slightly rounded ends), never a box or a flat-ended cylinder
 //   buildings:           tag = the name on the drawing ("KFC", "Toilets", "Shops 1", "Canopy")
 //   notes:               first what it is and its size, then levels, then anything to check on site, then the source line
