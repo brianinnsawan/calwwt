@@ -13,6 +13,7 @@ import Delaunator from 'delaunator';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { MATERIALS, LAYERS, VIEWS, SRC, notes } from './style.mjs';   // one look for every site
 
 // GLTFExporter writes its binary file through the browser's FileReader; Node has Blob but not FileReader.
 globalThis.FileReader = class {
@@ -69,7 +70,8 @@ export const ground = (x, y) => {
 const mats = new Map();
 const mat = (name) => {
   if (mats.has(name)) return mats.get(name);
-  const [color, opacity = 1] = site.materials[name] || (() => { throw new Error('No material ' + name); })();
+  // the shared style wins: a site file can only add a material no other site has
+  const [color, opacity = 1] = MATERIALS[name] || site.materials?.[name] || (() => { throw new Error('No material ' + name); })();
   const m = new THREE.MeshStandardMaterial({ color, roughness: 0.85, metalness: 0, transparent: opacity < 1, opacity, side: opacity < 1 ? THREE.DoubleSide : THREE.FrontSide });
   m.name = name; mats.set(name, m); return m;
 };
@@ -77,9 +79,14 @@ const mat = (name) => {
 // ---- shapes
 const scene = new THREE.Scene(); scene.name = `${code} ${site.name}`;
 const layers = new Map();
-for (const l of site.layers) {
-  const g = new THREE.Group(); g.name = l.id; g.userData = { layer: true, en: l.en, th: l.th, on: l.on !== false };
-  layers.set(l.id, g); scene.add(g);
+{ // layers: the site names the ones it uses (ids, or objects from older site files); names and order come from the shared style
+  const wanted = site.layers.map((l) => (typeof l === 'string' ? { id: l } : l));
+  const std = LAYERS.filter((l) => wanted.some((w) => w.id === l.id)), extra = wanted.filter((w) => !LAYERS.some((l) => l.id === w.id));
+  for (const l of [...std.filter((l) => !['plan', 'ground'].includes(l.id)), ...extra, ...std.filter((l) => ['plan', 'ground'].includes(l.id))]) {
+    if (!l.en || !l.th) throw new Error(`Layer ${l.id} is not in style.mjs and has no en / th name`);
+    const g = new THREE.Group(); g.name = l.id; g.userData = { layer: true, en: l.en, th: l.th, on: wanted.find((w) => w.id === l.id)?.on !== false };
+    layers.set(l.id, g); scene.add(g);
+  }
 }
 const info = (o) => {
   const u = {};
@@ -128,7 +135,7 @@ const pipeGeo = (pts, r) => {
 };
 const lv = (n) => (Math.abs(n) < 0.0005 ? '±0.00' : (n > 0 ? '+' : '-') + Math.abs(n).toFixed(Math.abs(n * 100 - Math.round(n * 100)) > 0.01 ? 3 : 2));
 
-const api = { V, ground, lv, add, boxGeo, cylGeo, hcylGeo, latheGeo, prismGeo, pipeGeo, merge: (list) => mergeGeometries(list.every((g) => g.index) ? list : list.map((g) => (g.index ? g.toNonIndexed() : g))), THREE };
+const api = { notes, SRC, V, ground, lv, add, boxGeo, cylGeo, hcylGeo, latheGeo, prismGeo, pipeGeo, merge: (list) => mergeGeometries(list.every((g) => g.index) ? list : list.map((g) => (g.index ? g.toNonIndexed() : g))), THREE };
 
 // ---- ground surface and plan linework
 {
@@ -156,7 +163,7 @@ const api = { V, ground, lv, add, boxGeo, cylGeo, hcylGeo, latheGeo, prismGeo, p
       }
     }
     const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(arr, 3));
-    const [color] = site.materials[material];
+    const [color] = MATERIALS[material];
     const l = new THREE.LineSegments(g, new THREE.LineBasicMaterial({ color })); l.material.name = material; l.name = key === 'general' ? 'As-built plan' : 'As-built plan (drainage)'; l.userData = { nopick: 1 };
     layers.get('plan').add(l);
   }
@@ -164,7 +171,7 @@ const api = { V, ground, lv, add, boxGeo, cylGeo, hcylGeo, latheGeo, prismGeo, p
 
 site.build(api);
 
-scene.userData = { site: code, name: site.name, datum: site.datum, note: site.note, views: site.views.map((v) => ({ ...v, pos: V(...v.from).toArray().map((n) => +n.toFixed(2)), target: V(...v.to).toArray().map((n) => +n.toFixed(2)), from: undefined, to: undefined })), north: site.north, built: site.built };
+scene.userData = { site: code, name: site.name, datum: site.datum, note: site.note, views: site.views.map((v) => ({ ...v, ...(VIEWS[v.id] || {}), pos: V(...v.from).toArray().map((n) => +n.toFixed(2)), target: V(...v.to).toArray().map((n) => +n.toFixed(2)), from: undefined, to: undefined })), north: site.north, built: site.built };
 scene.updateMatrixWorld(true);
 const out = path.join(here, '..', '..', 'portal-proposal', 'public', 'sites', 'models', `${code}.glb`);
 fs.mkdirSync(path.dirname(out), { recursive: true });

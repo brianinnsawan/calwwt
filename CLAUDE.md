@@ -74,4 +74,9 @@ Nothing is shared with calnkt: own logins, own databases, own file storage.
 - 3D models: 0589 Kathu and 1750 Saraburi done (first versions 25 Nov 2026, from the as-built DWGs; gaps listed in
   tools/models/README.md). The other sites are still to do; Brian wants them all. calcr.sppwork.com is his reference for what the viewer should
   grow into (measure tool, drainage long sections, find by ID, flow arrows).
+- All models share one look: `tools/models/style.mjs` (colours, layer names and order, view names, note wording). Brian asked
+  for this on 25 Nov 2026; do not give a site its own colours or layer names.
+- For the models still to build, from Brian (25 Nov 2026): at 1642 Phun Phon the main sales building is TWO storeys (other
+  sites are one storey); the office on the entrance side is one storey. At 0589 Kathu the underground 25,000 L clean-water
+  tank in front of the toilets by the firewall is in the model (layer "Clean-water tank and pumps").
 - Site notes and starting timelines in `data/sites.json` / `data/timelines/` were written from Brian's site-visit notes; dates to confirm.

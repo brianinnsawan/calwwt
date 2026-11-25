@@ -17,6 +17,8 @@ Then run the site tests and ship as usual (CLAUDE.md, "How to ship a change").
   `part` (position from the drawings, size or depth assumed) or `context` (above ground, for orientation only).
   Say honestly which one applies: people plan digging from this.
 - `<code>/plan-lines.json`: the as-built plan linework drawn on the ground (centimetres from `origin`).
+- `style.mjs`: ONE look for every site (colours by what a thing is, layer names and order, standard view names, the
+  source sentence at the end of every note, naming rules). build.mjs applies it; a site file cannot change it.
 - `build.mjs`: the shapes (box, cylinder, tank profile, pipe through points with invert levels, ground surface from the
   finished levels) and the `.glb` writer.
 
@@ -33,6 +35,8 @@ A site with only PDF drawings can still be done: read positions off the PDF at i
 Sources: `Spp Caltex Kathu Septic As Built Combined.dwg` (plan, manhole levels, new tanks and pipes),
 `Elevations on lift day.xlsx` (tank in / out levels), `Section Tank actual april 4.pdf` and
 `Tank air pumps and elevations.pdf` (tank size, depth, base and piles).
+The underground 25,000 L clean-water tank and the booster pump set (block "cold water system" in the same DWG) are in
+the layer "Clean-water tank and pumps": outline from the drawing, depth assumed 2.0 m (not on the drawing).
 Not yet used: site photos, 360 videos and Street View (building heights and what is on the surface are assumed).
 Known gaps: sizes and depths of WTT-1, WTT-2, WTT-4, the two Biotech tanks, the grease traps and the old tank; pipe
 routes for KFC and the middle building; which drain runs are pipe and which are channel; fuel tank depths.

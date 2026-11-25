@@ -9,11 +9,6 @@
 // src: 'drawn' = position and levels from the drawings; 'part' = position from the drawings, size or depth assumed or
 //      taken from the standard detail; 'context' = above-ground context only (heights assumed).
 const D = 'drawn', P = 'part', C = 'context';
-const src = {
-  [D]: { en: 'From the as-built drawings.', th: 'จากแบบก่อสร้างจริง' },
-  [P]: { en: 'Position from the as-built layout. Size or depth is from the standard detail or assumed.', th: 'ตำแหน่งจากผังก่อสร้างจริง ขนาดหรือความลึกมาจากแบบมาตรฐานหรือเป็นค่าสมมติ' },
-  [C]: { en: 'Outline from the as-built plan. Height is assumed, for context only.', th: 'แนวจากผังก่อสร้างจริง ความสูงเป็นค่าสมมติ ใช้ดูประกอบเท่านั้น' },
-};
 
 // Drain runs: every point is a sump with the level written on LAY-SN-02: [x, y, level]. Listed in flow direction.
 const RUNS = [
@@ -34,7 +29,7 @@ const NO_SUMP = new Set(['2245.35,-510.63', '2245.35,-507.4', '2243.94,-507.5', 
 // Treatment tanks (COM-07): lying cylinders 2.50 m across on a 0.20 m slab, 3.5 m wide and 1.0 m longer than the tank
 const TANKS = [
   { id: 'DLFN-15Q', where: { en: 'Star Park (west side)', th: 'Star Park (ด้านตะวันตก)' }, x: 2255.85, y: -362.40, rot: 90, len: 8.2, inL: -0.43, outL: -0.63, inAt: 'north', outAt: 'south', covers: [[2255.85, -359.16], [2255.85, -361.81], [2255.85, -364.69], [2255.85, -365.53]],
-    extra: { en: 'On the layout the Star Park drain line (sumps P1 to P3) runs along the west edge of this tank, so the two overlap in the model. Check on site which is where.', th: 'ในผัง แนวท่อระบายน้ำรอบ Star Park (บ่อพัก P1 ถึง P3) เดินทับขอบด้านตะวันตกของถังนี้ ทำให้ในโมเดลซ้อนกัน ต้องตรวจสอบตำแหน่งจริงหน้างาน' } },
+    extra: { en: 'On the layout the Star Park drain line (manholes P1 to P3) runs along the west edge of this tank, so the two overlap in the model. Check on site which is where.', th: 'ในผัง แนวท่อระบายน้ำรอบ Star Park (บ่อพัก P1 ถึง P3) เดินทับขอบด้านตะวันตกของถังนี้ ทำให้ในโมเดลซ้อนกัน ต้องตรวจสอบตำแหน่งจริงหน้างาน' } },
   { id: 'DTNC-15Q', where: { en: 'toilets and garbage room', th: 'ห้องน้ำและห้องพักขยะ' }, x: 2285.73, y: -433.71, rot: 9, len: 6.9, inL: -0.50, outL: -0.70, inAt: 'east', outAt: 'west', covers: [[2288.31, -433.31], [2286.24, -433.63], [2284.12, -433.97], [2283.30, -434.10]] },
   { id: 'DLFN-12Q', where: { en: 'shops (south-east corner)', th: 'ร้านค้า (มุมตะวันออกเฉียงใต้)' }, x: 2300.20, y: -504.19, rot: 16, len: 6.7, inL: -1.01, outL: -1.19, inAt: 'east', outAt: 'west', covers: [[2302.62, -503.50], [2300.70, -504.05], [2298.74, -504.61], [2297.94, -504.84]] },
 ];
@@ -70,22 +65,7 @@ export default {
     points: GROUND,
     names: { siteGround: { en: 'Forecourt and paving', th: 'ลานและพื้นผิว' }, road: { en: 'Highway side and entrances', th: 'ด้านทางหลวงและทางเข้าออก' } },
   },
-  layers: [
-    { id: 'tanks', en: 'Treatment tanks and grease traps', th: 'ถังบำบัดและถังดักไขมัน' },
-    { id: 'sewer', en: 'Wastewater pipes', th: 'ท่อน้ำเสีย' },
-    { id: 'drains', en: 'Site drains, sumps and oil traps', th: 'ท่อระบายน้ำ บ่อพัก และบ่อดักน้ำมัน' },
-    { id: 'base', en: 'Tank base slabs', th: 'ฐานคอนกรีตใต้ถัง' },
-    { id: 'fuel', en: 'Fuel tank area', th: 'บริเวณถังน้ำมันใต้ดิน' },
-    { id: 'buildings', en: 'Buildings and canopy', th: 'อาคารและหลังคาคลุมหัวจ่าย' },
-    { id: 'plan', en: 'As-built plan on the ground', th: 'แบบก่อสร้างจริงบนพื้น' },
-    { id: 'ground', en: 'Ground surface', th: 'ผิวพื้น' },
-  ],
-  materials: {
-    siteGround: [0xd9d6d0, 0.38], road: [0x6b6661, 0.5], planLine: [0x66727c], planDrainLine: [0x0f8f84],
-    tank: [0x0f9aa6, 0.8], grease: [0xc0892b, 0.75], oilTrap: [0x7c5cc4, 0.7], cover: [0x2f3a44],
-    sewerRaw: [0xb4531a], sewerTreated: [0x2f6fde], drain: [0x7b8794], manhole: [0x9aa5b1, 0.55],
-    slab: [0xb7b1a8, 0.9], fuel: [0xf2a51a, 0.18], building: [0xc4ccd4, 0.22], roof: [0xdfe5ea, 0.3],
-  },
+  layers: ['tanks', 'sewer', 'drains', 'base', 'fuel', 'buildings', 'plan', 'ground'],   // names, order and colours: ../style.mjs
   views: [
     { id: 'site', en: 'Whole site', th: 'ทั้งสถานี', from: [2275, -585, 85], to: [2275, -445, 0] },
     { id: 'plan', en: 'Plan', th: 'ผัง', from: [2275, -433.1, 245], to: [2275, -433, 0] },
@@ -95,9 +75,9 @@ export default {
     { id: 'under', en: 'From below ground', th: 'มองจากใต้ดิน', from: [2262, -528, -9], to: [2296, -500, -0.5] },
   ],
 
-  build({ V, ground, lv, add, boxGeo, cylGeo, hcylGeo, prismGeo, pipeGeo, merge }) {
+  build({ notes, V, ground, lv, add, boxGeo, cylGeo, hcylGeo, prismGeo, pipeGeo, merge }) {
     const r2 = (n) => Math.round(n * 100) / 100;   // worked-out levels are shown to the centimetre
-    const lines = (en, th, kind) => ({ en: [...en, src[kind].en], th: [...th, src[kind].th] });
+    const lines = notes;   // (en lines, th lines, 'drawn' | 'part' | 'context')
     const pipe = (layer, pts, r, material, o) => { const g = pipeGeo(pts, r); if (typeof o.info === 'function') o = { ...o, info: o.info(Math.round(g.length)) }; add(layer, g.geometry, material, o, o.tag ? g.mid.clone().setY(g.mid.y + 0.6) : null); return g; };
     const unit = (rot) => { const a = rot * Math.PI / 180; return [Math.cos(a), Math.sin(a)]; };
 
@@ -178,10 +158,10 @@ export default {
       run.pts.forEach(([x, y, l], i) => {
         const k = `${x},${y}`; if (seen.has(k) || NO_SUMP.has(k)) return; seen.add(k);
         const g0 = r2(ground(x, y)), id = `${run.id}${i + 1}`;
-        add('drains', boxGeo(0.84, 0.84, g0 - (l - 0.35), x, y, l - 0.35, 0), 'manhole', { en: `Sump ${id}`, th: `บ่อพัก ${id}`, lvl: lv(l), kind: 'manhole',
+        add('drains', boxGeo(0.84, 0.84, g0 - (l - 0.35), x, y, l - 0.35, 0), 'manhole', { en: `Manhole ${id}`, th: `บ่อพัก ${id}`, lvl: lv(l), kind: 'manhole',
           info: lines([`Level written on the layout: ${lv(l)} (taken as the pipe level). Ground here about ${lv(g0)}, so the pipe is about ${(g0 - l).toFixed(2)} m down.`, 'Drawn as the standard 0.60 m concrete sump (COM-05); the pit floor is taken as 0.20 m below the pipe.'],
             [`ระดับที่ระบุในผัง: ${lv(l)} (ถือเป็นระดับท่อ) ระดับพื้นตรงนี้ประมาณ ${lv(g0)} ท่อจึงอยู่ลึกประมาณ ${(g0 - l).toFixed(2)} ม.`, 'แสดงเป็นบ่อพักคอนกรีตมาตรฐาน 0.60 ม. (COM-05) ก้นบ่อใช้ค่าต่ำกว่าท่อ 0.20 ม.'], P) });
-        add('drains', boxGeo(0.7, 0.7, 0.03, x, y, g0, 0), 'cover', { en: `Sump ${id} cover`, th: `ฝาบ่อพัก ${id}`, nopick: 1 });
+        add('drains', boxGeo(0.7, 0.7, 0.03, x, y, g0, 0), 'cover', { en: `Manhole ${id} cover`, th: `ฝาบ่อพัก ${id}`, nopick: 1 });
       });
       const a = run.pts[0][2], b = run.pts[run.pts.length - 1][2];
       pipe('drains', run.pts, 0.2, 'drain', { en: `Site drain: ${run.en}`, th: 'ท่อระบายน้ำภายในสถานี', kind: 'drain',
