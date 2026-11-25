@@ -29,7 +29,7 @@ Nothing is shared with calnkt: own logins, own databases, own file storage.
   (and `/sites/programme/`). `layouts.mjs` = wastewater layout viewer, `viewer.mjs` = 3D model (three.js in `vendor/`),
   `gantt.js` = timeline (copied from calcr). Data: `data/sites.json`, starting timelines `data/timelines/<code>.json`.
   Layouts: `layouts/<code>/<name>.pdf` + `.png` (page 1, for quick viewing). 3D models go in `models/<code>.glb` and are named
-  in sites.json `"model"`. A site page has the tabs Layouts / 3D model / Timeline (3D model only when the site has one).
+  in sites.json `"model"`. A site page has the tabs 3D model / Layouts / Timeline; the 3D model tab exists only when the site has one and is then the tab that opens first.
 - `tools/models/`: makes the 3D models (`node build.mjs <code>` from `<code>/site.mjs`; see its README.md). The model
   carries its own names, notes, layers and views; `viewer.mjs` only shows them.
 - Map on the Sites overview: `public/sites/map.mjs` (Leaflet in `vendor/leaflet/`), pins from `lat`/`lng` in sites.json
