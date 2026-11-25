@@ -36,3 +36,16 @@ Sources: `Spp Caltex Kathu Septic As Built Combined.dwg` (plan, manhole levels, 
 Not yet used: site photos, 360 videos and Street View (building heights and what is on the surface are assumed).
 Known gaps: sizes and depths of WTT-1, WTT-2, WTT-4, the two Biotech tanks, the grease traps and the old tank; pipe
 routes for KFC and the middle building; which drain runs are pipe and which are channel; fuel tank depths.
+
+## 1750 Saraburi (first version, 25 Nov 2026)
+Sources (Brian's folder `Chevron Hub Site - NTI Saraburi CPF 2022\01. Drawings\As Built Saraburi`, SPP as-built set, Dec 2022):
+`1.Layout\DWG\SN` wastewater layout DWG = LAY-SN-02 (positions, the level at every sump and tank connection; the DWG holds
+two copies of the plan side by side, the right-hand one is the wastewater plan), COM-07 (tank and grease trap details),
+COM-02 (3-chamber oil trap), COM-05 (sump standard), LAY-ST-03 (forecourt levels, read off the sheet).
+What is in it: the three lying treatment tanks (DLFN-15Q Star Park, DTNC-15Q toilets, DLFN-12Q shops) with their base
+slabs, 14 grease traps, the 6" pipe behind the shops, tank inlets and outlets, every site drain run with its sumps and
+levels, both oil traps at the highway, fuel tank outlines, buildings and canopy.
+Known gaps: air pumps (LAY-EE-09) not placed; tank depth is worked out from the inlet level and COM-07, not surveyed;
+drain pipe size per run (drawn 0.40 m); the round tank at the office is not named on the layout; interior plumbing of
+Star Park, toilets and shops is only in the plan linework; the layout shows the Star Park drain line along the west
+edge of the DLFN-15Q tank (kept as drawn, flagged in the tank's notes); no site photos used.

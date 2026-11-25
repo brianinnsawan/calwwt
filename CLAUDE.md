@@ -69,8 +69,9 @@ Nothing is shared with calnkt: own logins, own databases, own file storage.
 - Brian is not a programmer: explain in plain words, lead with what changed for the people using the site.
 
 ## Open items (23 Nov 2026)
-- Layouts still missing: 1642 Phun Phon and 1156 Samut Prakan (Brian asked Thada), 1750 Saraburi (not needed yet).
-- 3D models: 0589 Kathu done (first version 25 Nov 2026, from the as-built DWG; gaps listed in tools/models/README.md).
-  The other sites are still to do; Brian wants them all. calcr.sppwork.com is his reference for what the viewer should
+- Layouts still missing: 1642 Phun Phon and 1156 Samut Prakan (Brian asked Thada). 1750 Saraburi has LAY-SN-02 and LAY-ST-03
+  (from Brian's separate folder `Chevron Hub Site - NTI Saraburi CPF 2022\01. Drawings\As Built Saraburi`, a full SPP as-built set).
+- 3D models: 0589 Kathu and 1750 Saraburi done (first versions 25 Nov 2026, from the as-built DWGs; gaps listed in
+  tools/models/README.md). The other sites are still to do; Brian wants them all. calcr.sppwork.com is his reference for what the viewer should
   grow into (measure tool, drainage long sections, find by ID, flow arrows).
 - Site notes and starting timelines in `data/sites.json` / `data/timelines/` were written from Brian's site-visit notes; dates to confirm.
