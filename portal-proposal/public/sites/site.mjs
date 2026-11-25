@@ -1,6 +1,6 @@
 // One site (calwwt.sppwork.com/sites/<code>/) and the all-sites programme (/sites/programme/).
-// Left panel: site notes, wastewater layouts and links. Right, as tabs: Layouts (wastewater drawings, layouts.mjs),
-// 3D model (viewer.mjs, when sites.json names a file in /sites/models/; it loads the first time its tab is opened)
+// Left panel: site notes, wastewater layouts and links. Right, as tabs: 3D model (viewer.mjs, when sites.json names a file in
+// /sites/models/; it is the first tab and opens by default), Layouts (wastewater drawings, layouts.mjs)
 // and Timeline (gantt.js, one shared timeline per site, saved on the server).
 import { languageFor } from '/__nav/bar.mjs';
 
@@ -74,9 +74,9 @@ async function main() {
       let started = false;
       const start = (into) => { if (started) return; started = true; import('/sites/viewer.mjs').then((v) => v.show(into, `/sites/models/${site.model}`, w, l)).catch((e) => { console.warn('model', e); }); };
       if (site.layouts?.length) {
-        const pl = pane('layouts'), pm = pane('model'); pm.hidden = true;
+        const pl = pane('layouts'), pm = pane('model'); pl.hidden = true;   // the 3D model is the tab that opens first (Brian, 25 Nov 2026)
         (await import('/sites/layouts.mjs')).showLayouts(pl, site, l, w);
-        views = [{ id: 'layouts', en: 'Layouts', th: 'แบบ' }, { id: 'model', en: W.en.model3d, th: W.th.model3d }];
+        views = [{ id: 'model', en: W.en.model3d, th: W.th.model3d }, { id: 'layouts', en: 'Layouts', th: 'แบบ' }];
         onView = (id) => { pl.hidden = id !== 'layouts'; pm.hidden = id !== 'model'; if (id === 'model') start(pm); };
         const s3 = el('section'); s3.append(el('h2', {}, w.model3d)); const p3 = el('p'); p3.append(el('a', { href: '#model' }, w.open3d)); s3.append(p3); sec.after(s3);
       } else start(view);
