@@ -96,6 +96,7 @@ export default {
   ],
 
   build({ V, ground, lv, add, boxGeo, cylGeo, hcylGeo, prismGeo, pipeGeo, merge }) {
+    const r2 = (n) => Math.round(n * 100) / 100;   // worked-out levels are shown to the centimetre
     const lines = (en, th, kind) => ({ en: [...en, src[kind].en], th: [...th, src[kind].th] });
     const pipe = (layer, pts, r, material, o) => { const g = pipeGeo(pts, r); if (typeof o.info === 'function') o = { ...o, info: o.info(Math.round(g.length)) }; add(layer, g.geometry, material, o, o.tag ? g.mid.clone().setY(g.mid.y + 0.6) : null); return g; };
     const unit = (rot) => { const a = rot * Math.PI / 180; return [Math.cos(a), Math.sin(a)]; };
@@ -103,7 +104,7 @@ export default {
     // ---------- treatment tanks
     const slabs = [];
     for (const t of TANKS) {
-      const r = 1.25, top = t.inL + 0.475, axis = top - r, g0 = ground(t.x, t.y), [ux, uy] = unit(t.rot);
+      const r = 1.25, top = r2(t.inL + 0.475), axis = top - r, g0 = r2(ground(t.x, t.y)), [ux, uy] = unit(t.rot);
       const parts = [hcylGeo(r, t.len - 2 * 0.6, t.x, t.y, axis, t.rot)];
       for (const s of [-1, 1]) { // rounded ends
         const e = hcylGeo(r * 0.82, 0.6, t.x + s * ux * (t.len / 2 - 0.3), t.y + s * uy * (t.len / 2 - 0.3), axis, t.rot); parts.push(e);
@@ -176,10 +177,10 @@ export default {
     for (const run of RUNS) {
       run.pts.forEach(([x, y, l], i) => {
         const k = `${x},${y}`; if (seen.has(k) || NO_SUMP.has(k)) return; seen.add(k);
-        const g0 = ground(x, y), id = `${run.id}${i + 1}`;
+        const g0 = r2(ground(x, y)), id = `${run.id}${i + 1}`;
         add('drains', boxGeo(0.84, 0.84, g0 - (l - 0.35), x, y, l - 0.35, 0), 'manhole', { en: `Sump ${id}`, th: `บ่อพัก ${id}`, lvl: lv(l), kind: 'manhole',
-          info: lines([`Level written on the layout: ${lv(l)} (pipe level). Ground here about ${lv(g0)}, so the pipe is about ${(g0 - l).toFixed(2)} m down.`, 'Drawn as the standard 0.60 m concrete sump (COM-05); the pit floor is taken as 0.20 m below the pipe.'],
-            [`ระดับที่ระบุในผัง: ${lv(l)} (ระดับท่อ) ระดับพื้นตรงนี้ประมาณ ${lv(g0)} ท่อจึงอยู่ลึกประมาณ ${(g0 - l).toFixed(2)} ม.`, 'แสดงเป็นบ่อพักคอนกรีตมาตรฐาน 0.60 ม. (COM-05) ก้นบ่อใช้ค่าต่ำกว่าท่อ 0.20 ม.'], P) });
+          info: lines([`Level written on the layout: ${lv(l)} (taken as the pipe level). Ground here about ${lv(g0)}, so the pipe is about ${(g0 - l).toFixed(2)} m down.`, 'Drawn as the standard 0.60 m concrete sump (COM-05); the pit floor is taken as 0.20 m below the pipe.'],
+            [`ระดับที่ระบุในผัง: ${lv(l)} (ถือเป็นระดับท่อ) ระดับพื้นตรงนี้ประมาณ ${lv(g0)} ท่อจึงอยู่ลึกประมาณ ${(g0 - l).toFixed(2)} ม.`, 'แสดงเป็นบ่อพักคอนกรีตมาตรฐาน 0.60 ม. (COM-05) ก้นบ่อใช้ค่าต่ำกว่าท่อ 0.20 ม.'], P) });
         add('drains', boxGeo(0.7, 0.7, 0.03, x, y, g0, 0), 'cover', { en: `Sump ${id} cover`, th: `ฝาบ่อพัก ${id}`, nopick: 1 });
       });
       const a = run.pts[0][2], b = run.pts[run.pts.length - 1][2];
