@@ -10,11 +10,6 @@
 // src: 'drawn' = position and levels from the drawings; 'part' = position from the drawings, size or depth assumed;
 //      'context' = above-ground context only (heights assumed).
 const D = 'drawn', P = 'part', C = 'context';
-const src = {
-  [D]: { en: 'From the as-built drawings.', th: 'จากแบบก่อสร้างจริง' },
-  [P]: { en: 'Position from the as-built drawing. Size and depth are assumed (not on the drawings).', th: 'ตำแหน่งจากแบบก่อสร้างจริง ขนาดและความลึกเป็นค่าสมมติ (ไม่มีในแบบ)' },
-  [C]: { en: 'Outline from the as-built plan. Height is assumed, for context only.', th: 'แนวจากแบบก่อสร้างจริง ความสูงเป็นค่าสมมติ ใช้ดูประกอบเท่านั้น' },
-};
 
 // Site drains: manholes with the levels written on the drawing: [x, y, finished level, inlet (invert), pit bottom]
 const MH = {
@@ -79,42 +74,24 @@ export default {
       road: { en: 'Highway 4024 and entrances', th: 'ทางหลวง 4024 และทางเข้าออก' },
     },
   },
-  layers: [
-    { id: 'tanks', en: 'Wastewater tanks', th: 'ถังบำบัดน้ำเสีย' },
-    { id: 'sewer', en: 'Wastewater pipes', th: 'ท่อน้ำเสีย' },
-    { id: 'drains', en: 'Site drains and manholes', th: 'ท่อระบายน้ำและบ่อพัก' },
-    { id: 'air', en: 'Air pumps and air lines', th: 'ปั๊มลมและท่อลม' },
-    { id: 'base', en: 'Tank base slabs and piles', th: 'ฐานถังและเสาเข็ม' },
-    { id: 'old', en: 'Old tank (out of use)', th: 'ถังเก่า (เลิกใช้)' },
-    { id: 'fuel', en: 'Fuel tank area', th: 'บริเวณถังน้ำมันใต้ดิน' },
-    { id: 'buildings', en: 'Buildings and canopy', th: 'อาคารและหลังคาคลุมหัวจ่าย' },
-    { id: 'plan', en: 'As-built plan on the ground', th: 'แบบก่อสร้างจริงบนพื้น' },
-    { id: 'ground', en: 'Ground surface', th: 'ผิวพื้น' },
-  ],
-  materials: {
-    siteGround: [0xd9d6d0, 0.38], road: [0x6b6661, 0.5], planLine: [0x66727c], planDrainLine: [0x0f8f84],
-    tankNew: [0x0f9aa6, 0.8], tankOther: [0x4f86c6, 0.7], grease: [0xc0892b, 0.75], tankOld: [0x8d9399, 0.45], cover: [0x2f3a44],
-    sewerRaw: [0xb4531a], sewerTreated: [0x2f6fde], drain: [0x7b8794], manhole: [0x9aa5b1, 0.55],
-    airLine: [0xe0b100], airPump: [0x3aa655], slab: [0xb7b1a8, 0.9], pile: [0x8c857b],
-    fuel: [0xf2a51a, 0.18], building: [0xc4ccd4, 0.22], roof: [0xdfe5ea, 0.3], column: [0x9aa5b1],
-  },
+  layers: ['tanks', 'sewer', 'drains', 'air', 'base', 'water', 'old', 'fuel', 'buildings', 'plan', 'ground'],   // names, order and colours: ../style.mjs
   views: [
     { id: 'site', en: 'Whole site', th: 'ทั้งสถานี', from: [338, 8, 78], to: [338, 88, 0] },
     { id: 'plan', en: 'Plan', th: 'ผัง', from: [338, 87.9, 125], to: [338, 88, 0] },
     { id: 'new', en: 'New tanks at the toilets', th: 'ถังใหม่ข้างห้องน้ำ', from: [372.5, 95.5, 8], to: [364.3, 103.8, -0.3] },
     { id: 'kfc', en: 'KFC tanks', th: 'ถังของ KFC', from: [289, 117, 12], to: [297, 101.5, -0.5] },
+    { id: 'fuel', from: [341, 66, 6], to: [328.35, 82.5, -1.8] },
     { id: 'under', en: 'From below ground', th: 'มองจากใต้ดิน', from: [352, 90, -7], to: [366, 103.5, 0.2] },
   ],
 
-  build({ V, ground, lv, add, boxGeo, cylGeo, hcylGeo, latheGeo, prismGeo, pipeGeo, merge }) {
-    const note = (kind) => src[kind];
-    const lines = (en, th, kind) => ({ en: [...en, note(kind).en], th: [...th, note(kind).th] });
+  build({ notes, fuelTank, capsuleGeo, V, ground, lv, add, boxGeo, cylGeo, hcylGeo, latheGeo, prismGeo, pipeGeo, merge }) {
+    const lines = notes;   // (en lines, th lines, 'drawn' | 'part' | 'context')
 
     // ---------- the four new tanks, their base and piles
     const slabs = [], piles = [];
     for (const t of TANKS) {
       const name = { en: `Tank ${t.n} · ${t.model}`, th: `ถัง ${t.n} · ${t.model}` };
-      add('tanks', latheGeo(FRA40, t.x, t.y, TANK_BASE), 'tankNew', {
+      add('tanks', latheGeo(FRA40, t.x, t.y, TANK_BASE), 'tank', {
         ...name, tag: `Tank ${t.n}`, tagTh: `ถัง ${t.n}`, kind: 'tank',
         info: lines(
           [`Ferrocement tank, 4,000 L, ${t.role.en}. One of 4 in series: 16 m³ in total, 8 m³/day, BOD 500 in → 40 mg/l or less out.`,
@@ -125,7 +102,7 @@ export default {
             `ระดับพื้น ${lv(TANK_GROUND)} · หลังถัง ${lv(TANK_TOP)} · ใต้ถัง ${lv(TANK_BASE)} (ลึกจากพื้น 2.40 ม.)`], D),
       }, V(t.x, t.y, TANK_GROUND + 0.4));
       // access neck up to the cover at ground level
-      add('tanks', cylGeo(0.35, TANK_GROUND - TANK_TOP, t.x, t.y, TANK_TOP), 'tankNew', { en: `Tank ${t.n} access neck`, th: `คอถัง ${t.n}`, nopick: 1 });
+      add('tanks', cylGeo(0.35, TANK_GROUND - TANK_TOP, t.x, t.y, TANK_TOP), 'tank', { en: `Tank ${t.n} access neck`, th: `คอถัง ${t.n}`, nopick: 1 });
       add('tanks', cylGeo(0.40, 0.04, t.x, t.y, TANK_GROUND), 'cover', { en: `Tank ${t.n} cover`, th: `ฝาถัง ${t.n}`, nopick: 1 });
       slabs.push(boxGeo(2.3, 2.3, 0.2, t.x, t.y, TANK_BASE - 0.2, 7.5));
       const a = 7.5 * Math.PI / 180, c = Math.cos(a), s = Math.sin(a);
@@ -165,15 +142,33 @@ export default {
       pipeGeo([[364.67, 100.78, airL], [364.31, 102.96, airL]], 0.025).geometry]), 'airLine', { en: 'Air lines to Tanks 2 and 3', th: 'ท่อลมเข้าถัง 2 และ 3', kind: 'air',
       info: lines(['From the air pumps along the south side of the tanks. Route from the drawing; depth is assumed (about 0.3 m below ground).'], ['จากปั๊มลม เดินเลียบด้านใต้ของถัง แนวท่อจากแบบ ความลึกเป็นค่าสมมติ (ประมาณ 0.3 ม. ใต้พื้น)'], P) });
 
+    // ---------- underground clean-water tank and booster pumps (water-supply layer of the combined as-built DWG, block
+    // "cold water system": "underground water storage tank 25,000 litres" and "PACKAGE BOOSTER PUMP SET"). Brian, 25 Nov 2026:
+    // it is in front of the toilets by the firewall, next to the four new tanks.
+    { // the drawing shows a lying capsule tank 2.50 m across, 4.90 m shell + dished ends = 5.40 m, on a 6.40 x 3.50 m base
+      const top = TANK_GROUND - 0.6, axis = top - 1.25;
+      add('water', capsuleGeo(1.25, 5.40, 366.46, 107.80, axis, 7.1, 0.25), 'waterTank', { en: 'Underground water tank · 25,000 L', th: 'ถังเก็บน้ำใต้ดิน 25,000 ลิตร', tag: 'Water tank 25,000 L', tagTh: 'ถังเก็บน้ำ 25,000 ลิตร', kind: 'tank',
+        info: lines(['Underground storage tank for clean water (not wastewater), 25,000 litres, in front of the toilets by the firewall.', 'A lying capsule tank with slightly rounded ends: 2.50 m across and 5.40 m long, with two access covers, on a 6.40 × 3.50 m base. Shape and size are from the water-supply drawing.',
+          'It is right beside the four new tanks: on the drawing its base is about 0.8 m from Tank 4 and 1.4 m from Tanks 1 to 3. Keep clear when digging.', `Depth is not on the drawing: the top is shown 0.6 m below ground (about ${lv(top)}), underside about ${lv(top - 2.5)}.`],
+        ['ถังเก็บน้ำดีใต้ดิน (ไม่ใช่น้ำเสีย) ขนาด 25,000 ลิตร อยู่หน้าห้องน้ำติดกำแพงกันไฟ', 'ถังแคปซูลแบบนอน ปลายโค้งเล็กน้อย กว้าง 2.50 ม. ยาว 5.40 ม. มีฝาเปิด 2 จุด วางบนฐาน 6.40 × 3.50 ม. รูปทรงและขนาดมาจากแบบระบบน้ำดี',
+          'อยู่ติดกับถังใหม่ทั้ง 4 ใบ: ในแบบ ฐานถังห่างจากถัง 4 ประมาณ 0.8 ม. และห่างจากถัง 1 ถึง 3 ประมาณ 1.4 ม. ต้องเว้นระยะเมื่อขุด', `ในแบบไม่มีความลึก แสดงหลังถังต่ำกว่าพื้น 0.6 ม. (ประมาณ ${lv(top)}) ใต้ถังประมาณ ${lv(top - 2.5)}`], P) }, V(366.46, 107.80, TANK_GROUND + 0.5));
+      add('water', boxGeo(6.40, 3.50, 0.30, 366.46, 107.80, top - 2.5 - 0.30, 7.1), 'slab', { en: 'Water tank base', th: 'ฐานถังเก็บน้ำ', kind: 'slab',
+        info: lines(['Base under the water tank, 6.40 × 3.50 m on the drawing. Thickness (0.30 m) and level are assumed.'], ['ฐานใต้ถังเก็บน้ำ ขนาด 6.40 × 3.50 ม. ตามแบบ ความหนา (0.30 ม.) และระดับเป็นค่าสมมติ'], P) });
+      for (const [mx, my] of [[368.39, 108.04], [364.52, 107.56]]) { add('water', cylGeo(0.3, 0.6, mx, my, top - 0.02), 'waterTank', { en: 'Water tank access', th: 'ช่องเปิดถังเก็บน้ำ', nopick: 1 }); add('water', cylGeo(0.32, 0.04, mx, my, TANK_GROUND), 'cover', { en: 'Water tank cover', th: 'ฝาถังเก็บน้ำ', nopick: 1 }); }
+    }
+    add('water', boxGeo(1.50, 1.20, 1.0, 373.68, 111.20, 1.108, 7.1), 'waterTank', { en: 'Booster pump set', th: 'ชุดปั๊มเพิ่มแรงดันน้ำ', tag: 'Water pumps', tagTh: 'ปั๊มน้ำ', kind: 'air',
+      info: lines(['Package booster pump set for the clean-water supply, behind the toilets by the firewall. It draws from the underground water tank.', 'Shown as a 1.5 × 1.2 m block, 1.0 m high.'],
+        ['ชุดปั๊มเพิ่มแรงดันสำหรับระบบน้ำดี อยู่หลังห้องน้ำติดกำแพงกันไฟ สูบน้ำจากถังเก็บน้ำใต้ดิน', 'แสดงเป็นแท่นขนาด 1.5 × 1.2 ม. สูง 1.0 ม.'], P) }, V(373.68, 111.20, 2.7));
+
     // ---------- new sump on the drain line
-    add('drains', boxGeo(1.0, 1.0, SUMP[2] - (SUMP[3] - 0.15), SUMP[0], SUMP[1], SUMP[3] - 0.15, 7), 'manhole', { en: 'New sump (treated water joins the site drain)', th: 'บ่อพักใหม่ (น้ำที่บำบัดแล้วลงท่อระบายน้ำ)', tag: 'New sump', tagTh: 'บ่อพักใหม่', lvl: `IN ${lv(SUMP[3])}`, kind: 'manhole',
+    add('drains', boxGeo(1.0, 1.0, SUMP[2] - (SUMP[3] - 0.15), SUMP[0], SUMP[1], SUMP[3] - 0.15, 7), 'manhole', { en: 'New sump (treated water joins the site drain)', th: 'บ่อพักใหม่ (น้ำที่บำบัดแล้วลงท่อระบายน้ำ)', tag: 'New sump', tagTh: 'บ่อพักใหม่', lvl: lv(SUMP[3]), kind: 'manhole',
       info: lines([`Built on the existing concrete drain pipe. Ground ${lv(SUMP[2])} · drain inlet ${lv(SUMP[3])} · treated water arrives at +0.07.`, 'Size of the sump is assumed (1.0 m square).'],
         [`สร้างคร่อมท่อระบายน้ำคอนกรีตเดิม ระดับพื้น ${lv(SUMP[2])} · ท่อเข้า ${lv(SUMP[3])} · น้ำที่บำบัดแล้วเข้าที่ +0.07`, 'ขนาดบ่อเป็นค่าสมมติ (1.0 ม. สี่เหลี่ยม)'], P) }, V(SUMP[0], SUMP[1], SUMP[2] + 0.5));
     add('drains', boxGeo(0.9, 0.9, 0.04, SUMP[0], SUMP[1], SUMP[2], 7), 'cover', { en: 'New sump cover', th: 'ฝาบ่อพักใหม่', nopick: 1 });
 
     // ---------- site drains and manholes
     for (const [id, [x, y, f, inl, bot]] of Object.entries(MH)) {
-      add('drains', boxGeo(0.8, 0.8, f - (bot - 0.1), x, y, bot - 0.1, 6), 'manhole', { en: `Manhole ${id}`, th: `บ่อพัก ${id}`, lvl: `IN ${lv(inl)}`, kind: 'manhole',
+      add('drains', boxGeo(0.8, 0.8, f - (bot - 0.1), x, y, bot - 0.1, 6), 'manhole', { en: `Manhole ${id}`, th: `บ่อพัก ${id}`, lvl: lv(inl), kind: 'manhole',
         info: lines([`Top (finished level) ${lv(f)} · inlet ${lv(inl)} · bottom of pit ${lv(bot)}.`, `Pipe inlet is ${(f - inl).toFixed(2)} m below the cover. Pit drawn 0.6 m square inside.`],
           [`ระดับหลังบ่อ ${lv(f)} · ท่อเข้า ${lv(inl)} · ก้นบ่อ ${lv(bot)}`, `ท่อเข้าอยู่ต่ำกว่าฝาบ่อ ${(f - inl).toFixed(2)} ม. แสดงบ่อขนาดภายใน 0.6 ม.`], D) });
       add('drains', boxGeo(0.7, 0.7, 0.03, x, y, f, 6), 'cover', { en: `Manhole ${id} cover`, th: `ฝาบ่อพัก ${id}`, nopick: 1 });
@@ -186,24 +181,24 @@ export default {
           [`ไหลจากระดับ ${lv(first)} ถึง ${lv(last)} ผ่าน ${nodes.length} จุด ระดับที่แต่ละบ่อพักมาจากแบบ`, 'แสดงเป็นท่อ 0.30 ม. สัญลักษณ์ในแบบมีท่อคอนกรีต 0.30 ม. และ 0.40 ม. กับรางคอนกรีต แต่ไม่ได้ระบุว่าช่วงใดใช้แบบใด'], P) });
     }
     const trap = (pt, w, d, rot, o) => add('drains', boxGeo(w, d, pt[2] - (pt[3] - 0.5), pt[0], pt[1], pt[3] - 0.5, rot), 'grease', o, V(pt[0], pt[1], pt[2] + 0.5));
-    trap(TRAP_W, 0.9, 3.0, 12, { en: 'Trap sump at the west outlet', th: 'บ่อดักที่ทางออกด้านตะวันตก', tag: 'West outlet', tagTh: 'ทางออกตะวันตก', lvl: `IN ${lv(TRAP_W[3])}`, kind: 'manhole',
+    trap(TRAP_W, 0.9, 3.0, 12, { en: 'Trap sump at the west outlet', th: 'บ่อดักที่ทางออกด้านตะวันตก', tag: 'West outlet', tagTh: 'ทางออกตะวันตก', lvl: lv(TRAP_W[3]), kind: 'manhole',
       info: lines(['Grating-covered trap sump before the public drain. Water goes in at +0.05 and out to the public manhole at ±0.00.', 'Public manhole: footpath -0.05, bottom of pit -1.64.', 'Depth of the trap is assumed.'],
         ['บ่อดักฝาตะแกรงก่อนลงท่อระบายน้ำสาธารณะ น้ำเข้าที่ +0.05 ออกไปบ่อสาธารณะที่ ±0.00', 'บ่อสาธารณะ: ระดับทางเท้า -0.05 ก้นบ่อ -1.64', 'ความลึกของบ่อดักเป็นค่าสมมติ'], P) });
-    trap([TRAP_E[0] + 1.2, TRAP_E[1] - 1.0, TRAP_E[2], TRAP_E[3]], 0.9, 3.4, 8, { en: 'Trap sump at the east outlet', th: 'บ่อดักที่ทางออกด้านตะวันออก', tag: 'East outlet', tagTh: 'ทางออกตะวันออก', lvl: `IN ${lv(TRAP_E[3])}`, kind: 'manhole',
+    trap([TRAP_E[0] + 1.2, TRAP_E[1] - 1.0, TRAP_E[2], TRAP_E[3]], 0.9, 3.4, 8, { en: 'Trap sump at the east outlet', th: 'บ่อดักที่ทางออกด้านตะวันออก', tag: 'East outlet', tagTh: 'ทางออกตะวันออก', lvl: lv(TRAP_E[3]), kind: 'manhole',
       info: lines(['Grating-covered trap sump at the south-east corner. The east drain, which takes the treated water from the new tanks, runs to this corner.', 'Water goes in at -0.27. The drawing marks "Inlet -0.32 / Outlet +0.12" at the outlet to the public drain.', 'Depth of the trap is assumed.'],
         ['บ่อดักฝาตะแกรงที่มุมตะวันออกเฉียงใต้ ท่อระบายด้านตะวันออกซึ่งรับน้ำที่บำบัดแล้วจากถังใหม่เดินมาที่มุมนี้', 'น้ำเข้าที่ -0.27 แบบระบุ "Inlet -0.32 / Outlet +0.12" ที่ทางออกสู่ท่อสาธารณะ', 'ความลึกของบ่อดักเป็นค่าสมมติ'], P) });
-    add('drains', boxGeo(1.2, 1.2, PUBLIC_W[2] - PUBLIC_W[4], PUBLIC_W[0], PUBLIC_W[1] - 0.6, PUBLIC_W[4], 0), 'manhole', { en: 'Public manhole (west)', th: 'บ่อพักสาธารณะ (ตะวันตก)', lvl: `BOT ${lv(PUBLIC_W[4])}`, kind: 'manhole',
+    add('drains', boxGeo(1.2, 1.2, PUBLIC_W[2] - PUBLIC_W[4], PUBLIC_W[0], PUBLIC_W[1] - 0.6, PUBLIC_W[4], 0), 'manhole', { en: 'Public manhole (west)', th: 'บ่อพักสาธารณะ (ตะวันตก)', lvl: lv(PUBLIC_W[4]), kind: 'manhole',
       info: lines(['Footpath level -0.05 · pipe from the site trap ±0.00 · bottom of pit -1.64.', 'Size is assumed (1.2 m square).'], ['ระดับทางเท้า -0.05 · ท่อจากบ่อดักของสถานี ±0.00 · ก้นบ่อ -1.64', 'ขนาดเป็นค่าสมมติ (1.2 ม. สี่เหลี่ยม)'], P) });
 
     // ---------- other treatment tanks already on site (position from the drawing, size and depth assumed)
     const gAt = (x, y) => ground(x, y);
     { // WTT-1: long tank behind KFC, four access covers
       const x = 294.5, y = 102.55, rot = 5, len = 6.5, r = 1.2, cover = 1.0, top = gAt(x, y) - cover;
-      const g = hcylGeo(r, len, x, y, top - r, rot);
-      add('tanks', g, 'tankOther', { en: 'WTT-1 · KFC treatment tank', th: 'WTT-1 · ถังบำบัดของ KFC', tag: 'WTT-1 (KFC)', tagTh: 'WTT-1 (KFC)', kind: 'tank',
+      const g = capsuleGeo(r, len, x, y, top - r, rot);
+      add('tanks', g, 'tankOlder', { en: 'WTT-1 · KFC treatment tank', th: 'WTT-1 · ถังบำบัดของ KFC', tag: 'WTT-1 (KFC)', tagTh: 'WTT-1 (KFC)', kind: 'tank',
         info: lines(['Package wastewater treatment tank 1, 10 m³/day. Long tank lying behind KFC with four access covers.', 'Drawn about 6.5 m long and 2.4 m across, 1.0 m below ground.'], ['ถังบำบัดน้ำเสียสำเร็จรูป 1 ขนาด 10 ลบ.ม./วัน ถังนอนด้านหลัง KFC มีฝาเปิด 4 จุด', 'แสดงยาวประมาณ 6.5 ม. กว้าง 2.4 ม. หลังถังต่ำกว่าพื้น 1.0 ม.'], P) }, V(x, y, gAt(x, y) + 0.5));
       for (const [mx, my] of [[291.93, 102.35], [293.37, 102.50], [295.52, 102.68], [296.92, 102.80]]) {
-        add('tanks', cylGeo(0.3, gAt(mx, my) - top, mx, my, top), 'tankOther', { en: 'WTT-1 access', th: 'ช่องเปิด WTT-1', nopick: 1 });
+        add('tanks', cylGeo(0.3, gAt(mx, my) - top, mx, my, top), 'tankOlder', { en: 'WTT-1 access', th: 'ช่องเปิด WTT-1', nopick: 1 });
         add('tanks', cylGeo(0.33, 0.03, mx, my, gAt(mx, my)), 'cover', { en: 'WTT-1 cover', th: 'ฝา WTT-1', nopick: 1 });
       }
     }
@@ -215,8 +210,8 @@ export default {
     pipe('sewer', [[297.75, 102.85, gAt(297.7, 102.85) - 1.0], [298.65, 102.95, gAt(298.6, 102.95) - 1.0]], 0.05, 'sewerRaw', { en: 'Grease trap to WTT-1', th: 'ท่อจากถังดักไขมันไป WTT-1', kind: 'pipe', info: lines(['Short pipe between the grease traps and WTT-1. Level is assumed.'], ['ท่อสั้นระหว่างถังดักไขมันกับ WTT-1 ระดับเป็นค่าสมมติ'], P) });
     const round = (x, y, r, h, coverDepth, o) => {
       const g0 = gAt(x, y), top = g0 - coverDepth;
-      add('tanks', cylGeo(r, h, x, y, top - h), 'tankOther', o, V(x, y, g0 + 0.5));
-      add('tanks', cylGeo(0.3, coverDepth, x, y, top), 'tankOther', { en: o.en + ' access', th: o.th, nopick: 1 });
+      add('tanks', cylGeo(r, h, x, y, top - h), 'tankOlder', o, V(x, y, g0 + 0.5));
+      add('tanks', cylGeo(0.3, coverDepth, x, y, top), 'tankOlder', { en: o.en + ' access', th: o.th, nopick: 1 });
       add('tanks', cylGeo(0.33, 0.03, x, y, g0), 'cover', { en: o.en + ' cover', th: o.th, nopick: 1 });
     };
     round(291.93, 96.80, 1.0, 2.0, 0.4, { en: 'WTT-2 · KFC toilet tank', th: 'WTT-2 · ถังบำบัดห้องน้ำ KFC', tag: 'WTT-2', tagTh: 'WTT-2', kind: 'tank',
@@ -233,11 +228,8 @@ export default {
       info: lines(['Out of commission. Waste removed and the tank filled with fresh water. The new pipe joins the existing pipe at this tank\'s inlet.', 'Drawn 2.2 × 3.3 m and 2.0 m deep.'], ['เลิกใช้งานแล้ว สูบของเสียออกและเติมน้ำสะอาดไว้ ท่อใหม่ต่อกับท่อเดิมที่ทางเข้าของถังนี้', 'แสดงขนาด 2.2 × 3.3 ม. ลึก 2.0 ม.'], P) }, V(383.8, 106.85, 1.108 + 0.5));
     pipe('old', [[384.14, 103.49, 0.158], [385.94, 102.09, 0.158]], 0.075, 'tankOld', { en: 'Old outlet pipe to manhole R0', th: 'ท่อออกเดิมไปบ่อพัก R0', kind: 'pipe', info: lines(['Old outlet from the treatment tank, +0.158 at the manhole.'], ['ท่อออกเดิมจากถังบำบัด ระดับ +0.158 ที่บ่อพัก'], D) });
 
-    // ---------- underground fuel tanks: plan outline only
-    for (const [label, y0] of [['B10 / PD', 88.4], ['T4 · D', 85.0], ['T3 · E20', 81.7], ['T2 · G95', 78.3], ['T1 · G91', 74.9]]) {
-      add('fuel', boxGeo(7.5, 2.3, 3.2, 328.35, y0 + 1.15, gAt(328.35, y0 + 1.15) - 3.2, 0), 'fuel', { en: `Fuel tank area ${label}`, th: `บริเวณถังน้ำมัน ${label}`, kind: 'fuel',
-        info: lines(['Underground fuel tank. Only the plan outline is on this drawing; the depth shown is not real.', 'Keep clear when planning any digging.'], ['ถังน้ำมันใต้ดิน ในแบบนี้มีเฉพาะแนวผัง ความลึกที่แสดงไม่ใช่ค่าจริง', 'เว้นระยะเมื่อวางแผนงานขุด'], C) });
-    }
+    // ---------- underground fuel tanks: 30,000 L capsule tanks where the as-built plan draws them (7.5 x 2.3 m outlines)
+    for (const [label, y0] of [['B10 / PD', 88.4], ['T4 · D', 85.0], ['T3 · E20', 81.7], ['T2 · G95', 78.3], ['T1 · G91', 74.9]]) fuelTank(label, 328.35, y0 + 1.15, 0);
 
     // ---------- buildings and canopy (context)
     const building = (poly, floor, h, o) => add('buildings', prismGeo(poly, floor, h), 'building', { ...o, kind: 'building', info: lines(o.lines || [], o.linesTh || [], C) }, V(poly.reduce((a, p) => a + p[0], 0) / poly.length, poly.reduce((a, p) => a + p[1], 0) / poly.length, floor + h + 0.6));
