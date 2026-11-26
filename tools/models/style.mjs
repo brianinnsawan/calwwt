@@ -28,6 +28,10 @@ export const MATERIALS = {
   // structure and context
   slab: [0xb7b1a8, 0.9], pile: [0x8c857b],
   fuel: [0xf2a51a, 0.6], building: [0xc4ccd4, 0.22], roof: [0xdfe5ea, 0.3], column: [0x9aa5b1],
+  fuelPipe: [0xd9860b],          // underground fuel pipes (fill, vent and dispensing lines), darker than the fuel tanks
+  islands: [0x8f98a1, 0.9],      // pump islands and dispensers
+  // surroundings outside the station (layer "surroundings", can be switched off): paler, so the station stays in front
+  surroundGround: [0xe3e6dc, 0.55], surroundBuilding: [0xd3d8de, 0.3], surroundLine: [0xa3acb4],
 };
 
 /** Layers, in the order they are listed in the viewer. A site uses the ones it needs. */
@@ -42,15 +46,17 @@ export const LAYERS = [
   { id: 'old', en: 'Tanks and pipes out of use', th: 'ถังและท่อที่เลิกใช้' },
   { id: 'fuel', en: 'Fuel tanks', th: 'ถังน้ำมันใต้ดิน' },
   { id: 'buildings', en: 'Buildings and canopy', th: 'อาคารและหลังคาคลุมหัวจ่าย' },
+  { id: 'surroundings', en: 'Surroundings (outside the station)', th: 'พื้นที่รอบสถานี (นอกแนวเขต)' },
   { id: 'plan', en: 'Drawing on the ground', th: 'แบบบนพื้น' },
   { id: 'ground', en: 'Ground surface', th: 'ผิวพื้น' },
 ];
 
-/** Standard views. Every site has site, plan and under, and fuel when it has fuel tanks, in this order: site, plan, close-ups..., fuel, under. */
+/** Standard views. Every site has site, plan and under, and fuel when it has fuel tanks, and area when it shows its surroundings, in this order: site, plan, close-ups..., fuel, area, under. */
 export const VIEWS = {
   site: { en: 'Whole site', th: 'ทั้งสถานี' },
   plan: { en: 'Plan', th: 'ผัง' },
   fuel: { en: 'Fuel tanks', th: 'ถังน้ำมัน' },
+  area: { en: 'Station and surroundings', th: 'สถานีและพื้นที่รอบ' },
   under: { en: 'From below ground', th: 'มองจากใต้ดิน' },
 };
 

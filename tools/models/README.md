@@ -95,13 +95,27 @@ Assumed: every drain pipe and manhole depth (0.40 m cover at the start, falling 
 levels. North is taken as up the sheet from the road labels (Lak Si left, Min Buri right); the small north symbol on the
 sheet reads the other way, so confirm against the map. The layout shows no canopy, pump islands or fuel tanks.
 
-## 1687 Phetchaburi (first version, 25 Nov 2026, from PDFs)
-Sources: plan `SN-01` and the pipe slope sheet (2024, stamped FOR CONSTRUCTION, so design, not as-built). They cover one
-corner of the station only: shop building, office toilet, two existing tanks, grease trap, the two new 2,500 L tanks,
-manholes, the 3-compartment trap and the public drain connection.
-Assumed: existing tank depths, all site drain levels and sizes, manhole and trap depths, flat ground. The sheet is plotted
-at about 1:114, not the 1:100 written on it (the model follows its scale bar). The plan says 2,500 L, the slope sheet
-title says 3,000 L. No north arrow.
+## 1687 Phetchaburi (first version 25 Nov 2026; whole station and surroundings 26 Nov 2026)
+The south-east corner (sales building, office toilet, old tanks, the two new tanks, drains to the public drain) comes from
+plan `SN-01` and the pipe slope sheet (2024, stamped FOR CONSTRUCTION). Brian's 2025 look-back deck (`Spp Septic Tank
+Phetchaburi Look Back.pptx`) uses SN-01 as its "Layout As Built" and its site photos show the two tanks apart in two grass
+areas, as on SN-01 (the January 2025 design and the station plan below show them side by side: not built that way).
+The tanks are Premier SS-3A 3,000 L (Ø2.04 x 1.78 m, `SS-3A.pdf`); SN-01 says 2,500 L.
+The rest of the station and the surroundings come from two DWGs in Brian's `24 25 Grease and Septic repair\เพชรบุรี Phetchaburi Robinson`:
+- `Layout As Built งานถังบำบัด 3,000 ลิตร (โรบินสันเพชรบุรี).dwg`: the older Caltex station plan (legend items 1 to 45, fuel tanks
+  T1 to T4, boundary 3,327 m², drainage block San-001, fuel pipe blocks Line-pile, north symbol 191.7°). No levels.
+- `01 Robinson Petchburi_Laou4.dwg`: the Robinson Phetchaburi site plan (1:1000) with the station; levels +0.80 forecourt,
+  ±0.00 Phetkasem Road.
+Both sit on the SN-01 coordinates by a plain shift (no turn or scale): model = C - (204.75, 327.51), C = D - (4428.93, 2648.12),
+checked on the old tanks, ten manholes and seven survey marks. `1687/make-lines.py` writes the station linework into
+`plan-lines.json` (after the SN-01 lines) and the Robinson linework into `surroundings.json`.
+Added: full boundary, canopy, pump islands, the four fuel tanks with their manholes, fill point, vent stack and fill, vent and
+dispensing pipes, all station drains (open channels, 0.30 m pipes, sumps MH-11 to MH-35, numbered by the model), the
+under-sink grease trap (item 15a) and its pipe to old tank 1, the 8,000 L tank (item 31; only its tag is drawn, place unknown),
+the full sales building. Layer "surroundings" (shared in style.mjs, can be switched off): Phetkasem Road at -0.80, the
+Robinson ground, the mall, the drive-through building, POP, car service and car wash as blocks, and the site plan linework.
+Assumed: every depth outside the corner (pipes 1:200 from the existing drains, channels 0.25 m, fuel pipes 0.45 to 0.65 m,
+fuel tank tops 1.0 m), canopy and building heights, dispensers, Robinson ground flat at ±0.00 and all its heights.
 
 ## 1703 King Kaew (first version, 25 Nov 2026, from PDFs)
 Sources: `LAY-ME-02` (SPP as-built, Nov 2021: positions, pipe routes and the written "inv" levels) and `GN-SEP-01` (oil
