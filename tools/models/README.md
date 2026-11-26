@@ -122,7 +122,7 @@ checked on the old tanks, ten manholes and seven survey marks. `1687/make-lines.
 Added: full boundary, canopy, pump islands, the four fuel tanks with their manholes, fill point, vent stack and fill, vent and
 dispensing pipes, all station drains (open channels, 0.30 m pipes, sumps MH-11 to MH-35, numbered by the model), the
 under-sink grease trap (item 15a) and its pipe to old tank 1, the 8,000 L tank (item 31; place confirmed by Brian 26 Nov 2026: lying capsule with 3 lids along the wall, size assumed),
-the office building and the separate toilet building (covered walkway between, Brian 26 Nov 2026), the garbage room behind the toilets (place estimated). Layer "surroundings" (shared in style.mjs, can be switched off): Phetkasem Road at -0.80, the
+the office building and the separate toilet building (open gap between, no roof), the garbage room between the toilets and the hedge and the pump room north-west of the toilets (places marked by Brian 26 Nov 2026, sizes estimated). Layer "surroundings" (shared in style.mjs, can be switched off): Phetkasem Road at -0.80, the
 Robinson ground, the mall, the drive-through building, POP, car service and car wash as blocks, and the site plan linework.
 From Brian's 2026 site video and photos (26 Nov 2026): the air pump enclosure and power socket box of the 8,000 L tank, the
 ~2 m hedge along the back (east) boundary planted on top of the drains MH-1 and MH-11 to MH-13 (layer buildings, `hedge`), and
