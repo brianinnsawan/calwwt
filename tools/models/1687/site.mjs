@@ -323,27 +323,29 @@ export default {
     const building = (poly, h, o) => add('buildings', prismGeo(poly, 0, h), 'building', { ...o, kind: 'building', info: lines(o.lines, o.linesTh, C) }, V(poly.reduce((s, p) => s + p[0], 0) / poly.length, poly.reduce((s, p) => s + p[1], 0) / poly.length, h + 0.7));
     // ---------- sales building (context): south part from SN-01, north end from the Robinson site plan
     // Two separate buildings with a covered outdoor walkway between them (Brian, 26 Nov 2026, with site photos); outlines from the
-    // Robinson site plan (D): office / shop to about y 34.9, walkway, toilets from about y 37.8.
+    // Robinson site plan (D): office / shop to about y 34.9, an open gap (no roof, Brian), toilets from about y 37.8.
     building([[19.55, 20.50], [25.92, 20.50], [25.92, 34.90], [19.55, 34.90]], 3.6, { en: 'Caltex sales and office building', th: 'อาคารสำนักงานและร้านค้า Caltex', tag: 'Office / shop', tagTh: 'สำนักงาน/ร้านค้า',
       lines: ['The south building: coffee / shop at the south end, the Caltex office, and the office toilet at its south-east corner (its waste goes east through the wall into existing treatment tank 1). The south part is the "sales room / shop building" of the wastewater sheet SN-01; the north end is from the Robinson site plan (2025 DWG), floor +1.00.',
-        'Separate from the toilet building to the north by a covered outdoor walkway (Brian, 26 Nov 2026). Height assumed.'],
+        'Separate from the toilet building to the north, with an open gap about 2.9 m wide between them (no roof; Brian, 26 Nov 2026). Height assumed.'],
       linesTh: ['อาคารด้านใต้: ร้านกาแฟ/ร้านค้าที่ปลายด้านใต้ สำนักงาน Caltex และห้องน้ำสำนักงานที่มุมตะวันออกเฉียงใต้ (น้ำเสียออกทางตะวันออกผ่านผนังเข้าถังบำบัดเดิมใบที่ 1) ส่วนใต้คือ "อาคารห้องขาย/ร้านค้า" ในแบบงานน้ำเสีย SN-01 ปลายด้านเหนือตามผังโครงการโรบินสัน (DWG ปี 2025) ระดับพื้น +1.00',
-        'แยกจากอาคารห้องน้ำทางด้านเหนือด้วยทางเดินภายนอกที่มีหลังคา (Brian 26 พ.ย. 2026) ความสูงเป็นค่าสมมติ'] });
+        'แยกจากอาคารห้องน้ำทางด้านเหนือ มีช่องว่างกว้างประมาณ 2.9 ม. ระหว่างอาคาร (ไม่มีหลังคา; Brian 26 พ.ย. 2026) ความสูงเป็นค่าสมมติ'] });
     building([[19.55, 37.80], [25.30, 37.80], [25.30, 46.50], [19.55, 46.50]], 3.6, { en: 'Toilet building', th: 'อาคารห้องน้ำ', tag: 'Toilets', tagTh: 'ห้องน้ำ',
       lines: ['Separate toilet building north of the office: women\'s (south half) and men\'s (north half) toilets with a diaper-changing room, floor +1.00 (Robinson site plan, 2025 DWG). Its waste most likely goes to the 8,000 L tank on its east side.', 'Outline from the site plan; height assumed.'],
       linesTh: ['อาคารห้องน้ำแยกทางเหนือของสำนักงาน: ห้องน้ำหญิง (ครึ่งใต้) และห้องน้ำชาย (ครึ่งเหนือ) พร้อมห้องเปลี่ยนผ้าอ้อม ระดับพื้น +1.00 (ผังโครงการโรบินสัน DWG ปี 2025) น้ำเสียน่าจะลงถัง 8,000 ลิตรทางด้านตะวันออก', 'แนวอาคารตามผังโครงการ ความสูงเป็นค่าสมมติ'] });
-    add('buildings', boxGeo(6.37, 2.9, 0.15, 22.735, 36.35, 3.0, 0), 'roof', { en: 'Roof over the walkway', th: 'หลังคาทางเดิน', tag: 'Covered walkway', tagTh: 'ทางเดินมีหลังคา', kind: 'building',
-      info: notes(['Outdoor walkway about 2.9 m wide between the office building and the toilet building, under a flat roof (Brian, 26 Nov 2026, with site photos). A vending machine stands against the toilet building wall here. Roof height assumed.'],
-        ['ทางเดินภายนอกกว้างประมาณ 2.9 ม. ระหว่างอาคารสำนักงานกับอาคารห้องน้ำ มีหลังคาแบน (Brian 26 พ.ย. 2026 พร้อมรูปถ่ายหน้างาน) มีตู้กดเครื่องดื่มชิดผนังอาคารห้องน้ำ ความสูงหลังคาเป็นค่าสมมติ'], C) }, V(22.7, 36.35, 3.9));
-    {  // small garbage room behind the toilets, against the hedge (Brian, 26 Nov 2026, with a site photo; place estimated)
-      const G = { x0: 24.2, x1: 26.9, y0: 46.8, y1: 48.9 };
+    {  // small garbage room behind the toilets, between the toilet building and the hedge at its south end (Brian, 26 Nov 2026, marked on a plan screenshot)
+      const G = { x0: 25.35, x1: 27.15, y0: 37.9, y1: 40.1 };
       const cage = prismGeo([[G.x0, G.y0], [G.x1, G.y0], [G.x1, G.y1], [G.x0, G.y1]], 0, 2.3);
       add('buildings', cage, 'building', { en: 'Garbage room', th: 'ห้องเก็บขยะ', tag: 'Garbage room', tagTh: 'ห้องขยะ', kind: 'building',
-        info: notes(['Small garbage room with mesh walls and a sloping metal roof behind the toilet building, next to the hedge on the back boundary (Brian, 26 Nov 2026, with a site photo).', 'Size and exact place estimated: about 2.7 × 2.1 m, 2.3 m to the roof.'],
-          ['ห้องเก็บขยะขนาดเล็ก ผนังตะแกรง หลังคาเหล็กลาดเอียง อยู่หลังอาคารห้องน้ำ ติดแนวพุ่มไม้ที่แนวเขตด้านหลัง (Brian 26 พ.ย. 2026 พร้อมรูปถ่ายหน้างาน)', 'ขนาดและตำแหน่งโดยประมาณ: ประมาณ 2.7 × 2.1 ม. สูงถึงหลังคา 2.3 ม.'], C) }, V((G.x0 + G.x1) / 2, (G.y0 + G.y1) / 2, 3.2));
-      const r = new THREE.BoxGeometry(3.3, 0.06, 2.7); r.rotateX(0.12); { const c = V((G.x0 + G.x1) / 2, (G.y0 + G.y1) / 2, 2.45); r.translate(c.x, c.y, c.z); }
+        info: notes(['Small garbage room with mesh walls and a sloping metal roof behind the toilet building, between its east wall and the hedge on the back boundary, at the south end of the toilets (Brian, 26 Nov 2026, place marked by him on the model).', 'Size estimated: about 1.8 × 2.2 m, 2.3 m to the roof.'],
+          ['ห้องเก็บขยะขนาดเล็ก ผนังตะแกรง หลังคาเหล็กลาดเอียง อยู่หลังอาคารห้องน้ำ ติดแนวพุ่มไม้ที่แนวเขตด้านหลัง (Brian 26 พ.ย. 2026 พร้อมรูปถ่ายหน้างาน)', 'ขนาดโดยประมาณ: ประมาณ 1.8 × 2.2 ม. สูงถึงหลังคา 2.3 ม. (ตำแหน่งตามที่ Brian ระบุบนโมเดล)'], C) }, V((G.x0 + G.x1) / 2, (G.y0 + G.y1) / 2, 3.2));
+      const r = new THREE.BoxGeometry(2.3, 0.06, 2.7); r.rotateX(0.12); { const c = V((G.x0 + G.x1) / 2, (G.y0 + G.y1) / 2, 2.45); r.translate(c.x, c.y, c.z); }
       add('buildings', r, 'roof', { en: 'Garbage room roof', th: 'หลังคาห้องขยะ', nopick: 1 });
     }
+
+    // pump room north-west of the toilet building (Brian, 26 Nov 2026, marked on the model; size estimated)
+    building([[19.30, 46.65], [21.20, 46.65], [21.20, 48.35], [19.30, 48.35]], 2.6, { en: 'Pump room', th: 'ห้องปั๊ม', tag: 'Pump room', tagTh: 'ห้องปั๊ม',
+      lines: ['Small separate pump room just north-west of the toilet building (Brian, 26 Nov 2026, place marked by him on the model). The station plan lists a roofed water-pump shelter and 3,000 L water tanks in this area (items 32 and 33).', 'Size and height estimated: about 1.9 × 1.7 m, 2.6 m high.'],
+      linesTh: ['ห้องปั๊มขนาดเล็กแยกอยู่ทางตะวันตกเฉียงเหนือของอาคารห้องน้ำ (Brian 26 พ.ย. 2026 ระบุตำแหน่งบนโมเดล) ผังสถานีระบุหลังคาคลุมปั๊มสูบน้ำและถังเก็บน้ำ 3,000 ลิตรในบริเวณนี้ (รายการ 32 และ 33)', 'ขนาดและความสูงโดยประมาณ: ประมาณ 1.9 × 1.7 ม. สูง 2.6 ม.'] });
 
     // =================================================================================================================
     // THE REST OF THE STATION (26 Nov 2026), from the station plan inside Brian's 2025 DWG "Layout As Built งานถังบำบัด 3,000 ลิตร
