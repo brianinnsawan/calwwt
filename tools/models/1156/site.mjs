@@ -117,9 +117,9 @@ export default {
 
     // ---------- the two outlets at the road (Caltex deck: existing sampling points G2.1 at both front corners)
     const outlets = [
-      { x: X0 + 2.0, y: Y0 + 1.05, w: 3.4, l: 1.0, chambers: 3, inL: Math.min(runs[1].out[1][2], runs[2].out[1][2]), en: 'Oil-water separator, 3 chambers (entrance side, by the coffee shop)', th: 'บ่อดักน้ำมัน 3 ช่อง (ฝั่งทางเข้า ข้างร้านกาแฟ)', tag: 'Oil trap (entrance side)', tagTh: 'บ่อดักน้ำมัน (ฝั่งทางเข้า)', oil: 1,
-        lines: ['Where the west U-drain and the west half of the front drain leave the site, at the front-left corner. The Caltex deck marks the existing sampling point G2.1 here and a new point G2.2 at the coffee shop beside it.', 'Brian (26 Nov 2026): a three-chamber oil-water separator. Size not known: shown as the usual Caltex 3-chamber trap, 3.40 × 1.00 m, along the road.'],
-        linesTh: ['จุดที่รางด้านตะวันตกและรางหน้าสถานีช่วงตะวันตกออกจากสถานี ที่มุมหน้าซ้าย ในเอกสารของ Caltex ระบุจุดเก็บตัวอย่างเดิม G2.1 ที่นี่ และจุดใหม่ G2.2 ที่ร้านกาแฟข้าง ๆ', 'Brian (26 พ.ย. 2026): เป็นบ่อดักน้ำมัน 3 ช่อง ไม่ทราบขนาด แสดงเป็นบ่อดักน้ำมัน 3 ช่องแบบมาตรฐานของ Caltex ขนาด 3.40 × 1.00 ม. วางตามแนวถนน'] },
+      { x: X0 + 0.75, y: Y0 + 2.0, w: 1.0, l: 3.4, chambers: 3, inL: Math.min(runs[1].out[1][2], runs[2].out[1][2]), en: 'Oil-water separator, 3 chambers (entrance side, by the coffee shop)', th: 'บ่อดักน้ำมัน 3 ช่อง (ฝั่งทางเข้า ข้างร้านกาแฟ)', tag: 'Oil trap (entrance side)', tagTh: 'บ่อดักน้ำมัน (ฝั่งทางเข้า)', oil: 1,
+        lines: ['Where the west U-drain and the west half of the front drain leave the site, at the front-left corner. The Caltex deck marks the existing sampling point G2.1 here and a new point G2.2 at the coffee shop beside it.', 'Brian (26 Nov 2026): a three-chamber oil-water separator. Size not known: shown as the usual Caltex 3-chamber trap, 3.40 × 1.00 m, lying along the west firewall at the front corner (Brian, 26 Nov 2026).'],
+        linesTh: ['จุดที่รางด้านตะวันตกและรางหน้าสถานีช่วงตะวันตกออกจากสถานี ที่มุมหน้าซ้าย ในเอกสารของ Caltex ระบุจุดเก็บตัวอย่างเดิม G2.1 ที่นี่ และจุดใหม่ G2.2 ที่ร้านกาแฟข้าง ๆ', 'Brian (26 พ.ย. 2026): เป็นบ่อดักน้ำมัน 3 ช่อง ไม่ทราบขนาด แสดงเป็นบ่อดักน้ำมัน 3 ช่องแบบมาตรฐานของ Caltex ขนาด 3.40 × 1.00 ม. วางตามแนวกำแพงกันไฟด้านตะวันตกที่มุมหน้า (ตาม Brian 26 พ.ย. 2026)'] },
       { x: 12.95, y: -23.6, w: 1.3, l: 2.6, inL: Math.min(runs[3].out[1][2], runs[4].out[1][2]), en: 'Oil trap (exit side)', th: 'บ่อดักน้ำมัน (ฝั่งทางออก)', tag: 'Oil trap (exit side)', tagTh: 'บ่อดักน้ำมัน (ฝั่งทางออก)', oil: 1,
         lines: ['Grated pit with two concrete plank covers against the east wall at the road (video, 3:38), where the east U-drain and the east half of the front drain meet. Size read from the video, about 1.3 × 2.6 m.', 'The Caltex deck marks the existing sampling point G2.1 here. The Mini Big C treatment tank is right behind it (Brian).'],
         linesTh: ['บ่อมีฝาตะแกรงและแผ่นคอนกรีต 2 แผ่น ชิดกำแพงด้านตะวันออกที่ริมถนน (วิดีโอ 3:38) จุดที่รางด้านตะวันออกและรางหน้าสถานีช่วงตะวันออกมาบรรจบ ขนาดประมาณจากวิดีโอ ประมาณ 1.3 × 2.6 ม.', 'ในเอกสารของ Caltex ระบุจุดเก็บตัวอย่างเดิม G2.1 ที่นี่ ถังบำบัดของมินิบิ๊กซีอยู่ด้านหลังบ่อนี้ทันที (ตาม Brian)'] },
@@ -128,10 +128,10 @@ export default {
       const g0 = ground(o.x, o.y), inL = r2(o.inL), floor = r2(inL - 0.5), outL = r2(inL - 0.05);
       add('drains', boxGeo(o.w, o.l, g0 - floor, o.x, o.y, floor, 0), o.oil ? 'oilTrap' : 'manhole', { en: o.en, th: o.th, tag: o.tag, tagTh: o.tagTh, lvl: `${lv(inL)} / ${lv(outL)}`, kind: 'manhole',
         info: lines([...o.lines, `Levels not known: inlet about ${lv(inL)}, outlet about ${lv(outL)}, floor shown 0.5 m below the inlet (assumed).`], [...o.linesTh, `ไม่ทราบระดับ: ท่อเข้าประมาณ ${lv(inL)} ท่อออกประมาณ ${lv(outL)} ก้นบ่อแสดงต่ำกว่าท่อเข้า 0.5 ม. (ค่าสมมติ)`], A) }, V(o.x, o.y, g0 + 0.8));
-      if (o.chambers) {   // three chambers along the long side: a grating over each, and the two baffle walls inside
-        const cw = o.w / o.chambers;
-        for (let k = 0; k < o.chambers; k++) add('drains', boxGeo(cw - 0.12, o.l - 0.12, 0.03, o.x - o.w / 2 + cw * (k + 0.5), o.y, g0, 0), 'cover', { en: 'Steel grating', th: 'ฝาตะแกรงเหล็ก', nopick: 1 });
-        for (let k = 1; k < o.chambers; k++) add('drains', boxGeo(0.1, o.l - 0.1, g0 - 0.15 - floor, o.x - o.w / 2 + cw * k, o.y, floor, 0), 'cover', { en: 'Baffle wall', th: 'ผนังกั้น', nopick: 1 });
+      if (o.chambers) {   // three chambers along the long side (y): a grating over each, and the two baffle walls inside
+        const cw = o.l / o.chambers;
+        for (let k = 0; k < o.chambers; k++) add('drains', boxGeo(o.w - 0.12, cw - 0.12, 0.03, o.x, o.y - o.l / 2 + cw * (k + 0.5), g0, 0), 'cover', { en: 'Steel grating', th: 'ฝาตะแกรงเหล็ก', nopick: 1 });
+        for (let k = 1; k < o.chambers; k++) add('drains', boxGeo(o.w - 0.1, 0.1, g0 - 0.15 - floor, o.x, o.y - o.l / 2 + cw * k, floor, 0), 'cover', { en: 'Baffle wall', th: 'ผนังกั้น', nopick: 1 });
       } else add('drains', boxGeo(o.w + 0.1, o.l + 0.1, 0.03, o.x, o.y, g0, 0), 'cover', { en: 'Grating', th: 'ฝาตะแกรง', nopick: 1 });
       pipe('drains', [[o.x, o.y - o.l / 2, outL], [o.x, Y0 - 2.5, r2(outL - 0.05)]], 0.15, 'drain', { en: `${o.tag}: out to the public drain`, th: `${o.tagTh}: ออกท่อระบายน้ำสาธารณะ`, kind: 'drain',
         info: lines(['Out under the road edge to the public drain. Size, route and level assumed.'], ['ออกใต้ขอบถนนไปท่อระบายน้ำสาธารณะ ขนาด แนว และระดับเป็นค่าสมมติ'], A) });
@@ -264,10 +264,14 @@ export default {
       linesTh: ['ร้านกาแฟชั้นเดียวสีดำที่สร้างใหม่กว่า อยู่ด้านหน้าฝั่งทางเข้า มีกระบะต้นไม้ด้านหน้า (วิดีโอ 0:07-0:17, 4:07) แนวจากภาพดาวเทียมรุ่นเก่า (ร้านเล็กเดิมตรงนี้) ขนาดโดยประมาณ'] });
     building([[-15.2, -19.5], [-6.4, -19.5], [-6.4, -16.0], [6.0, -16.0], [6.0, -1.0], [-6.4, -1.0], [-6.4, 15.0], [-15.2, 15.0]], 5.2, 1.0, 'roof', { en: 'Canopy', th: 'หลังคาคลุมหัวจ่าย', tag: 'Canopy', tagTh: 'หลังคาคลุมหัวจ่าย',
       lines: ['L-shaped canopy: the long part runs from the road towards KFC over the pump islands, the short part joins the Mini Big C building (outline from the satellite image; video 4:07).'], linesTh: ['หลังคารูปตัว L: ส่วนยาวจากถนนไปทาง KFC คลุมแท่นหัวจ่าย ส่วนสั้นต่อกับอาคารมินิบิ๊กซี (แนวจากภาพดาวเทียม วิดีโอ 4:07)'] });
-    for (const [x, y] of [[-12.8, 12], [-8.8, 12], [-12.8, 1], [-8.8, 1], [-12.8, -10], [-8.8, -10], [-12.8, -17.5], [-8.8, -17.5], [-2, -13], [-2, -3.5]]) add('buildings', boxGeo(0.45, 0.45, 5.05, x, y, 0.15, 0), 'column', { en: 'Canopy column', th: 'เสาหลังคา', nopick: 1 });
+    // four pump islands under the long part of the canopy, one behind the other from the road; each island lies along the
+    // road (entrance side to exit side) with a canopy column at each end and the dispenser between them (Brian, 26 Nov 2026,
+    // with his photo from the exit-side corner). Four islands, four pairs of columns.
+    const IX = -10.8, ILEN = 5.6, COL = 2.4;
     [[11.5, '7/8'], [3.8, '5/6'], [-3.9, '3/4'], [-11.6, '1/2']].forEach(([y, n]) => {
-      add('buildings', boxGeo(1.2, 4.2, 0.2, -10.8, y, 0, 0), 'column', { en: 'Pump island', th: 'แท่นหัวจ่าย', nopick: 1 });
-      add('buildings', boxGeo(0.6, 1.0, 2.0, -10.8, y, 0.2, 0), 'islands', { en: `Dispenser ${n}`, th: `ตู้จ่าย ${n}`, kind: 'building', info: lines([`Dispenser for pumps ${n}, numbered from the road (pumps 1, 3, 5, 7 seen in the video). Number of islands judged from the video.`], [`ตู้จ่ายหัวจ่าย ${n} นับจากถนน (เห็นหัวจ่าย 1, 3, 5, 7 ในวิดีโอ) จำนวนแท่นประมาณจากวิดีโอ`], AC) });
+      add('buildings', boxGeo(ILEN, 1.2, 0.2, IX, y, 0, 0), 'column', { en: 'Pump island', th: 'แท่นหัวจ่าย', nopick: 1 });
+      for (const dx of [-COL, COL]) add('buildings', boxGeo(0.45, 0.45, 5.05, IX + dx, y, 0.15, 0), 'column', { en: 'Canopy column', th: 'เสาหลังคา', nopick: 1 });
+      add('buildings', boxGeo(1.0, 0.6, 2.0, IX, y, 0.2, 0), 'islands', { en: `Dispenser ${n}`, th: `ตู้จ่าย ${n}`, kind: 'building', info: lines([`Dispenser for pumps ${n}, numbered from the road (pumps 1, 3, 5, 7 seen in the video). Four islands, one behind the other from the road; each lies along the road with a canopy column at each end and the dispenser between them (Brian, 26 Nov 2026). Island and column spacing judged from the photo.`], [`ตู้จ่ายหัวจ่าย ${n} นับจากถนน (เห็นหัวจ่าย 1, 3, 5, 7 ในวิดีโอ) มี 4 แท่น เรียงจากถนนเข้าไป แต่ละแท่นวางตามแนวถนน มีเสาหลังคาที่ปลายทั้งสองข้างและตู้จ่ายอยู่ตรงกลาง (ตาม Brian 26 พ.ย. 2026) ระยะแท่นและเสาประมาณจากภาพถ่าย`], AC) });
     });
     // EV chargers and the air pump against the west wall between the coffee shop and KFC (Brian; video 0:28, 0:58, 1:02)
     add('buildings', merge([boxGeo(0.8, 0.6, 1.9, X0 + 0.9, -1.6, 0.15, 0), boxGeo(0.8, 0.6, 1.9, X0 + 0.9, 0.9, 0.15, 0)]), 'column', { en: 'EV chargers', th: 'เครื่องชาร์จรถยนต์ไฟฟ้า', kind: 'building',
