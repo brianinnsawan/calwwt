@@ -85,4 +85,6 @@ Nothing is shared with calnkt: own logins, own databases, own file storage.
   long lying tanks are capsules (`capsuleGeo`), never boxes (Brian, 25 Nov 2026). Depth of the fuel tanks is assumed: the
   Saraburi as-built set has fuel-system tank drawings (Brian's `As Built Saraburi` folder) that should give the real size
   and depth; read them when his computer is connected and update `FUEL_TANK` in style.mjs or the 1750 site file.
+- 0589 Kathu, from Brian 26 Nov 2026: two oil traps in an L at the east outlet; the shop sink at the east end of the mart
+  drains through a small grease trap and a PVC pipe to a sump beside WTT-4; WTT-4 has two lids (size still to confirm).
 - Site notes and starting timelines in `data/sites.json` / `data/timelines/` were written from Brian's site-visit notes; dates to confirm.

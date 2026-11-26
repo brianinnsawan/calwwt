@@ -41,6 +41,14 @@ is not on the drawing (top shown 0.6 m below ground).
 Fuel tanks (every site): `fuelTank()` in build.mjs draws a 30,000 L capsule tank where the drawing shows the tank;
 depth is assumed (top 1.0 m below ground). Long lying tanks are capsules (`capsuleGeo`), never boxes.
 Not yet used: site photos, 360 videos and Street View (building heights and what is on the surface are assumed).
+Added 26 Nov 2026 from Brian's site photo and markup (not on the drawing unless said):
+- the two 3-chamber oil traps at the east outlet, side by side in an L (outlines from the DWG block "Z$W@#6334"; the
+  west outlet trap uses the same block). Depth assumed 0.5 m below the inlet.
+- WTT-4 as a lying capsule tank with two lids, 1.25 x 2.5 m (about 3,000 L, size to confirm).
+- the shop sink against the east boundary wall, its small (10 to 20 L) grease trap, the PVC pipe along the wall and the
+  mart front, and the sump on the west side of WTT-4. Positions from the markup; sizes and levels assumed.
+- the front site drain now runs from manhole E7 along the front channel into the road-side oil trap (as drawn), instead
+  of a straight line to the east trap.
 Known gaps: sizes and depths of WTT-1, WTT-2, WTT-4, the two Biotech tanks, the grease traps and the old tank; pipe
 routes for KFC and the middle building; which drain runs are pipe and which are channel; fuel tank depths.
 
