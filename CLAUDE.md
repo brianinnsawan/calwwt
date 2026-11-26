@@ -76,6 +76,8 @@ Nothing is shared with calnkt: own logins, own databases, own file storage.
   1642 Phun Phon and 1156 Samut Prakan (no drawings: rough models from satellite, Street View and site photos, which need
   Brian's computer connected). calcr.sppwork.com is his reference for what the viewer should grow into (measure tool,
   drainage long sections, find by ID, flow arrows).
+- 1687 Phetchaburi (26 Nov 2026) shows the whole station plus its surroundings (Robinson, Phetkasem Road) in the shared layer
+  "surroundings" that the viewer can switch off; other sites can use the same layer for their own context.
 - All models share one look: `tools/models/style.mjs` (colours, layer names and order, view names, note wording). Brian asked
   for this on 25 Nov 2026; do not give a site its own colours or layer names.
 - For the models still to build, from Brian (25 Nov 2026): at 1642 Phun Phon the main sales building is TWO storeys (other

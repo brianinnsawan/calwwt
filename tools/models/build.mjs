@@ -151,8 +151,16 @@ const fuelTank = (label, x, y, rot = 0, o = {}) => {
     [`ถังน้ำมันใต้ดิน ${label}: ถังแคปซูลแบบนอน 30,000 ลิตร ปลายโค้งเล็กน้อย กว้าง ${dia.toFixed(2)} ม. ยาว ${len.toFixed(1)} ม.`, ...(o.th || []),
       `ในแบบชุดนี้ไม่มีความลึก แสดงหลังถังต่ำกว่าพื้น ${F.cover.toFixed(1)} ม. (ประมาณ ${lv(g0 - F.cover)})`, 'เว้นระยะเมื่อวางแผนงานขุด'], 'part') }, V(x, y, g0 + 0.5));
 };
+/** Plan linework in a layer: lines(layer, [[x1, y1, x2, y2, ...] polylines in drawing metres], material, level(x, y) = height of the line). */
+const lines = (layer, polylines, material, level) => {
+  const arr = [];
+  for (const pl of polylines) for (let i = 0; i + 3 < pl.length; i += 2) for (const k of [i, i + 2]) { const v = V(pl[k], pl[k + 1], level(pl[k], pl[k + 1])); arr.push(v.x, v.y, v.z); }
+  const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(arr, 3));
+  const l = new THREE.LineSegments(g, new THREE.LineBasicMaterial({ color: MATERIALS[material][0] })); l.material.name = material; l.userData = { nopick: 1 };
+  layers.get(layer).add(l); return l;
+};
 const sections = [];   // long sections the viewer can open ("Long section" button), drawn from the same levels as the model
-const api = { section: (x) => sections.push(x), notes, SRC, FUEL_TANK, fuelTank, capsuleGeo, V, ground, lv, add, boxGeo, cylGeo, hcylGeo, latheGeo, prismGeo, pipeGeo, merge: (list) => mergeGeometries(list.every((g) => g.index) ? list : list.map((g) => (g.index ? g.toNonIndexed() : g))), THREE };
+const api = { section: (x) => sections.push(x), lines, notes, SRC, FUEL_TANK, fuelTank, capsuleGeo, V, ground, lv, add, boxGeo, cylGeo, hcylGeo, latheGeo, prismGeo, pipeGeo, merge: (list) => mergeGeometries(list.every((g) => g.index) ? list : list.map((g) => (g.index ? g.toNonIndexed() : g))), THREE };
 
 // ---- ground surface and plan linework
 {

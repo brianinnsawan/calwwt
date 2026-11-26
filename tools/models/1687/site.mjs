@@ -1,7 +1,9 @@
 // 1687 Phetchaburi (Caltex at Robinson Phetchaburi): what the 3D model shows. Built by tools/models/build.mjs into public/sites/models/1687.glb.
 //
-// THE MODEL COVERS ONE CORNER OF THE STATION ONLY: the shop / sales building with the office toilet, the old tanks beside
-// it, the two new 2,500 L aerated tanks south of it and the drains down to the public drain. Nothing else is on the drawings.
+// The south-east corner (sales building, office toilet, old tanks, the two new 3,000 L aerated tanks, drains to the public
+// drain) is modelled in detail from the wastewater sheets A and B. Since 26 Nov 2026 the rest of the station (canopy, pump
+// islands, fuel tanks and pipes, the whole drainage, the full boundary) and its surroundings (Robinson Phetchaburi and
+// Phetkasem Road, layer "surroundings") are added from Brian's 2025 DWGs C and D; see the second half of build().
 //
 // Sources (portal-proposal/public/sites/layouts/1687, both A3 PDFs dated 11.09.2024 and stamped FOR CONSTRUCTION, although
 // the files are named "as-built" and sheet B is titled "As Built Pipe Slope Section"):
@@ -12,12 +14,23 @@
 //   B  1687-septic-pipe-slope.pdf: two sections, "Station Office Septic Tank Piping Slope" and "Insurance Shop Tank Piping
 //      Slope" (same plot factor, checked against its 10.7206 m dimension). Gives the datum (BM 0.0 = top of drain sump), the
 //      depth of the pipe at each end, the tank height, the cover depth, the slab and the bottom of the excavation.
-// Positions are metres on the sheet at 1:113.61 (x right, y up, from the bottom-left corner of the page).
-// Levels are metres from BM 0.00 = top of the drain sump. The plan gives no ground levels: the ground is shown flat at 0.00.
+//   C  "Layout As Built งานถังบำบัด 3,000 ลิตร (โรบินสันเพชรบุรี).dwg" (Brian's folder 24 25 Grease and Septic repair\เพชรบุรี Phetchaburi
+//      Robinson, June 2025): the Caltex station plan with its legend (items 1 to 45, fuel tanks T1 to T4) and drainage plan
+//      (block San-001), drawn over the Robinson site plan. Older than the 2024 work; no levels. North symbol: 191.7°.
+//   D  "01 Robinson Petchburi_Laou4.dwg" (same folder, May 2025): the Robinson Phetchaburi site plan (1:1000) with the station.
+//   E  "Spp Septic Tank Phetchaburi Look Back.pptx" (2025): SPP's photos of the 2025 install, its "Layout As Built" slide (= sheet
+//      A), the change to the foundation, and the Premier SS-3A tank drawing (SS-3A.pdf) in the same folder.
+// Positions are metres on the sheet at 1:113.61 (x right, y up, from the bottom-left corner of the page). C and D sit on
+// these by a plain shift: model = C - (204.75, 327.51), C = D - (4428.93, 2648.12) (see make-lines.py).
+// Levels are metres from BM 0.00 = top of the drain sump. The station is shown flat at 0.00; D writes +0.80 on the forecourt and
+// ±0.00 on Phetkasem Road, so the road is shown at -0.80.
 // src: 'drawn' = position and levels from the drawings; 'part' = position from the drawing, size, depth or level assumed;
 //      'context' = above-ground context only (heights assumed).
+import fs from 'node:fs';
 const D = 'drawn', P = 'part', C = 'context';
 // Both sheets are design drawings: this line goes into the notes of every underground object, before the source line.
+// C (the station plan) is older than the 2024 work and has no levels: this line goes into the notes of what comes from it.
+const PLAN = { en: 'From the Caltex station plan in Brian\'s 2025 DWG (older than the 2024 work, no levels). Confirm on site.', th: 'จากผังสถานี Caltex ใน DWG ปี 2025 ของ Brian (เก่ากว่างานปี 2024 ไม่มีระดับ) ต้องยืนยันหน้างาน' };
 const DESIGN = { en: 'From 2024 drawings stamped FOR CONSTRUCTION (design, not as-built): as designed for the 2024 improvement. Confirm on site.', th: 'จากแบบปี 2024 ที่ประทับตรา FOR CONSTRUCTION (แบบออกแบบ ไม่ใช่แบบก่อสร้างจริง): เป็นไปตามที่ออกแบบไว้สำหรับงานปรับปรุงปี 2024 ต้องยืนยันหน้างาน' };
 
 // ---- levels written on sheet B (depth below BM 0.00)
@@ -47,10 +60,10 @@ const SHAPE = [[0, 0], [0.66, 0], [0.82, 0.10], [0.93, 0.30], [0.97, 0.53], [1.0
 const OLD = [
   { id: 1, x: 26.59, y: 28.32, material: 'tankOlder', en: 'Existing treatment tank 1 (office toilet)', th: 'ถังบำบัดเดิม ใบที่ 1 (ห้องน้ำสำนักงาน)', tag: 'Existing tank 1', tagTh: 'ถังบำบัดเดิม 1',
     en1: 'Takes the office toilet (dotted pipe with an arrow from the toilet) and a second dotted pipe that comes from the north, off the sheet.', th1: 'รับน้ำจากห้องน้ำสำนักงาน (ท่อเส้นประมีลูกศรจากห้องน้ำ) และท่อเส้นประอีกเส้นที่มาจากด้านเหนือนอกแบบ',
-    en2: 'Before 2024 it discharged east to manhole MH-1. The new pipe to the west 2,500 L tank starts at a clean-out (FCO 4") drawn at the centre of this tank.', th2: 'ก่อนปี 2024 ปล่อยน้ำไปทางตะวันออกลงบ่อพัก MH-1 ท่อใหม่ไปถัง 2,500 ลิตรฝั่งตะวันตกเริ่มที่ช่องล้างท่อ (FCO 4 นิ้ว) ที่เขียนไว้กลางถังนี้' },
+    en2: 'Before 2024 it discharged east to manhole MH-1. The new pipe to the west 3,000 L tank starts at a clean-out (FCO 4") drawn at the centre of this tank.', th2: 'ก่อนปี 2024 ปล่อยน้ำไปทางตะวันออกลงบ่อพัก MH-1 ท่อใหม่ไปถัง 3,000 ลิตรฝั่งตะวันตกเริ่มที่ช่องล้างท่อ (FCO 4 นิ้ว) ที่เขียนไว้กลางถังนี้' },
   { id: 2, x: 26.59, y: 26.70, material: 'tankOlder', en: 'Existing treatment tank 2', th: 'ถังบำบัดเดิม ใบที่ 2', tag: 'Existing tank 2', tagTh: 'ถังบำบัดเดิม 2',
     en1: 'Takes the outflow of the existing grease trap (dotted pipe with an arrow pointing north into this tank).', th1: 'รับน้ำจากถังดักไขมันเดิม (ท่อเส้นประมีลูกศรชี้ขึ้นเหนือเข้าถังนี้)',
-    en2: 'Before 2024 it discharged north-east to manhole MH-1. The new pipe to the east 2,500 L tank starts at a clean-out (FCO 4") on the east side of this tank.', th2: 'ก่อนปี 2024 ปล่อยน้ำไปทางตะวันออกเฉียงเหนือลงบ่อพัก MH-1 ท่อใหม่ไปถัง 2,500 ลิตรฝั่งตะวันออกเริ่มที่ช่องล้างท่อ (FCO 4 นิ้ว) ด้านตะวันออกของถังนี้' },
+    en2: 'Before 2024 it discharged north-east to manhole MH-1. The new pipe to the east 3,000 L tank starts at a clean-out (FCO 4") on the east side of this tank.', th2: 'ก่อนปี 2024 ปล่อยน้ำไปทางตะวันออกเฉียงเหนือลงบ่อพัก MH-1 ท่อใหม่ไปถัง 3,000 ลิตรฝั่งตะวันออกเริ่มที่ช่องล้างท่อ (FCO 4 นิ้ว) ด้านตะวันออกของถังนี้' },
   { id: 3, x: 26.59, y: 25.16, material: 'grease', en: 'Existing grease trap (round)', th: 'ถังดักไขมันเดิม (ถังกลม)', tag: 'Grease trap', tagTh: 'ถังดักไขมัน',
     en1: 'Takes a dotted pipe from the shop building (arrow pointing east into the trap).', th1: 'รับน้ำจากท่อเส้นประที่มาจากอาคารร้านค้า (ลูกศรชี้ไปทางตะวันออกเข้าถัง)',
     en2: 'Its outflow goes north into existing treatment tank 2. The pipe slope sheet shows the "existing grease trap" outlet at -0.56.', th2: 'น้ำออกไปทางเหนือเข้าถังบำบัดเดิมใบที่ 2 แบบความลาดท่อแสดงท่อออกของ "ถังดักไขมันเดิม" ที่ระดับ -0.56' },
@@ -80,34 +93,46 @@ const MH_NOTE = {
   'MH-10': { en: 'Drawn with a different symbol (open square) from the other manholes. Drain lines carry on north and west, off the sheet.', th: 'เขียนด้วยสัญลักษณ์ต่างจากบ่อพักอื่น (สี่เหลี่ยมโปร่ง) แนวท่อระบายน้ำเดินต่อไปทางเหนือและตะวันตกนอกแบบ' },
 };
 
+// ---- fuel pipes from the station plan C (blocks Line-pile), model coordinates: fill (4"), vent (3") and dispensing (2") lines
+const FILL = [[[-16.37, 42.52], [-14.99, 42.52], [-14.99, 58.85], [-11.49, 58.85], [-9.91, 60.43]], [[-16.37, 40.85], [-13.79, 40.85], [-13.79, 52.09], [-9.61, 52.09], [-8.03, 53.67]], [[-16.37, 40.43], [-13.49, 40.43], [-13.49, 48.71], [-11.49, 48.71], [-9.91, 50.29]], [[-16.37, 41.68], [-14.39, 41.68], [-14.39, 55.47], [-9.61, 55.47], [-8.03, 57.05]], [[-16.37, 42.1], [-14.69, 42.1], [-14.69, 55.77], [-13.06, 55.77], [-11.78, 57.05]], [[-16.37, 41.27], [-14.09, 41.27], [-14.09, 52.39], [-13.06, 52.39], [-11.78, 53.67]]];
+const VENT = [[[-16.37, 35.07], [-13.17, 35.07], [-13.17, 48.18], [-9.91, 48.18], [-9.91, 50.05]], [[-16.37, 36.32], [-17.03, 36.32], [-17.03, 58.55], [-8.03, 58.55], [-8.03, 57.29]], [[-16.37, 35.49], [-17.43, 35.49], [-17.43, 55.25], [-8.03, 55.25], [-8.03, 53.91]], [[-16.37, 35.91], [-17.23, 35.91], [-17.23, 54.97], [-11.78, 54.97], [-11.78, 53.91]], [[-16.37, 36.74], [-16.83, 36.74], [-16.83, 58.31], [-11.78, 58.31], [-11.78, 57.29]], [[-16.37, 37.16], [-16.63, 37.16], [-16.63, 61.78], [-9.91, 61.78], [-9.91, 60.67]]];
+const DISP = [[[-1.99, 23.61], [-1.99, 43.86]], [[-1.0, 23.61], [-1.0, 43.86]], [[-0.67, 23.61], [-0.67, 43.86]], [[-1.66, 23.61], [-1.66, 43.86]], [[-1.33, 33.61], [-1.33, 43.86]], [[-1.5, 43.86], [-1.5, 32.32], [-1.33, 23.61]], [[-2.29, 56.62], [-1.31, 54.4], [-0.87, 52.09], [-0.67, 43.86]], [[-4.19, 56.65], [-3.39, 55.47], [-2.78, 54.26], [-1.77, 51.25], [-1.22, 47.95], [-1.0, 43.86]], [[-7.79, 57.05], [-6.31, 56.82], [-4.94, 56.2], [-3.81, 55.22], [-2.98, 53.96], [-2.24, 51.77], [-1.71, 49.22], [-1.45, 46.7], [-1.33, 43.86]], [[-3.36, 52.47], [-2.62, 51.16], [-1.96, 49.14], [-1.66, 47.25], [-1.5, 43.86]], [[-7.79, 53.67], [-6.45, 53.56], [-5.08, 53.01], [-4.29, 52.41], [-3.26, 51.11], [-2.6, 49.71], [-2.12, 47.95], [-1.72, 45.57], [-1.66, 43.86]], [[-1.99, 43.86], [-2.1, 45.48], [-2.48, 46.49], [-3.71, 48.26], [-4.52, 48.97], [-5.44, 49.54], [-6.43, 49.96], [-7.48, 50.21], [-9.67, 50.29]], [[-11.54, 53.67], [-9.86, 54.39], [-8.97, 54.57], [-7.14, 54.57], [-5.38, 54.08], [-4.57, 53.66], [-3.36, 52.47]], [[-9.25, 57.88], [-7.9, 58.14], [-6.54, 58.01], [-5.26, 57.5], [-4.19, 56.65]], [[-11.54, 57.05], [-10.97, 56.86], [-10.56, 56.92], [-9.25, 57.88]], [[-9.67, 60.43], [-8.57, 60.46], [-7.49, 60.33], [-5.42, 59.61], [-4.48, 59.04], [-3.64, 58.34], [-2.9, 57.53], [-2.29, 56.62]]];
+// ---- Robinson site plan D outside the station, made by make-lines.py (centimetres, model coordinates)
+const STATION = [[-17.66, 12.58], [12.26, 12.39], [25.82, 12.56], [25.83, 13.37], [25.90, 14.18], [26.02, 14.99], [26.18, 15.78], [26.40, 16.57], [26.66, 17.34], [26.97, 18.09], [27.33, 18.82], [27.91, 19.92], [27.91, 54.13], [-17.66, 68.47]];
+const SURROUND = JSON.parse(fs.readFileSync(new URL('./surroundings.json', import.meta.url), 'utf8'));
+
 export default {
   name: 'Phetchaburi',
   origin: [22.5, 20],
-  datum: { en: 'Levels are in metres from the drawing datum: BM ±0.00 = top of the drain sump (manhole top), from the pipe slope sheet. The plan gives no ground levels, so the ground is shown flat at ±0.00.', th: 'ระดับเป็นเมตรจากระดับอ้างอิงของแบบ: BM ±0.00 = ระดับหลังบ่อพัก (จากแบบความลาดท่อ) ผังไม่มีระดับพื้น จึงแสดงพื้นราบที่ ±0.00' },
+  datum: { en: 'Levels are in metres from the drawing datum: BM ±0.00 = top of the drain sump (manhole top), from the pipe slope sheet. The station is shown flat at ±0.00. The Robinson site plan writes +0.80 on the forecourt and ±0.00 on Phetkasem Road, so the road is shown at -0.80. Robinson around the station is shown flat (no levels on its plan).', th: 'ระดับเป็นเมตรจากระดับอ้างอิงของแบบ: BM ±0.00 = ระดับหลังบ่อพัก (จากแบบความลาดท่อ) แสดงสถานีเป็นพื้นราบที่ ±0.00 ผังโครงการโรบินสันเขียนลานสถานี +0.80 และถนนเพชรเกษม ±0.00 จึงแสดงถนนที่ -0.80 พื้นที่โรบินสันรอบสถานีแสดงเป็นพื้นราบ (ผังไม่มีระดับ)' },
   note: {
-    en: 'First version. Shows ONLY ONE CORNER of the station (shop building, office toilet, existing tanks, the two new 2,500 L tanks and the drains to the public drain); the rest of the site is not on these drawings. Built from 2024 sheets stamped FOR CONSTRUCTION, not as-built: positions are as designed for the 2024 improvement and must be confirmed on site before any digging. Not for setting out. The north and west edges of the ground are only the edge of the drawing. The sheet has no north arrow and is plotted at about 1:114, not the 1:100 written on it (the model follows its scale bar).',
-    th: 'ฉบับแรก แสดงเฉพาะมุมเดียวของสถานี (อาคารร้านค้า ห้องน้ำสำนักงาน ถังเดิม ถังใหม่ 2,500 ลิตร 2 ใบ และท่อระบายน้ำไปถึงท่อสาธารณะ) ส่วนอื่นของสถานีไม่มีในแบบชุดนี้ จัดทำจากแบบปี 2024 ที่ประทับตรา FOR CONSTRUCTION ไม่ใช่แบบก่อสร้างจริง: ตำแหน่งเป็นไปตามที่ออกแบบไว้สำหรับงานปรับปรุงปี 2024 ต้องยืนยันหน้างานก่อนขุดทุกครั้ง ห้ามใช้วางผัง ขอบพื้นด้านเหนือและตะวันตกเป็นเพียงขอบของแบบ แบบไม่มีลูกศรทิศเหนือ และพิมพ์ที่ประมาณ 1:114 ไม่ใช่ 1:100 ตามที่เขียนไว้ (โมเดลใช้ตามแถบมาตราส่วนในแบบ)',
+    en: 'The south-east corner with the wastewater tanks (sales building, office toilet, old tanks, the two new 3,000 L tanks installed in 2025, drains to the public drain) is in detail from the 2024 wastewater sheets, which SPP\'s 2025 look-back report and site photos confirm for the tank positions. The rest of the station (canopy, pump islands, four fuel tanks and their pipes, the drainage all round, the full boundary) comes from the older Caltex station plan in Brian\'s 2025 DWG: no levels, so depths are assumed. The layer "Surroundings (outside the station)" shows Phetkasem Road and the Robinson Phetchaburi site from the Robinson site plan, for context only; switch it off to see the station alone. Not for setting out: confirm on site before any digging.',
+    th: 'มุมตะวันออกเฉียงใต้ที่มีถังบำบัด (อาคารร้านค้า ห้องน้ำสำนักงาน ถังเดิม ถังใหม่ 3,000 ลิตร 2 ใบที่ติดตั้งปี 2025 และท่อระบายน้ำไปท่อสาธารณะ) แสดงละเอียดตามแบบงานน้ำเสียปี 2024 ซึ่งรายงานทบทวนงานปี 2025 และรูปถ่ายหน้างานของ SPP ยืนยันตำแหน่งถัง ส่วนอื่นของสถานี (หลังคาคลุมหัวจ่าย เกาะจ่าย ถังน้ำมัน 4 ใบและท่อ ระบบระบายน้ำรอบสถานี แนวเขตทั้งหมด) มาจากผังสถานี Caltex ฉบับเก่าใน DWG ปี 2025 ของ Brian ซึ่งไม่มีระดับ ความลึกจึงเป็นค่าสมมติ ชั้นข้อมูล "พื้นที่รอบสถานี (นอกแนวเขต)" แสดงถนนเพชรเกษมและโครงการโรบินสันเพชรบุรีตามผังโครงการ ใช้ดูประกอบเท่านั้น ปิดชั้นนี้เพื่อดูเฉพาะสถานี ห้ามใช้วางผัง ต้องยืนยันหน้างานก่อนขุดทุกครั้ง',
   },
-  built: '2026-11-25',
-  // no north arrow on the sheet: `north` left out on purpose
-  // South and east sides follow the red dashed site boundary on the plan; the north and west sides are the edge of the drawing.
-  boundary: [[3.73, 12.44], [25.80, 12.55], [25.84, 13.63], [25.87, 14.25], [26.15, 15.49], [26.30, 16.30], [26.68, 17.29], [27.33, 18.84], [27.91, 19.94], [27.91, 30.20], [3.73, 30.20]],
+  built: '2026-11-26',
+  // Drawing angle of north, anticlockwise from +x: the north symbol on the station plan (C) is turned 101.7°, so north points
+  // left and slightly down the sheet. It agrees with the site plan (D): Ratchaburi (north) to the left, Cha-am (south) to the right.
+  north: 191.7,
+  // The station boundary from the station plan (C, layer Boundary, legend item 1: 3,327 m²). Its south-east curve matches SN-01.
+  boundary: STATION,
   ground: {
-    bbox: [1.5, 8, 31.5, 32], step: 2, apron: 5, road: 0,
-    roadArea: [[1.5, 8], [31.5, 8], [31.5, 32], [1.5, 32]],
-    points: [[22, 19, 0]],
-    names: { siteGround: { en: 'Ground inside the drawn corner (shown flat)', th: 'พื้นภายในบริเวณที่มีในแบบ (แสดงเป็นพื้นราบ)' }, road: { en: 'Outside the boundary or beyond the drawing', th: 'นอกแนวเขตหรือนอกขอบเขตของแบบ' } },
+    bbox: [-18, 12, 28, 69], step: 2, apron: 3, road: 0,
+    roadArea: STATION,   // nothing outside the boundary in this layer: the surroundings layer has the ground round the station
+    points: [[5, 40, 0]],
+    names: { siteGround: { en: 'Station forecourt (shown flat at ±0.00)', th: 'ลานสถานี (แสดงเป็นพื้นราบที่ ±0.00)' }, road: { en: 'Just outside the station boundary', th: 'พื้นที่ติดแนวเขตสถานี' } },
   },
-  layers: ['tanks', 'sewer', 'drains', 'air', 'base', 'buildings', 'plan', 'ground'],   // names, order and colours: ../style.mjs
+  layers: ['tanks', 'sewer', 'drains', 'air', 'base', 'fuel', 'buildings', 'surroundings', 'plan', 'ground'],   // names, order and colours: ../style.mjs
   views: [
-    { id: 'site', from: [13, -4, 20], to: [19, 19, -0.5] },
-    { id: 'plan', from: [18, 20.2, 32], to: [18, 20.3, 0] },
-    { id: 'new', en: 'New 2,500 L tanks', th: 'ถังใหม่ 2,500 ลิตร', from: [20.5, 8.5, 8], to: [22.3, 18.2, -0.8] },
+    { id: 'site', from: [-28, -22, 38], to: [5, 38, -0.5] },
+    { id: 'plan', from: [5, 40.2, 82], to: [5, 40.3, 0] },
+    { id: 'new', en: 'New 3,000 L tanks', th: 'ถังใหม่ 3,000 ลิตร', from: [20.5, 8.5, 8], to: [22.3, 18.2, -0.8] },
     { id: 'old', en: 'Existing tanks at the toilet', th: 'ถังเดิมข้างห้องน้ำ', from: [34, 20.5, 7], to: [26.6, 25.5, -0.6] },
-    { id: 'under', from: [13, 8, -5.5], to: [22.5, 19, -0.8] },
+    { id: 'fuel', from: [-30, 38, 12], to: [-9, 55, -1.6] },
+    { id: 'area', from: [60, -150, 150], to: [-60, 90, 0] },
+    { id: 'under', from: [-14, -6, -16], to: [6, 36, -1] },
   ],
 
-  build({ notes, V, ground, lv, add, boxGeo, cylGeo, latheGeo, prismGeo, pipeGeo, merge, THREE }) {
+  build({ notes, V, ground, lv, add, boxGeo, cylGeo, latheGeo, prismGeo, pipeGeo, merge, THREE, fuelTank, lines: drawLines }) {
     // notes: the lines given, then (for everything except above-ground context) the design-drawing line, then the shared source line
     const lines = (en, th, kind) => (kind === C ? notes(en, th, kind) : notes([...en, DESIGN.en], [...th, DESIGN.th], kind));
     // flow arrows: cones round the pipe, pointing the way the plan's arrows point
@@ -134,20 +159,20 @@ export default {
     };
     const one = (n) => n.toFixed(1), ratio = (len, drop) => Math.round(len / drop / 5) * 5;
 
-    // ---------- the two new 2,500 L tanks, their slabs and piles
+    // ---------- the two new 3,000 L tanks, their slabs and piles
     const slabs = [], piles = [];
     for (const t of TANKS) {
       const first = t.id === 'W';
-      add('tanks', latheGeo(SHAPE, t.x, t.y, SLAB_TOP), 'tank', { en: `New 2,500 L treatment tank (${t.en}) · aerated`, th: `ถังบำบัดใหม่ 2,500 ลิตร (${t.th}) · ชนิดเติมอากาศ`, tag: `New 2,500 L tank (${t.en})`, tagTh: `ถังบำบัด 2,500 ลิตร (${t.th})`, lvl: lv(IN), kind: 'tank',
+      add('tanks', latheGeo(SHAPE, t.x, t.y, SLAB_TOP), 'tank', { en: `New 3,000 L treatment tank (${t.en}) · aerated`, th: `ถังบำบัดใหม่ 3,000 ลิตร (${t.th}) · ชนิดเติมอากาศ`, tag: `New 3,000 L tank (${t.en})`, tagTh: `ถังบำบัด 3,000 ลิตร (${t.th})`, lvl: lv(IN), kind: 'tank',
         info: lines(
-          ['Aerated package treatment tank, one of the 2 new tanks of the 2024 improvement. The plan says 2,500 L; the title of the pipe slope sheet says 3,000 L. Confirm which size was installed.',
+          ['Aerated package treatment tank Premier SS-3A (Ø2.04 m, 1.78 m high, 3.64 m³), one of the 2 new tanks installed in May 2025. The 2024 plan says 2,500 L; SPP\'s 2025 look-back report and the Premier SS-3A drawing in the project folder show that 3,000 L tanks were installed.', 'SPP\'s 2025 site photos show the two tanks in two separate grass areas between the concrete drain pipes, as on this sheet (not side by side as in the January 2025 design).',
             `Takes the outflow of ${t.from.en}. Treated water leaves to manhole ${t.to} and from there to the 3-compartment trap and the public drain.`,
             `Taken to be the "${t.section}" of the pipe slope sheet. The plan does not name the two tanks, so confirm which section belongs to which tank.`,
             `Size: 2.00 m across (plan), ${TANK_H.toFixed(3)} m high (slope sheet).`,
             `Pipe in (PVC 4") ${lv(IN)} on the ${t.inAt.en} side, as written. Pipe out on the ${t.outAt.en} side about ${lv(OUT)}: the outlet level is not written, taken 0.05 m below the inlet.`,
             `Ground ±0.00 · top of tank cover ${lv(COVER)} · underside of tank about ${lv(SLAB_TOP)} · bottom of the excavation ${lv(BED)}.`,
             first ? 'A 2" PVC vent (V-PVC 2") is marked beside this tank; its route is not drawn. Flexible connectors are marked at the inlet and outlet.' : 'Flexible connectors are marked at the inlet and outlet. A safety switch and an underground power cable are drawn about 1 m east of this tank.'],
-          ['ถังบำบัดน้ำเสียสำเร็จรูปชนิดเติมอากาศ เป็น 1 ใน 2 ถังใหม่ของงานปรับปรุงปี 2024 ผังระบุ 2,500 ลิตร แต่ชื่อแบบความลาดท่อระบุ 3,000 ลิตร ต้องยืนยันขนาดที่ติดตั้งจริง',
+          ['ถังบำบัดน้ำเสียสำเร็จรูปชนิดเติมอากาศ Premier SS-3A (Ø2.04 ม. สูง 1.78 ม. 3.64 ลบ.ม.) เป็น 1 ใน 2 ถังใหม่ที่ติดตั้งเดือนพฤษภาคม 2025 ผังปี 2024 ระบุ 2,500 ลิตร แต่รายงานทบทวนงานปี 2025 ของ SPP และแบบ Premier SS-3A ในโฟลเดอร์โครงการแสดงว่าติดตั้งถัง 3,000 ลิตร', 'รูปถ่ายหน้างานปี 2025 แสดงถังสองใบอยู่คนละแปลงหญ้า คั่นด้วยท่อระบายน้ำคอนกรีต ตามแบบแผ่นนี้ (ไม่ได้วางติดกันตามแบบเดือนมกราคม 2025)',
             `รับน้ำจาก${t.from.th} น้ำที่บำบัดแล้วออกไปบ่อพัก ${t.to} แล้วไปบ่อดักไขมัน 3 ตอนและท่อระบายน้ำสาธารณะ`,
             `ถือว่าเป็น "${t.section}" ในแบบความลาดท่อ ผังไม่ได้ระบุชื่อถังทั้งสองใบ ต้องยืนยันว่ารูปตัดใดเป็นของถังใด`,
             `ขนาด: กว้าง 2.00 ม. (จากผัง) สูง ${TANK_H.toFixed(3)} ม. (จากแบบความลาดท่อ)`,
@@ -163,15 +188,15 @@ export default {
       [`Concrete slab 2.40 × 2.40 m under each tank (plan), ${SLAB.toFixed(2)} m thick (slope sheet). The west slab is 0.80 m clear of the building line.`, `Top of slab about ${lv(SLAB_TOP)} · bottom of the excavation ${lv(BED)} (written as 2.4325 m below the datum).`],
       [`พื้นคอนกรีต 2.40 × 2.40 ม. ใต้ถังแต่ละใบ (จากผัง) หนา ${SLAB.toFixed(2)} ม. (จากแบบความลาดท่อ) ฐานฝั่งตะวันตกห่างจากแนวอาคาร 0.80 ม.`, `ระดับหลังฐานประมาณ ${lv(SLAB_TOP)} · ก้นหลุมขุด ${lv(BED)} (ในแบบเขียน 2.4325 ม. ต่ำกว่าระดับอ้างอิง)`], D) });
     add('base', merge(piles), 'pile', { en: 'Piles under the new tanks', th: 'เสาเข็มใต้ถังใหม่', kind: 'base', info: lines(
-      ['The plan shows 8 pile symbols on each slab (corners and mid-sides, about 0.95 m apart) and the slope sheet shows piles under the slab.', 'Pile size and length are not given: shown 0.15 m square and 2.0 m long.'],
-      ['ผังแสดงสัญลักษณ์เสาเข็ม 8 ต้นต่อฐาน (มุมและกึ่งกลางด้าน ห่างกันประมาณ 0.95 ม.) และแบบความลาดท่อแสดงเสาเข็มใต้ฐาน', 'ไม่มีขนาดและความยาวเสาเข็มในแบบ: แสดงเป็นเสา 0.15 ม. ยาว 2.0 ม.'], P) });
+      ['The plan shows 8 pile symbols on each slab (corners and mid-sides, about 0.95 m apart) and the slope sheet shows piles under the slab.', 'Pile size and length are not given: shown 0.15 m square and 2.0 m long.', 'SPP\'s 2025 look-back: the soil was hard with large stones, driven piles stopped at about 0.3 m, so the holes were bored with a 2 m auger and the slab was made 20 cm thick with 2 layers of DB12 @ 15 cm. Pile length on site is not recorded.'],
+      ['ผังแสดงสัญลักษณ์เสาเข็ม 8 ต้นต่อฐาน (มุมและกึ่งกลางด้าน ห่างกันประมาณ 0.95 ม.) และแบบความลาดท่อแสดงเสาเข็มใต้ฐาน', 'ไม่มีขนาดและความยาวเสาเข็มในแบบ: แสดงเป็นเสา 0.15 ม. ยาว 2.0 ม.', 'รายงานทบทวนงานปี 2025 ของ SPP: ดินแข็งมีหินขนาดใหญ่ ตอกเข็มได้ลึกประมาณ 0.3 ม. จึงเจาะด้วยสว่านยาว 2 ม. และเปลี่ยนฐานเป็นหนา 20 ซม. เหล็ก DB12 @ 15 ซม. 2 ชั้น ไม่มีบันทึกความยาวเข็มที่ใช้จริง'], P) });
 
     // ---------- the old tanks beside the building (depth unknown)
     const OLD_TOP = -0.65, OLD_H = 1.5;
     for (const t of OLD) {
       add('tanks', cylGeo(0.635, OLD_H, t.x, t.y, OLD_TOP - OLD_H), t.material, { en: t.en, th: t.th, tag: t.tag, tagTh: t.tagTh, kind: 'tank',
-        info: lines([t.en1, t.en2, 'Round tank 1.27 m across on the plan with a 0.47 m opening. Its depth is not on the drawings: shown 1.5 m high with its top 0.65 m below ground, so that the new pipes drawn over it pass above it.'],
-          [t.th1, t.th2, 'ถังกลมกว้าง 1.27 ม. ตามผัง มีช่องเปิด 0.47 ม. ไม่มีความลึกในแบบ: แสดงสูง 1.5 ม. หลังถังต่ำกว่าพื้น 0.65 ม. เพื่อให้ท่อใหม่ที่เขียนทับถังอยู่เหนือถัง'], P) }, V(t.x - 0.75, t.y + 0.3, 0.7));
+        info: lines([t.en1, t.en2, t.id === 3 ? 'The older Caltex station plan (2025 DWG) tags it item 15: 1,000 L grease trap MG-1000F.' : 'The older Caltex station plan (2025 DWG) tags it item 30: 2,500 L aerated treatment tank MC-2500F, which would be larger than the 1.27 m circle drawn. Check on site.', 'Round tank 1.27 m across on the plan with a 0.47 m opening. Its depth is not on the drawings: shown 1.5 m high with its top 0.65 m below ground, so that the new pipes drawn over it pass above it.'],
+          [t.th1, t.th2, t.id === 3 ? 'ผังสถานี Caltex ฉบับเก่า (DWG ปี 2025) ระบุเป็นรายการ 15: บ่อดักไขมัน 1,000 ลิตร MG-1000F' : 'ผังสถานี Caltex ฉบับเก่า (DWG ปี 2025) ระบุเป็นรายการ 30: ถังบำบัดชนิดเติมอากาศ 2,500 ลิตร MC-2500F ซึ่งน่าจะใหญ่กว่าวงกลม 1.27 ม. ที่เขียนไว้ ต้องตรวจสอบหน้างาน', 'ถังกลมกว้าง 1.27 ม. ตามผัง มีช่องเปิด 0.47 ม. ไม่มีความลึกในแบบ: แสดงสูง 1.5 ม. หลังถังต่ำกว่าพื้น 0.65 ม. เพื่อให้ท่อใหม่ที่เขียนทับถังอยู่เหนือถัง'], P) }, V(t.x - 0.75, t.y + 0.3, 0.7));
       add('tanks', cylGeo(0.235, 0 - OLD_TOP, t.x, t.y, OLD_TOP), t.material, { en: `${t.en} access`, th: `ช่องเปิด ${t.th}`, nopick: 1 });
       add('tanks', cylGeo(0.26, 0.03, t.x, t.y, 0), 'cover', { en: `${t.en} cover`, th: `ฝา ${t.th}`, nopick: 1 });
     }
@@ -229,7 +254,7 @@ export default {
       info: lines(['Existing pipe, drawn as a dotted line on the plan' + (flow ? ' with an arrow showing the flow.' : '; no arrow, so the direction of flow is not shown (taken as flowing into the tank).'), 'No size or level on the drawings: the depth shown is assumed. The plan does not say whether the old outlets to manhole MH-1 were cut off when the new pipes were connected: check on site.'],
         ['ท่อเดิม เขียนเป็นเส้นประในผัง' + (flow ? ' มีลูกศรแสดงทิศทางไหล' : ' ไม่มีลูกศร จึงไม่ทราบทิศทางไหล (ถือว่าไหลเข้าถัง)'), 'ไม่มีขนาดหรือระดับในแบบ: ความลึกที่แสดงเป็นค่าสมมติ ผังไม่ได้ระบุว่าท่อออกเดิมที่ไปบ่อพัก MH-1 ถูกตัดออกหรือไม่เมื่อต่อท่อใหม่ ต้องตรวจสอบหน้างาน'], P) });
     oldPipe([[25.45, 28.32, -0.30], [26.36, 28.32, -0.32]], 'Existing pipe: office toilet to old tank 1', 'ท่อเดิม: จากห้องน้ำสำนักงานเข้าถังเดิมใบที่ 1');
-    oldPipe([[26.59, 30.17, -0.30], [26.59, 28.56, -0.32]], 'Existing pipe from the north into old tank 1', 'ท่อเดิมจากด้านเหนือเข้าถังเดิมใบที่ 1', 0);
+    oldPipe([[26.59, 30.17, -0.30], [26.59, 28.56, -0.32]], 'Existing pipe from the under-sink grease trap into old tank 1', 'ท่อเดิมจากถังดักไขมันใต้อ่างเข้าถังเดิมใบที่ 1', 0);
     oldPipe([[26.82, 28.32, -0.36], [27.31, 28.32, -0.38]], 'Existing outlet: old tank 1 to manhole MH-1', 'ท่อออกเดิม: จากถังเดิมใบที่ 1 ไปบ่อพัก MH-1', 1, 'sewerTreated');
     oldPipe([[26.96, 27.12, START_B], [27.44, 28.01, START_B - 0.02]], 'Existing outlet: old tank 2 to manhole MH-1', 'ท่อออกเดิม: จากถังเดิมใบที่ 2 ไปบ่อพัก MH-1', 1, 'sewerTreated');
     oldPipe([[26.59, 25.42, -0.50], [26.59, 26.45, -0.52]], 'Existing pipe: grease trap to old tank 2', 'ท่อเดิม: จากถังดักไขมันเข้าถังเดิมใบที่ 2');
@@ -268,10 +293,10 @@ export default {
     const TRAP = { x: 22.09, y: 13.965, w: 0.90, d: 2.53, depth: 1.5 };
     add('drains', boxGeo(TRAP.w, TRAP.d, TRAP.depth, TRAP.x, TRAP.y, -TRAP.depth, 0), 'oilTrap', { en: 'Existing 3-compartment grease trap (grating covers)', th: 'บ่อดักไขมัน 3 ตอน เดิม (ฝาตะแกรง)', tag: '3-compartment trap', tagTh: 'บ่อดักไขมัน 3 ตอน', kind: 'manhole',
       info: lines(['Existing three-compartment trap with grating covers, just inside the south boundary: about 0.90 × 2.53 m on the plan. It is the last stop before the public drain.',
-        'Everything in this corner ends up here: the two new 2,500 L tanks (through MH-5 and MH-4) and the site drains. This is the place to check or sample what leaves this corner of the site.',
+        'Everything in this corner ends up here: the two new 3,000 L tanks (through MH-5 and MH-4) and the site drains. This is the place to check or sample what leaves this corner of the site.',
         'Its depth and pipe levels are not on the drawings: shown 1.50 m deep with the drain coming in at about -1.00 (assumed).'],
         ['บ่อดักไขมัน 3 ตอนเดิม ฝาตะแกรง อยู่ชิดแนวเขตด้านใต้ ขนาดประมาณ 0.90 × 2.53 ม. ตามผัง เป็นจุดสุดท้ายก่อนลงท่อระบายน้ำสาธารณะ',
-          'น้ำทั้งหมดของมุมนี้มารวมที่นี่: ถังใหม่ 2,500 ลิตรทั้งสองใบ (ผ่าน MH-5 และ MH-4) และท่อระบายน้ำของสถานี เป็นจุดสำหรับตรวจหรือเก็บตัวอย่างน้ำที่ออกจากมุมนี้ของสถานี',
+          'น้ำทั้งหมดของมุมนี้มารวมที่นี่: ถังใหม่ 3,000 ลิตรทั้งสองใบ (ผ่าน MH-5 และ MH-4) และท่อระบายน้ำของสถานี เป็นจุดสำหรับตรวจหรือเก็บตัวอย่างน้ำที่ออกจากมุมนี้ของสถานี',
           'ไม่มีความลึกและระดับท่อในแบบ: แสดงลึก 1.50 ม. ท่อระบายน้ำเข้าที่ประมาณ -1.00 (ค่าสมมติ)'], P) }, V(TRAP.x + 0.2, TRAP.y, 0.7));
     add('drains', merge([[14.80, 0.80], [13.93, 0.80], [13.095, 0.73]].map(([y, d]) => boxGeo(0.82, d, 0.03, TRAP.x, y, 0, 0))), 'cover', { en: 'Trap gratings', th: 'ฝาตะแกรงบ่อดัก', nopick: 1 });
     pipe('drains', [[TRAP.x, 12.70, -1.02], [TRAP.x, 10.55, -1.03]], 0.15, 'drain', { en: 'Connection to the public drain', th: 'ท่อเชื่อมต่อกับท่อระบายน้ำสาธารณะ', tag: 'To the public drain', tagTh: 'ไปท่อสาธารณะ', kind: 'drain', flow: 1,
@@ -296,9 +321,167 @@ export default {
 
     // ---------- building (context)
     const building = (poly, h, o) => add('buildings', prismGeo(poly, 0, h), 'building', { ...o, kind: 'building', info: lines(o.lines, o.linesTh, C) }, V(poly.reduce((s, p) => s + p[0], 0) / poly.length, poly.reduce((s, p) => s + p[1], 0) / poly.length, h + 0.7));
-    building([[19.55, 20.50], [25.92, 20.50], [25.92, 27.82], [19.55, 27.82]], 3.6, { en: 'Shop / sales building', th: 'อาคารห้องขาย/ร้านค้า', tag: 'Sales room / shop', tagTh: 'อาคารห้องขาย/ร้านค้า',
-      lines: ['Marked "sales room / shop building" on the plan. The building carries on north beyond the edge of the drawing.'], linesTh: ['ในผังระบุ "อาคารห้องขาย/ร้านค้า" อาคารต่อเนื่องไปทางเหนือเลยขอบของแบบ'] });
-    building([[22.65, 27.84], [25.92, 27.84], [25.92, 29.27], [22.65, 29.27]], 3.0, { en: 'Office toilet', th: 'ห้องน้ำสำนักงาน', tag: 'Office toilet', tagTh: 'ห้องน้ำสำนักงาน',
-      lines: ['Marked "office toilet" on the plan. Its waste goes east through the wall into existing treatment tank 1.'], linesTh: ['ในผังระบุ "ห้องน้ำสำนักงาน" น้ำเสียออกทางตะวันออกผ่านผนังเข้าถังบำบัดเดิมใบที่ 1'] });
+    // ---------- sales building (context): south part from SN-01, north end from the Robinson site plan
+    building([[19.55, 20.50], [25.92, 20.50], [25.92, 47.49], [19.55, 47.49]], 3.6, { en: 'Caltex sales building (shop, office, toilets)', th: 'อาคารสถานีบริการ Caltex (ร้านค้า สำนักงาน ห้องน้ำ)', tag: 'Sales building', tagTh: 'อาคารร้านค้า',
+      lines: ['The south part is the "sales room / shop building" of the wastewater sheet SN-01, with the office toilet at its south-east corner (its waste goes east through the wall into existing treatment tank 1). The building carries on north to the toilets at about 27 m long; the north end is taken from the Robinson site plan (2025 DWG), where it is marked CALTEX Office, Coffee and toilets (M., W.), floor +1.00.',
+        'The station plan in the same DWG draws a roof over a walkway along the west side; it is not shown. Height assumed.'],
+      linesTh: ['ส่วนใต้คือ "อาคารห้องขาย/ร้านค้า" ในแบบงานน้ำเสีย SN-01 มีห้องน้ำสำนักงานที่มุมตะวันออกเฉียงใต้ (น้ำเสียออกทางตะวันออกผ่านผนังเข้าถังบำบัดเดิมใบที่ 1) อาคารต่อไปทางเหนือถึงห้องน้ำ ยาวประมาณ 27 ม. ปลายด้านเหนือใช้ตามผังโครงการโรบินสัน (DWG ปี 2025) ซึ่งระบุ CALTEX Office, Coffee และห้องน้ำชาย/หญิง ระดับพื้น +1.00',
+        'ผังสถานีใน DWG เดียวกันเขียนหลังคาคลุมทางเดินด้านตะวันตกไว้ ไม่ได้แสดงในโมเดล ความสูงเป็นค่าสมมติ'] });
+
+    // =================================================================================================================
+    // THE REST OF THE STATION (26 Nov 2026), from the station plan inside Brian's 2025 DWG "Layout As Built งานถังบำบัด 3,000 ลิตร
+    // (โรบินสันเพชรบุรี).dwg": the Caltex station layout with its legend (items 1 to 45, T1 to T4) and its drainage plan (block
+    // San-001). Placed by a plain shift (see make-lines.py); it agrees with SN-01 within about 0.2 m at every manhole both show.
+    // That plan is older than the 2024 work, has no levels and does not number the sumps: MH-11 and up are this model's numbers.
+    const st = (en, th, kind) => (kind === C ? notes(en, th, kind) : notes([...en, PLAN.en], [...th, PLAN.th], kind));
+    const L200 = (lvl, m) => Math.round((lvl + m / 200) * 100) / 100;        // 1:200 back up the pipe from a known level
+
+    // ---- sumps (station plan: item 17 = sump with steel grating, item 19 = sump with sealed concrete cover)
+    const NEW_MH = {
+      'MH-11': [27.61, 38.62, 17], 'MH-12': [27.61, 48.02, 17], 'MH-13': [27.61, 54.13, 17],
+      'MH-14': [17.87, 57.20, 17], 'MH-15': [8.40, 60.17, 17], 'MH-16': [-1.06, 63.15, 17], 'MH-17': [-10.53, 66.13, 17], 'MH-18': [-17.51, 67.87, 17],
+      'MH-19': [-17.21, 57.68, 17], 'MH-20': [-17.21, 48.79, 17], 'MH-21': [-15.29, 43.03, 17], 'MH-22': [-15.29, 34.43, 17], 'MH-23': [-15.29, 25.23, 17],
+      'MH-24': [-15.29, 16.63, 17], 'MH-25': [-16.90, 12.70, 17], 'MH-26': [-11.27, 12.70, 17], 'MH-27': [-0.67, 12.58, 17],
+      'MH-28': [5.43, 35.50, 19], 'MH-29': [5.43, 44.90, 19], 'MH-30': [0.52, 24.90, 19], 'MH-31': [0.52, 35.50, 19], 'MH-32': [0.52, 44.90, 19],
+      'MH-33': [17.00, 33.52, 17], 'MH-34': [17.00, 42.12, 17], 'MH-35': [17.00, 47.06, 17],
+    };
+    const MHL = {};   // pipe level at each new sump that a 0.30 m pipe leaves from (assumed, 1:200 from the existing drains)
+    const J = { east: [27.61, 30.14, drainLevel('MH-1', 1.82)], canopy: [5.43, 30.12, drainLevel('MH-10', 4.92)], island: [3.79, 25.20, drainLevel('MH-10', 1.64)], front: [3.81, 12.88, drainLevel('MH-8', 3.96)] };
+    const d2 = (a, b) => Math.hypot(a[0] - b[0], a[1] - b[1]);
+    MHL['MH-11'] = L200(J.east[2], d2(NEW_MH['MH-11'], J.east)); MHL['MH-12'] = L200(MHL['MH-11'], 9.40);
+    MHL['MH-28'] = L200(J.canopy[2], d2(NEW_MH['MH-28'], J.canopy)); MHL['MH-29'] = L200(MHL['MH-28'], 9.40);
+    MHL['MH-31'] = L200(MHL['MH-28'], 4.91); MHL['MH-32'] = L200(MHL['MH-29'], 4.91); MHL['MH-30'] = L200(J.island[2], 3.31);
+    MHL['MH-27'] = L200(J.front[2], d2(NEW_MH['MH-27'], J.front)); MHL['MH-26'] = L200(MHL['MH-27'], 10.6);
+    MHL['MH-35'] = -0.60; MHL['MH-34'] = -0.62;
+    for (const [id, [x, y, item]] of Object.entries(NEW_MH)) {
+      const sealed = item === 19, depth = sealed ? 1.0 : 0.8, l = MHL[id];
+      add('drains', boxGeo(0.6, 0.6, depth, x, y, -depth, 0), 'manhole', { en: `Manhole ${id}`, th: `บ่อพัก ${id}`, kind: 'manhole',
+        info: st([sealed ? 'Sump with a sealed concrete cover (station plan item 19), at the pump islands.' : 'Sump with a steel grating (station plan item 17) on the drain around the station.',
+          'The number is this model\'s, not the drawing\'s. 0.60 m square as the other sumps; the depth is not on any drawing: shown ' + depth.toFixed(1) + ' m deep.' + (l != null ? ` The 0.30 m pipe is shown leaving at about ${lv(l)} (assumed, 1:200 from the existing drains).` : '')],
+        [sealed ? 'บ่อพักฝาปิด คสล. ปิดตาย (รายการ 19 ในผังสถานี) อยู่ที่เกาะจ่ายน้ำมัน' : 'บ่อพักฝาตะแกรงเหล็ก (รายการ 17 ในผังสถานี) บนรางระบายน้ำรอบสถานี',
+          'หมายเลขบ่อเป็นของโมเดล ไม่ใช่ของแบบ ขนาด 0.60 ม. เท่าบ่ออื่น ไม่มีความลึกในแบบ: แสดงลึก ' + depth.toFixed(1) + ' ม.' + (l != null ? ` แสดงท่อ 0.30 ม. ออกที่ประมาณ ${lv(l)} (ค่าสมมติ ลาด 1:200 จากท่อระบายน้ำเดิม)` : '')], P) });
+      add('drains', boxGeo(0.5, 0.5, 0.03, x, y, 0, 0), 'cover', { en: `Manhole ${id} cover`, th: `ฝาบ่อพัก ${id}`, nopick: 1 });
+    }
+    const P_ = (id) => [NEW_MH[id][0], NEW_MH[id][1]];
+    // ---- 0.30 m concrete drain pipes (station plan item 23), levels assumed
+    const newPipe = (pts, en, th, more) => pipe('drains', pts, 0.15, 'drain', { en: `Site drain: ${en}`, th: `ท่อระบายน้ำ: ${th}`, kind: 'drain', flow: 1,
+      info: (m) => st([`0.30 m concrete drain pipe, buried (station plan item 23), about ${one(m)} m. ${more.en}`, 'No levels on the station plan: shown falling 1:200 towards the existing drains of the corner model. Check on site.'],
+        [`ท่อระบายน้ำ คสล. 0.30 ม. ฝังใต้ดิน (รายการ 23 ในผังสถานี) ยาวประมาณ ${one(m)} ม. ${more.th}`, 'ผังสถานีไม่มีระดับ: แสดงลาด 1:200 ไปทางท่อระบายน้ำเดิมของมุมที่มีในโมเดล ต้องตรวจสอบหน้างาน'], P) });
+    newPipe([[...P_('MH-12'), MHL['MH-12']], [...P_('MH-11'), MHL['MH-11']], J.east], 'east side, MH-12 to MH-11 and on to MH-1', 'ด้านตะวันออก จาก MH-12 ถึง MH-11 แล้วต่อไป MH-1',
+      { en: 'Runs down the east boundary beside the sales building and joins the drain to MH-1, MH-2 and the trap.', th: 'เดินลงตามแนวเขตด้านตะวันออกข้างอาคาร ต่อกับท่อไป MH-1, MH-2 และบ่อดัก' });
+    newPipe([[...P_('MH-29'), MHL['MH-29']], [...P_('MH-28'), MHL['MH-28']], J.canopy], 'east edge of the canopy, MH-29 to MH-28 and on to MH-10', 'ขอบตะวันออกของหลังคาคลุมหัวจ่าย จาก MH-29 ถึง MH-28 แล้วต่อไป MH-10',
+      { en: 'Along the east edge of the canopy, taking the three pump-island sumps.', th: 'เดินตามขอบตะวันออกของหลังคาคลุมหัวจ่าย รับน้ำจากบ่อพักที่เกาะจ่ายทั้งสามเกาะ' });
+    newPipe([[...P_('MH-31'), MHL['MH-31']], [5.43, 35.2, MHL['MH-28']]], 'middle pump island to MH-28', 'จากเกาะจ่ายกลางไป MH-28', { en: 'From the sealed sump at the middle pump island.', th: 'จากบ่อพักฝาปิดที่เกาะจ่ายกลาง' });
+    newPipe([[...P_('MH-32'), MHL['MH-32']], [5.43, 45.2, MHL['MH-29']]], 'north pump island to MH-29', 'จากเกาะจ่ายด้านเหนือไป MH-29', { en: 'From the sealed sump at the north pump island.', th: 'จากบ่อพักฝาปิดที่เกาะจ่ายด้านเหนือ' });
+    newPipe([[...P_('MH-30'), MHL['MH-30']], J.island], 'south pump island to the MH-10 branch', 'จากเกาะจ่ายด้านใต้ไปแนวท่อ MH-10',
+      { en: 'From the sealed sump at the south pump island; joins the branch that runs west from MH-10.', th: 'จากบ่อพักฝาปิดที่เกาะจ่ายด้านใต้ ต่อกับแนวท่อที่แยกจาก MH-10 ไปทางตะวันตก' });
+    newPipe([[...P_('MH-26'), MHL['MH-26']], [...P_('MH-27'), MHL['MH-27']], J.front], 'along the road, MH-26 to MH-27 and on to MH-8', 'ตามแนวถนน จาก MH-26 ถึง MH-27 แล้วต่อไป MH-8',
+      { en: 'Along the south boundary behind the road kerb, past the entry driveway, joining the branch west of MH-8.', th: 'ตามแนวเขตด้านใต้หลังขอบถนน ผ่านทางเข้า ต่อกับแนวท่อด้านตะวันตกของ MH-8' });
+    newPipe([[...P_('MH-35'), MHL['MH-35']], [...P_('MH-34'), MHL['MH-34']]], 'north end of the building, MH-35 to MH-34', 'ปลายเหนือของอาคาร จาก MH-35 ถึง MH-34',
+      { en: 'Short pipe on the channel west of the building.', th: 'ท่อสั้นบนแนวรางด้านตะวันตกของอาคาร' });
+
+    // ---- open V-channels at the surface (station plan item 20) and the narrow 8" channel at the road (item 22)
+    const channel = (ids, en, th, item = 20) => {
+      const pts = ids.map((p) => (typeof p === 'string' ? P_(p) : p)), parts = [];
+      let len = 0;
+      for (let i = 0; i < pts.length - 1; i++) {
+        const [ax, ay] = pts[i], [bx, by] = pts[i + 1], L = Math.hypot(bx - ax, by - ay); len += L;
+        parts.push(boxGeo(L, item === 22 ? 0.22 : 0.30, item === 22 ? 0.22 : 0.25, (ax + bx) / 2, (ay + by) / 2, item === 22 ? -0.22 : -0.25, Math.atan2(by - ay, bx - ax) * 180 / Math.PI));
+      }
+      add('drains', merge(parts), 'drain', { en: `Open channel: ${en}`, th: `รางระบายน้ำ: ${th}`, kind: 'drain',
+        info: st([item === 22 ? `Narrow open channel made from an 8" pipe (station plan item 22), about ${one(len)} m.` : `Open concrete V-channel (station plan item 20) at the surface, about ${one(len)} m, with grated sumps along it.`,
+          'Shown 0.25 m deep at the surface; its fall is not on the drawings (the plan writes 1:200 along it).'],
+        [item === 22 ? `รางเปิดปากแคบทำจากท่อ 8 นิ้ว (รายการ 22 ในผังสถานี) ยาวประมาณ ${one(len)} ม.` : `รางระบายน้ำ คสล. แบบเปิด (รางวี) (รายการ 20 ในผังสถานี) ที่ผิวพื้น ยาวประมาณ ${one(len)} ม. มีบ่อพักฝาตะแกรงเป็นระยะ`,
+          'แสดงลึก 0.25 ม. ที่ผิวพื้น ไม่มีระดับความลาดในแบบ (ผังเขียนลาด 1:200)'], P) });
+    };
+    channel(['MH-13', [27.61, 48.62]], 'north-east corner, MH-13 to MH-12', 'มุมตะวันออกเฉียงเหนือ จาก MH-13 ถึง MH-12');
+    channel(['MH-13', 'MH-14', 'MH-15', 'MH-16', 'MH-17', 'MH-18'], 'along the north boundary (Robinson side)', 'ตามแนวเขตด้านเหนือ (ฝั่งโรบินสัน)');
+    channel(['MH-18', 'MH-19', 'MH-20', [-16.6, 46.0], 'MH-21', 'MH-22', 'MH-23', 'MH-24', [-16.0, 14.6], 'MH-25'], 'along the west boundary', 'ตามแนวเขตด้านตะวันตก');
+    channel(['MH-25', [-11.57, 12.97]], 'at the road, MH-25 to MH-26', 'ริมถนน จาก MH-25 ถึง MH-26', 22);
+    channel([[17.0, 22.83], 'MH-33', 'MH-34'], 'west side of the sales building, MH-6 to MH-34', 'ด้านตะวันตกของอาคาร จาก MH-6 ถึง MH-34');
+
+    // ---- the grease trap under the sink and its pipe (station plan item 15a) and the 8,000 L tank (item 31)
+    add('tanks', boxGeo(0.45, 0.35, 0.4, 25.25, 32.39, 0, 0), 'grease', { en: 'Grease trap under the sink (60 L, MK-60F)', th: 'ถังดักไขมันใต้อ่าง (60 ลิตร MK-60F)', tag: 'Under-sink grease trap', tagTh: 'ถังดักไขมันใต้อ่าง', kind: 'tank',
+      info: st(['60 L grease trap under a sink inside the sales building (station plan item 15a: MK-60F). Its pipe runs east through the wall and south into existing treatment tank 1: this is the pipe that SN-01 shows coming "from the north, off the sheet".', 'Size from the model number; height and exact place assumed.'],
+        ['ถังดักไขมันใต้อ่าง 60 ลิตรภายในอาคาร (รายการ 15a ในผังสถานี: MK-60F) ท่อออกไปทางตะวันออกผ่านผนังแล้วลงใต้เข้าถังบำบัดเดิมใบที่ 1: เป็นท่อที่ SN-01 แสดงว่า "มาจากด้านเหนือนอกแบบ"', 'ขนาดตามรุ่น ความสูงและตำแหน่งที่แน่นอนเป็นค่าสมมติ'], P) }, V(25.25, 32.39, 1.2));
+    pipe('sewer', [[25.54, 32.39, -0.24], [26.59, 32.39, -0.26], [26.59, 30.17, -0.30]], 0.05, 'sewerRaw', { en: 'Existing pipe: under-sink grease trap to old tank 1', th: 'ท่อเดิม: จากถังดักไขมันใต้อ่างไปถังเดิมใบที่ 1', kind: 'pipe', flow: 1,
+      info: st(['Drawn on the station plan from the under-sink grease trap east, then south along the building to existing treatment tank 1, where SN-01 picks it up.', 'Size and levels not on the drawings: shown as a 4" pipe just below ground (assumed).'],
+        ['ผังสถานีเขียนจากถังดักไขมันใต้อ่างไปทางตะวันออก แล้วลงใต้ตามอาคารถึงถังบำบัดเดิมใบที่ 1 ซึ่ง SN-01 เขียนต่อ', 'ไม่มีขนาดและระดับในแบบ: แสดงเป็นท่อ 4 นิ้วใต้ผิวดิน (ค่าสมมติ)'], P) });
+    add('tanks', cylGeo(0.85, 2.0, 26.6, 43.5, -2.6), 'tankOlder', { en: 'Treatment tank 8,000 L (MC-08A) · place not drawn', th: 'ถังบำบัด 8,000 ลิตร (MC-08A) · ไม่ได้เขียนตำแหน่ง', tag: '8,000 L tank (place?)', tagTh: 'ถัง 8,000 ลิตร (ตำแหน่ง?)', kind: 'tank',
+      info: st(['The station plan lists an 8,000 L aerated treatment tank (item 31: MC-08A) and puts its number tag east of the toilets at the north end of the sales building, but draws no outline. It probably takes the toilets.',
+        'POSITION NOT KNOWN: shown at the tag only, with an assumed size and depth. Find it on site (lids in the paving east or north of the toilets) before any digging there.'],
+        ['ผังสถานีระบุถังบำบัดชนิดเติมอากาศ 8,000 ลิตร (รายการ 31: MC-08A) และวางป้ายหมายเลขไว้ทางตะวันออกของห้องน้ำที่ปลายเหนือของอาคาร แต่ไม่ได้เขียนรูปถัง น่าจะรับน้ำจากห้องน้ำ',
+          'ไม่ทราบตำแหน่ง: แสดงที่ป้ายหมายเลขเท่านั้น ขนาดและความลึกเป็นค่าสมมติ ต้องหาหน้างาน (ฝาถังในพื้นทางตะวันออกหรือเหนือของห้องน้ำ) ก่อนขุดบริเวณนั้น'], P) }, V(26.6, 43.5, 1.2));
+
+    // ---- fuel: four underground tanks T1 to T4 (legend), fill point, vents, pipes; pump islands and canopy
+    const FUEL = [
+      { id: 'T1', y: 60.43, label: 'T1 · B10', mh: [[-9.91, 60.43]], en: 'One compartment of 30,000 L, low-flammability fuel (diesel type). Product written on the plan: B10.', th: 'ช่องเดียว 30,000 ลิตร น้ำมันไวไฟน้อย (ประเภทดีเซล) ผลิตภัณฑ์ในผัง: B10' },
+      { id: 'T2', y: 57.05, label: 'T2 · PD | B7', mh: [[-11.78, 57.05], [-8.03, 57.05]], en: 'Two compartments of 15,000 L (30,000 L), low-flammability fuel (diesel type). Products written on the plan: PD and B7.', th: '2 ช่อง ช่องละ 15,000 ลิตร (รวม 30,000 ลิตร) น้ำมันไวไฟน้อย (ประเภทดีเซล) ผลิตภัณฑ์ในผัง: PD และ B7' },
+      { id: 'T3', y: 53.67, label: 'T3 · 95 | E20', mh: [[-11.78, 53.67], [-8.03, 53.67]], en: 'Two compartments of 15,000 L (30,000 L), high-flammability fuel (petrol type). Products written on the plan: 95 and E20.', th: '2 ช่อง ช่องละ 15,000 ลิตร (รวม 30,000 ลิตร) น้ำมันไวไฟมาก (ประเภทเบนซิน) ผลิตภัณฑ์ในผัง: 95 และ E20' },
+      { id: 'T4', y: 50.29, label: 'T4 · G95', mh: [[-9.91, 50.29]], en: 'One compartment of 30,000 L, high-flammability fuel (petrol type). Product written on the plan: G95.', th: 'ช่องเดียว 30,000 ลิตร น้ำมันไวไฟมาก (ประเภทเบนซิน) ผลิตภัณฑ์ในผัง: G95' },
+    ];
+    for (const f of FUEL) {
+      fuelTank(f.label, -9.85, f.y, 0, { en: [f.en, 'Position from the station plan (legend T1 to T4: the four tanks lie east-west, 3.4 m apart, north-west of the canopy).'], th: [f.th, 'ตำแหน่งตามผังสถานี (รายการ T1 ถึง T4: ถังสี่ใบวางแนวตะวันออก-ตะวันตก ห่างกัน 3.4 ม. ทางตะวันตกเฉียงเหนือของหลังคาคลุมหัวจ่าย)'] });
+      for (const [x, y] of f.mh) {
+        add('fuel', cylGeo(0.69, 1.0, x, y, -1.0), 'manhole', { en: `Tank ${f.id} manhole chamber`, th: `บ่อเปิดถัง ${f.id}`, nopick: 1 });
+        add('fuel', cylGeo(0.72, 0.04, x, y, 0), 'cover', { en: `Tank ${f.id} manhole cover`, th: `ฝาบ่อถัง ${f.id}`, nopick: 1 });
+      }
+    }
+    const fp = (list, r, level, en, th, enL, thL) => add('fuel', merge(list.map((pl) => pipeGeo(pl.map(([x, y]) => [x, y, level]), r).geometry)), 'fuelPipe', { en, th, kind: 'fuel', info: st(enL, thL, P) });
+    fp(FILL, 0.05, -0.65, 'Fuel fill pipes (4")', 'ท่อเติมน้ำมันลงถัง (4 นิ้ว)',
+      ['Six 4" fill pipes (station plan item 41), one to each tank compartment, from the fill point at the west boundary. Routes from the plan.', 'Depth not on the drawings: shown about 0.65 m below ground. Keep clear when digging; have them located on site.'],
+      ['ท่อเติมน้ำมันลงถัง 4 นิ้ว 6 เส้น (รายการ 41 ในผังสถานี) ไปแต่ละช่องของถัง จากจุดเติมน้ำมันที่แนวเขตด้านตะวันตก แนวท่อตามผัง', 'ไม่มีความลึกในแบบ: แสดงต่ำกว่าพื้นประมาณ 0.65 ม. ต้องระวังเมื่อขุด และให้ตรวจหาแนวท่อหน้างาน']);
+    fp(VENT, 0.04, -0.5, 'Fuel tank vent pipes (3")', 'ท่อระบายอากาศถังน้ำมัน (3 นิ้ว)',
+      ['Six vent pipes (station plan item 42: 3" underground, 2" above ground), one from each tank compartment to the vent stack at the west boundary. Routes from the plan.', 'Depth not on the drawings: shown about 0.5 m below ground.'],
+      ['ท่อระบายอากาศ 6 เส้น (รายการ 42 ในผังสถานี: 3 นิ้วใต้ดิน 2 นิ้วเหนือดิน) จากแต่ละช่องของถังไปท่อระบายอากาศที่แนวเขตด้านตะวันตก แนวท่อตามผัง', 'ไม่มีความลึกในแบบ: แสดงต่ำกว่าพื้นประมาณ 0.5 ม.']);
+    fp(DISP, 0.03, -0.45, 'Fuel dispensing pipes (2") to the pump islands', 'ท่อจ่ายน้ำมัน (2 นิ้ว) ไปเกาะจ่าย',
+      ['2" dispensing pipes (station plan item 43) from the tanks, curving south-east to the canopy and running under the three pump islands. Routes from the plan.', 'Depth not on the drawings: shown about 0.45 m below ground. They cross the area between the tanks and the canopy: locate them before any digging.'],
+      ['ท่อจ่ายน้ำมัน 2 นิ้ว (รายการ 43 ในผังสถานี) จากถังโค้งไปทางตะวันออกเฉียงใต้ถึงหลังคาคลุมหัวจ่าย แล้วเดินใต้เกาะจ่ายทั้งสาม แนวท่อตามผัง', 'ไม่มีความลึกในแบบ: แสดงต่ำกว่าพื้นประมาณ 0.45 ม. ท่อผ่านพื้นที่ระหว่างถังกับหลังคา ต้องตรวจหาแนวก่อนขุด']);
+    add('fuel', boxGeo(0.9, 3.5, 0.6, -16.40, 41.04, -0.6, 0), 'manhole', { en: 'Fuel fill point', th: 'จุดเติมน้ำมัน', tag: 'Fill point', tagTh: 'จุดเติมน้ำมัน', kind: 'fuel',
+      info: st(['Fill point box at the west boundary where the tanker connects: the six fill pipes start here. Outline from the station plan; depth assumed.'], ['บ่อจุดเติมน้ำมันที่แนวเขตด้านตะวันตก สำหรับต่อรถขนส่งน้ำมัน ท่อเติม 6 เส้นเริ่มที่นี่ ขอบเขตตามผังสถานี ความลึกเป็นค่าสมมติ'], P) }, V(-16.4, 41.0, 1.0));
+    add('fuel', merge(VENT.map((pl) => cylGeo(0.03, 4.0, -16.5, pl[0][1], 0, 8))), 'fuelPipe', { en: 'Vent stack', th: 'ท่อระบายอากาศเหนือดิน', tag: 'Vent pipes', tagTh: 'ท่อระบายอากาศ', kind: 'fuel',
+      info: notes(['The six tank vent pipes rise beside the west boundary (station plan item 42). Height assumed (4 m).'], ['ท่อระบายอากาศของถังทั้ง 6 เส้นตั้งขึ้นข้างแนวเขตด้านตะวันตก (รายการ 42 ในผังสถานี) ความสูงเป็นค่าสมมติ (4 ม.)'], C) }, V(-16.5, 36.1, 4.6));
+    const isl = [], disp = [], cols = [];
+    for (const y of [23.60, 33.60, 43.60]) {
+      isl.push(boxGeo(7.2, 1.24, 0.2, -0.57, y, 0, 0));
+      for (const x of [-2.4, 2.0]) disp.push(boxGeo(1.1, 0.55, 1.9, x, y, 0.2, 0));
+      cols.push(boxGeo(0.45, 0.30, 5.2, 0.2, y, 0.2, 0));
+    }
+    add('buildings', merge(isl), 'islands', { en: 'Pump islands', th: 'เกาะจ่ายน้ำมัน', tag: 'Pump islands', tagTh: 'เกาะจ่าย', kind: 'building',
+      info: notes(['Three pump islands under the canopy, about 7.2 × 1.24 m, 10 m apart (station plan). The dispensers on them are shown as boxes; their number and size are assumed.'], ['เกาะจ่ายน้ำมัน 3 เกาะใต้หลังคา ขนาดประมาณ 7.2 × 1.24 ม. ห่างกัน 10 ม. (ผังสถานี) ตู้จ่ายแสดงเป็นกล่อง จำนวนและขนาดเป็นค่าสมมติ'], C) }, V(-3.2, 43.6, 2.6));
+    add('buildings', merge(disp), 'islands', { en: 'Dispensers', th: 'ตู้จ่ายน้ำมัน', nopick: 1 });
+    add('buildings', merge(cols), 'column', { en: 'Canopy columns', th: 'เสาหลังคาคลุมหัวจ่าย', nopick: 1 });
+    add('buildings', boxGeo(9.4, 28.4, 0.8, 0.22, 33.61, 5.4, 0), 'roof', { en: 'Canopy', th: 'หลังคาคลุมหัวจ่าย', tag: 'Canopy', tagTh: 'หลังคาคลุมหัวจ่าย', kind: 'building',
+      info: notes(['Canopy over the pump islands, 9.4 × 28.4 m (station plan item 6), on one steel column per island. Height assumed (underside 5.4 m).'], ['หลังคาคลุมตู้จ่ายน้ำมัน 9.4 × 28.4 ม. (รายการ 6 ในผังสถานี) เสาเหล็กเกาะละ 1 ต้น ความสูงเป็นค่าสมมติ (ใต้หลังคา 5.4 ม.)'], C) }, V(0.22, 33.6, 7.0));
+
+    // =================================================================================================================
+    // SURROUNDINGS (layer "surroundings", can be switched off): Phetkasem Road and the Robinson Phetchaburi site around the station,
+    // from the Robinson site plan in "01 Robinson Petchburi_Laou4.dwg". Flat, outlines traced from that plan, heights assumed.
+    const KERB = 8.0, ROAD = -0.80;
+    {  // flat ground from the road kerb to the edge of the site plan, with the station cut out
+      const o = V(0, 0, 0), sh = new THREE.Shape([[-370, KERB], [170, KERB], [170, 330], [-370, 330]].map(([x, y]) => new THREE.Vector2(x + o.x, y - o.z)));
+      sh.holes.push(new THREE.Path(STATION.map(([x, y]) => new THREE.Vector2(x + o.x, y - o.z))));
+      const g = new THREE.ExtrudeGeometry(sh, { depth: 0.05, bevelEnabled: false }); g.rotateX(-Math.PI / 2); g.translate(0, -0.06, 0);
+      add('surroundings', g, 'surroundGround', { en: 'Robinson Phetchaburi site (shown flat)', th: 'พื้นที่โครงการโรบินสันเพชรบุรี (แสดงเป็นพื้นราบ)', nopick: 1 });
+    }
+    add('surroundings', prismGeo([[-370, -42], [170, -42], [170, KERB], [-370, KERB]], ROAD - 0.05, 0.05), 'road', { en: 'Phetkasem Road (Highway 4)', th: 'ถนนเพชรเกษม (ทางหลวงหมายเลข 4)', tag: 'Phetkasem Road', tagTh: 'ถนนเพชรเกษม', kind: 'building',
+      info: notes(['Phetkasem Road in front of the station and Robinson: to Ratchaburi to the north (left on the plan) and to Cha-am to the south (right), as written on the site plan.', 'The site plan writes ±0.00 on the road and +0.80 on the station forecourt, so the road is shown 0.80 m below the station. Lanes and far edge are traced roughly.'],
+        ['ถนนเพชรเกษมหน้าสถานีและโรบินสัน: ไปราชบุรีทางเหนือ (ด้านซ้ายของผัง) และไปชะอำทางใต้ (ด้านขวา) ตามที่เขียนในผังโครงการ', 'ผังโครงการเขียนระดับถนน ±0.00 และลานสถานี +0.80 จึงแสดงถนนต่ำกว่าสถานี 0.80 ม. ช่องจราจรและขอบถนนอีกฝั่งเป็นแนวโดยประมาณ'], C) }, V(-60, -15, 1.2));
+    add('surroundings', boxGeo(540, 0.15, -ROAD, -100, KERB - 0.075, ROAD, 0), 'slab', { en: 'Road kerb', th: 'ขอบถนน', nopick: 1 });
+    drawLines('surroundings', SURROUND.lines.map((l) => l.map((v) => v / 100)), 'surroundLine', (x, y) => (y < KERB ? ROAD + 0.02 : 0.02));
+    const block = (poly, h, en, th, tag, tagTh, more) => add('surroundings', prismGeo(poly, 0, h), 'surroundBuilding', { en, th, tag, tagTh, kind: 'building',
+      info: notes([more.en, 'Outline traced from the Robinson site plan; height assumed. For context only.'], [more.th, 'แนวอาคารตามผังโครงการโรบินสัน ความสูงเป็นค่าสมมติ ใช้ดูประกอบเท่านั้น'], C) },
+      V(poly.reduce((s, p) => s + p[0], 0) / poly.length, poly.reduce((s, p) => s + p[1], 0) / poly.length, h + 1.5));
+    block([[-201.68, 226.37], [-7.68, 165.37], [-15.68, 129.37], [-27.68, 104.37], [-43.68, 88.37], [-50.68, 90.37], [-171.68, 124.37], [-221.68, 134.37], [-222.68, 166.37]], 14,
+      'Robinson Phetchaburi shopping mall', 'ศูนย์การค้าโรบินสัน เพชรบุรี', 'Robinson Phetchaburi', 'โรบินสัน เพชรบุรี',
+      { en: 'The main Robinson building north-west of the station, about 200 m long. Its nearest corner is about 30 m from the station\'s north boundary. Outline simplified.', th: 'อาคารหลักของโรบินสันทางตะวันตกเฉียงเหนือของสถานี ยาวประมาณ 200 ม. มุมที่ใกล้ที่สุดห่างจากแนวเขตด้านเหนือของสถานีประมาณ 30 ม. แนวอาคารแบบย่อ' });
+    block([[-48.18, 24.37], [-31.18, 24.37], [-31.18, 43.67], [-48.18, 43.67]], 6, 'Building west of the station (drive-through lane)', 'อาคารทางตะวันตกของสถานี (มีช่องไดรฟ์ทรู)', 'Drive-through building', 'อาคารไดรฟ์ทรู',
+      { en: 'Next building to the west, about 14 m from the station boundary, with a drive-through lane drawn along its east side. Not named on the plan.', th: 'อาคารถัดไปทางตะวันตก ห่างจากแนวเขตสถานีประมาณ 14 ม. มีช่องไดรฟ์ทรูเขียนไว้ด้านตะวันออก ผังไม่ได้ระบุชื่อ' });
+    block([[-87.18, 28.97], [-68.28, 28.97], [-68.28, 46.37], [-87.18, 46.37]], 6, 'Building "POP"', 'อาคาร "POP"', 'POP', 'POP',
+      { en: 'Small building marked POP on the site plan, further west along the road.', th: 'อาคารขนาดเล็กที่ผังเขียนว่า POP อยู่ถัดไปทางตะวันตกตามแนวถนน' });
+    block([[15.82, 169.07], [30.62, 163.87], [22.62, 134.37], [7.82, 139.57]], 7, 'Car service', 'อาคารบริการรถยนต์', 'Car service', 'บริการรถยนต์',
+      { en: 'Car service building, 15.6 × 29.3 m as written on the site plan, north of the station across the Robinson car park.', th: 'อาคารบริการรถยนต์ ขนาด 15.6 × 29.3 ม. ตามผังโครงการ อยู่ทางเหนือของสถานีอีกฝั่งของลานจอดรถโรบินสัน' });
+    block([[37.82, 159.87], [44.82, 157.67], [38.32, 133.87], [31.32, 135.97]], 5, 'Car wash', 'อาคารล้างรถ', 'Car wash', 'ล้างรถ',
+      { en: 'Car wash, 7 × 25 m as written on the site plan, beside the car service building.', th: 'อาคารล้างรถ ขนาด 7 × 25 ม. ตามผังโครงการ อยู่ข้างอาคารบริการรถยนต์' });
   },
 };
