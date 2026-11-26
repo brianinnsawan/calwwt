@@ -44,7 +44,7 @@ export default {
     points: [[-30, -20, 0], [10, -20, 0], [-30, 30, 0], [10, 30, 0], [-10, 5, 0]],
     names: { siteGround: { en: 'Forecourt (shown flat at ±0.00, no levels known)', th: 'ลานสถานี (แสดงเป็นพื้นราบที่ ±0.00 ไม่ทราบระดับ)' }, road: { en: 'Road side (frontage road)', th: 'ด้านถนน (ถนนคู่ขนาน)' } },
   },
-  layers: ['tanks', 'sewer', 'drains', 'air', 'base', 'water', 'fuel', 'buildings', 'surroundings', 'plan', 'ground'],   // names, order and colours: ../style.mjs
+  layers: ['tanks', 'sewer', 'drains', 'air', 'base', 'water', 'fuel', 'buildings', 'paving', 'surroundings', 'plan', 'ground'],   // names, order and colours: ../style.mjs
   views: [
     { id: 'site', from: [-10, -72, 46], to: [-10, 6, 0] },
     { id: 'plan', from: [-10, 4.9, 120], to: [-10, 5, 0] },
@@ -273,6 +273,59 @@ export default {
       for (const dx of [-COL, COL]) add('buildings', boxGeo(0.45, 0.45, 5.05, IX + dx, y, 0.15, 0), 'column', { en: 'Canopy column', th: 'เสาหลังคา', nopick: 1 });
       add('buildings', boxGeo(1.0, 0.6, 2.0, IX, y, 0.2, 0), 'islands', { en: `Dispenser ${n}`, th: `ตู้จ่าย ${n}`, kind: 'building', info: lines([`Dispenser for pumps ${n}, numbered from the road (pumps 1, 3, 5, 7 seen in the video). Four islands, one behind the other from the road; each lies along the road with a canopy column at each end and the dispenser between them (Brian, 26 Nov 2026). Island and column spacing judged from the photo.`], [`ตู้จ่ายหัวจ่าย ${n} นับจากถนน (เห็นหัวจ่าย 1, 3, 5, 7 ในวิดีโอ) มี 4 แท่น เรียงจากถนนเข้าไป แต่ละแท่นวางตามแนวถนน มีเสาหลังคาที่ปลายทั้งสองข้างและตู้จ่ายอยู่ตรงกลาง (ตาม Brian 26 พ.ย. 2026) ระยะแท่นและเสาประมาณจากภาพถ่าย`], AC) });
     });
+    // ---------- kerbs, walkways and parking (Brian, 26 Nov 2026: estimate them from the video and photos). Outlines judged
+    // from the video stills and the satellite image; sizes approximate. Walkways shown 0.15 m above the forecourt.
+    {
+      const KH = 0.15, KW = 0.15, AP = { en: 'Estimated from Brian\'s video stills and the satellite image; place and size approximate.', th: 'ประมาณจากภาพนิ่งในวิดีโอของ Brian และภาพถ่ายดาวเทียม ตำแหน่งและขนาดโดยประมาณ' };
+      // raised walkway [x0, y0, x1, y1] with a painted kerb on the listed sides ('s' road side, 'n' back, 'w', 'e')
+      const walk = (x0, y0, x1, y1, sides, kerb, en, th, extra = [], extraTh = []) => {
+        const parts = [boxGeo(x1 - x0, y1 - y0, KH, (x0 + x1) / 2, (y0 + y1) / 2, ground((x0 + x1) / 2, (y0 + y1) / 2), 0)];
+        add('paving', merge(parts), 'walkway', { en, th, kind: 'building', info: lines([...extra, AP.en], [...extraTh, AP.th], AC) });
+        const k = [];
+        for (const sd of sides) {
+          if (sd === 's') k.push(boxGeo(x1 - x0, KW, KH + 0.01, (x0 + x1) / 2, y0 + KW / 2, 0, 0));
+          if (sd === 'n') k.push(boxGeo(x1 - x0, KW, KH + 0.01, (x0 + x1) / 2, y1 - KW / 2, 0, 0));
+          if (sd === 'w') k.push(boxGeo(KW, y1 - y0, KH + 0.01, x0 + KW / 2, (y0 + y1) / 2, 0, 0));
+          if (sd === 'e') k.push(boxGeo(KW, y1 - y0, KH + 0.01, x1 - KW / 2, (y0 + y1) / 2, 0, 0));
+        }
+        if (k.length) add('paving', merge(k), kerb, { en: `Kerb: ${en}`, th: `ขอบคันหิน: ${th}`, nopick: 1 });
+      };
+      walk(-28.0, 20.7, -2.5, 22.0, ['s', 'e'], 'kerbYellow', 'Walkway along the front of KFC', 'ทางเดินด้านหน้า KFC',
+        ['Raised walkway along the front of KFC with a yellow-and-black kerb; motorbikes park on it (video 1:09).'], ['ทางเดินยกระดับด้านหน้า KFC ขอบคันหินทาสีเหลืองดำ มีรถจักรยานยนต์จอดอยู่ (วิดีโอ 1:09)']);
+      walk(-28.7, 25.0, -28.0, 32.5, ['w'], 'kerbYellow', 'Kerb along the drive-through side of KFC', 'ขอบคันหินด้านไดรฟ์ทรูของ KFC',
+        ['Narrow raised strip with a yellow-and-black kerb along the west side of KFC, at the order point (video 1:31).'], ['แนวยกระดับแคบ ขอบคันหินทาสีเหลืองดำ ตามด้านตะวันตกของ KFC ที่จุดสั่งอาหาร (วิดีโอ 1:31)']);
+      walk(2.5, 19.6, 11.8, 21.0, ['s', 'w'], 'kerbPlain', 'Walkway in front of the toilets', 'ทางเดินหน้าห้องน้ำ',
+        ['Tiled walkway along the front of the toilets with a low concrete kerb (video 2:14).'], ['ทางเดินปูกระเบื้องหน้าห้องน้ำ ขอบคันหินคอนกรีตเตี้ย (วิดีโอ 2:14)']);
+      walk(4.6, -15.5, 6.0, 0.0, ['w'], 'kerbPlain', 'Walkway along the office and Mini Big C', 'ทางเดินหน้าสำนักงานและมินิบิ๊กซี',
+        ['Walkway along the forecourt side of the office / Mini Big C building (assumed width).'], ['ทางเดินด้านลานจอดของอาคารสำนักงาน / มินิบิ๊กซี (ความกว้างสมมติ)']);
+      walk(-25.5, -17.0, -24.3, -6.5, ['e'], 'kerbPlain', 'Walkway along the coffee shop', 'ทางเดินข้างร้านกาแฟ',
+        ['Walkway on the forecourt side of the coffee shop (assumed width).'], ['ทางเดินด้านลานจอดของร้านกาแฟ (ความกว้างสมมติ)']);
+      walk(9.0, -25.3, 12.2, -17.4, ['w', 'n'], 'kerbRed', 'Island with the pole signs', 'เกาะเสาป้าย',
+        ['Raised island at the exit-side front corner carrying the KFC and Caltex pole signs, with a red-and-white kerb (video 4:10, Brian\'s photo).'], ['เกาะยกระดับที่มุมหน้าฝั่งทางออก มีเสาป้าย KFC และ Caltex ขอบคันหินทาสีแดงขาว (วิดีโอ 4:10 และภาพของ Brian)']);
+      // planter along the front of the coffee shop (video 0:07-0:17; Brian's photo)
+      add('paving', boxGeo(6.0, 0.9, 0.5, -29.0, -17.6, 0, 0), 'grass', { en: 'Planter in front of the coffee shop', th: 'กระบะต้นไม้หน้าร้านกาแฟ', kind: 'building',
+        info: lines(['Low planter with shrubs along the front of the coffee shop (video 0:07, Brian\'s photo).', AP.en], ['กระบะต้นไม้เตี้ยหน้าร้านกาแฟ (วิดีโอ 0:07 และภาพของ Brian)', AP.th], AC) });
+      // drive-through lane entry: curved yellow-and-black kerb island west of KFC (video 1:09)
+      { const pts = []; for (let i = 0; i <= 8; i++) { const t = (i / 8) * Math.PI / 2; pts.push([-28.0 - 3.2 * (1 - Math.cos(t)), 20.7 - 3.2 * Math.sin(t)]); }
+        const k = []; for (let i = 1; i < pts.length; i++) { const [ax, ay] = pts[i - 1], [bx, by] = pts[i]; k.push(boxGeo(Math.hypot(bx - ax, by - ay) + 0.05, 0.3, KH, (ax + bx) / 2, (ay + by) / 2, 0, Math.atan2(by - ay, bx - ax) * 180 / Math.PI)); }
+        add('paving', merge(k), 'kerbYellow', { en: 'Kerb at the drive-through entry', th: 'ขอบคันหินที่ทางเข้าไดรฟ์ทรู', kind: 'building',
+          info: lines(['Curved yellow-and-black kerb at the corner of KFC where the drive-through lane starts (video 1:09). Shape approximate.', AP.en], ['ขอบคันหินโค้งทาสีเหลืองดำที่มุม KFC ตรงทางเข้าไดรฟ์ทรู (วิดีโอ 1:09) รูปร่างโดยประมาณ', AP.th], AC) }); }
+      // parking bays along the west wall between the coffee shop and KFC: an air-pump bay, two blue EV bays, then six bays
+      const BX0 = X0 + 0.6, BX1 = BX0 + 5.0, lineAt = [], bays = [];
+      const bay = (y0, y1, kind) => { bays.push([y0, y1, kind]); lineAt.push(y0, y1); };
+      bay(-5.4, -2.9, 'air'); bay(-2.9, -0.4, 'ev'); bay(-0.4, 2.1, 'ev');
+      for (let i = 0; i < 6; i++) bay(2.1 + i * 2.5, 4.6 + i * 2.5, 'car');
+      for (const [y0, y1, kind] of bays) if (kind === 'ev') add('paving', boxGeo(BX1 - BX0, y1 - y0 - 0.1, 0.01, (BX0 + BX1) / 2, (y0 + y1) / 2, 0.005, 0), 'bayEV', { en: 'EV parking bay (blue)', th: 'ช่องจอดรถยนต์ไฟฟ้า (สีฟ้า)', nopick: 1 });
+      const ls = [...new Set(lineAt)].map((y) => boxGeo(BX1 - BX0, 0.1, 0.012, (BX0 + BX1) / 2, y, 0.005, 0));
+      ls.push(boxGeo(0.1, bays[bays.length - 1][1] - bays[0][0], 0.012, BX1, (bays[0][0] + bays[bays.length - 1][1]) / 2, 0.005, 0));
+      add('paving', merge(ls), 'bayLine', { en: 'Parking bays along the west wall', th: 'ช่องจอดรถตามกำแพงด้านตะวันตก', kind: 'building',
+        info: lines(['Parking bays against the west wall between the coffee shop and KFC (Brian): an air-pump bay ("AIR PUMP" painted), two blue EV bays at the chargers (video 0:36, 0:58), then about six car bays. Each bay shown 2.5 × 5.0 m; number and size approximate.', AP.en],
+          ['ช่องจอดรถชิดกำแพงด้านตะวันตกระหว่างร้านกาแฟกับ KFC (ตาม Brian): ช่องปั๊มลม (มีคำว่า AIR PUMP) ช่องจอดรถยนต์ไฟฟ้าสีฟ้า 2 ช่องที่เครื่องชาร์จ (วิดีโอ 0:36, 0:58) และช่องจอดรถประมาณ 6 ช่อง แต่ละช่องแสดงขนาด 2.5 × 5.0 ม. จำนวนและขนาดโดยประมาณ', AP.th], AC) });
+      // public footpath outside the front boundary, with a red-and-white kerb at the road (Brian's photo; video 4:10)
+      add('surroundings', boxGeo(X1 - X0 + 8, 2.4, 0.30, (X0 + X1) / 2, Y0 - 1.2, -0.20, 0), 'walkway', { en: 'Public footpath along the road', th: 'ทางเท้าสาธารณะริมถนน', kind: 'building',
+        info: lines(['Public footpath between the station and the road, about 2.4 m wide, with a red-and-white painted kerb at the road edge (Brian\'s photo; video 4:10).', AP.en], ['ทางเท้าสาธารณะระหว่างสถานีกับถนน กว้างประมาณ 2.4 ม. ขอบคันหินทาสีแดงขาวที่ริมถนน (ภาพของ Brian และวิดีโอ 4:10)', AP.th], AC) });
+      add('surroundings', boxGeo(X1 - X0 + 8, 0.15, 0.32, (X0 + X1) / 2, Y0 - 2.4 + 0.075, -0.20, 0), 'kerbRed', { en: 'Road kerb', th: 'ขอบถนน', nopick: 1 });
+    }
     // EV chargers and the air pump against the west wall between the coffee shop and KFC (Brian; video 0:28, 0:58, 1:02)
     add('buildings', merge([boxGeo(0.8, 0.6, 1.9, X0 + 0.9, -1.6, 0.15, 0), boxGeo(0.8, 0.6, 1.9, X0 + 0.9, 0.9, 0.15, 0)]), 'column', { en: 'EV chargers', th: 'เครื่องชาร์จรถยนต์ไฟฟ้า', kind: 'building',
       info: lines(['Two EV chargers under a small roof against the west wall, with parking bays in front (video 0:58, 1:02). Places approximate.'], ['เครื่องชาร์จรถยนต์ไฟฟ้า 2 เครื่องใต้หลังคาเล็กชิดกำแพงด้านตะวันตก มีช่องจอดด้านหน้า (วิดีโอ 0:58, 1:02) ตำแหน่งโดยประมาณ'], AC) });
