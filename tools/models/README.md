@@ -95,9 +95,10 @@ tanks. Both are in the model, the as-built outlines in their own layer. No sheet
 There are no drawings of this site. Outlines come from the Esri World Imagery satellite image (zoom 19, 0.29 m a pixel),
 turned 35.5° so the road runs along x, read on a 1 m grid (`1156/plan-lines.json` is that tracing, not a drawing); north
 125.5°. What is where comes from Brian's notes of 26 Nov 2026 and stills of Aqua's 360° sampling video, plus the Caltex
-deck slides 27-28 (G2.1 / G2.2 sampling points). In the model: under the KFC drive-through lane, one grease trap (4 lids)
-and one treatment tank (5 lids; Brian is not sure whether it is two tanks, 2 + 3 lids), the KFC pump room behind the rolling
-door about midway along KFC, the KFC pump sump at the back-west corner
+deck slides 27-28 (G2.1 / G2.2 sampling points). In the model: the KFC grease trap (one tank, 4 lids) under the lane
+behind KFC and the treatment tank (5 lids; Brian is not sure whether it is two tanks, 2 + 3 lids) under the lane along the
+west wall between the garbage building (west end of KFC, about 2.5 m tall) and the pump sump (Brian's markup, 26 Nov 2026),
+the KFC pump room behind the rolling door about midway along KFC, the KFC pump sump at the back-west corner
 and its blue PVC pumped line along the west wall into the U-drain; the toilets' solids tank behind the building and the
 aeration tank on the east side; the Mini Big C tank behind the exit-side oil trap between the east wall and the 12 m
 pole signs; three fuel tanks lying parallel to the road between the toilets and the office, one with two compartments
