@@ -49,6 +49,7 @@ export default {
     { id: 'site', from: [-10, -72, 46], to: [-10, 6, 0] },
     { id: 'plan', from: [-10, 4.9, 120], to: [-10, 5, 0] },
     { id: 'kfc', en: 'KFC tanks and pump sump (drive-through lane)', th: 'ถัง KFC และบ่อสูบ (ช่องทางไดรฟ์ทรู)', from: [-30, 20, 12], to: [-18, 34, -1] },
+    { id: 'drive', en: 'Drive-through exit: pick-up window and toilets', th: 'ทางออกไดรฟ์ทรู: ช่องรับสินค้าและห้องน้ำ', from: [-0.5, 10.5, 6.5], to: [1.5, 27, 1.2] },
     { id: 'toilets', en: 'Toilet tanks (solids tank and aeration tank)', th: 'ถังของห้องน้ำ (ถังแยกกากและถังเติมอากาศ)', from: [-2, 14, 12], to: [9, 29, -1] },
     { id: 'sales', en: 'Mini Big C tank and exit-side oil trap', th: 'ถังของมินิบิ๊กซีและบ่อดักน้ำมันฝั่งทางออก', from: [-4, -42, 13], to: [12, -20, -1] },
     { id: 'fuel', from: [-6, -4, 10], to: [7, 9, -1.6] },
@@ -140,7 +141,7 @@ export default {
     // ---------- KFC: one grease trap and one treatment tank in a line under the drive-through lane behind KFC, the pump /
     // blower room midway along the back of KFC, pump sump at the back-west corner (Brian, 26 Nov 2026)
     const LANE = 34.3;   // middle of the drive-through lane behind KFC (between the building, about y 32.5, and the back wall)
-    const ROOM_X = -15.2;   // the room with the pumps and controls, about midway along KFC (x -28 to -2.5)
+    const ROOM_X = -15.2;   // the room with the pumps and controls, about midway along KFC (x -28 to -4)
     {
       const top = r2(ground(-18, LANE) - 0.35);
       // grease trap: one large lying tank with four lids, east of the treatment tank, next to the pump room
@@ -249,14 +250,38 @@ export default {
     const building = (poly, floor, h, material, o) => add('buildings', prismGeo(poly, floor, h), material, { ...o, kind: 'building', info: lines(o.lines || [], o.linesTh || [], AC) },
       o.tag ? V(poly.reduce((s, p) => s + p[0], 0) / poly.length, poly.reduce((s, p) => s + p[1], 0) / poly.length, floor + h + 0.7) : null);
     const rect = (x0, y0, x1, y1) => [[x0, y0], [x1, y0], [x1, y1], [x0, y1]];
-    building(rect(-28.0, 22.0, -2.5, 32.5), 0.15, 5.5, 'building', { en: 'KFC drive-through restaurant', th: 'ร้าน KFC (ไดรฟ์ทรู)', tag: 'KFC', tagTh: 'KFC',
-      lines: ['Restaurant at the back-left of the site, with the drive-through lane round its west side and behind it (garbage building at the west end, pay and pick-up windows at the east end). The grease trap and the rolling door to the pump room (about midway along the back) are behind it.'],
+    building(rect(-28.0, 22.0, -4.0, 32.5), 0.15, 5.5, 'building', { en: 'KFC drive-through restaurant', th: 'ร้าน KFC (ไดรฟ์ทรู)', tag: 'KFC', tagTh: 'KFC',
+      lines: ['Restaurant at the back-left of the site, with the drive-through lane round its west side and behind it (garbage building at the west end; the lane comes out between KFC and the toilets, past the pick-up window on the east side of KFC). The grease trap and the rolling door to the pump room (about midway along the back) are behind it.'],
       linesTh: ['ร้านอาหารที่มุมหลังซ้ายของสถานี ช่องทางไดรฟ์ทรูอ้อมด้านตะวันตกและด้านหลัง (จุดสั่งที่ปลายด้านตะวันตก ช่องจ่ายเงินและรับสินค้าที่ปลายด้านตะวันออก) ถังดักไขมันและประตูม้วนห้องเครื่องเป่าลมอยู่ด้านหลัง'] });
     building(rect(-31.0, 22.0, -28.0, 25.0), 0.15, 2.5, 'building', { en: 'Garbage building (west end of KFC)', th: 'อาคารขยะ (ปลายด้านตะวันตกของ KFC)', tag: 'Garbage building', tagTh: 'อาคารขยะ',
       lines: ['Garbage building at the west end of KFC, about 2.5 m tall (Brian, 26 Nov 2026). Outline from the satellite image.'], linesTh: ['อาคารขยะที่ปลายด้านตะวันตกของ KFC สูงประมาณ 2.5 ม. (ตาม Brian 26 พ.ย. 2026) แนวอาคารจากภาพถ่ายดาวเทียม'] });
-    building(rect(2.5, 21.0, 11.8, 32.5), 0.15, 3.3, 'building', { en: 'Toilets', th: 'ห้องน้ำ', tag: 'Toilets', tagTh: 'ห้องน้ำ',
-      lines: ['Public toilets at the back-right. Men\'s urinals open onto the grass strip on the east side; the women\'s side is beyond them (video 2:36).'], linesTh: ['ห้องน้ำสาธารณะที่มุมหลังขวา โถปัสสาวะชายเปิดออกสู่แนวหญ้าด้านตะวันออก ฝั่งหญิงอยู่ถัดไป (วิดีโอ 2:36)'] });
-    building(rect(-0.3, 32.9, 2.4, 35.75), 0.15, 2.4, 'building', { en: 'Garbage room', th: 'ห้องขยะ', lines: ['Small garbage room with grey double doors next to the toilets, on the exit side of the drive-through (Brian; video 2:14). Place approximate.'], linesTh: ['ห้องขยะเล็กประตูคู่สีเทาข้างห้องน้ำ ฝั่งทางออกของไดรฟ์ทรู (ตาม Brian วิดีโอ 2:14) ตำแหน่งโดยประมาณ'] });
+    // toilets (Brian's photos and video 2:14, 2:43): white-clad walls, open front onto the tiled walkway along the drive-through
+    // lane, red slatted screens at the men's (north) and women's (south) entrances, the disabled toilet between them, sink
+    // counters inside, flat roof with a red edge. Layout inside judged from the video; sizes approximate.
+    {
+      const TX0 = 3.9, TX1 = 11.8, TY0 = 21.0, TY1 = 32.5, FL = 0.15, H = 3.0, WT = 0.2, P1 = 25.0, P2 = 28.0;
+      add('buildings', merge([boxGeo(TX1 - TX0 + 0.5, TY1 - TY0 + 0.5, 0.35, (TX0 + TX1) / 2, (TY0 + TY1) / 2, FL + H, 0)]), 'roof', { en: 'Toilets', th: 'ห้องน้ำ', tag: 'Toilets', tagTh: 'ห้องน้ำ', kind: 'building',
+        info: lines(['Public toilets at the back-right, facing the drive-through lane across a tiled walkway (Brian). Men\'s at the north end (red slatted screen, urinals open onto the grass strip on the east side, video 2:36), the disabled toilet in the middle, women\'s at the south end (red screen). Open front with sink counters inside, white-clad walls, flat roof with a red edge (Brian\'s photo).', 'Inside layout and sizes judged from the video and photos.'],
+          ['ห้องน้ำสาธารณะที่มุมหลังขวา หันหน้าไปช่องทางไดรฟ์ทรู มีทางเดินปูกระเบื้องคั่น (ตาม Brian) ห้องน้ำชายอยู่ด้านเหนือ (ฉากระแนงสีแดง โถปัสสาวะเปิดออกแนวหญ้าด้านตะวันออก วิดีโอ 2:36) ห้องน้ำคนพิการอยู่ตรงกลาง ห้องน้ำหญิงอยู่ด้านใต้ (ฉากสีแดง) ด้านหน้าเปิดโล่ง มีเคาน์เตอร์อ่างล้างมือด้านใน ผนังกรุสีขาว หลังคาแบนขอบสีแดง (ภาพของ Brian)', 'ผังภายในและขนาดประมาณจากวิดีโอและภาพถ่าย'], AC) }, V((TX0 + TX1) / 2, (TY0 + TY1) / 2, FL + H + 1.0));
+      { const rx0 = TX0 - 0.25, rx1 = TX1 + 0.25, ry0 = TY0 - 0.25, ry1 = TY1 + 0.25, z = FL + H + 0.35, e = 0.15, eh = 0.15;
+        add('buildings', merge([boxGeo(rx1 - rx0, e, eh, (rx0 + rx1) / 2, ry0 + e / 2, z, 0), boxGeo(rx1 - rx0, e, eh, (rx0 + rx1) / 2, ry1 - e / 2, z, 0),
+          boxGeo(e, ry1 - ry0, eh, rx0 + e / 2, (ry0 + ry1) / 2, z, 0), boxGeo(e, ry1 - ry0, eh, rx1 - e / 2, (ry0 + ry1) / 2, z, 0)]), 'signPanel', { en: 'Toilet roof edge (red)', th: 'ขอบหลังคาห้องน้ำ (สีแดง)', nopick: 1 }); }
+      const walls = [
+        boxGeo(WT, TY1 - TY0, H, TX1 - WT / 2, (TY0 + TY1) / 2, FL, 0),                 // back (east) wall
+        boxGeo(TX1 - TX0, WT, H, (TX0 + TX1) / 2, TY1 - WT / 2, FL, 0),                 // north end
+        boxGeo(TX1 - TX0, WT, H, (TX0 + TX1) / 2, TY0 + WT / 2, FL, 0),                 // south end
+        boxGeo(TX1 - TX0 - 1.2, WT, H, (TX0 + 1.2 + TX1) / 2, P1, FL, 0),               // partitions, open at the front
+        boxGeo(TX1 - TX0 - 1.2, WT, H, (TX0 + 1.2 + TX1) / 2, P2, FL, 0),
+      ];
+      for (const cy of [TY0 + 0.25, P1, P2, TY1 - 0.25]) walls.push(boxGeo(0.5, 0.5, H, TX0 + 0.25, cy, FL, 0));   // white-clad front columns
+      add('buildings', merge(walls), 'fixture', { en: 'Toilet walls', th: 'ผนังห้องน้ำ', nopick: 1 });
+      const red = [];
+      for (const [y0, y1] of [[29.0, 31.4], [22.0, 24.2]]) for (let y = y0; y < y1; y += 0.25) red.push(boxGeo(0.12, 0.08, 2.5, TX0 + 0.35, y, FL, 0));
+      add('buildings', merge(red), 'signPanel', { en: 'Red slatted screens at the entrances', th: 'ฉากระแนงสีแดงที่ทางเข้า', nopick: 1 });
+      add('buildings', merge([boxGeo(0.6, 2.6, 0.85, TX0 + 3.6, 30.2, FL, 0), boxGeo(0.6, 2.6, 0.85, TX0 + 3.6, 23.1, FL, 0)]), 'fixture', { en: 'Sink counters', th: 'เคาน์เตอร์อ่างล้างมือ', kind: 'building',
+        info: lines(['Sink counters inside the men\'s and women\'s toilets, seen through the open front (Brian\'s photo). Places approximate.'], ['เคาน์เตอร์อ่างล้างมือในห้องน้ำชายและหญิง มองเห็นผ่านด้านหน้าที่เปิดโล่ง (ภาพของ Brian) ตำแหน่งโดยประมาณ'], AC) });
+    }
+    building(rect(1.4, 32.9, 4.0, 35.75), 0.15, 2.4, 'building', { en: 'Garbage room', th: 'ห้องขยะ', lines: ['Small garbage room with grey double doors next to the toilets, on the exit side of the drive-through (Brian; video 2:14). Place approximate.'], linesTh: ['ห้องขยะเล็กประตูคู่สีเทาข้างห้องน้ำ ฝั่งทางออกของไดรฟ์ทรู (ตาม Brian วิดีโอ 2:14) ตำแหน่งโดยประมาณ'] });
     building(rect(6.0, -15.5, 13.3, 0.0), 0.15, 3.6, 'building', { en: 'Office and Mini Big C', th: 'สำนักงานและมินิบิ๊กซี', tag: 'Office / Mini Big C', tagTh: 'สำนักงาน / มินิบิ๊กซี',
       lines: ['One-storey building on the exit side: the office at the back end (facing the tank farm), Mini Big C at the front under the end of the canopy.'], linesTh: ['อาคารชั้นเดียวฝั่งทางออก สำนักงานอยู่ด้านหลัง (หันหน้าไปลานถังน้ำมัน) มินิบิ๊กซีอยู่ด้านหน้าใต้ปลายหลังคาคลุมหัวจ่าย'] });
     building(rect(-32.6, -17.0, -25.5, -6.5), 0.15, 3.8, 'building', { en: 'Coffee shop', th: 'ร้านกาแฟ', tag: 'Coffee shop', tagTh: 'ร้านกาแฟ',
@@ -290,12 +315,28 @@ export default {
         }
         if (k.length) add('paving', merge(k), kerb, { en: `Kerb: ${en}`, th: `ขอบคันหิน: ${th}`, nopick: 1 });
       };
-      walk(-28.0, 20.7, -2.5, 22.0, ['s', 'e'], 'kerbYellow', 'Walkway along the front of KFC', 'ทางเดินด้านหน้า KFC',
+      walk(-28.0, 20.7, -4.0, 22.0, ['s'], 'kerbYellow', 'Walkway along the front of KFC', 'ทางเดินด้านหน้า KFC',
         ['Raised walkway along the front of KFC with a yellow-and-black kerb; motorbikes park on it (video 1:09).'], ['ทางเดินยกระดับด้านหน้า KFC ขอบคันหินทาสีเหลืองดำ มีรถจักรยานยนต์จอดอยู่ (วิดีโอ 1:09)']);
       walk(-28.7, 25.0, -28.0, 32.5, ['w'], 'kerbYellow', 'Kerb along the drive-through side of KFC', 'ขอบคันหินด้านไดรฟ์ทรูของ KFC',
         ['Narrow raised strip with a yellow-and-black kerb along the west side of KFC, at the order point (video 1:31).'], ['แนวยกระดับแคบ ขอบคันหินทาสีเหลืองดำ ตามด้านตะวันตกของ KFC ที่จุดสั่งอาหาร (วิดีโอ 1:31)']);
-      walk(2.5, 19.6, 11.8, 21.0, ['s', 'w'], 'kerbPlain', 'Walkway in front of the toilets', 'ทางเดินหน้าห้องน้ำ',
-        ['Tiled walkway along the front of the toilets with a low concrete kerb (video 2:14).'], ['ทางเดินปูกระเบื้องหน้าห้องน้ำ ขอบคันหินคอนกรีตเตี้ย (วิดีโอ 2:14)']);
+      // the drive-through lane comes out between KFC and the toilets: KFC sidewalk 3 rows of 40 cm tiles + 15 cm kerb, lane
+      // 4.0 m, toilet walkway 6 rows of 40 cm tiles + 15 cm kerb (Brian, 26 Nov 2026)
+      walk(-4.0, 20.7, -2.65, 32.5, ['e', 's'], 'kerbYellow', 'Sidewalk along the drive-through side of KFC', 'ทางเท้าด้านไดรฟ์ทรูของ KFC',
+        ['Tiled sidewalk along the east side of KFC at the pick-up window: three rows of 40 cm tiles (1.2 m) and a 15 cm yellow-and-black kerb (Brian, 26 Nov 2026; video 2:14).'], ['ทางเท้าปูกระเบื้องด้านตะวันออกของ KFC ที่ช่องรับสินค้า กระเบื้อง 40 ซม. 3 แถว (1.2 ม.) และขอบคันหินทาสีเหลืองดำ 15 ซม. (ตาม Brian 26 พ.ย. 2026 วิดีโอ 2:14)']);
+      walk(1.35, 19.6, 3.9, 32.5, ['w', 's'], 'kerbPlain', 'Walkway in front of the toilets', 'ทางเดินหน้าห้องน้ำ',
+        ['Tiled walkway along the front of the toilets, facing the drive-through lane: six rows of 40 cm tiles (2.4 m) and a 15 cm concrete kerb (Brian, 26 Nov 2026; his photo and video 2:14). The drive-through lane between this kerb and the KFC kerb is 4.0 m wide.'], ['ทางเดินปูกระเบื้องหน้าห้องน้ำ หันไปช่องทางไดรฟ์ทรู กระเบื้อง 40 ซม. 6 แถว (2.4 ม.) และขอบคันหินคอนกรีต 15 ซม. (ตาม Brian 26 พ.ย. 2026 ภาพของ Brian และวิดีโอ 2:14) ช่องทางไดรฟ์ทรูระหว่างขอบคันหินนี้กับขอบคันหินฝั่ง KFC กว้าง 4.0 ม.']);
+      walk(3.9, 19.6, 11.8, 21.0, ['s'], 'kerbPlain', 'Walkway at the south end of the toilets', 'ทางเดินด้านใต้ของห้องน้ำ',
+        ['The toilet walkway continues round the south end of the building (Brian\'s photo).'], ['ทางเดินห้องน้ำต่อเนื่องอ้อมด้านใต้ของอาคาร (ภาพของ Brian)']);
+      // KFC pick-up window: red booth on the KFC sidewalk with a flat roof over the lane and a "PICK UP HERE" sign; bollards
+      // along the kerb before it (video 2:14, Brian's still)
+      add('buildings', boxGeo(1.25, 2.6, 2.6, -3.35, 24.3, 0.15, 0), 'signPanel', { en: 'KFC pick-up window', th: 'ช่องรับสินค้า KFC', tag: 'Pick-up window', tagTh: 'ช่องรับสินค้า', kind: 'building',
+        info: lines(['Red pick-up booth with the drive-through window, on the KFC sidewalk at the east side of KFC, facing the lane (video 2:14, Brian\'s still). Size judged from the video.'], ['ช่องรับสินค้าไดรฟ์ทรูสีแดง อยู่บนทางเท้าด้านตะวันออกของ KFC หันหน้าไปช่องทาง (วิดีโอ 2:14 และภาพของ Brian) ขนาดประมาณจากวิดีโอ'], AC) }, V(-3.35, 24.3, 3.6));
+      add('buildings', boxGeo(0.05, 1.5, 1.1, -2.71, 24.3, 1.1, 0), 'signDark', { en: 'Pick-up window glass', th: 'กระจกช่องรับสินค้า', nopick: 1 });
+      add('buildings', boxGeo(5.2, 3.6, 0.25, -1.6, 24.3, 3.1, 0), 'roof', { en: 'Roof over the pick-up window', th: 'หลังคาช่องรับสินค้า', kind: 'building',
+        info: lines(['Flat roof over the pick-up window, out from the KFC wall across the drive-through lane, with the "PICK UP HERE" sign along its north edge (video 2:14, Brian\'s still). Height and size judged from the video.'], ['หลังคาแบนเหนือช่องรับสินค้า ยื่นจากผนัง KFC คลุมช่องทางไดรฟ์ทรู มีป้าย "PICK UP HERE" ที่ขอบด้านเหนือ (วิดีโอ 2:14 และภาพของ Brian) ความสูงและขนาดประมาณจากวิดีโอ'], AC) });
+      add('buildings', boxGeo(5.2, 0.1, 0.25, -1.6, 22.55, 3.1, 0), 'fixture', { en: 'Roof edge', th: 'ขอบหลังคา', nopick: 1 });
+      add('buildings', boxGeo(2.6, 0.08, 0.55, -1.0, 26.1, 2.55, 0), 'signDark', { en: 'PICK UP HERE sign', th: 'ป้าย PICK UP HERE', nopick: 1 });
+      add('paving', merge([26.6, 28.0, 29.4].map((y) => cylGeo(0.1, 1.0, -2.95, y, 0.15, 12))), 'kerbYellow', { en: 'Bollards (yellow and black)', th: 'เสากันชน (เหลืองดำ)', nopick: 1 });
       walk(4.6, -15.5, 6.0, 0.0, ['w'], 'kerbPlain', 'Walkway along the office and Mini Big C', 'ทางเดินหน้าสำนักงานและมินิบิ๊กซี',
         ['Walkway along the forecourt side of the office / Mini Big C building (assumed width).'], ['ทางเดินด้านลานจอดของอาคารสำนักงาน / มินิบิ๊กซี (ความกว้างสมมติ)']);
       walk(-25.5, -17.0, -24.3, -6.5, ['e'], 'kerbPlain', 'Walkway along the coffee shop', 'ทางเดินข้างร้านกาแฟ',
