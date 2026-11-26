@@ -102,8 +102,8 @@ the KFC pump room behind the rolling door about midway along KFC, the KFC pump s
 and its blue PVC pumped line along the west wall into the U-drain; the toilets' solids tank behind the building and the
 aeration tank on the east side; the Mini Big C tank behind the exit-side oil trap between the east wall and the 12 m
 pole signs; three fuel tanks lying parallel to the road between the toilets and the office, one with two compartments
-(four products; Brian, 26 Nov 2026); 3-chamber oil traps at both outlets to the road; U-drains round the
-site; KFC, toilets, garbage room, office / Mini Big C, coffee shop, canopy, EV chargers, air pump; road and the elevated
+(four products; Brian, 26 Nov 2026); 3-chamber oil traps at both outlets to the road; open concrete U-drains (channels,
+not pipes; Brian, 26 Nov 2026) round the site; KFC, toilets, garbage room, office / Mini Big C, coffee shop, canopy, EV chargers, air pump; road and the elevated
 structure in "surroundings". Every size, depth, level and pipe route is assumed. Notes use the source kinds `aerial`
 and `aerialContext` (style.mjs) instead of drawn / part / context. Replace with real positions if Caltex sends drawings.
 
