@@ -248,6 +248,22 @@ export default {
         'No drawings: three tanks, four products in all, lying parallel to the road (Brian). Which tank is which, which product is in each and the spacing are not known: shown side by side under the pad with the round covers (video 2:53).'],
       th: [two ? 'ถังนี้มี 2 ช่อง เก็บน้ำมัน 2 ชนิด (ตาม Brian 26 พ.ย. 2026) ไม่ทราบว่าแบ่ง 30,000 ลิตรอย่างไร' : 'ช่องเดียว น้ำมัน 1 ชนิด (ตาม Brian 26 พ.ย. 2026)',
         'ไม่มีแบบ: มี 3 ถัง น้ำมันรวม 4 ชนิด วางขนานกับถนน (ตาม Brian) ไม่ทราบว่าถังใดเป็นถังใด น้ำมันชนิดใดอยู่ถังใด และระยะห่าง แสดงวางเรียงกันใต้ลานที่มีฝากลม (วิดีโอ 2:53)'] }));
+    // fibreglass tank sumps with 1 m lids on top of each fuel tank (Brian, 26 Nov 2026: lids usually 1 m across; places
+    // approximate): one per compartment, so two on T1. Sump from the top of the tank (1.0 m under the ground) up to the pad.
+    { const PAD = 0.15, top = -1.0, sumps = [[5.6, 6.8, 'T1 (compartment 1)', 'T1 (ช่องที่ 1)'], [9.4, 6.8, 'T1 (compartment 2)', 'T1 (ช่องที่ 2)'], [7.5, 9.8, 'T2', 'T2'], [7.5, 12.8, 'T3', 'T3']];
+      sumps.forEach(([x, y, en, th], i) => {
+        add('fuel', cylGeo(0.6, PAD - top, x, y, top), 'fuelSump', { en: `Tank sump · ${en}`, th: `บ่อครอบหัวถัง · ${th}`, kind: 'fuel', ...(i === 3 ? { tag: 'Tank sumps and lids', tagTh: 'บ่อครอบหัวถังและฝา' } : {}),
+          info: lines([`Fibreglass tank sump on top of fuel tank ${en}, about 1.2 m across, from the top of the tank up to the raised tank-farm pad, under a round lid about 1.0 m across (Brian, 26 Nov 2026; video 2:53 shows the round lids on the pad). It holds the pump and pipe connections of the tank. Place approximate.`],
+            [`บ่อครอบหัวถังไฟเบอร์กลาสบนถังน้ำมัน ${th} กว้างประมาณ 1.2 ม. จากหลังถังขึ้นมาถึงลานถังที่ยกระดับ มีฝากลมกว้างประมาณ 1.0 ม. (ตาม Brian 26 พ.ย. 2026 วิดีโอ 2:53 เห็นฝากลมบนลาน) ภายในมีปั๊มและข้อต่อท่อของถัง ตำแหน่งโดยประมาณ`], A) }, i === 3 ? V(x + 1.6, y + 0.8, 1.2) : null);
+        add('fuel', cylGeo(0.5, 0.03, x, y, PAD), 'cover', { en: 'Tank sump lid (1 m)', th: 'ฝาบ่อครอบหัวถัง (1 ม.)', nopick: 1 });
+      }); }
+    // raised kerbed pad over the tank farm, between the toilets and the office / Mini Big C building (Brian, 26 Nov 2026;
+    // video 2:53)
+    { const x0 = 1.35, x1 = E - 0.2, y0 = 0.0, y1 = 19.6, H = 0.15;
+      add('paving', boxGeo(x1 - x0, y1 - y0, H, (x0 + x1) / 2, (y0 + y1) / 2, 0, 0), 'pad', { en: 'Raised tank-farm pad', th: 'ลานถังน้ำมันยกระดับ', kind: 'building',
+        info: lines(['The area over the fuel tank farm, between the toilets and the office / Mini Big C building, is a raised concrete pad with a kerb round its open (forecourt) side (Brian, 26 Nov 2026; video 2:53). The tank sump lids, fill points and drain gratings are on it.', 'Edge and height approximate (shown 0.15 m above the forecourt).'],
+          ['พื้นที่เหนือถังน้ำมันใต้ดิน ระหว่างห้องน้ำกับอาคารสำนักงาน / มินิบิ๊กซี เป็นลานคอนกรีตยกระดับ มีขอบคันหินรอบด้านที่ติดลานจอด (ตาม Brian 26 พ.ย. 2026 วิดีโอ 2:53) มีฝาบ่อครอบหัวถัง จุดเติมน้ำมัน และตะแกรงระบายน้ำอยู่บนลาน', 'แนวขอบและความสูงโดยประมาณ (แสดงสูงกว่าลานจอด 0.15 ม.)'], AC) });
+      add('paving', merge([boxGeo(0.15, y1 - y0, H + 0.01, x0 + 0.075, (y0 + y1) / 2, 0, 0), boxGeo(6.0 - x0, 0.15, H + 0.01, (x0 + 6.0) / 2, y0 + 0.075, 0, 0)]), 'kerbPlain', { en: 'Kerb: raised tank-farm pad', th: 'ขอบคันหิน: ลานถังน้ำมัน', nopick: 1 }); }
     add('fuel', merge([0, 1, 2, 3, 4].map((k) => cylGeo(0.05, 6.5, 13.55, 0.6 + k * 0.18, 0))), 'fuelPipe', { en: 'Fuel tank vent pipes', th: 'ท่อระบายไอถังน้ำมัน', kind: 'pipe',
       info: lines(['Five white vent pipes on a frame against the east wall at the back corner of the office (video 3:07, 3:13). Height judged from the video, about 6.5 m.'], ['ท่อระบายไอสีขาว 5 ท่อบนโครงชิดกำแพงด้านตะวันออก ที่มุมหลังสำนักงาน (วิดีโอ 3:07, 3:13) ความสูงประมาณจากวิดีโอ ประมาณ 6.5 ม.'], A) });
 
