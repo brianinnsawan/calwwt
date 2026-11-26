@@ -20,6 +20,7 @@ export const MATERIALS = {
   drain: [0x7b8794],             // site drain (grey)
   manhole: [0x9aa5b1, 0.55],
   airLine: [0xe0b100], airPump: [0x3aa655],
+  fixture: [0xb3bcc6, 0.9],      // sinks and other fixtures above ground (stainless grey)
   waterTank: [0x58b7e6, 0.5],    // clean-water storage tank and its pumps (light blue): not wastewater, shown because it is in the way of digging
   // structure and context
   slab: [0xb7b1a8, 0.9], pile: [0x8c857b],
