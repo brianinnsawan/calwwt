@@ -86,5 +86,7 @@ Nothing is shared with calnkt: own logins, own databases, own file storage.
   Saraburi as-built set has fuel-system tank drawings (Brian's `As Built Saraburi` folder) that should give the real size
   and depth; read them when his computer is connected and update `FUEL_TANK` in style.mjs or the 1750 site file.
 - 0589 Kathu, from Brian 26 Nov 2026: two oil traps in an L at the east outlet; the shop sink at the east end of the mart
-  drains through a small grease trap and a PVC pipe to a sump beside WTT-4; WTT-4 has two lids (size still to confirm).
+  drains through a small grease trap and a 2" PVC pipe lying on the ground the whole way to a sump beside WTT-4; WTT-4 has
+  two lids (size still to confirm). The existing drain along the road edge (sumps F1 to F6) runs west to a third oil trap at
+  the middle outlet; all three outlets have the same 3-chamber trap.
 - Site notes and starting timelines in `data/sites.json` / `data/timelines/` were written from Brian's site-visit notes; dates to confirm.

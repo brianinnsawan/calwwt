@@ -45,8 +45,11 @@ Added 26 Nov 2026 from Brian's site photo and markup (not on the drawing unless 
 - the two 3-chamber oil traps at the east outlet, side by side in an L (outlines from the DWG block "Z$W@#6334"; the
   west outlet trap uses the same block). Depth assumed 0.5 m below the inlet.
 - WTT-4 as a lying capsule tank with two lids, 1.25 x 2.5 m (about 3,000 L, size to confirm).
-- the shop sink against the east boundary wall, its small (10 to 20 L) grease trap, the PVC pipe along the wall and the
-  mart front, and the sump on the west side of WTT-4. Positions from the markup; sizes and levels assumed.
+- the shop sink against the east boundary wall (modelled like the photo: bowl, two wire shelves, dish rack, tap), its small
+  (10 to 20 L) grease trap, the 2" PVC pipe lying on the ground the whole way along the wall and the mart front, and the
+  sump on the west side of WTT-4. Positions from the markup; sizes and the sump depth assumed.
+- the existing drain along the road edge: sumps F1 to F6 (not numbered on the drawing), flowing west to the existing
+  3-chamber oil trap at the middle outlet. Levels from the two written pit bottoms (+0.288 at F4, +0.208 at F2).
 - the front site drain now runs from manhole E7 along the front channel into the road-side oil trap (as drawn), instead
   of a straight line to the east trap.
 Known gaps: sizes and depths of WTT-1, WTT-2, WTT-4, the two Biotech tanks, the grease traps and the old tank; pipe

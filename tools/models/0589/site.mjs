@@ -34,6 +34,10 @@ const TRAP_E = [388.28, 76.51, 0.86, -0.27];           // east trap: "water into
 const OWS_W = [295.17, 71.75, 3.40, 1.00, 90];
 const OWS_S = [387.44, 73.53, 3.40, 1.16, 7.9];          // east outlet, along the road (Brian, 26 Nov 2026: two traps side by side in an L)
 const OWS_E = [389.41, 74.93, 3.42, 1.16, 97.1];         // east outlet, along the east boundary
+const OWS_M = [316.17, 70.56, 3.40, 1.10, 90];           // middle outlet, existing (same 3-grating trap, outline from the DWG)
+// Existing sumps along the road edge (Brian, 26 Nov 2026: model the front drainage). Not numbered on the drawing: F1 to F6
+// from west to east. [x, y, pit bottom or null]; the drawing writes "existing pit bottom" +0.288 (F4) and +0.208 (F2).
+const FRONT = { F1: [332.71, 69.73, null], F2: [341.92, 69.73, 0.208], F3: [361.02, 69.73, null], F4: [366.27, 70.46, 0.288], F5: [374.20, 71.60, null], F6: [375.45, 71.81, null] };
 const OWS_S_IN = [385.76, 73.30, 0.86, -0.27];         // west end of the road-side trap, where the front drain comes in (level assumed)
 const OUT_E = [388.64, 72.70, 0.86, -0.32, 0.12];      // "Inlet Ele -0.32 / Outlet Ele +0.12"
 const PUBLIC_C = [316.20, 68.40];                      // "connects to the public drain"
@@ -85,6 +89,7 @@ export default {
     { id: 'plan', en: 'Plan', th: 'ผัง', from: [338, 87.9, 125], to: [338, 88, 0] },
     { id: 'new', en: 'New tanks at the toilets', th: 'ถังใหม่ข้างห้องน้ำ', from: [372.5, 95.5, 8], to: [364.3, 103.8, -0.3] },
     { id: 'kfc', en: 'KFC tanks', th: 'ถังของ KFC', from: [289, 117, 12], to: [297, 101.5, -0.5] },
+    { id: 'front', en: 'Front drain and sumps', th: 'ท่อระบายและบ่อพักด้านหน้า', from: [344, 47, 22], to: [347, 70.5, 0.2] },
     { id: 'east', en: 'Mart front and east outlet', th: 'หน้าร้านสะดวกซื้อและทางออกตะวันออก', from: [377.5, 61.5, 13], to: [385.3, 75.4, -0.3] },
     { id: 'fuel', from: [341, 66, 6], to: [328.35, 82.5, -1.8] },
     { id: 'under', en: 'From below ground', th: 'มองจากใต้ดิน', from: [352, 90, -7], to: [366, 103.5, 0.2] },
@@ -209,6 +214,33 @@ export default {
       pipe('drains', [[x0, y0, OUT_E[3]], [x1, y1, OUT_E[3]]], 0.15, 'drain', { en, th, kind: 'pipe',
         info: lines(['Pipe south under the footpath towards the public drain; the drawing notes 0.50 m concrete pipe to the nearest public manhole and stops the pipe at the footpath.', 'Shown at -0.32 (the inlet level written on the drawing at oil trap 1).'],
           ['ท่อไปทางทิศใต้ลอดทางเท้าไปท่อระบายน้ำสาธารณะ ในแบบระบุท่อคอนกรีต 0.50 ม. ไปบ่อพักสาธารณะที่ใกล้ที่สุด และเขียนท่อสิ้นสุดที่ทางเท้า', 'แสดงที่ระดับ -0.32 (ระดับท่อเข้าที่เขียนในแบบที่บ่อดักน้ำมัน 1)'], P) });
+    ows(OWS_M, MH.C6[3] - 0.01, { en: 'Oil trap (middle outfall)', th: 'บ่อดักน้ำมัน (ทางออกกลาง)', tag: 'Oil trap (middle outfall)', tagTh: 'บ่อดักน้ำมัน (ทางออกกลาง)',
+      info: lines(['Existing three-chamber oil trap with steel gratings, 3.40 × 1.10 m, at the middle outlet to the public drain. Outline from the as-built drawing.', 'Takes the drain from manhole C6 at its north end (inlet -0.16 at C6) and the front drain along the road edge at its east side. Out to the public drain at about -0.18.', 'Depth is not on the drawing: shown 0.5 m below the inlet.'],
+        [owsTh('ที่มีอยู่เดิม ที่ทางออกกลางลงท่อระบายน้ำสาธารณะ ขนาด 3.40 × 1.10 ม.'), 'รับน้ำจากบ่อพัก C6 ที่ปลายด้านเหนือ (ท่อเข้า -0.16 ที่ C6) และท่อระบายริมถนนด้านหน้าทางด้านตะวันออก ออกลงท่อสาธารณะที่ประมาณ -0.18', 'ในแบบไม่มีความลึก แสดงก้นบ่อต่ำกว่าท่อเข้า 0.5 ม.'], P) });
+
+    // ---------- existing drain along the road edge (front of the station): sumps F1 to F6, flowing west to the middle oil trap
+    { // the drawing gives the pit bottom at F4 (+0.288) and F2 (+0.208); pipe invert taken 0.15 above the pit bottom, other levels on that fall
+      const fall = (0.288 - 0.208) / Math.hypot(FRONT.F4[0] - FRONT.F2[0], FRONT.F4[1] - FRONT.F2[1]);
+      const inv = (id) => { const [x, y] = FRONT[id]; return 0.208 + 0.15 + fall * Math.hypot(x - FRONT.F2[0], y - FRONT.F2[1]) * (x >= FRONT.F2[0] ? 1 : -1); };
+      for (const [id, [x, y, bot]] of Object.entries(FRONT)) {
+        const g0 = ground(x, y), b = bot ?? inv(id) - 0.15, rot = x > 362 ? 8 : 0;
+        add('drains', boxGeo(1.2, 1.2, g0 - (b - 0.1), x, y, b - 0.1, rot), 'manhole', { en: `Manhole ${id} (front)`, th: `บ่อพัก ${id} (ด้านหน้า)`, lvl: lv(inv(id)), kind: 'manhole',
+          info: lines([`Existing sump on the drain along the road edge, ${id === 'F5' ? 'with a steel grating, ' : ''}1.20 m square outside on the drawing. Not numbered on the drawing: F1 to F6 run west to east.`,
+              bot != null ? `Pit bottom ${lv(bot)} (written on the drawing: "existing pit bottom"). Pipe shown at about ${lv(inv(id))}.` : `No level on the drawing: pipe shown at about ${lv(inv(id))}, on the fall between the two written pit bottoms (+0.288 at F4, +0.208 at F2).`,
+              `Ground about ${lv(g0)}.`],
+            [`บ่อพักเดิมบนท่อระบายริมถนนด้านหน้า${id === 'F5' ? ' ฝาตะแกรงเหล็ก' : ''} ขนาดภายนอก 1.20 ม. ตามแบบ ในแบบไม่มีหมายเลข F1 ถึง F6 เรียงจากตะวันตกไปตะวันออก`,
+              bot != null ? `ก้นบ่อ ${lv(bot)} (ในแบบเขียนว่า "ก้นบ่อเดิม") แสดงท่อที่ประมาณ ${lv(inv(id))}` : `ในแบบไม่มีระดับ แสดงท่อที่ประมาณ ${lv(inv(id))} ตามความลาดระหว่างก้นบ่อสองจุดที่มีในแบบ (+0.288 ที่ F4 และ +0.208 ที่ F2)`,
+              `ระดับพื้นประมาณ ${lv(g0)}`], bot != null ? D : P) });
+        add('drains', boxGeo(1.0, 1.0, 0.03, x, y, g0, rot), 'cover', { en: `Manhole ${id} cover`, th: `ฝาบ่อพัก ${id}`, nopick: 1 });
+      }
+      const pts = ['F6', 'F5', 'F4', 'F3', 'F2', 'F1'].map((id) => [FRONT[id][0], FRONT[id][1], inv(id)]);
+      const mIn = inv('F1') - fall * (FRONT.F1[0] - 316.75);
+      pipe('drains', [...pts, [316.75, 69.74, mIn]], 0.15, 'drain', { en: 'Site drain: along the road edge to the middle outlet', th: 'ท่อระบายน้ำริมถนนด้านหน้า ไปทางออกกลาง', kind: 'drain', tag: 'Front drain', tagTh: 'ท่อระบายด้านหน้า',
+        info: (m) => lines([`Existing drain along the front of the station, from the sumps by the mart west past the fuel tank area to the middle oil trap. About ${m} m, 6 sumps.`,
+            'The drawing labels it a 0.30 m U-ditch at the middle outlet and draws the flow arrows west. Drawn here as a 0.30 m pipe.', `Levels from the two written pit bottoms; the rest follow that fall (about 1 in ${Math.round(1 / fall)}). Into the middle trap at about ${lv(mIn)}.`],
+          [`ท่อระบายน้ำเดิมริมถนนด้านหน้าสถานี จากบ่อพักหน้าร้านสะดวกซื้อไปทางตะวันตก ผ่านบริเวณถังน้ำมันถึงบ่อดักน้ำมันทางออกกลาง ยาวประมาณ ${m} ม. มีบ่อพัก 6 บ่อ`,
+            'ในแบบระบุเป็นรางยู 0.30 ม. ที่ทางออกกลาง และมีลูกศรทิศทางการไหลไปทางตะวันตก แสดงเป็นท่อ 0.30 ม.', `ระดับจากก้นบ่อสองจุดที่มีในแบบ จุดอื่นตามความลาดนั้น (ประมาณ 1 ต่อ ${Math.round(1 / fall)}) เข้าบ่อดักกลางที่ประมาณ ${lv(mIn)}`], P) });
+    }
     add('drains', boxGeo(1.2, 1.2, PUBLIC_W[2] - PUBLIC_W[4], PUBLIC_W[0], PUBLIC_W[1] - 0.6, PUBLIC_W[4], 0), 'manhole', { en: 'Public manhole (west)', th: 'บ่อพักสาธารณะ (ตะวันตก)', lvl: lv(PUBLIC_W[4]), kind: 'manhole',
       info: lines(['Footpath level -0.05 · pipe from the site trap ±0.00 · bottom of pit -1.64.', 'Size is assumed (1.2 m square).'], ['ระดับทางเท้า -0.05 · ท่อจากบ่อดักของสถานี ±0.00 · ก้นบ่อ -1.64', 'ขนาดเป็นค่าสมมติ (1.2 ม. สี่เหลี่ยม)'], P) });
 
@@ -268,21 +300,44 @@ export default {
       pipe('sewer', [[S[0] + 0.4, S[1] + 0.05, sIn - 0.05], [tIn[0], tIn[1], sIn - 0.08]], 0.05, 'sewerRaw', { en: 'Sump to WTT-4', th: 'ท่อจากบ่อพักเข้า WTT-4', kind: 'pipe',
         info: lines(['Short pipe from the sump into the west end of WTT-4. Level assumed.'], ['ท่อสั้นจากบ่อพักเข้าปลายด้านตะวันตกของ WTT-4 ระดับเป็นค่าสมมติ'], C) });
       // the shop sink, its small grease trap and the PVC pipe to the sump
-      const K = [388.45, 77.10], gK = gAt(...K), G = [387.95, 77.85], gG = gAt(...G);
-      add('sewer', boxGeo(0.55, 1.0, 0.9, K[0], K[1], gK, 7), 'fixture', { en: 'Shop sink', th: 'ซิงก์ล้างของร้าน', tag: 'Sink', tagTh: 'ซิงก์', kind: 'building',
-        info: lines(['Stainless steel sink on a stand, outside against the east boundary wall, for the shop at the east end of the building.', 'It drains through the small grease trap next to it, then a PVC pipe to the sump beside WTT-4.', 'Not on the drawing: from Brian\'s site photo and markup of 26 Nov 2026. Shown 0.55 × 1.0 m, 0.9 m high.'],
-          ['ซิงก์สแตนเลสบนขาตั้ง อยู่ด้านนอกชิดกำแพงแนวเขตด้านตะวันออก ใช้สำหรับร้านที่ปลายอาคารด้านตะวันออก', 'น้ำทิ้งผ่านถังดักไขมันขนาดเล็กข้างซิงก์ แล้วต่อท่อ PVC ไปบ่อพักข้าง WTT-4', 'ไม่มีในแบบ จากรูปถ่ายหน้างานและภาพที่ Brian วาดเมื่อ 26 พ.ย. 2026 แสดงขนาด 0.55 × 1.0 ม. สูง 0.9 ม.'], C) }, V(K[0], K[1], gK + 1.4));
+      const K = [388.45, 77.10], gK = gAt(...K), G = [387.95, 77.85], gG = gAt(...G), KR = 7;
+      { // stainless sink on a stand, as in Brian's photo: basin on top, two wire shelves below, a back frame with a dish rack and a tap
+        const c = Math.cos((KR * Math.PI) / 180), sn = Math.sin((KR * Math.PI) / 180);
+        const at = (lx, ly) => [K[0] + lx * c - ly * sn, K[1] + lx * sn + ly * c];      // lx across (+ = towards the wall), ly along
+        const bx = (w, d, h, lx, ly, z) => boxGeo(w, d, h, ...at(lx, ly), gK + z, KR);
+        const W = 0.55, L = 0.95, H = 0.85, t = 0.03, parts = [];
+        for (const sx of [-1, 1]) for (const sy of [-1, 1]) parts.push(bx(t, t, H, sx * (W / 2 - t / 2), sy * (L / 2 - t / 2), 0));          // legs
+        for (const z of [0.12, 0.45]) { parts.push(bx(W, L, 0.015, 0, 0, z)); for (const sx of [-1, 1]) parts.push(bx(t, L, t, sx * (W / 2 - t / 2), 0, z)); }   // wire shelves
+        parts.push(bx(W, 0.25, 0.04, 0, L / 2 - 0.125, H), bx(W, 0.20, 0.04, 0, -L / 2 + 0.10, H), bx(0.06, 0.5, 0.04, -W / 2 + 0.03, 0, H), bx(0.06, 0.5, 0.04, W / 2 - 0.03, 0, H)); // top around the bowl
+        parts.push(bx(0.43, 0.50, 0.20, 0, 0, H - 0.18));                                                                          // bowl
+        for (const sy of [-1, 1]) parts.push(bx(t, t, 0.85, W / 2 - 0.06, sy * (L / 2 - t / 2), H));                                   // back frame posts
+        for (const z of [1.30, 1.68]) parts.push(bx(0.28, L, 0.02, W / 2 - 0.17, 0, z), bx(t, L, t, W / 2 - 0.06, 0, z));             // dish rack shelves
+        const tap = at(W / 2 - 0.08, 0.0); parts.push(cylGeo(0.012, 0.30, tap[0], tap[1], gK + H), bx(0.18, 0.02, 0.02, W / 2 - 0.16, 0, H + 0.28)); // tap
+        add('sewer', merge(parts), 'fixture', { en: 'Shop sink', th: 'ซิงก์ล้างของร้าน', tag: 'Sink', tagTh: 'ซิงก์', kind: 'building',
+          info: lines(['Stainless steel sink on a stand, outside against the east boundary wall, for the shop at the east end of the building: bowl on top, two wire shelves below, a dish rack on a frame behind and a tap.',
+              'It drains through the small grease trap next to it, then a 2" PVC pipe above ground to the sump beside WTT-4.', 'Not on the drawing: from Brian\'s site photo and markup of 26 Nov 2026. Shown 0.55 × 0.95 m, worktop 0.85 m high, rack to about 1.7 m.'],
+            ['ซิงก์สแตนเลสบนขาตั้ง อยู่ด้านนอกชิดกำแพงแนวเขตด้านตะวันออก ใช้สำหรับร้านที่ปลายอาคารด้านตะวันออก: อ่างด้านบน ชั้นตะแกรง 2 ชั้นด้านล่าง ชั้นคว่ำจานบนโครงด้านหลัง และก๊อกน้ำ',
+              'น้ำทิ้งผ่านถังดักไขมันขนาดเล็กข้างซิงก์ แล้วต่อท่อ PVC 2 นิ้ว เดินบนพื้นไปบ่อพักข้าง WTT-4', 'ไม่มีในแบบ จากรูปถ่ายหน้างานและภาพที่ Brian วาดเมื่อ 26 พ.ย. 2026 แสดงขนาด 0.55 × 0.95 ม. ความสูงอ่าง 0.85 ม. ชั้นคว่ำจานสูงประมาณ 1.7 ม.'], C) }, V(K[0], K[1], gK + 2.0));
+      }
       add('tanks', boxGeo(0.4, 0.4, 0.4, G[0], G[1], gG, 7), 'grease', { en: 'Small grease trap at the shop sink', th: 'ถังดักไขมันขนาดเล็กที่ซิงก์ของร้าน', tag: 'Small grease trap', tagTh: 'ถังดักไขมันเล็ก', kind: 'tank',
         info: lines(['Very small grease trap next to the shop sink, about 10 to 20 litres or smaller, standing on the ground.', 'Not on the drawing: from Brian\'s site photo and markup of 26 Nov 2026. Shown 0.4 m square and 0.4 m high.'],
           ['ถังดักไขมันขนาดเล็กมากข้างซิงก์ของร้าน ประมาณ 10 ถึง 20 ลิตรหรือเล็กกว่า วางบนพื้น', 'ไม่มีในแบบ จากรูปถ่ายหน้างานและภาพที่ Brian วาดเมื่อ 26 พ.ย. 2026 แสดงขนาด 0.4 ม. สูง 0.4 ม.'], C) }, V(G[0], G[1], gG + 0.9));
-      pipe('sewer', [[K[0] - 0.1, K[1] + 0.3, gK + 0.02], [G[0] + 0.2, G[1], gG + 0.02]], 0.03, 'sewerRaw', { en: 'Sink to grease trap', th: 'ท่อจากซิงก์ไปถังดักไขมัน', kind: 'pipe', info: lines(['Short PVC pipe from the sink waste to the small grease trap, above ground.'], ['ท่อ PVC สั้นจากซิงก์ไปถังดักไขมันขนาดเล็ก เดินบนพื้น'], C) });
-      const W1 = [388.95, 77.85], W2 = [388.95, 76.95], F1 = [388.55, 76.35], F2 = [381.15, 74.85];
-      pipe('sewer', [[G[0] + 0.2, G[1], gG + 0.02], [...W1, gAt(...W1) + 0.02], [...W2, gAt(...W2) + 0.02], [...F1, gAt(...F1) - 0.35], [...F2, sIn + 0.02], [S[0] + 0.25, S[1] + 0.3, sIn]], 0.05, 'sewerRaw', {
-        en: 'PVC pipe from the shop sink to the sump at WTT-4', th: 'ท่อ PVC จากซิงก์ของร้านไปบ่อพักที่ WTT-4', tag: 'Sink pipe', tagTh: 'ท่อซิงก์', kind: 'pipe',
-        info: (m) => lines(['PVC pipe from the small grease trap east to the boundary wall, south along the wall, then west along the front of the mart, past the north side of WTT-4, to the sump. About ' + m + ' m.',
-            'On the ground by the sink (as in the photo); shown buried about 0.35 m along the front. Route from Brian\'s markup, levels assumed.'],
-          ['ท่อ PVC จากถังดักไขมันขนาดเล็กไปทางตะวันออกถึงกำแพงแนวเขต เลียบกำแพงลงทางใต้ แล้วเลียบหน้าร้านสะดวกซื้อไปทางตะวันตก ผ่านด้านเหนือของ WTT-4 ไปบ่อพัก ยาวประมาณ ' + m + ' ม.',
-            'ช่วงที่ซิงก์เดินบนพื้น (ตามรูปถ่าย) ช่วงหน้าร้านแสดงฝังลึกประมาณ 0.35 ม. แนวท่อจากภาพที่ Brian วาด ระดับเป็นค่าสมมติ'], C) });
+      const R2 = 0.03;   // 2" PVC, about 60 mm outside
+      pipe('sewer', [[K[0] - 0.1, K[1] + 0.35, gK + 0.55], [K[0] - 0.1, K[1] + 0.35, gK + 0.02], [G[0] + 0.2, G[1], gG + 0.02]], R2, 'sewerRaw', { en: 'Sink to grease trap', th: 'ท่อจากซิงก์ไปถังดักไขมัน', kind: 'pipe',
+        info: lines(['2" PVC from the sink waste down to the ground and into the small grease trap, above ground.'], ['ท่อ PVC 2 นิ้ว จากท่อน้ำทิ้งของซิงก์ลงพื้นแล้วเข้าถังดักไขมันขนาดเล็ก เดินบนพื้น'], C) });
+      // the pipe lies on the ground the whole way (Brian, 26 Nov 2026), so follow the ground every metre or so
+      const route = [[G[0] + 0.2, G[1]], [388.95, 77.85], [388.95, 76.95], [388.55, 76.35], [381.15, 74.85], [S[0] + 0.25, S[1] + 0.42]], onG = [];
+      for (let i = 0; i < route.length - 1; i++) {
+        const [a0, a1] = route[i], [b0, b1] = route[i + 1], n = Math.max(1, Math.ceil(Math.hypot(b0 - a0, b1 - a1) / 1.0));
+        for (let k = 0; k < n; k++) { const x = a0 + ((b0 - a0) * k) / n, y = a1 + ((b1 - a1) * k) / n; onG.push([x, y, gAt(x, y) + 0.005]); }
+      }
+      const end = route[route.length - 1]; onG.push([end[0], end[1], gAt(...end) + 0.005], [S[0] + 0.15, S[1] + 0.15, sIn]);
+      pipe('sewer', onG, R2, 'sewerRaw', {
+        en: '2" PVC pipe from the shop sink to the sump at WTT-4', th: 'ท่อ PVC 2 นิ้ว จากซิงก์ของร้านไปบ่อพักที่ WTT-4', tag: 'Sink pipe', tagTh: 'ท่อซิงก์', kind: 'pipe',
+        info: (m) => lines(['2" PVC pipe (about 60 mm outside) from the small grease trap east to the boundary wall, south along the wall, then west along the front of the mart, past the north side of WTT-4, and down into the sump. About ' + m + ' m.',
+            'Above ground the whole way, lying on the paving (Brian, 26 Nov 2026). Route from Brian\'s markup.'],
+          ['ท่อ PVC 2 นิ้ว (ขนาดนอกประมาณ 60 มม.) จากถังดักไขมันขนาดเล็กไปทางตะวันออกถึงกำแพงแนวเขต เลียบกำแพงลงทางใต้ แล้วเลียบหน้าร้านสะดวกซื้อไปทางตะวันตก ผ่านด้านเหนือของ WTT-4 แล้วลงบ่อพัก ยาวประมาณ ' + m + ' ม.',
+            'เดินบนพื้นตลอดแนว วางบนพื้นปู (Brian, 26 พ.ย. 2026) แนวท่อจากภาพที่ Brian วาด'], C) });
     }
 
     // ---------- old tank (out of use) and its old pipe
