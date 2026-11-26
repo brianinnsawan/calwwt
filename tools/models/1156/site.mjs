@@ -83,13 +83,13 @@ export default {
     // front of the station (Brian's stills, video 3:52-4:57): entrance driveway on the west (coffee-shop) side, a kerbed
     // centre island with the price sign, exit driveway on the east side. The front drain is a narrow-mouth gutter across each
     // driveway and an open U-drain with gratings between them, running to the oil trap at each side.
-    const ENT = [-22.0, -14.0], EXIT = [-4.0, 9.0], ISL = [-14.0, -4.0];
-    const FRONT_PARTS = [[-99, ENT[0], 'grate'], [ENT[0], ENT[1], 'slot'], [ENT[1], EXIT[0], 'grate'], [EXIT[0], EXIT[1], 'slot'], [EXIT[1], 99, 'grate']];
+    const ENT = [-22.0, -16.6], EXIT = [2.5, 9.0], ISL = [-16.6, 2.5], IY = -21.6;   // IY: line of the U-drain along the inner side of the island
+    const FRONT_PARTS = [[-99, ENT[0], 'grate'], [ENT[0], ENT[1] - 0.3, 'slot'], [EXIT[0] + 0.3, EXIT[1], 'slot'], [EXIT[1], 99, 'grate']];
     const runs = [
       { id: 'back', pts: [[-1.0, R], [W, R]], en: 'along the back wall behind the KFC drive-through (grated)', th: 'ตามแนวกำแพงด้านหลัง หลังช่องทางไดรฟ์ทรู KFC (มีตะแกรง)' },
       { id: 'west', pts: [[W, R], [W, F]], en: 'along the west wall to the front (entrance side)', th: 'ตามแนวกำแพงด้านตะวันตกไปด้านหน้า (ฝั่งทางเข้า)' },
-      { id: 'front-w', pts: [[-10.0, F], [W + 0.6, F]], en: 'along the front, west part, to the entrance-side oil trap (narrow-mouth gutter across the entrance)', th: 'ตามขอบหน้าสถานี ช่วงตะวันตก ไปบ่อทางออกฝั่งทางเข้า' },
-      { id: 'front-e', pts: [[-10.0, F], [E - 0.8, F]], en: 'along the front, east part, to the exit-side oil trap (narrow-mouth gutter across the exit)', th: 'ตามขอบหน้าสถานี ช่วงตะวันออก ไปบ่อดักน้ำมันฝั่งทางออก' },
+      { id: 'front-w', pts: [[-7.0, IY], [ISL[0] - 0.3, IY], [ISL[0] - 0.3, F], [W + 0.6, F]], en: 'round the inner side of the centre island, then along the front to the entrance-side oil trap (narrow-mouth gutter across the entrance)', th: 'ตามขอบหน้าสถานี ช่วงตะวันตก ไปบ่อทางออกฝั่งทางเข้า' },
+      { id: 'front-e', pts: [[-7.0, IY], [ISL[1] + 0.3, IY], [ISL[1] + 0.3, F], [E - 0.8, F]], en: 'round the inner side of the centre island, then along the front to the exit-side oil trap (narrow-mouth gutter across the exit)', th: 'ตามขอบหน้าสถานี ช่วงตะวันออก ไปบ่อดักน้ำมันฝั่งทางออก' },
       { id: 'east', pts: [[E, R], [E, -22.6]], en: 'along the east wall (exit side) to the exit-side oil trap', th: 'ตามแนวกำแพงด้านตะวันออก (ฝั่งทางออก) ไปบ่อดักน้ำมันฝั่งทางออก' },
     ];
     const ul = {};   // level of the channel bottom at a point, for joining pipes
@@ -119,14 +119,19 @@ export default {
       add('drains', merge(parts), 'drain', { en: `U-drain: ${run.en}`, th: `รางระบายน้ำ (ยู): ${run.th}`, kind: 'drain',
         info: lines([`Open concrete U-drain (a channel, not a pipe; Brian, 26 Nov 2026) about 0.30 m wide inside, with gratings, about ${m} m. Wall and floor thickness assumed (0.08 m). Bottom shown from about ${lv(out[0][2])} to about ${lv(out[out.length - 1][2])} (assumed: 0.40 m deep at the far end, falling 1:200; which way it flows is assumed).`, VIDEO.en],
           [`รางระบายน้ำ คสล. รูปตัวยูแบบเปิด (เป็นราง ไม่ใช่ท่อ ตาม Brian 26 พ.ย. 2026) กว้างภายในประมาณ 0.30 ม. มีฝาตะแกรง ยาวประมาณ ${m} ม. ความหนาผนังและพื้นรางเป็นค่าสมมติ (0.08 ม.) ก้นรางแสดงจากประมาณ ${lv(out[0][2])} ถึงประมาณ ${lv(out[out.length - 1][2])} (ค่าสมมติ: ลึก 0.40 ม. ที่ปลายต้นราง ลาด 1:200 ทิศการไหลเป็นค่าสมมติ)`, VIDEO.th], A) });
-      if (run.id.startsWith('front')) {   // front drain: narrow-mouth gutter (slot) across the driveways, gratings elsewhere
-        const xa = Math.min(out[0][0], out[out.length - 1][0]), xb = Math.max(out[0][0], out[out.length - 1][0]);
-        for (const [p0, p1, kind] of FRONT_PARTS) {
-          const a0 = Math.max(xa, p0), a1 = Math.min(xb, p1); if (a1 - a0 < 0.05) continue;
-          if (kind === 'slot') {
-            add('drains', merge([boxGeo(a1 - a0, 0.17, 0.03, (a0 + a1) / 2, F - 0.12, 0, 0), boxGeo(a1 - a0, 0.17, 0.03, (a0 + a1) / 2, F + 0.12, 0, 0)]), 'slab', { en: 'Narrow-mouth gutter top', th: 'ฝารางปากแคบ', nopick: 1 });
-            add('drains', boxGeo(a1 - a0, 0.06, 0.01, (a0 + a1) / 2, F, 0.0, 0), 'cover', { en: 'Narrow-mouth gutter slot', th: 'ช่องรางปากแคบ', nopick: 1 });
-          } else add('drains', boxGeo(a1 - a0, 0.42, 0.03, (a0 + a1) / 2, F, 0, 0), 'cover', { en: 'U-drain grating', th: 'ฝาตะแกรงรางระบายน้ำ', nopick: 1 });
+      if (run.id.startsWith('front')) {   // front drain: gratings round the island, narrow-mouth gutter (slot) across the driveways
+        for (let k = 1; k < out.length; k++) {
+          const [ax, ay] = out[k - 1], [bx, by] = out[k];
+          if (Math.abs(ay - F) > 0.01 || Math.abs(by - F) > 0.01) { const L = Math.hypot(bx - ax, by - ay);
+            add('drains', boxGeo(Math.abs(bx - ax) > 0.01 ? L : 0.42, Math.abs(by - ay) > 0.01 ? L : 0.42, 0.03, (ax + bx) / 2, (ay + by) / 2, 0, 0), 'cover', { en: 'U-drain grating', th: 'ฝาตะแกรงรางระบายน้ำ', nopick: 1 }); continue; }
+          const xa = Math.min(ax, bx), xb = Math.max(ax, bx);
+          for (const [p0, p1, kind] of FRONT_PARTS) {
+            const a0 = Math.max(xa, p0), a1 = Math.min(xb, p1); if (a1 - a0 < 0.05) continue;
+            if (kind === 'slot') {
+              add('drains', merge([boxGeo(a1 - a0, 0.17, 0.03, (a0 + a1) / 2, F - 0.12, 0, 0), boxGeo(a1 - a0, 0.17, 0.03, (a0 + a1) / 2, F + 0.12, 0, 0)]), 'slab', { en: 'Narrow-mouth gutter top', th: 'ฝารางปากแคบ', nopick: 1 });
+              add('drains', boxGeo(a1 - a0, 0.06, 0.01, (a0 + a1) / 2, F, 0.0, 0), 'cover', { en: 'Narrow-mouth gutter slot', th: 'ช่องรางปากแคบ', nopick: 1 });
+            } else add('drains', boxGeo(a1 - a0, 0.42, 0.03, (a0 + a1) / 2, F, 0, 0), 'cover', { en: 'U-drain grating', th: 'ฝาตะแกรงรางระบายน้ำ', nopick: 1 });
+          }
         }
         continue;
       }
@@ -140,10 +145,10 @@ export default {
 
     // ---------- the two outlets at the road (Caltex deck: existing sampling points G2.1 at both front corners)
     const outlets = [
-      { x: X0 + 0.75, y: Y0 + 2.0, w: 1.0, l: 3.4, chambers: 3, inL: Math.min(runs[1].out[1][2], runs[2].out[1][2]), en: 'Oil-water separator, 3 chambers (entrance side, by the coffee shop)', th: 'บ่อดักน้ำมัน 3 ช่อง (ฝั่งทางเข้า ข้างร้านกาแฟ)', tag: 'Oil trap (entrance side)', tagTh: 'บ่อดักน้ำมัน (ฝั่งทางเข้า)', oil: 1,
+      { x: X0 + 0.75, y: Y0 + 2.0, w: 1.0, l: 3.4, chambers: 3, inL: Math.min(runs[1].out[runs[1].out.length - 1][2], runs[2].out[runs[2].out.length - 1][2]), en: 'Oil-water separator, 3 chambers (entrance side, by the coffee shop)', th: 'บ่อดักน้ำมัน 3 ช่อง (ฝั่งทางเข้า ข้างร้านกาแฟ)', tag: 'Oil trap (entrance side)', tagTh: 'บ่อดักน้ำมัน (ฝั่งทางเข้า)', oil: 1,
         lines: ['Where the west U-drain and the west half of the front drain leave the site, at the front-left corner. The Caltex deck marks the existing sampling point G2.1 here and a new point G2.2 at the coffee shop beside it.', 'Brian (26 Nov 2026): a three-chamber oil-water separator. Size not known: shown as the usual Caltex 3-chamber trap, 3.40 × 1.00 m, lying along the west firewall at the front corner (Brian, 26 Nov 2026).'],
         linesTh: ['จุดที่รางด้านตะวันตกและรางหน้าสถานีช่วงตะวันตกออกจากสถานี ที่มุมหน้าซ้าย ในเอกสารของ Caltex ระบุจุดเก็บตัวอย่างเดิม G2.1 ที่นี่ และจุดใหม่ G2.2 ที่ร้านกาแฟข้าง ๆ', 'Brian (26 พ.ย. 2026): เป็นบ่อดักน้ำมัน 3 ช่อง ไม่ทราบขนาด แสดงเป็นบ่อดักน้ำมัน 3 ช่องแบบมาตรฐานของ Caltex ขนาด 3.40 × 1.00 ม. วางตามแนวกำแพงกันไฟด้านตะวันตกที่มุมหน้า (ตาม Brian 26 พ.ย. 2026)'] },
-      { x: 12.95, y: -23.6, w: 1.3, l: 2.6, inL: Math.min(runs[3].out[1][2], runs[4].out[1][2]), en: 'Oil trap (exit side)', th: 'บ่อดักน้ำมัน (ฝั่งทางออก)', tag: 'Oil trap (exit side)', tagTh: 'บ่อดักน้ำมัน (ฝั่งทางออก)', oil: 1,
+      { x: 12.95, y: -23.6, w: 1.3, l: 2.6, inL: Math.min(runs[3].out[runs[3].out.length - 1][2], runs[4].out[runs[4].out.length - 1][2]), en: 'Oil trap (exit side)', th: 'บ่อดักน้ำมัน (ฝั่งทางออก)', tag: 'Oil trap (exit side)', tagTh: 'บ่อดักน้ำมัน (ฝั่งทางออก)', oil: 1,
         lines: ['Grated pit with two concrete plank covers against the east wall at the road (video, 3:38), where the east U-drain and the east half of the front drain meet. Size read from the video, about 1.3 × 2.6 m.', 'The Caltex deck marks the existing sampling point G2.1 here. The Mini Big C treatment tank is right behind it (Brian).'],
         linesTh: ['บ่อมีฝาตะแกรงและแผ่นคอนกรีต 2 แผ่น ชิดกำแพงด้านตะวันออกที่ริมถนน (วิดีโอ 3:38) จุดที่รางด้านตะวันออกและรางหน้าสถานีช่วงตะวันออกมาบรรจบ ขนาดประมาณจากวิดีโอ ประมาณ 1.3 × 2.6 ม.', 'ในเอกสารของ Caltex ระบุจุดเก็บตัวอย่างเดิม G2.1 ที่นี่ ถังบำบัดของมินิบิ๊กซีอยู่ด้านหลังบ่อนี้ทันที (ตาม Brian)'] },
     ];
@@ -396,17 +401,17 @@ export default {
         add('paving', merge(tubs.map(([x, y]) => boxGeo(0.55, 0.95, 0.4, x, y, DH + 0.45, 0))), 'hedge', { en: 'Shrubs', th: 'ไม้พุ่ม', nopick: 1 }); }
       // kerbed centre island between the entrance and the exit, with grass, the price sign and the IN sign (Brian's stills,
       // video 3:52-4:17)
-      { const iy0 = F + 0.35, iy1 = iy0 + 3.2, IH = 0.2;
+      { const iy0 = Y0 + 0.05, iy1 = IY - 0.25, IH = 0.2;
         add('paving', boxGeo(ISL[1] - ISL[0], iy1 - iy0, IH - 0.02, (ISL[0] + ISL[1]) / 2, (iy0 + iy1) / 2, 0, 0), 'grass', { en: 'Centre island', th: 'เกาะกลางระหว่างทางเข้าและทางออก', tag: 'Centre island', tagTh: 'เกาะกลาง', kind: 'building',
-          info: lines(['Raised island between the entrance and the exit, with grass, banners, the price sign and the IN sign, and a red-and-white kerb (Brian\'s stills, video 3:52-4:17). Size approximate (Brian: exact size not important).', AP.en], ['เกาะยกระดับระหว่างทางเข้าและทางออก มีหญ้า ป้ายธง ป้ายราคา และป้ายทางเข้า ขอบคันหินทาสีแดงขาว (ภาพของ Brian วิดีโอ 3:52-4:17) ขนาดโดยประมาณ', AP.th], AC) }, V(-9, iy1 - 0.5, 1.5));
+          info: lines(['Raised island between the entrance and the exit, with grass, banners, the price sign and the IN sign, and a red-and-white kerb (Brian\'s stills, video 3:52-4:17). It runs from the footpath back to the U-drain with gratings that wraps its inner side and both ends, and ends about 2 m short of the line of the Mini Big C walkway on the exit side (Brian, 26 Nov 2026). Size approximate.', AP.en], ['เกาะยกระดับระหว่างทางเข้าและทางออก มีหญ้า ป้ายธง ป้ายราคา และป้ายทางเข้า ขอบคันหินทาสีแดงขาว (ภาพของ Brian วิดีโอ 3:52-4:17) เกาะยาวจากทางเท้าถึงรางระบายน้ำฝาตะแกรงที่อ้อมด้านในและปลายทั้งสองด้าน และสิ้นสุดก่อนแนวทางเดินมินิบิ๊กซีประมาณ 2 ม. ฝั่งทางออก (ตาม Brian 26 พ.ย. 2026) ขนาดโดยประมาณ', AP.th], AC) }, V(-7, iy1 - 0.5, 1.5));
         const k = [boxGeo(ISL[1] - ISL[0], 0.15, IH, (ISL[0] + ISL[1]) / 2, iy0 + 0.075, 0, 0), boxGeo(ISL[1] - ISL[0], 0.15, IH, (ISL[0] + ISL[1]) / 2, iy1 - 0.075, 0, 0), boxGeo(0.15, iy1 - iy0, IH, ISL[0] + 0.075, (iy0 + iy1) / 2, 0, 0), boxGeo(0.15, iy1 - iy0, IH, ISL[1] - 0.075, (iy0 + iy1) / 2, 0, 0)];
         add('paving', merge(k), 'kerbRed', { en: 'Kerb: centre island (red and white)', th: 'ขอบคันหินเกาะกลาง (แดงขาว)', nopick: 1 });
         // price sign at the entrance end: grey base with the electrical boxes, tall panel with the price digits
         const px = ISL[0] + 1.4, py = (iy0 + iy1) / 2;
-        add('buildings', boxGeo(1.5, 0.8, 1.2, px, py, IH, 0), 'column', { en: 'Price sign base', th: 'ฐานป้ายราคา', nopick: 1 });
-        add('buildings', boxGeo(1.3, 0.4, 4.8, px, py, IH + 1.2, 0), 'signPanel', { en: 'Price sign', th: 'ป้ายราคาน้ำมัน', tag: 'Price sign', tagTh: 'ป้ายราคา', kind: 'building',
-          info: lines(['Caltex price sign at the entrance end of the centre island: a tall panel (Caltex, Techron, Havoline, starcard and the fuel prices) on a grey base with electrical boxes (Brian\'s stills, video 4:13-4:17). Height about 6 m, judged from the stills.', AP.en], ['ป้ายราคาน้ำมัน Caltex ที่ปลายเกาะกลางฝั่งทางเข้า: แผงป้ายสูง (Caltex, Techron, Havoline, starcard และราคาน้ำมัน) บนฐานสีเทามีตู้ไฟฟ้า (ภาพของ Brian วิดีโอ 4:13-4:17) สูงประมาณ 6 ม. ประมาณจากภาพ', AP.th], AC) }, V(px, py, 6.8));
-        add('buildings', boxGeo(1.32, 0.42, 1.2, px, py, IH + 4.8, 0), 'signDark', { en: 'Price sign head (Caltex)', th: 'หัวป้าย Caltex', nopick: 1 });
+        add('buildings', boxGeo(0.8, 1.5, 1.2, px, py, IH, 0), 'column', { en: 'Price sign base', th: 'ฐานป้ายราคา', nopick: 1 });
+        add('buildings', boxGeo(0.4, 1.3, 4.8, px, py, IH + 1.2, 0), 'signPanel', { en: 'Price sign', th: 'ป้ายราคาน้ำมัน', tag: 'Price sign', tagTh: 'ป้ายราคา', kind: 'building',
+          info: lines(['Caltex price sign at the entrance end of the centre island: a tall panel (Caltex, Techron, Havoline, starcard and the fuel prices) on a grey base with electrical boxes, its faces turned to the entrance and the exit (Brian\'s stills, video 4:13-4:17). Height about 6 m, judged from the stills.', AP.en], ['ป้ายราคาน้ำมัน Caltex ที่ปลายเกาะกลางฝั่งทางเข้า: แผงป้ายสูง (Caltex, Techron, Havoline, starcard และราคาน้ำมัน) บนฐานสีเทามีตู้ไฟฟ้า (ภาพของ Brian วิดีโอ 4:13-4:17) สูงประมาณ 6 ม. ประมาณจากภาพ', AP.th], AC) }, V(px, py, 6.8));
+        add('buildings', boxGeo(0.42, 1.32, 1.2, px, py, IH + 4.8, 0), 'signDark', { en: 'Price sign head (Caltex)', th: 'หัวป้าย Caltex', nopick: 1 });
         // IN sign at the entrance corner of the island
         add('buildings', merge([boxGeo(0.9, 0.12, 1.3, ISL[0] + 0.5, iy0 + 0.5, IH + 0.3, 0), boxGeo(0.08, 0.08, 0.35, ISL[0] + 0.5, iy0 + 0.5, IH, 0)]), 'signDark', { en: 'IN sign (entrance)', th: 'ป้ายทางเข้า (IN)', tag: 'IN sign', tagTh: 'ป้ายทางเข้า', kind: 'building',
           info: lines(['Low blue "IN" sign with the Caltex logo and an arrow at the entrance corner of the centre island (Brian\'s stills, video 4:17).', AP.en], ['ป้ายทางเข้าสีน้ำเงินแบบเตี้ย มีโลโก้ Caltex และลูกศร ที่มุมเกาะกลางฝั่งทางเข้า (ภาพของ Brian วิดีโอ 4:17)', AP.th], AC) }, V(ISL[0] + 0.5, iy0 + 0.5, 2.3)); }
