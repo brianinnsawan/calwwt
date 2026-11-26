@@ -89,9 +89,24 @@ export default {
       if (run.id === 'back') { const L = out.length; out = out.map((p, i) => [p[0], p[1], r2(START + (L - 1 - i) * 0 + (p[0] - W) * FALL)]); }
       if (run.id === 'front-w') { const tail = west[west.length - 1][2]; out = out.map((p) => [p[0], p[1], r2(Math.min(p[2], tail + (p[0] - W) * FALL))]); }
       run.out = out;
-      pipe('drains', out, 0.15, 'drain', { en: `U-drain: ${run.en}`, th: `รางระบายน้ำ (ยู): ${run.th}`, kind: 'drain',
-        info: (m) => lines([`Open U-drain about 0.30 m wide with gratings, about ${m} m. Bottom shown from about ${lv(out[0][2])} to about ${lv(out[out.length - 1][2])} (assumed: 0.40 m deep at the far end, falling 1:200; which way it flows is assumed).`, VIDEO.en],
-          [`รางระบายน้ำแบบเปิดกว้างประมาณ 0.30 ม. มีฝาตะแกรง ยาวประมาณ ${m} ม. ก้นรางแสดงจากประมาณ ${lv(out[0][2])} ถึงประมาณ ${lv(out[out.length - 1][2])} (ค่าสมมติ: ลึก 0.40 ม. ที่ปลายต้นราง ลาด 1:200 ทิศการไหลเป็นค่าสมมติ)`, VIDEO.th], A) });
+      // open concrete U-channel (not a pipe): 0.30 m wide inside, 0.08 m walls and floor, built in 2 m pieces that step down
+      // with the fall; open at the top under the gratings
+      const UW = 0.30, UT = 0.08, parts = [];
+      let ulen = 0;
+      for (let k = 1; k < out.length; k++) {
+        const [ax, ay, al] = out[k - 1], [bx, by, bl] = out[k], L = Math.hypot(bx - ax, by - ay), rot = Math.atan2(by - ay, bx - ax) * 180 / Math.PI;
+        const n = Math.max(1, Math.ceil(L / 2)), ux = (bx - ax) / L, uy = (by - ay) / L, nx = -uy, ny = ux;
+        for (let q = 0; q < n; q++) {
+          const t = (q + 0.5) / n, cx = ax + (bx - ax) * t, cy = ay + (by - ay) * t, bot = al + (bl - al) * t, g0 = ground(cx, cy), seg = L / n + 0.01;
+          parts.push(boxGeo(seg, UW + 2 * UT, UT, cx, cy, bot - UT, rot));   // floor
+          for (const sd of [-1, 1]) parts.push(boxGeo(seg, UT, g0 - (bot - UT), cx + nx * sd * (UW + UT) / 2, cy + ny * sd * (UW + UT) / 2, bot - UT, rot));   // side walls
+        }
+        ulen += L;
+      }
+      const m = Math.round(ulen);
+      add('drains', merge(parts), 'drain', { en: `U-drain: ${run.en}`, th: `รางระบายน้ำ (ยู): ${run.th}`, kind: 'drain',
+        info: lines([`Open concrete U-drain (a channel, not a pipe; Brian, 26 Nov 2026) about 0.30 m wide inside, with gratings, about ${m} m. Wall and floor thickness assumed (0.08 m). Bottom shown from about ${lv(out[0][2])} to about ${lv(out[out.length - 1][2])} (assumed: 0.40 m deep at the far end, falling 1:200; which way it flows is assumed).`, VIDEO.en],
+          [`รางระบายน้ำ คสล. รูปตัวยูแบบเปิด (เป็นราง ไม่ใช่ท่อ ตาม Brian 26 พ.ย. 2026) กว้างภายในประมาณ 0.30 ม. มีฝาตะแกรง ยาวประมาณ ${m} ม. ความหนาผนังและพื้นรางเป็นค่าสมมติ (0.08 ม.) ก้นรางแสดงจากประมาณ ${lv(out[0][2])} ถึงประมาณ ${lv(out[out.length - 1][2])} (ค่าสมมติ: ลึก 0.40 ม. ที่ปลายต้นราง ลาด 1:200 ทิศการไหลเป็นค่าสมมติ)`, VIDEO.th], A) });
       for (let i = 1; i < out.length; i++) {
         const [ax, ay] = out[i - 1], [bx, by] = out[i], len = Math.hypot(bx - ax, by - ay);
         add('drains', boxGeo(Math.abs(bx - ax) > 0.01 ? len : 0.42, Math.abs(by - ay) > 0.01 ? len : 0.42, 0.03, (ax + bx) / 2, (ay + by) / 2, 0, 0), 'cover', { en: 'U-drain grating', th: 'ฝาตะแกรงรางระบายน้ำ', nopick: 1 });
