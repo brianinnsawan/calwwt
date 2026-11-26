@@ -54,6 +54,15 @@ const DESIGN = [
     asBuilt: { en: 'The garbage room of the design is not on the as-built sheet. That sheet shows a smaller room just east of this spot and no tank. Confirm on site whether this tank exists.', th: 'ห้องพักขยะตามแบบออกแบบไม่มีในแบบก่อสร้างจริง แบบก่อสร้างจริงแสดงห้องขนาดเล็กกว่าอยู่ถัดไปทางตะวันออก และไม่มีถัง ต้องยืนยันหน้างานว่ามีถังนี้หรือไม่' },
     outNote: { en: 'As designed the pipe runs through the spot where the as-built sheet shows the small room, so the layout here changed. Check on site.', th: 'ตามแบบออกแบบ ท่อเดินผ่านตำแหน่งที่แบบก่อสร้างจริงแสดงห้องขนาดเล็ก แสดงว่าผังบริเวณนี้เปลี่ยนไป ต้องตรวจสอบหน้างาน' } },
 ];
+// Tank models approved by Chevron for Porto Go (Biotech spec pack, Aug 2019, in Sites\1588 Samut Sakhon\03 Drawings\Tank documents;
+// also a layout on the site page): BG-600 grease trap; BO-1000, BO-4000, BO-6000 upright treatment tanks; BO-R-7500 lying tank.
+// The FX-10-D1.5 water tank in the pack is struck out. Matched to the SN-103 tanks by volume.
+const BIOTECH = {
+  T75: { en: 'Approved model (Biotech spec pack, Aug 2019): BO-R-7500, a LYING 7,500 L tank with a DLX-80 air pump. The as-built sheet\'s lying tank in front of building A is probably this one.', th: 'รุ่นที่อนุมัติ (เอกสาร Biotech ส.ค. 2019): BO-R-7500 ถังแบบนอน 7,500 ลิตร พร้อมเครื่องเติมอากาศ DLX-80 ถังแบบนอนหน้าอาคาร A ในแบบก่อสร้างจริงน่าจะเป็นถังนี้' },
+  T60: { en: 'Approved model (Biotech spec pack, Aug 2019): BO-6000, 6,000 L, with a DLX-120 air pump.', th: 'รุ่นที่อนุมัติ (เอกสาร Biotech ส.ค. 2019): BO-6000 ขนาด 6,000 ลิตร พร้อมเครื่องเติมอากาศ DLX-120' },
+  T40: { en: 'Approved model (Biotech spec pack, Aug 2019): BO-4000, 4,000 L, with a DLX-80 air pump.', th: 'รุ่นที่อนุมัติ (เอกสาร Biotech ส.ค. 2019): BO-4000 ขนาด 4,000 ลิตร พร้อมเครื่องเติมอากาศ DLX-80' },
+  T10: { en: 'Approved model (Biotech spec pack, Aug 2019): BO-1000, 1,000 L, with a DL-40 air pump.', th: 'รุ่นที่อนุมัติ (เอกสาร Biotech ส.ค. 2019): BO-1000 ขนาด 1,000 ลิตร พร้อมเครื่องเติมอากาศ DL-40' },
+};
 const GT = { x: 72.86, y: 39.36, side: 1.1, depth: 1.2 };   // design grease trap: 1.1 m square on the sheet
 const GT_IN = [[70.05, 41.50], [70.05, 39.70], [70.39, 39.36], [71.75, 39.36], [72.31, 39.36]];
 const GT_OUT = [[73.41, 39.36], [75.40, 39.37]];
@@ -147,11 +156,13 @@ export default {
         info: ab(['Outline of a lying tank with three round covers, along the south wall of building A (toilets). The outline is 6.90 m long and 2.00 m across.',
           'The as-built drainage sheet shows the outline only: no name, size, level or pipes.',
           'The 2019 design sheet SN-103 shows no tank here. It shows two upright tanks instead: 7.50 m³ at the west end of building A and 6.00 m³ at the east end. This lying tank may have been built in their place. Confirm on site which tanks exist.',
+          'The approved tank list (Biotech spec pack, Aug 2019) has one lying tank, the BO-R-7500 (7,500 L), for the west toilets of building A: this outline is probably that tank.',
           'As drawn, its north edge is about 0.2 m under the wall line of building A, and a manhole of the buried site drain sits on its south edge. Check on site.',
           `Depth assumed: ${COVER.toFixed(2)} m of cover, so top ${as(top)} and underside ${as(top - 2 * r)}.`],
         ['แนวถังแบบนอน มีฝากลม 3 ฝา อยู่ตามแนวผนังด้านใต้ของอาคาร A (ห้องน้ำ) แนวถังยาว 6.90 ม. กว้าง 2.00 ม.',
           'แบบก่อสร้างจริงแสดงเฉพาะแนวถัง ไม่มีชื่อ ขนาด ระดับ หรือท่อ',
           'แบบออกแบบ SN-103 ปี 2019 ไม่มีถังที่ตำแหน่งนี้ แต่แสดงถังแบบตั้ง 2 ใบ: 7.50 ลบ.ม. ที่ปลายด้านตะวันตกของอาคาร A และ 6.00 ลบ.ม. ที่ปลายด้านตะวันออก ถังแบบนอนนี้อาจสร้างแทนถังทั้งสองใบ ต้องยืนยันหน้างานว่ามีถังใดอยู่จริง',
+          'รายการถังที่อนุมัติ (เอกสาร Biotech ส.ค. 2019) มีถังแบบนอน 1 ใบ คือ BO-R-7500 (7,500 ลิตร) สำหรับห้องน้ำฝั่งตะวันตกของอาคาร A แนวถังนี้น่าจะเป็นถังดังกล่าว',
           'ตามที่เขียนในแบบ ขอบถังด้านเหนือล้ำเข้าไปใต้แนวผนังอาคาร A ประมาณ 0.2 ม. และมีบ่อพักของท่อระบายน้ำฝังใต้ดินอยู่ตรงขอบถังด้านใต้ ต้องตรวจสอบหน้างาน',
           `ความลึกเป็นค่าสมมติ: ดินกลบ ${COVER.toFixed(2)} ม. หลังถัง ${as(top)} ใต้ถัง ${as(top - 2 * r)}`]) }, V(x, y, 0.7));
       for (const [mx, my] of [[51.25, 37.50], [53.54, 37.52], [56.49, 37.55]]) {
@@ -210,11 +221,13 @@ export default {
       add('tanks', cylGeo(t.r, h, t.x, t.y, top - h), 'tank', { ...name, tag: `${volTxt} m³ tank`, tagTh: `ถัง ${volTxt} ลบ.ม.`, kind: 'tank',
         info: des([`Underground wastewater treatment tank, ${volTxt} m³, as designed on SN-103 (issued for submission 29/03/2019).`,
           t.serves.en,
+          BIOTECH[t.id].en,
           `The sheet gives the volume only. Drawn as an upright cylinder ${(2 * t.r).toFixed(2)} m across (the circle on the sheet) and ${h.toFixed(2)} m high, which holds ${volTxt} m³. The real tank will be somewhat taller.`,
           `Depth assumed: ${COVER.toFixed(2)} m of cover, so top ${as(top)} and underside ${as(top - h)}. Pipe in ${as(inL)}, pipe out ${as(outL)} (assumed).`,
           t.asBuilt.en],
         [`ถังบำบัดน้ำเสียใต้ดิน ${volTxt} ลบ.ม. ตามแบบ SN-103 (ออกแบบเพื่อยื่นขออนุญาต 29/03/2019)`,
           t.serves.th,
+          BIOTECH[t.id].th,
           `แบบระบุเฉพาะปริมาตร ในโมเดลแสดงเป็นถังทรงกระบอกตั้ง กว้าง ${(2 * t.r).toFixed(2)} ม. (ตามวงกลมในแบบ) สูง ${h.toFixed(2)} ม. ซึ่งจุได้ ${volTxt} ลบ.ม. ถังจริงจะสูงกว่านี้เล็กน้อย`,
           `ความลึกเป็นค่าสมมติ: ดินกลบ ${COVER.toFixed(2)} ม. หลังถัง ${as(top)} ใต้ถัง ${as(top - h)} ท่อเข้า ${as(inL)} ท่อออก ${as(outL)} (ค่าสมมติ)`,
           t.asBuilt.th]) }, V(t.x, t.y, t.id === 'T40' ? 1.3 : 0.7));
@@ -228,10 +241,12 @@ export default {
     add('tanks', boxGeo(GT.side, GT.side, GT.depth, GT.x, GT.y, -GT.depth, 0), 'grease', { en: 'Design: grease trap labelled 6.00 m³ (building B)', th: 'ตามแบบออกแบบ: ถังดักไขมันระบุ 6.00 ลบ.ม. (อาคาร B)', tag: 'Grease trap', tagTh: 'ถังดักไขมัน', kind: 'tank',
       info: des(['Grease trap for building B, labelled 6.00 m³ on SN-103 (issued for submission 29/03/2019).',
         'On the sheet it is a 1.10 m square with a round cover about 1.0 m across. That is far too small to hold 6.00 m³, so either the label or the symbol is not to scale. Check on site.',
+        'The approved model (Biotech spec pack, Aug 2019) is a BG-600 grease trap, 600 L: so the 6.00 m³ label is probably a slip for 0.60 m³.',
         `Shown here as the 1.10 m square, ${GT.depth.toFixed(2)} m deep from the ground (assumed). Pipe in ${as(gtIn)}, pipe out ${as(gtOut)} (assumed).`,
         'As drawn it overlaps the south-east corner of building B on the as-built sheet. The as-built sheet shows two round outlines and a square pit 2 to 7 m east of here instead.'],
       ['ถังดักไขมันของอาคาร B ในแบบ SN-103 ระบุ 6.00 ลบ.ม. (ออกแบบเพื่อยื่นขออนุญาต 29/03/2019)',
         'ในแบบเขียนเป็นสี่เหลี่ยม 1.10 ม. มีฝากลมกว้างประมาณ 1.0 ม. ซึ่งเล็กเกินไปสำหรับ 6.00 ลบ.ม. แสดงว่าตัวเลขหรือสัญลักษณ์ไม่ตรงมาตราส่วน ต้องตรวจสอบหน้างาน',
+        'รุ่นที่อนุมัติ (เอกสาร Biotech ส.ค. 2019) คือถังดักไขมัน BG-600 ขนาด 600 ลิตร ตัวเลข 6.00 ลบ.ม. จึงน่าจะพิมพ์ผิดจาก 0.60 ลบ.ม.',
         `ในโมเดลแสดงเป็นสี่เหลี่ยม 1.10 ม. ลึก ${GT.depth.toFixed(2)} ม. จากผิวพื้น (ค่าสมมติ) ท่อเข้า ${as(gtIn)} ท่อออก ${as(gtOut)} (ค่าสมมติ)`,
         'ตามที่เขียน ตำแหน่งนี้ทับมุมตะวันออกเฉียงใต้ของอาคาร B ในแบบก่อสร้างจริง แบบก่อสร้างจริงแสดงแนววงกลม 2 วงและบ่อสี่เหลี่ยม ห่างไปทางตะวันออก 2 ถึง 7 ม. แทน']) }, V(GT.x, GT.y, 1.9));
     add('tanks', cylGeo(0.5, 0.03, GT.x, GT.y, 0), 'cover', { en: 'Grease trap cover (design)', th: 'ฝาถังดักไขมัน (ตามแบบออกแบบ)', nopick: 1 });

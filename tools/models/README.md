@@ -95,11 +95,13 @@ tanks. Both are in the model, the as-built outlines in their own layer. No sheet
 There are no drawings of this site. Outlines come from the Esri World Imagery satellite image (zoom 19, 0.29 m a pixel),
 turned 35.5° so the road runs along x, read on a 1 m grid (`1156/plan-lines.json` is that tracing, not a drawing); north
 125.5°. What is where comes from Brian's notes of 26 Nov 2026 and stills of Aqua's 360° sampling video, plus the Caltex
-deck slides 27-28 (G2.1 / G2.2 sampling points). In the model: KFC grease traps behind the kitchen, a line of KFC tanks
-under the drive-through lane (about eight round lids; shown as three tanks), the KFC pump sump at the back-west corner
+deck slides 27-28 (G2.1 / G2.2 sampling points). In the model: under the KFC drive-through lane, one grease trap (4 lids)
+and one treatment tank (5 lids; Brian is not sure whether it is two tanks, 2 + 3 lids), the KFC pump room behind the rolling
+door about midway along KFC, the KFC pump sump at the back-west corner
 and its blue PVC pumped line along the west wall into the U-drain; the toilets' solids tank behind the building and the
 aeration tank on the east side; the Mini Big C tank behind the exit-side oil trap between the east wall and the 12 m
-pole signs; four fuel tanks between the toilets and the office (number assumed from the vent pipes); U-drains round the
+pole signs; three fuel tanks lying parallel to the road between the toilets and the office, one with two compartments
+(four products; Brian, 26 Nov 2026); 3-chamber oil traps at both outlets to the road; U-drains round the
 site; KFC, toilets, garbage room, office / Mini Big C, coffee shop, canopy, EV chargers, air pump; road and the elevated
 structure in "surroundings". Every size, depth, level and pipe route is assumed. Notes use the source kinds `aerial`
 and `aerialContext` (style.mjs) instead of drawn / part / context. Replace with real positions if Caltex sends drawings.
@@ -166,3 +168,16 @@ drain run, the three outlet pits at the road (two are the sampled oil traps; the
 to confirm), four fuel tanks (the middle two have two lids), buildings, canopy and islands.
 Assumed: every pipe level and size (no levels on any sheet: drains 0.30 m, 0.40 m cover at the start, 1:200; tank pipes
 0.3 m under the tank top), tank depths, round tank sizes, building heights. North from the A-104 arrow (314.6).
+
+## Tank documents found (26 Nov 2026)
+Brian asked for more information on the tanks at every site from email and SharePoint. Filed in each site's
+`03 Drawings\Tank documents` folder in the NFR Projects library, and added to the site pages as layouts (no prices):
+- 1588 Porto Go: Biotech spec pack approved Aug 2019 (BG-600 grease trap, BO-1000, BO-4000, BO-6000, BO-R-7500 lying tank;
+  FX-10-D1.5 water tank struck out), water storage tank spec, Chevron design change list (Jul 2019). The models are in the
+  1588 tank notes; BG-600 suggests SN-103's "6.00 m³" grease trap label is a slip for 0.60 m³.
+- 1703 King Kaew: KFC as-built sheets KFC-ME-03/04/05 and TOI-ME-01 (2021). Installed models: DOS LITETITE DLFS-15Q(N)
+  (the layout's SP-T-15,000 L), 2× DOS SGT-07/BK-5000L grease traps, DOS OK ST-24/BK-1600L for the KFC toilet.
+- 1750 Saraburi: Five Star grease trap replaced 2025 with a Premier GT-1600 (Ø1.60 × 1.40 m, two lids, on a slab and 5 piles;
+  drawings from `NFR Projects\24 25 Grease and Septic repair\Saraburi Kaeng Khoi`), and DOS's 2022 diagram (a proposal).
+- Nothing new found for 0589, 1156, 1622, 1642, 1687.
+
