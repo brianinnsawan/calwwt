@@ -175,18 +175,33 @@
    },
    "notes": {
     "en": [
-     "Visited with the Aqua technicians on 20–21 Nov 2026."
+     "Visited with the Aqua technicians on 20–21 Nov 2026.",
+     "From the site visit (Brian): the clean-water tank is under the disabled parking bay; the septic tank is under the walkway behind the toilets; Aqua sampled both oil traps (entrance and exit side) at the outlet pipe."
     ],
     "th": [
-     "เข้าพื้นที่พร้อมช่างของ Aqua วันที่ 20–21 พ.ย. 2026"
+     "เข้าพื้นที่พร้อมช่างของ Aqua วันที่ 20–21 พ.ย. 2026",
+     "จากการสำรวจหน้างาน (Brian): ถังเก็บน้ำดีอยู่ใต้ที่จอดรถคนพิการ ถังบำบัดอยู่ใต้ทางเดินหลังห้องน้ำ Aqua เก็บตัวอย่างที่บ่อดักน้ำมันทั้งสองบ่อ (ฝั่งทางเข้าและทางออก) ที่ฝั่งท่อออก"
     ]
    },
-   "model": null,
+   "model": "1642.glb",
    "links": [],
-   "layouts": [],
+   "layouts": [
+    {
+     "file": "1642/1642-a104-site-plan-tanks",
+     "en": "A-104 Site plan with the treatment tanks and the clean-water tank",
+     "th": "A-104 แปลนตำแหน่งถังบำบัด และถังน้ำดี",
+     "source": "Sites\\1642 Phun Phon Phuket\\03 Drawings\\CAD\\A-104 แปลนถังบำบัด.dwg (plotted from Brian's DXF, 26 Nov 2026)"
+    },
+    {
+     "file": "1642/1642-a103-water-supply",
+     "en": "A-103 Water supply layout (20,000 L water tank, pump, HDPE pipes)",
+     "th": "A-103 ผังแสดงระบบจ่ายน้ำประปา",
+     "source": "Sites\\1642 Phun Phon Phuket\\03 Drawings\\CAD\\A-103 ผังระบบน้ำดี.dwg (plotted from Brian's DXF, 26 Nov 2026)"
+    }
+   ],
    "layoutNote": {
-    "en": "Layout requested from Caltex (Thada).",
-    "th": "ขอแบบจาก Caltex (คุณธาดา) แล้ว"
+    "en": "From the CAD files in the site folder (no pipe levels on them). The tank detail sheet 6-9 is a Bio-San catalogue page and is not shown here.",
+    "th": "จากไฟล์ CAD ในโฟลเดอร์ของสถานี (ไม่มีระดับท่อ) แผ่นแบบขยายถัง 6-9 เป็นหน้าแค็ตตาล็อก Bio-San จึงไม่ได้แสดงที่นี่"
    },
    "sampledLabel": {
     "en": "20–21 Nov 2026",

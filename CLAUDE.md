@@ -69,12 +69,13 @@ Nothing is shared with calnkt: own logins, own databases, own file storage.
 - Brian is not a programmer: explain in plain words, lead with what changed for the people using the site.
 
 ## Open items (23 Nov 2026)
-- Layouts still missing: 1642 Phun Phon and 1156 Samut Prakan (Brian asked Thada). 1750 Saraburi has LAY-SN-02 and LAY-ST-03
+- Layouts still missing: 1156 Samut Prakan (Brian asked Thada). 1642 Phun Phon has A-104 and A-103 (26 Nov 2026,
+  plotted from Brian's CAD files). 1750 Saraburi has LAY-SN-02 and LAY-ST-03
   (from Brian's separate folder `Chevron Hub Site - NTI Saraburi CPF 2022\01. Drawings\As Built Saraburi`, a full SPP as-built set).
 - 3D models (first versions, 25 Nov 2026; sources and gaps per site in tools/models/README.md): 0589 Kathu, 1750 Saraburi
-  (as-built DWGs), 1588 Samut Sakhon, 1622 Ram Intra, 1687 Phetchaburi, 1703 King Kaew (from the PDF layouts). Still to do:
-  1642 Phun Phon and 1156 Samut Prakan (no drawings: rough models from satellite, Street View and site photos, which need
-  Brian's computer connected). calcr.sppwork.com is his reference for what the viewer should grow into (measure tool,
+  (as-built DWGs), 1588 Samut Sakhon, 1622 Ram Intra, 1687 Phetchaburi, 1703 King Kaew (from the PDF layouts), 1642 Phun
+  Phon (26 Nov 2026, from A-104 / A-103 saved as DXF by Brian). Still to do: 1156 Samut Prakan (no drawings: rough model
+  from satellite, Street View and site photos, which need Brian's computer connected). calcr.sppwork.com is his reference for what the viewer should grow into (measure tool,
   drainage long sections, find by ID, flow arrows).
 - 1687 Phetchaburi (26 Nov 2026) shows the whole station plus its surroundings (Robinson, Phetkasem Road) in the shared layer
   "surroundings" that the viewer can switch off; other sites can use the same layer for their own context.
