@@ -43,6 +43,8 @@ export const MATERIALS = {
   bayLine: [0xf4f2ec],           // white parking-bay lines
   bayEV: [0x2f7fd1, 0.85],       // blue painted EV bay
   grass: [0x6f9a4a, 0.75],       // grass and planting beds
+  deck: [0x5a4636, 0.9],          // raised timber deck
+  planterTub: [0xeeeeea],        // small white concrete planter tub
   signPanel: [0xc8432f, 0.95],   // the head of a tall pole sign (plain panels, no logo)
   signDark: [0x2b3138],          // dark sign panels and round signs
 };

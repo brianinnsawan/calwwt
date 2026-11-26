@@ -52,6 +52,7 @@ export default {
     { id: 'site', from: [-10, -72, 46], to: [-10, 6, 0] },
     { id: 'plan', from: [-10, 4.9, 120], to: [-10, 5, 0] },
     { id: 'kfc', en: 'KFC tanks and pump sump (drive-through lane)', th: 'ถัง KFC และบ่อสูบ (ช่องทางไดรฟ์ทรู)', from: [-30, 20, 12], to: [-18, 34, -1] },
+    { id: 'front', en: 'Front: entrance, centre island, exit and coffee shop', th: 'ด้านหน้า: ทางเข้า เกาะกลาง ทางออก และร้านกาแฟ', from: [-10, -41, 10], to: [-12, -19, 0] },
     { id: 'entry', en: 'Drive-through entry: height limiter and order point', th: 'ทางเข้าไดรฟ์ทรู: โครงจำกัดความสูงและจุดสั่งอาหาร', from: [-37.5, 16.5, 5.0], to: [-29.5, 26.0, 1.5] },
     { id: 'pay', en: 'Behind KFC: pump room and pay window', th: 'หลัง KFC: ห้องปั๊มและช่องชำระเงิน', from: [-18.5, 35.8, 4.2], to: [-8.0, 33.6, 1.4] },
     { id: 'drive', en: 'Drive-through exit: pick-up window and toilets', th: 'ทางออกไดรฟ์ทรู: ช่องรับสินค้าและห้องน้ำ', from: [-0.5, 10.5, 6.5], to: [1.5, 27, 1.2] },
@@ -79,11 +80,16 @@ export default {
     // the east wall and the coffee shop; the Caltex deck draws the same lines). Shown as 0.30 m channels, bottom 0.40 m below
     // ground at the far end, falling 1:200 to the two outlets at the road. Which way each part flows is assumed.
     const W = X0 + 0.5, E = X1 - 0.45, F = Y0 + 0.55, R = Y1 - 0.45, FALL = 1 / 200, START = -0.40;
+    // front of the station (Brian's stills, video 3:52-4:57): entrance driveway on the west (coffee-shop) side, a kerbed
+    // centre island with the price sign, exit driveway on the east side. The front drain is a narrow-mouth gutter across each
+    // driveway and an open U-drain with gratings between them, running to the oil trap at each side.
+    const ENT = [-22.0, -14.0], EXIT = [-4.0, 9.0], ISL = [-14.0, -4.0];
+    const FRONT_PARTS = [[-99, ENT[0], 'grate'], [ENT[0], ENT[1], 'slot'], [ENT[1], EXIT[0], 'grate'], [EXIT[0], EXIT[1], 'slot'], [EXIT[1], 99, 'grate']];
     const runs = [
       { id: 'back', pts: [[-1.0, R], [W, R]], en: 'along the back wall behind the KFC drive-through (grated)', th: 'ตามแนวกำแพงด้านหลัง หลังช่องทางไดรฟ์ทรู KFC (มีตะแกรง)' },
       { id: 'west', pts: [[W, R], [W, F]], en: 'along the west wall to the front (entrance side)', th: 'ตามแนวกำแพงด้านตะวันตกไปด้านหน้า (ฝั่งทางเข้า)' },
-      { id: 'front-w', pts: [[-10.0, F], [W + 0.6, F]], en: 'along the front kerb, west part, to the entrance-side outlet', th: 'ตามขอบหน้าสถานี ช่วงตะวันตก ไปบ่อทางออกฝั่งทางเข้า' },
-      { id: 'front-e', pts: [[-10.0, F], [E - 0.8, F]], en: 'along the front kerb, east part, to the exit-side oil trap', th: 'ตามขอบหน้าสถานี ช่วงตะวันออก ไปบ่อดักน้ำมันฝั่งทางออก' },
+      { id: 'front-w', pts: [[-10.0, F], [W + 0.6, F]], en: 'along the front, west part, to the entrance-side oil trap (narrow-mouth gutter across the entrance)', th: 'ตามขอบหน้าสถานี ช่วงตะวันตก ไปบ่อทางออกฝั่งทางเข้า' },
+      { id: 'front-e', pts: [[-10.0, F], [E - 0.8, F]], en: 'along the front, east part, to the exit-side oil trap (narrow-mouth gutter across the exit)', th: 'ตามขอบหน้าสถานี ช่วงตะวันออก ไปบ่อดักน้ำมันฝั่งทางออก' },
       { id: 'east', pts: [[E, R], [E, -22.6]], en: 'along the east wall (exit side) to the exit-side oil trap', th: 'ตามแนวกำแพงด้านตะวันออก (ฝั่งทางออก) ไปบ่อดักน้ำมันฝั่งทางออก' },
     ];
     const ul = {};   // level of the channel bottom at a point, for joining pipes
@@ -113,6 +119,17 @@ export default {
       add('drains', merge(parts), 'drain', { en: `U-drain: ${run.en}`, th: `รางระบายน้ำ (ยู): ${run.th}`, kind: 'drain',
         info: lines([`Open concrete U-drain (a channel, not a pipe; Brian, 26 Nov 2026) about 0.30 m wide inside, with gratings, about ${m} m. Wall and floor thickness assumed (0.08 m). Bottom shown from about ${lv(out[0][2])} to about ${lv(out[out.length - 1][2])} (assumed: 0.40 m deep at the far end, falling 1:200; which way it flows is assumed).`, VIDEO.en],
           [`รางระบายน้ำ คสล. รูปตัวยูแบบเปิด (เป็นราง ไม่ใช่ท่อ ตาม Brian 26 พ.ย. 2026) กว้างภายในประมาณ 0.30 ม. มีฝาตะแกรง ยาวประมาณ ${m} ม. ความหนาผนังและพื้นรางเป็นค่าสมมติ (0.08 ม.) ก้นรางแสดงจากประมาณ ${lv(out[0][2])} ถึงประมาณ ${lv(out[out.length - 1][2])} (ค่าสมมติ: ลึก 0.40 ม. ที่ปลายต้นราง ลาด 1:200 ทิศการไหลเป็นค่าสมมติ)`, VIDEO.th], A) });
+      if (run.id.startsWith('front')) {   // front drain: narrow-mouth gutter (slot) across the driveways, gratings elsewhere
+        const xa = Math.min(out[0][0], out[out.length - 1][0]), xb = Math.max(out[0][0], out[out.length - 1][0]);
+        for (const [p0, p1, kind] of FRONT_PARTS) {
+          const a0 = Math.max(xa, p0), a1 = Math.min(xb, p1); if (a1 - a0 < 0.05) continue;
+          if (kind === 'slot') {
+            add('drains', merge([boxGeo(a1 - a0, 0.17, 0.03, (a0 + a1) / 2, F - 0.12, 0, 0), boxGeo(a1 - a0, 0.17, 0.03, (a0 + a1) / 2, F + 0.12, 0, 0)]), 'slab', { en: 'Narrow-mouth gutter top', th: 'ฝารางปากแคบ', nopick: 1 });
+            add('drains', boxGeo(a1 - a0, 0.06, 0.01, (a0 + a1) / 2, F, 0.0, 0), 'cover', { en: 'Narrow-mouth gutter slot', th: 'ช่องรางปากแคบ', nopick: 1 });
+          } else add('drains', boxGeo(a1 - a0, 0.42, 0.03, (a0 + a1) / 2, F, 0, 0), 'cover', { en: 'U-drain grating', th: 'ฝาตะแกรงรางระบายน้ำ', nopick: 1 });
+        }
+        continue;
+      }
       for (let i = 1; i < out.length; i++) {
         const [ax, ay] = out[i - 1], [bx, by] = out[i], len = Math.hypot(bx - ax, by - ay);
         add('drains', boxGeo(Math.abs(bx - ax) > 0.01 ? len : 0.42, Math.abs(by - ay) > 0.01 ? len : 0.42, 0.03, (ax + bx) / 2, (ay + by) / 2, 0, 0), 'cover', { en: 'U-drain grating', th: 'ฝาตะแกรงรางระบายน้ำ', nopick: 1 });
@@ -360,13 +377,39 @@ export default {
       add('paving', merge([26.6, 28.0, 29.4].map((y) => cylGeo(0.1, 1.0, -2.95, y, 0.15, 12))), 'kerbYellow', { en: 'Bollards (yellow and black)', th: 'เสากันชน (เหลืองดำ)', nopick: 1 });
       walk(4.6, -15.5, 6.0, 0.0, ['w'], 'kerbPlain', 'Walkway along the office and Mini Big C', 'ทางเดินหน้าสำนักงานและมินิบิ๊กซี',
         ['Walkway along the forecourt side of the office / Mini Big C building (assumed width).'], ['ทางเดินด้านลานจอดของอาคารสำนักงาน / มินิบิ๊กซี (ความกว้างสมมติ)']);
-      walk(-25.5, -17.0, -24.3, -6.5, ['e'], 'kerbPlain', 'Walkway along the coffee shop', 'ทางเดินข้างร้านกาแฟ',
-        ['Walkway on the forecourt side of the coffee shop (assumed width).'], ['ทางเดินด้านลานจอดของร้านกาแฟ (ความกว้างสมมติ)']);
       walk(9.0, -25.3, 12.2, -17.4, ['w', 'n'], 'kerbRed', 'Island with the pole signs', 'เกาะเสาป้าย',
         ['Raised island at the exit-side front corner carrying the KFC and Caltex pole signs, with a red-and-white kerb (video 4:10, Brian\'s photo).'], ['เกาะยกระดับที่มุมหน้าฝั่งทางออก มีเสาป้าย KFC และ Caltex ขอบคันหินทาสีแดงขาว (วิดีโอ 4:10 และภาพของ Brian)']);
-      // planter along the front of the coffee shop (video 0:07-0:17; Brian's photo)
-      add('paving', boxGeo(6.0, 0.9, 0.5, -29.0, -17.6, 0, 0), 'grass', { en: 'Planter in front of the coffee shop', th: 'กระบะต้นไม้หน้าร้านกาแฟ', kind: 'building',
-        info: lines(['Low planter with shrubs along the front of the coffee shop (video 0:07, Brian\'s photo).', AP.en], ['กระบะต้นไม้เตี้ยหน้าร้านกาแฟ (วิดีโอ 0:07 และภาพของ Brian)', AP.th], AC) });
+      // coffee shop (artemis): raised timber deck on its forecourt (east) side and along the front, under a red awning roof
+      // that reaches out from the shop, with small white concrete tubs of shrubs round the deck edge (Brian's stills 4:26-4:57)
+      { const DH = 0.35, dx0 = -25.5, dx1 = -22.3, dy0 = -18.2, dy1 = -6.5;
+        add('paving', merge([boxGeo(dx1 - dx0, dy1 - dy0, DH, (dx0 + dx1) / 2, (dy0 + dy1) / 2, 0, 0), boxGeo(-25.5 - (-32.6), 1.2, DH, -29.05, -17.6, 0, 0)]), 'deck', { en: 'Coffee shop deck', th: 'ชานไม้ร้านกาแฟ', tag: 'Coffee shop deck', tagTh: 'ชานไม้ร้านกาแฟ', kind: 'building',
+          info: lines(['Raised dark timber deck along the forecourt side and the front of the coffee shop, about 0.35 m high with a step, under the red awning (Brian\'s stills, video 4:37-4:57).', AP.en], ['ชานไม้สีเข้มยกระดับตามด้านลานจอดและด้านหน้าร้านกาแฟ สูงประมาณ 0.35 ม. มีขั้นบันได อยู่ใต้กันสาดสีแดง (ภาพของ Brian วิดีโอ 4:37-4:57)', AP.th], AC) }, V(-23.9, -12, 1.2));
+        add('paving', boxGeo(0.4, dy1 - dy0 - 2, 0.17, dx1 + 0.2, (dy0 + dy1) / 2 + 1, 0, 0), 'deck', { en: 'Deck step', th: 'ขั้นบันไดชาน', nopick: 1 });
+        add('buildings', boxGeo(dx1 - dx0 + 0.3, dy1 - dy0, 0.2, (dx0 + dx1) / 2 + 0.15, (dy0 + dy1) / 2, 2.9, 0), 'signPanel', { en: 'Coffee shop awning (red)', th: 'กันสาดร้านกาแฟ (สีแดง)', kind: 'building',
+          info: lines(['Red awning roof reaching out from the coffee shop over the deck on its forecourt side (Brian\'s stills, video 4:37-4:57). Height and reach judged from the stills.', AP.en], ['กันสาดสีแดงยื่นจากร้านกาแฟคลุมชานไม้ด้านลานจอด (ภาพของ Brian วิดีโอ 4:37-4:57) ความสูงและระยะยื่นประมาณจากภาพ', AP.th], AC) });
+        add('buildings', merge([dy0 + 0.2, (dy0 + dy1) / 2, dy1 - 0.2].map((y) => boxGeo(0.12, 0.12, 2.9 - DH, dx1 - 0.1, y, DH, 0))), 'signDark', { en: 'Awning posts', th: 'เสากันสาด', nopick: 1 });
+        const tubs = [];
+        for (let y = dy0 + 0.6; y < dy1 - 0.4; y += 1.8) tubs.push([dx1 - 0.3, y]);
+        for (let x = -32.0; x < dx0; x += 1.6) tubs.push([x, dy0 + 0.3]);
+        add('paving', merge(tubs.map(([x, y]) => boxGeo(0.5, 0.9, 0.45, x, y, DH, 0))), 'planterTub', { en: 'Planter tubs', th: 'กระถางคอนกรีต', kind: 'building',
+          info: lines(['Small white concrete tubs with shrubs round the edge of the coffee-shop deck (Brian\'s stills). Number and places approximate.', AP.en], ['กระถางคอนกรีตสีขาวขนาดเล็กปลูกไม้พุ่มรอบขอบชานไม้ร้านกาแฟ (ภาพของ Brian) จำนวนและตำแหน่งโดยประมาณ', AP.th], AC) });
+        add('paving', merge(tubs.map(([x, y]) => boxGeo(0.55, 0.95, 0.4, x, y, DH + 0.45, 0))), 'hedge', { en: 'Shrubs', th: 'ไม้พุ่ม', nopick: 1 }); }
+      // kerbed centre island between the entrance and the exit, with grass, the price sign and the IN sign (Brian's stills,
+      // video 3:52-4:17)
+      { const iy0 = F + 0.35, iy1 = iy0 + 3.2, IH = 0.2;
+        add('paving', boxGeo(ISL[1] - ISL[0], iy1 - iy0, IH - 0.02, (ISL[0] + ISL[1]) / 2, (iy0 + iy1) / 2, 0, 0), 'grass', { en: 'Centre island', th: 'เกาะกลางระหว่างทางเข้าและทางออก', tag: 'Centre island', tagTh: 'เกาะกลาง', kind: 'building',
+          info: lines(['Raised island between the entrance and the exit, with grass, banners, the price sign and the IN sign, and a red-and-white kerb (Brian\'s stills, video 3:52-4:17). Size approximate (Brian: exact size not important).', AP.en], ['เกาะยกระดับระหว่างทางเข้าและทางออก มีหญ้า ป้ายธง ป้ายราคา และป้ายทางเข้า ขอบคันหินทาสีแดงขาว (ภาพของ Brian วิดีโอ 3:52-4:17) ขนาดโดยประมาณ', AP.th], AC) }, V(-9, iy1 - 0.5, 1.5));
+        const k = [boxGeo(ISL[1] - ISL[0], 0.15, IH, (ISL[0] + ISL[1]) / 2, iy0 + 0.075, 0, 0), boxGeo(ISL[1] - ISL[0], 0.15, IH, (ISL[0] + ISL[1]) / 2, iy1 - 0.075, 0, 0), boxGeo(0.15, iy1 - iy0, IH, ISL[0] + 0.075, (iy0 + iy1) / 2, 0, 0), boxGeo(0.15, iy1 - iy0, IH, ISL[1] - 0.075, (iy0 + iy1) / 2, 0, 0)];
+        add('paving', merge(k), 'kerbRed', { en: 'Kerb: centre island (red and white)', th: 'ขอบคันหินเกาะกลาง (แดงขาว)', nopick: 1 });
+        // price sign at the entrance end: grey base with the electrical boxes, tall panel with the price digits
+        const px = ISL[0] + 1.4, py = (iy0 + iy1) / 2;
+        add('buildings', boxGeo(1.5, 0.8, 1.2, px, py, IH, 0), 'column', { en: 'Price sign base', th: 'ฐานป้ายราคา', nopick: 1 });
+        add('buildings', boxGeo(1.3, 0.4, 4.8, px, py, IH + 1.2, 0), 'signPanel', { en: 'Price sign', th: 'ป้ายราคาน้ำมัน', tag: 'Price sign', tagTh: 'ป้ายราคา', kind: 'building',
+          info: lines(['Caltex price sign at the entrance end of the centre island: a tall panel (Caltex, Techron, Havoline, starcard and the fuel prices) on a grey base with electrical boxes (Brian\'s stills, video 4:13-4:17). Height about 6 m, judged from the stills.', AP.en], ['ป้ายราคาน้ำมัน Caltex ที่ปลายเกาะกลางฝั่งทางเข้า: แผงป้ายสูง (Caltex, Techron, Havoline, starcard และราคาน้ำมัน) บนฐานสีเทามีตู้ไฟฟ้า (ภาพของ Brian วิดีโอ 4:13-4:17) สูงประมาณ 6 ม. ประมาณจากภาพ', AP.th], AC) }, V(px, py, 6.8));
+        add('buildings', boxGeo(1.32, 0.42, 1.2, px, py, IH + 4.8, 0), 'signDark', { en: 'Price sign head (Caltex)', th: 'หัวป้าย Caltex', nopick: 1 });
+        // IN sign at the entrance corner of the island
+        add('buildings', merge([boxGeo(0.9, 0.12, 1.3, ISL[0] + 0.5, iy0 + 0.5, IH + 0.3, 0), boxGeo(0.08, 0.08, 0.35, ISL[0] + 0.5, iy0 + 0.5, IH, 0)]), 'signDark', { en: 'IN sign (entrance)', th: 'ป้ายทางเข้า (IN)', tag: 'IN sign', tagTh: 'ป้ายทางเข้า', kind: 'building',
+          info: lines(['Low blue "IN" sign with the Caltex logo and an arrow at the entrance corner of the centre island (Brian\'s stills, video 4:17).', AP.en], ['ป้ายทางเข้าสีน้ำเงินแบบเตี้ย มีโลโก้ Caltex และลูกศร ที่มุมเกาะกลางฝั่งทางเข้า (ภาพของ Brian วิดีโอ 4:17)', AP.th], AC) }, V(ISL[0] + 0.5, iy0 + 0.5, 2.3)); }
       // drive-through entry (Brian's stills, video 1:09): kerbed island on the west side of the entry, ending in a curve at the
       // height limiter; the lane between it and the KFC kerb is about 4 m
       { const k = [boxGeo(0.3, 5.6, KH, -32.75, 18.2, 0, 0), boxGeo(0.3, 5.6, KH, -33.35, 18.2, 0, 0)], pts = [];
