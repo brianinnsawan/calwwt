@@ -104,7 +104,9 @@ Nothing is shared with calnkt: own logins, own databases, own file storage.
   1750), also on the site pages as layouts; details in tools/models/README.md. 1156 (26 Nov 2026, Brian): 3 fuel tanks parallel
   to the road, one with two compartments; 3-chamber oil traps at both outlets; KFC grease trap 1 tank / 4 lids, treatment
   tank 1 tank / 5 lids (maybe 2 + 3) under the lane behind KFC after (west of) the grease trap, pump room midway along KFC; the box
-  at the west end of KFC is the garbage building (about 2.5 m), and there is no order-point hut. The drive-through comes out between KFC (east wall x -4) and the toilets (west wall x 3.9):
+  first drawn at the west end of KFC is the ORDER POINT (roof, menu boards, kerbed walkway), not a garbage building (Brian,
+  26 Nov 2026); 2.0 m height limiter at the lane entry; PAY HERE booth behind KFC after the pump room; red DRIVE THRU tower at
+  the KFC front-west corner. One garbage room only, by the toilets. The drive-through comes out between KFC (east wall x -4) and the toilets (west wall x 3.9):
   KFC sidewalk 1.2 m + 15 cm kerb, lane 4.0 m, toilet walkway 2.4 m + 15 cm kerb (40 cm tiles); pick-up window with roof on the KFC side.
 - Kerbs, walkways and parking go in the shared layer "paving" (materials walkway, kerbYellow, kerbRed, kerbPlain, bayLine,
   bayEV, grass in style.mjs); first used at 1156 (estimated from the video, 26 Nov 2026).

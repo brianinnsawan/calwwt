@@ -12,7 +12,10 @@
 //        pump the water towards the front of the station into the U-drain further along;
 //      - (26 Nov 2026) the grease trap is one large tank with 4 lids; the treatment tank is one large tank with 5 lids (or
 //        possibly two, with 2 and 3 lids: not sure); the room with the pumps is about midway along the KFC building;
-//      - (26 Nov 2026, markups) the treatment tank is under the lane behind KFC, after (west of) the grease trap; the box at the west end of KFC is the garbage building, about 2.5 m tall; there is no order-point hut.
+//      - (26 Nov 2026, markups) the treatment tank is under the lane behind KFC, after (west of) the grease trap; (26 Nov 2026, Brian's stills) the drive-through runs: entry at the
+//        front-west corner under a 2 m height limiter, north along the west side past the order point (roof, menu boards,
+//        kerbed island), east behind KFC past the tanks, the grease trap and the pump room to the PAY HERE booth, then south
+//        between KFC and the toilets past the pick-up window. The box first drawn at the west end of KFC was the order point.
 //      - behind KFC, where the grease trap is, a rolling door opens to the room with the air pumps and controls;
 //      - a small garbage room next to the toilets, on the exit side of the drive-through;
 //      - the toilets have a solids (septic) tank between the building and the back firewall, and an aeration tank on the
@@ -49,6 +52,8 @@ export default {
     { id: 'site', from: [-10, -72, 46], to: [-10, 6, 0] },
     { id: 'plan', from: [-10, 4.9, 120], to: [-10, 5, 0] },
     { id: 'kfc', en: 'KFC tanks and pump sump (drive-through lane)', th: 'ถัง KFC และบ่อสูบ (ช่องทางไดรฟ์ทรู)', from: [-30, 20, 12], to: [-18, 34, -1] },
+    { id: 'entry', en: 'Drive-through entry: height limiter and order point', th: 'ทางเข้าไดรฟ์ทรู: โครงจำกัดความสูงและจุดสั่งอาหาร', from: [-37.5, 16.5, 5.0], to: [-29.5, 26.0, 1.5] },
+    { id: 'pay', en: 'Behind KFC: pump room and pay window', th: 'หลัง KFC: ห้องปั๊มและช่องชำระเงิน', from: [-18.5, 35.8, 4.2], to: [-8.0, 33.6, 1.4] },
     { id: 'drive', en: 'Drive-through exit: pick-up window and toilets', th: 'ทางออกไดรฟ์ทรู: ช่องรับสินค้าและห้องน้ำ', from: [-0.5, 10.5, 6.5], to: [1.5, 27, 1.2] },
     { id: 'toilets', en: 'Toilet tanks (solids tank and aeration tank)', th: 'ถังของห้องน้ำ (ถังแยกกากและถังเติมอากาศ)', from: [-2, 14, 12], to: [9, 29, -1] },
     { id: 'sales', en: 'Mini Big C tank and exit-side oil trap', th: 'ถังของมินิบิ๊กซีและบ่อดักน้ำมันฝั่งทางออก', from: [-4, -42, 13], to: [12, -20, -1] },
@@ -251,10 +256,10 @@ export default {
       o.tag ? V(poly.reduce((s, p) => s + p[0], 0) / poly.length, poly.reduce((s, p) => s + p[1], 0) / poly.length, floor + h + 0.7) : null);
     const rect = (x0, y0, x1, y1) => [[x0, y0], [x1, y0], [x1, y1], [x0, y1]];
     building(rect(-28.0, 22.0, -4.0, 32.5), 0.15, 5.5, 'building', { en: 'KFC drive-through restaurant', th: 'ร้าน KFC (ไดรฟ์ทรู)', tag: 'KFC', tagTh: 'KFC',
-      lines: ['Restaurant at the back-left of the site, with the drive-through lane round its west side and behind it (garbage building at the west end; the lane comes out between KFC and the toilets, past the pick-up window on the east side of KFC). The grease trap and the rolling door to the pump room (about midway along the back) are behind it.'],
+      lines: ['Restaurant at the back-left of the site, with the drive-through lane round its west side and behind it (order point on the west side, PAY HERE booth at the back after the pump room, pick-up window on the east side; the lane comes out between KFC and the toilets). Red DRIVE THRU tower at the front-west corner.'],
       linesTh: ['ร้านอาหารที่มุมหลังซ้ายของสถานี ช่องทางไดรฟ์ทรูอ้อมด้านตะวันตกและด้านหลัง (จุดสั่งที่ปลายด้านตะวันตก ช่องจ่ายเงินและรับสินค้าที่ปลายด้านตะวันออก) ถังดักไขมันและประตูม้วนห้องเครื่องเป่าลมอยู่ด้านหลัง'] });
-    building(rect(-31.0, 22.0, -28.0, 25.0), 0.15, 2.5, 'building', { en: 'Garbage building (west end of KFC)', th: 'อาคารขยะ (ปลายด้านตะวันตกของ KFC)', tag: 'Garbage building', tagTh: 'อาคารขยะ',
-      lines: ['Garbage building at the west end of KFC, about 2.5 m tall (Brian, 26 Nov 2026). Outline from the satellite image.'], linesTh: ['อาคารขยะที่ปลายด้านตะวันตกของ KFC สูงประมาณ 2.5 ม. (ตาม Brian 26 พ.ย. 2026) แนวอาคารจากภาพถ่ายดาวเทียม'] });
+    building(rect(-28.0, 22.0, -26.6, 23.4), 0.15, 9.0, 'signPanel', { en: 'KFC "DRIVE THRU" tower', th: 'หอป้าย "DRIVE THRU" ของ KFC',
+      lines: ['Red tower with the DRIVE THRU sign at the front-west corner of KFC (video 1:09). Height judged from the video.'], linesTh: ['หอสีแดงมีป้าย DRIVE THRU ที่มุมหน้าด้านตะวันตกของ KFC (วิดีโอ 1:09) ความสูงประมาณจากวิดีโอ'] });
     // toilets (Brian's photos and video 2:14, 2:43): white-clad walls, open front onto the tiled walkway along the drive-through
     // lane, red slatted screens at the men's (north) and women's (south) entrances, the disabled toilet between them, sink
     // counters inside, flat roof with a red edge. Layout inside judged from the video; sizes approximate.
@@ -315,10 +320,10 @@ export default {
         }
         if (k.length) add('paving', merge(k), kerb, { en: `Kerb: ${en}`, th: `ขอบคันหิน: ${th}`, nopick: 1 });
       };
-      walk(-28.0, 20.7, -4.0, 22.0, ['s'], 'kerbYellow', 'Walkway along the front of KFC', 'ทางเดินด้านหน้า KFC',
+      walk(-29.3, 20.7, -4.0, 22.0, ['s', 'w'], 'kerbYellow', 'Walkway along the front of KFC', 'ทางเดินด้านหน้า KFC',
         ['Raised walkway along the front of KFC with a yellow-and-black kerb; motorbikes park on it (video 1:09).'], ['ทางเดินยกระดับด้านหน้า KFC ขอบคันหินทาสีเหลืองดำ มีรถจักรยานยนต์จอดอยู่ (วิดีโอ 1:09)']);
-      walk(-28.7, 25.0, -28.0, 32.5, ['w'], 'kerbYellow', 'Kerb along the drive-through side of KFC', 'ขอบคันหินด้านไดรฟ์ทรูของ KFC',
-        ['Narrow raised strip with a yellow-and-black kerb along the west side of KFC, at the order point (video 1:31).'], ['แนวยกระดับแคบ ขอบคันหินทาสีเหลืองดำ ตามด้านตะวันตกของ KFC ที่จุดสั่งอาหาร (วิดีโอ 1:31)']);
+      walk(-29.3, 22.0, -28.0, 32.5, ['w'], 'kerbYellow', 'Kerbed walkway along the drive-through side of KFC', 'ทางเดินขอบคันหินด้านไดรฟ์ทรูของ KFC',
+        ['Raised walkway with a yellow-and-black kerb along the west side of KFC, round the corner from the front walkway; the order point stands on it (Brian\'s stills, video 1:09-1:34).'], ['ทางเดินยกระดับ ขอบคันหินทาสีเหลืองดำ ตามด้านตะวันตกของ KFC ต่อจากทางเดินด้านหน้า จุดสั่งอาหารตั้งอยู่บนนี้ (ภาพของ Brian วิดีโอ 1:09-1:34)']);
       // the drive-through lane comes out between KFC and the toilets: KFC sidewalk 3 rows of 40 cm tiles + 15 cm kerb, lane
       // 4.0 m, toilet walkway 6 rows of 40 cm tiles + 15 cm kerb (Brian, 26 Nov 2026)
       walk(-4.0, 20.7, -2.65, 32.5, ['e', 's'], 'kerbYellow', 'Sidewalk along the drive-through side of KFC', 'ทางเท้าด้านไดรฟ์ทรูของ KFC',
@@ -346,22 +351,58 @@ export default {
       // planter along the front of the coffee shop (video 0:07-0:17; Brian's photo)
       add('paving', boxGeo(6.0, 0.9, 0.5, -29.0, -17.6, 0, 0), 'grass', { en: 'Planter in front of the coffee shop', th: 'กระบะต้นไม้หน้าร้านกาแฟ', kind: 'building',
         info: lines(['Low planter with shrubs along the front of the coffee shop (video 0:07, Brian\'s photo).', AP.en], ['กระบะต้นไม้เตี้ยหน้าร้านกาแฟ (วิดีโอ 0:07 และภาพของ Brian)', AP.th], AC) });
-      // drive-through lane entry: curved yellow-and-black kerb island west of KFC (video 1:09)
-      { const pts = []; for (let i = 0; i <= 8; i++) { const t = (i / 8) * Math.PI / 2; pts.push([-28.0 - 3.2 * (1 - Math.cos(t)), 20.7 - 3.2 * Math.sin(t)]); }
-        const k = []; for (let i = 1; i < pts.length; i++) { const [ax, ay] = pts[i - 1], [bx, by] = pts[i]; k.push(boxGeo(Math.hypot(bx - ax, by - ay) + 0.05, 0.3, KH, (ax + bx) / 2, (ay + by) / 2, 0, Math.atan2(by - ay, bx - ax) * 180 / Math.PI)); }
-        add('paving', merge(k), 'kerbYellow', { en: 'Kerb at the drive-through entry', th: 'ขอบคันหินที่ทางเข้าไดรฟ์ทรู', kind: 'building',
-          info: lines(['Curved yellow-and-black kerb at the corner of KFC where the drive-through lane starts (video 1:09). Shape approximate.', AP.en], ['ขอบคันหินโค้งทาสีเหลืองดำที่มุม KFC ตรงทางเข้าไดรฟ์ทรู (วิดีโอ 1:09) รูปร่างโดยประมาณ', AP.th], AC) }); }
-      // parking bays along the west wall between the coffee shop and KFC: an air-pump bay, two blue EV bays, then six bays
+      // drive-through entry (Brian's stills, video 1:09): kerbed island on the west side of the entry, ending in a curve at the
+      // height limiter; the lane between it and the KFC kerb is about 4 m
+      { const k = [boxGeo(0.3, 5.6, KH, -32.75, 18.2, 0, 0), boxGeo(0.3, 5.6, KH, -33.35, 18.2, 0, 0)], pts = [];
+        for (let i = 0; i <= 8; i++) { const t = Math.PI * i / 8; pts.push([-33.05 + 0.3 * Math.cos(t), 21.0 + 0.3 * Math.sin(t)]); }
+        for (let i = 1; i < pts.length; i++) { const [ax, ay] = pts[i - 1], [bx, by] = pts[i]; k.push(boxGeo(Math.hypot(bx - ax, by - ay) + 0.05, 0.3, KH, (ax + bx) / 2, (ay + by) / 2, 0, Math.atan2(by - ay, bx - ax) * 180 / Math.PI)); }
+        add('paving', merge(k), 'kerbYellow', { en: 'Kerbed island at the drive-through entry', th: 'เกาะขอบคันหินที่ทางเข้าไดรฟ์ทรู', kind: 'building',
+          info: lines(['Narrow yellow-and-black kerbed island along the west wall at the drive-through entry, ending in a round end at the height limiter (Brian\'s stills, video 1:09). Shape approximate.', AP.en], ['เกาะขอบคันหินแคบทาสีเหลืองดำตามกำแพงด้านตะวันตกที่ทางเข้าไดรฟ์ทรู ปลายโค้งที่โครงจำกัดความสูง (ภาพของ Brian วิดีโอ 1:09) รูปร่างโดยประมาณ', AP.th], AC) });
+        add('paving', boxGeo(0.3, 5.8, 0.02, -33.05, 18.2, KH, 0), 'walkway', { en: 'Island top', th: 'ผิวเกาะ', nopick: 1 }); }
+      // height limiter across the entry: clear height 2.0 m (Brian), red "DRIVE THRU" sign on top, yellow-and-black bars
+      { const LIM = 2.0, gy = 21.2, gx0 = -33.05, gx1 = -28.65;
+        add('buildings', merge([boxGeo(0.2, 0.2, LIM + 0.25, gx0, gy, 0.15, 0), boxGeo(0.2, 0.2, LIM + 0.25, gx1, gy, 0.15, 0), boxGeo(gx1 - gx0 + 0.2, 0.2, 0.2, (gx0 + gx1) / 2, gy, 0.15 + LIM, 0)]), 'signDark',
+          { en: 'Drive-through height limiter (2.0 m)', th: 'โครงจำกัดความสูงไดรฟ์ทรู (2.0 ม.)', tag: 'Height limiter 2.0 m', tagTh: 'จำกัดความสูง 2.0 ม.', kind: 'building',
+            info: lines(['Steel height-limiter frame across the drive-through entry, about 2.0 m clear (Brian, 26 Nov 2026), with the red "ช่องบริการ DRIVE THRU" sign on top and yellow-and-black bars hanging below (Brian\'s stills, video 1:09). Width judged from the stills.'],
+              ['โครงเหล็กจำกัดความสูงคร่อมทางเข้าไดรฟ์ทรู สูงโล่งประมาณ 2.0 ม. (ตาม Brian 26 พ.ย. 2026) มีป้ายสีแดง "ช่องบริการ DRIVE THRU" ด้านบน และแผงเหลืองดำห้อยด้านล่าง (ภาพของ Brian วิดีโอ 1:09) ความกว้างประมาณจากภาพ'], AC) }, V((gx0 + gx1) / 2, gy, 3.3));
+        add('buildings', boxGeo(gx1 - gx0 - 0.6, 0.12, 0.55, (gx0 + gx1) / 2 + 0.3, gy, 0.15 + LIM + 0.2, 0), 'signPanel', { en: 'DRIVE THRU sign', th: 'ป้าย DRIVE THRU', nopick: 1 });
+        add('paving', merge([boxGeo(1.4, 0.05, 0.12, (gx0 + gx1) / 2 - 0.8, gy, 0.15 + LIM - 0.14, 0), boxGeo(1.0, 0.05, 0.12, (gx0 + gx1) / 2 + 0.9, gy, 0.15 + LIM - 0.14, 0)]), 'kerbYellow', { en: 'Hanging yellow-and-black bars', th: 'แผงเหลืองดำห้อย', nopick: 1 }); }
+      // order point on the west side of KFC: flat roof out over the lane, menu boards and speaker post, bollards at its south
+      // end (Brian's stills, video 1:31-1:34)
+      { const ox = -28.0, oy0 = 25.3, oy1 = 28.1;
+        add('buildings', boxGeo(2.8, oy1 - oy0, 0.25, ox - 1.4, (oy0 + oy1) / 2, 3.0, 0), 'roof', { en: 'KFC order point (ORDER HERE)', th: 'จุดสั่งอาหาร KFC (ORDER HERE)', tag: 'Order point', tagTh: 'จุดสั่งอาหาร', kind: 'building',
+          info: lines(['Drive-through order point on the west side of KFC: a flat roof out from the KFC wall over the lane with the "ORDER HERE" sign, two menu boards and the speaker post on the kerbed walkway, bollards at its south end (Brian\'s stills, video 1:31-1:34). This is what the box at the west end of KFC was meant to be. Sizes judged from the stills.'],
+            ['จุดสั่งอาหารไดรฟ์ทรูด้านตะวันตกของ KFC: หลังคาแบนยื่นจากผนัง KFC คลุมช่องทาง มีป้าย "ORDER HERE" ป้ายเมนู 2 แผ่นและเสาลำโพงบนทางเดินขอบคันหิน มีเสากันชนที่ปลายด้านใต้ (ภาพของ Brian วิดีโอ 1:31-1:34) กล่องที่ปลายด้านตะวันตกของ KFC เดิมคือจุดนี้ ขนาดประมาณจากภาพ'], AC) }, V(ox - 1.4, (oy0 + oy1) / 2, 4.0));
+        add('buildings', merge([boxGeo(0.15, 0.15, 2.85, ox - 0.9, oy0 + 0.3, 0.15, 0), boxGeo(0.15, 0.15, 2.85, ox - 0.9, oy1 - 0.3, 0.15, 0)]), 'signDark', { en: 'Order point posts', th: 'เสาจุดสั่งอาหาร', nopick: 1 });
+        add('buildings', boxGeo(0.1, 2.2, 0.5, ox - 2.7, (oy0 + oy1) / 2, 2.5, 0), 'signDark', { en: 'ORDER HERE sign', th: 'ป้าย ORDER HERE', nopick: 1 });
+        add('buildings', merge([boxGeo(0.12, 1.1, 1.8, ox - 1.15, oy0 + 0.9, 0.35, 0), boxGeo(0.12, 0.9, 1.0, ox - 1.15, oy0 + 2.0, 1.1, 0), boxGeo(0.25, 0.3, 1.2, ox - 1.15, oy1 - 0.1, 0.15, 0)]), 'signDark', { en: 'Menu boards and speaker post', th: 'ป้ายเมนูและเสาลำโพง', nopick: 1 });
+        add('paving', merge([24.0, 24.5, 25.0].map((y, k) => cylGeo(0.1, 1.0, -29.0 + (k === 1 ? 0.35 : 0), y, 0.15, 12))), 'kerbYellow', { en: 'Bollards (yellow and black)', th: 'เสากันชน (เหลืองดำ)', nopick: 1 });
+        add('paving', merge([boxGeo(2.6, 0.12, 0.01, -31.3, 24.4, 0.005, 0), boxGeo(2.6, 0.12, 0.01, -31.3, 28.6, 0.005, 0), boxGeo(0.12, 4.2, 0.01, -32.6, 26.5, 0.005, 0)]), 'kerbYellow', { en: 'Painted stop box at the order point', th: 'กรอบจอดทาสีที่จุดสั่งอาหาร', nopick: 1 }); }
+      // PAY HERE booth behind KFC, after the grease trap and the pump room: red booth against the back wall with its window
+      // facing the lane, flat roof over the lane with the "PAY HERE" sign, air-conditioner condensers before it, kerbed strip
+      // along the back wall (Brian's stills, video 2:00-2:09)
+      { const px0 = -9.4, px1 = -7.4, py0 = 32.5, py1 = 33.7;
+        add('buildings', boxGeo(px1 - px0, py1 - py0, 2.5, (px0 + px1) / 2, (py0 + py1) / 2, 0.15, 0), 'signPanel', { en: 'KFC PAY HERE booth', th: 'ช่องชำระเงิน KFC (PAY HERE)', tag: 'Pay window', tagTh: 'ช่องชำระเงิน', kind: 'building',
+          info: lines(['Red PAY HERE booth against the back wall of KFC, after the grease trap and the pump room (Brian, 26 Nov 2026; video 2:00-2:09). Its window faces the lane; a flat roof with the "PAY HERE" sign reaches over the lane. The air-conditioner condensers stand just before it. Size judged from the stills.'],
+            ['ช่องชำระเงินสีแดงชิดผนังด้านหลัง KFC ถัดจากถังดักไขมันและห้องปั๊ม (ตาม Brian 26 พ.ย. 2026 วิดีโอ 2:00-2:09) หน้าต่างหันไปช่องทาง หลังคาแบนมีป้าย "PAY HERE" ยื่นคลุมช่องทาง เครื่องระบายความร้อนแอร์ตั้งอยู่ก่อนถึงช่องนี้ ขนาดประมาณจากภาพ'], AC) }, V((px0 + px1) / 2, py1, 3.4));
+        add('buildings', boxGeo(1.3, 0.05, 0.9, (px0 + px1) / 2, py1 + 0.03, 1.1, 0), 'signDark', { en: 'Pay window glass', th: 'กระจกช่องชำระเงิน', nopick: 1 });
+        add('buildings', boxGeo(4.2, 3.0, 0.22, (px0 + px1) / 2 - 0.4, 34.0, 2.95, 0), 'roof', { en: 'Roof over the pay window', th: 'หลังคาช่องชำระเงิน', nopick: 1 });
+        add('buildings', boxGeo(0.08, 2.0, 0.45, px0 - 1.45, 34.4, 2.45, 0), 'signDark', { en: 'PAY HERE sign', th: 'ป้าย PAY HERE', nopick: 1 });
+        add('buildings', merge([-12.6, -11.5, -10.4].map((x) => boxGeo(0.95, 0.8, 1.8, x, 33.0, 0.15, 0))), 'fixture', { en: 'Air-conditioner condensers', th: 'คอยล์ร้อนเครื่องปรับอากาศ', kind: 'building',
+          info: lines(['Three large air-conditioner condensers against the back wall of KFC, just before the PAY HERE booth (video 2:09).', AP.en], ['คอยล์ร้อนเครื่องปรับอากาศขนาดใหญ่ 3 เครื่องชิดผนังด้านหลัง KFC ก่อนถึงช่องชำระเงิน (วิดีโอ 2:09)', AP.th], AC) });
+        walk(-13.2, 32.5, -4.0, 33.5, ['n'], 'kerbYellow', 'Kerbed strip along the back of KFC', 'แนวขอบคันหินด้านหลัง KFC',
+          ['Raised strip with a yellow-and-black kerb along the back wall of KFC from the pump room past the PAY HERE booth (video 2:00-2:09).'], ['แนวยกระดับ ขอบคันหินทาสีเหลืองดำ ตามผนังด้านหลัง KFC จากห้องปั๊มผ่านช่องชำระเงิน (วิดีโอ 2:00-2:09)']); }
+      // parking bays along the west wall between the coffee shop and KFC: an air-pump bay, two blue EV bays, then five bays
       const BX0 = X0 + 0.6, BX1 = BX0 + 5.0, lineAt = [], bays = [];
       const bay = (y0, y1, kind) => { bays.push([y0, y1, kind]); lineAt.push(y0, y1); };
       bay(-5.4, -2.9, 'air'); bay(-2.9, -0.4, 'ev'); bay(-0.4, 2.1, 'ev');
-      for (let i = 0; i < 6; i++) bay(2.1 + i * 2.5, 4.6 + i * 2.5, 'car');
+      for (let i = 0; i < 5; i++) bay(2.1 + i * 2.5, 4.6 + i * 2.5, 'car');
       for (const [y0, y1, kind] of bays) if (kind === 'ev') add('paving', boxGeo(BX1 - BX0, y1 - y0 - 0.1, 0.01, (BX0 + BX1) / 2, (y0 + y1) / 2, 0.005, 0), 'bayEV', { en: 'EV parking bay (blue)', th: 'ช่องจอดรถยนต์ไฟฟ้า (สีฟ้า)', nopick: 1 });
       const ls = [...new Set(lineAt)].map((y) => boxGeo(BX1 - BX0, 0.1, 0.012, (BX0 + BX1) / 2, y, 0.005, 0));
       ls.push(boxGeo(0.1, bays[bays.length - 1][1] - bays[0][0], 0.012, BX1, (bays[0][0] + bays[bays.length - 1][1]) / 2, 0.005, 0));
       add('paving', merge(ls), 'bayLine', { en: 'Parking bays along the west wall', th: 'ช่องจอดรถตามกำแพงด้านตะวันตก', kind: 'building',
-        info: lines(['Parking bays against the west wall between the coffee shop and KFC (Brian): an air-pump bay ("AIR PUMP" painted), two blue EV bays at the chargers (video 0:36, 0:58), then about six car bays. Each bay shown 2.5 × 5.0 m; number and size approximate.', AP.en],
-          ['ช่องจอดรถชิดกำแพงด้านตะวันตกระหว่างร้านกาแฟกับ KFC (ตาม Brian): ช่องปั๊มลม (มีคำว่า AIR PUMP) ช่องจอดรถยนต์ไฟฟ้าสีฟ้า 2 ช่องที่เครื่องชาร์จ (วิดีโอ 0:36, 0:58) และช่องจอดรถประมาณ 6 ช่อง แต่ละช่องแสดงขนาด 2.5 × 5.0 ม. จำนวนและขนาดโดยประมาณ', AP.th], AC) });
+        info: lines(['Parking bays against the west wall between the coffee shop and KFC (Brian): an air-pump bay ("AIR PUMP" painted), two blue EV bays at the chargers (video 0:36, 0:58), then about five car bays up to the kerbed island at the drive-through entry. Each bay shown 2.5 × 5.0 m; number and size approximate.', AP.en],
+          ['ช่องจอดรถชิดกำแพงด้านตะวันตกระหว่างร้านกาแฟกับ KFC (ตาม Brian): ช่องปั๊มลม (มีคำว่า AIR PUMP) ช่องจอดรถยนต์ไฟฟ้าสีฟ้า 2 ช่องที่เครื่องชาร์จ (วิดีโอ 0:36, 0:58) และช่องจอดรถประมาณ 5 ช่องจนถึงเกาะขอบคันหินที่ทางเข้าไดรฟ์ทรู แต่ละช่องแสดงขนาด 2.5 × 5.0 ม. จำนวนและขนาดโดยประมาณ', AP.th], AC) });
       // public footpath outside the front boundary, with a red-and-white kerb at the road (Brian's photo; video 4:10)
       add('surroundings', boxGeo(X1 - X0 + 8, 2.4, 0.30, (X0 + X1) / 2, Y0 - 1.2, -0.20, 0), 'walkway', { en: 'Public footpath along the road', th: 'ทางเท้าสาธารณะริมถนน', kind: 'building',
         info: lines(['Public footpath between the station and the road, about 2.4 m wide, with a red-and-white painted kerb at the road edge (Brian\'s photo; video 4:10).', AP.en], ['ทางเท้าสาธารณะระหว่างสถานีกับถนน กว้างประมาณ 2.4 ม. ขอบคันหินทาสีแดงขาวที่ริมถนน (ภาพของ Brian และวิดีโอ 4:10)', AP.th], AC) });
