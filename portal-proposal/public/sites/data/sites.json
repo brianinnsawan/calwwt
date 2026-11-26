@@ -111,7 +111,8 @@
      "en": "LAY-SN-101 Drainage layout (layout set)",
      "th": "LAY-SN-101 ผังบริเวณระบบระบายน้ำ (ชุดผังบริเวณ)",
      "source": "LAY-OUT/PDF/SN-LAYOUT.pdf, sheet LAY-SN-101"
-    }
+    },
+    {"file": "1588/1588-biotech-tank-spec-2019", "en": "Biotech tank spec pack approved for Porto Go (Aug 2019): BG-600 grease trap, BO-1000 / BO-4000 / BO-6000 treatment tanks, BO-R-7500 lying tank; page 5 shown", "th": "เอกสารสเปกถัง Biotech ที่อนุมัติสำหรับ Porto Go (ส.ค. 2019): ถังดักไขมัน BG-600 ถังบำบัด BO-1000 / BO-4000 / BO-6000 และถังแบบนอน BO-R-7500 แสดงหน้า 5", "source": "Contract BOQ / Porto Go / Material Spec / Water Tank & Septic Tank (no prices)"}
    ],
    "sampledLabel": {
     "en": "20–21 Nov 2026",
@@ -309,7 +310,10 @@
      "en": "GN-SEP-01 Grease trap, 3 compartments",
      "th": "GN-SEP-01 แบบบ่อดักไขมัน 3 ตอน",
      "source": "แบบAs-BUILTS/General Drawing"
-    }
+    },
+    {"file": "1703/1703-KFC-ME-03-kfc-tanks", "en": "KFC-ME-03 KFC tanks and grease traps (as-built 2021): DOS LITETITE DLFS-15Q(N), 2× DOS SGT-07/BK-5000L, DOS OK ST-24/BK-1600L", "th": "KFC-ME-03 ถังบำบัดและถังดักไขมัน KFC (แบบก่อสร้างจริง 2021): DOS LITETITE DLFS-15Q(N), DOS SGT-07/BK-5000L 2 ใบ, DOS OK ST-24/BK-1600L", "source": "แบบAs-BUILTS/KFC/ME/PDF"},
+    {"file": "1703/1703-KFC-ME-04-kfc-waste-positions", "en": "KFC-ME-04 KFC waste system positions (as-built 2021)", "th": "KFC-ME-04 ตำแหน่งระบบน้ำเสีย KFC (แบบก่อสร้างจริง 2021)", "source": "แบบAs-BUILTS/KFC/ME/PDF"},
+    {"file": "1703/1703-TOI-ME-01-toilet-sanitary", "en": "TOI-ME-01 Toilet building sanitary plan (as-built 2021)", "th": "TOI-ME-01 ผังสุขาภิบาลอาคารห้องน้ำ (แบบก่อสร้างจริง 2021)", "source": "แบบAs-BUILTS/TOILET/ME/PDF"}
    ],
    "lat": 13.7075911,
    "lng": 100.7368988,
@@ -349,7 +353,10 @@
      "en": "LAY-ST-03 Site levels (SPP as-built, 2022)",
      "th": "LAY-ST-03 ผังบริเวณแสดงค่าระดับโครงการ (แบบก่อสร้างจริง SPP ปี 2022)",
      "source": "As Built Saraburi/1.Layout/PDF/ST"
-    }
+    },
+    {"file": "1750/1750-five-star-grease-trap-2025", "en": "Five Star grease trap replacement 2025: Premier GT-1600, 1,600 L (layout and tank detail; page 3 shown)", "th": "เปลี่ยนถังดักไขมัน Five Star ปี 2025: Premier GT-1600 ขนาด 1,600 ลิตร (ผังและแบบติดตั้งถัง แสดงหน้า 3)", "source": "NFR Projects / 24 25 Grease and Septic repair / Saraburi Kaeng Khoi"},
+    {"file": "1750/1750-five-star-grease-trap-section-2025", "en": "Section: Five Star grease trap (-0.25) to the DLFN-12Q tank (-1.01), 2025", "th": "รูปตัด: ถังดักไขมัน Five Star (-0.25) ถึงถัง DLFN-12Q (-1.01) ปี 2025", "source": "NFR Projects / 24 25 Grease and Septic repair / Saraburi Kaeng Khoi"},
+    {"file": "1750/1750-dos-wastewater-diagram-2022", "en": "DOS wastewater diagram for Saraburi CPF (2022 proposal, not as-built)", "th": "แผนภาพระบบน้ำเสียของ DOS สำหรับ Saraburi CPF (ข้อเสนอปี 2022 ไม่ใช่แบบก่อสร้างจริง)", "source": "BOQ NTI Saraburi CPF 2022 / Dos Documents"}
    ],
    "lat": 14.573519,
    "lng": 100.987598,

@@ -110,10 +110,10 @@ export default {
       ['พื้นคอนกรีตหนา 0.20 ม. บนคอนกรีตหยาบ 0.05 ม. และทราย 0.10 ม. กว้าง 3.50 ม. ยาวกว่าถัง 1.00 ม.', 'วางบนเสาเข็มระยะประมาณ 0.96 × 1.00 ม. (ไม่ได้แสดงเสาเข็มในโมเดล) ถังยึดกับพื้นด้วยสายรัด'], P) });
 
     // ---------- grease traps
-    const gt = (x, y, o) => {
+    const gt = (x, y, o, r = 0.66, h = 1.37, lids = [[0, 0]]) => {
       const g0 = ground(x, y);
-      add('tanks', cylGeo(0.66, 1.37, x, y, g0 - 0.15 - 1.37), 'grease', o, o.tag ? V(x, y, g0 + 0.6) : null);
-      add('tanks', cylGeo(0.35, 0.03, x, y, g0), 'cover', { en: 'Grease trap cover', th: 'ฝาถังดักไขมัน', nopick: 1 });
+      add('tanks', cylGeo(r, h, x, y, g0 - 0.15 - h), 'grease', o, o.tag ? V(x, y, g0 + 0.6) : null);
+      for (const [dx, dy] of lids) add('tanks', cylGeo(0.35, 0.03, x + dx, y + dy, g0), 'cover', { en: 'Grease trap cover', th: 'ฝาถังดักไขมัน', nopick: 1 });
     };
     GT.forEach(([x, y], i) => gt(x, y, { en: `Shop grease trap ${i + 1} · GT-T-1000`, th: `ถังดักไขมันร้านค้า ${i + 1} · GT-T-1000`, ...(i === 0 || i === 6 ? { tag: 'Grease traps', tagTh: 'ถังดักไขมัน' } : {}), kind: 'tank',
       info: lines([`Grease trap behind shop unit ${i + 1} (1,000 L; detail COM-07, DGT-1000: 1.32 m across, 1.37 m high, in a 1.5 m concrete surround).`,
@@ -121,11 +121,13 @@ export default {
       [`ถังดักไขมันหลังร้านค้าคูหาที่ ${i + 1} (1,000 ลิตร แบบ COM-07 รุ่น DGT-1000: กว้าง 1.32 ม. สูง 1.37 ม. ในบ่อคอนกรีต 1.5 ม.)`,
         i === 0 ? 'ระดับที่ระบุที่ถังนี้: -0.30' : 'ไม่มีระดับระบุที่ถังนี้ ถังแรกในแถวระบุ -0.30', 'ท่อออกต่อเข้าท่อ 6 นิ้วหลังร้านค้า ซึ่งเดินลงใต้ไปเข้าถัง DLFN-12Q'], P) }));
     gt(2285.58, -403.06, { en: 'Round tank at the office', th: 'ถังกลมที่สำนักงาน', tag: 'Office tank', tagTh: 'ถังสำนักงาน', kind: 'tank',
-      info: lines(['Drawn with the same symbol as the grease traps; level written here: -0.30. A 4" PVC pipe runs to it from the office.', 'The layout does not name the model (the detail sheet also shows a small DTNC-1.6Q treatment tank). To confirm on site.'],
-        ['เขียนด้วยสัญลักษณ์เดียวกับถังดักไขมัน ระดับที่ระบุ: -0.30 มีท่อ PVC 4 นิ้วจากสำนักงานมาที่ถังนี้', 'ผังไม่ได้ระบุรุ่น (ในแบบขยายมีถังบำบัดขนาดเล็ก DTNC-1.6Q ด้วย) ต้องยืนยันหน้างาน'], P) });
-    gt(2292.13, -508.87, { en: 'Grease trap at Five Star', th: 'ถังดักไขมันที่ Five Star', tag: 'Five Star grease trap', tagTh: 'ถังดักไขมัน Five Star', kind: 'tank',
-      info: lines(['Grease trap at the Five Star kiosk; levels written here: -0.23 and -0.25. A 4" pipe takes it to the inlet of the DLFN-12Q tank.'],
-        ['ถังดักไขมันที่ร้าน Five Star ระดับที่ระบุ: -0.23 และ -0.25 มีท่อ 4 นิ้วต่อไปเข้าถัง DLFN-12Q'], P) });
+      info: lines(['Drawn with the same symbol as the grease traps; level written here: -0.30. A 4" PVC pipe runs to it from the office.', 'The layout does not name the model (the detail sheet also shows a small DTNC-1.6Q treatment tank). DOS\'s 2022 diagram for the station (a proposal, not an as-built) shows a DFSOK-2000L treatment tank for the bathroom and office. To confirm on site.'],
+        ['เขียนด้วยสัญลักษณ์เดียวกับถังดักไขมัน ระดับที่ระบุ: -0.30 มีท่อ PVC 4 นิ้วจากสำนักงานมาที่ถังนี้', 'ผังไม่ได้ระบุรุ่น (ในแบบขยายมีถังบำบัดขนาดเล็ก DTNC-1.6Q ด้วย) ต้องยืนยันหน้างาน แผนภาพของ DOS ปี 2022 (เป็นข้อเสนอ ไม่ใช่แบบก่อสร้างจริง) แสดงถังบำบัด DFSOK-2000L สำหรับห้องน้ำและสำนักงาน'], P) });
+    gt(2292.13, -508.87, { en: 'Grease trap at Five Star · Premier GT-1600 (replaced 2025)', th: 'ถังดักไขมันที่ Five Star · Premier GT-1600 (เปลี่ยนใหม่ 2025)', tag: 'Five Star grease trap', tagTh: 'ถังดักไขมัน Five Star', kind: 'tank',
+      info: lines(['Grease trap at the Five Star kiosk; levels written here: -0.23 and -0.25. A 4" pipe takes it to the inlet of the DLFN-12Q tank (-1.01).',
+        'Replaced in 2025 with a 1,600 L Premier GT-1600 (SPP\'s 2025 replacement drawings, in Sites\\1750 Kaeng Khoi Saraburi\\03 Drawings\\Tank documents): 1.60 m across, 1.40 m high, two lids, pipe in 0.20 m and pipe out 0.25 m below the ground, on a 2.00 × 2.00 m concrete base 0.15 m thick over five 0.15 m piles 4 m long.'],
+        ['ถังดักไขมันที่ร้าน Five Star ระดับที่ระบุ: -0.23 และ -0.25 มีท่อ 4 นิ้วต่อไปเข้าถัง DLFN-12Q (-1.01)',
+          'เปลี่ยนใหม่ในปี 2025 เป็นถัง Premier GT-1600 ขนาด 1,600 ลิตร (แบบเปลี่ยนถังปี 2025 ของ SPP): กว้าง 1.60 ม. สูง 1.40 ม. มี 2 ฝา ท่อเข้าต่ำกว่าพื้น 0.20 ม. ท่อออก 0.25 ม. วางบนฐานคอนกรีต 2.00 × 2.00 ม. หนา 0.15 ม. บนเสาเข็ม 0.15 ม. ยาว 4 ม. 5 ต้น'], P) }, 0.8, 1.4, [[-0.4, 0], [0.4, 0]]);
 
     // ---------- wastewater pipes
     pipe('sewer', [[2271.5, -357.40, -0.27], [2257.2, -357.50], [2255.85, -357.9, -0.43], [2255.85, -358.4, -0.43]], 0.075, 'sewerRaw', { en: 'Star Park toilets to the DLFN-15Q tank', th: 'ท่อจากห้องน้ำ Star Park เข้าถัง DLFN-15Q', kind: 'pipe',

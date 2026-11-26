@@ -100,4 +100,8 @@ Nothing is shared with calnkt: own logins, own databases, own file storage.
 - 1622 Ram Intra (26 Nov 2026): the KFC drive-through tanks (Biotech 15,000 L treatment tank, 2 grease traps, BS-3000, pump room)
   are in the model from KFC's 2020 design sheets SN-01 / SN-02, fitted by the station drain manholes; design, not as-built.
   Sheets are 1622 layouts and in Brian's `Sites\1622 Ram Intra\03 Drawings\CAD\KFC 2020 (from email)`.
+- Tank documents (26 Nov 2026): found in email / SharePoint and filed in each site's `03 Drawings\Tank documents` (1588, 1703,
+  1750), also on the site pages as layouts; details in tools/models/README.md. 1156 (26 Nov 2026, Brian): 3 fuel tanks parallel
+  to the road, one with two compartments; 3-chamber oil traps at both outlets; KFC grease trap 1 tank / 4 lids, treatment
+  tank 1 tank / 5 lids (maybe 2 + 3), pump room midway along KFC.
 - Site notes and starting timelines in `data/sites.json` / `data/timelines/` were written from Brian's site-visit notes; dates to confirm.
