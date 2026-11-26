@@ -114,7 +114,7 @@ checked on the old tanks, ten manholes and seven survey marks. `1687/make-lines.
 `plan-lines.json` (after the SN-01 lines) and the Robinson linework into `surroundings.json`.
 Added: full boundary, canopy, pump islands, the four fuel tanks with their manholes, fill point, vent stack and fill, vent and
 dispensing pipes, all station drains (open channels, 0.30 m pipes, sumps MH-11 to MH-35, numbered by the model), the
-under-sink grease trap (item 15a) and its pipe to old tank 1, the 8,000 L tank (item 31; only its tag is drawn, place unknown),
+under-sink grease trap (item 15a) and its pipe to old tank 1, the 8,000 L tank (item 31; place confirmed by Brian 26 Nov 2026: lying capsule with 3 lids along the wall, size assumed),
 the full sales building. Layer "surroundings" (shared in style.mjs, can be switched off): Phetkasem Road at -0.80, the
 Robinson ground, the mall, the drive-through building, POP, car service and car wash as blocks, and the site plan linework.
 Assumed: every depth outside the corner (pipes 1:200 from the existing drains, channels 0.25 m, fuel pipes 0.45 to 0.65 m,

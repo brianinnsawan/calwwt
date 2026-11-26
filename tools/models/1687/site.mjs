@@ -132,7 +132,7 @@ export default {
     { id: 'under', from: [-14, -6, -16], to: [6, 36, -1] },
   ],
 
-  build({ notes, V, ground, lv, add, boxGeo, cylGeo, latheGeo, prismGeo, pipeGeo, merge, THREE, fuelTank, lines: drawLines }) {
+  build({ notes, V, ground, lv, add, boxGeo, cylGeo, latheGeo, prismGeo, pipeGeo, merge, THREE, fuelTank, capsuleGeo, lines: drawLines }) {
     // notes: the lines given, then (for everything except above-ground context) the design-drawing line, then the shared source line
     const lines = (en, th, kind) => (kind === C ? notes(en, th, kind) : notes([...en, DESIGN.en], [...th, DESIGN.th], kind));
     // flow arrows: cones round the pipe, pointing the way the plan's arrows point
@@ -407,11 +407,24 @@ export default {
     pipe('sewer', [[25.54, 32.39, -0.24], [26.59, 32.39, -0.26], [26.59, 30.17, -0.30]], 0.05, 'sewerRaw', { en: 'Existing pipe: under-sink grease trap to old tank 1', th: 'ท่อเดิม: จากถังดักไขมันใต้อ่างไปถังเดิมใบที่ 1', kind: 'pipe', flow: 1,
       info: st(['Drawn on the station plan from the under-sink grease trap east, then south along the building to existing treatment tank 1, where SN-01 picks it up.', 'Size and levels not on the drawings: shown as a 4" pipe just below ground (assumed).'],
         ['ผังสถานีเขียนจากถังดักไขมันใต้อ่างไปทางตะวันออก แล้วลงใต้ตามอาคารถึงถังบำบัดเดิมใบที่ 1 ซึ่ง SN-01 เขียนต่อ', 'ไม่มีขนาดและระดับในแบบ: แสดงเป็นท่อ 4 นิ้วใต้ผิวดิน (ค่าสมมติ)'], P) });
-    add('tanks', cylGeo(0.85, 2.0, 26.6, 43.5, -2.6), 'tankOlder', { en: 'Treatment tank 8,000 L (MC-08A) · place not drawn', th: 'ถังบำบัด 8,000 ลิตร (MC-08A) · ไม่ได้เขียนตำแหน่ง', tag: '8,000 L tank (place?)', tagTh: 'ถัง 8,000 ลิตร (ตำแหน่ง?)', kind: 'tank',
-      info: st(['The station plan lists an 8,000 L aerated treatment tank (item 31: MC-08A) and puts its number tag east of the toilets at the north end of the sales building, but draws no outline. It probably takes the toilets.',
-        'POSITION NOT KNOWN: shown at the tag only, with an assumed size and depth. Find it on site (lids in the paving east or north of the toilets) before any digging there.'],
-        ['ผังสถานีระบุถังบำบัดชนิดเติมอากาศ 8,000 ลิตร (รายการ 31: MC-08A) และวางป้ายหมายเลขไว้ทางตะวันออกของห้องน้ำที่ปลายเหนือของอาคาร แต่ไม่ได้เขียนรูปถัง น่าจะรับน้ำจากห้องน้ำ',
-          'ไม่ทราบตำแหน่ง: แสดงที่ป้ายหมายเลขเท่านั้น ขนาดและความลึกเป็นค่าสมมติ ต้องหาหน้างาน (ฝาถังในพื้นทางตะวันออกหรือเหนือของห้องน้ำ) ก่อนขุดบริเวณนั้น'], P) }, V(26.6, 43.5, 1.2));
+    {  // 8,000 L tank: place confirmed by Brian (26 Nov 2026); a lying capsule with 3 lids in a row along the building wall (his 2026 site video)
+      const T8 = { x: 26.6, y: 43.5, dia: 2.0, len: 3.4, top: -0.45 }, axis = T8.top - T8.dia / 2;
+      add('tanks', capsuleGeo(T8.dia / 2, T8.len, T8.x, T8.y, axis, 90), 'tankOlder', { en: 'Treatment tank 8,000 L (MC-08A) · 3 lids', th: 'ถังบำบัด 8,000 ลิตร (MC-08A) · ฝา 3 ใบ', tag: '8,000 L tank (toilets)', tagTh: 'ถัง 8,000 ลิตร (ห้องน้ำ)', kind: 'tank', lvl: lv(T8.top),
+        info: st(['Aerated treatment tank of 8,000 L listed on the station plan (item 31: MC-08A), east of the toilets at the north end of the sales building, in the grass strip between the building wall and the hedge. It probably takes the toilets.',
+          'Brian, 26 Nov 2026: this place is right; it is a lying capsule tank with 3 round lids in a row along the wall, as in his 2026 site video (two smaller lids and one larger).',
+          `Size and depth are not on any drawing: shown ${T8.dia.toFixed(1)} m across and ${T8.len.toFixed(1)} m long (about 8 m³), lying north-south, top about ${lv(T8.top)}. The spacing and sizes of the lids are taken from the video, roughly.`],
+        ['ถังบำบัดชนิดเติมอากาศ 8,000 ลิตร ตามผังสถานี (รายการ 31: MC-08A) อยู่ทางตะวันออกของห้องน้ำที่ปลายเหนือของอาคาร ในแนวหญ้าระหว่างผนังอาคารกับแนวพุ่มไม้ น่าจะรับน้ำจากห้องน้ำ',
+          'Brian ยืนยัน 26 พ.ย. 2026: ตำแหน่งนี้ถูกต้อง เป็นถังแคปซูลแบบนอน มีฝากลม 3 ใบเรียงตามแนวผนัง ตามวิดีโอหน้างานปี 2026 (ฝาเล็ก 2 ใบ ฝาใหญ่ 1 ใบ)',
+          `ไม่มีขนาดและความลึกในแบบ: แสดงกว้าง ${T8.dia.toFixed(1)} ม. ยาว ${T8.len.toFixed(1)} ม. (ประมาณ 8 ลบ.ม.) วางแนวเหนือ-ใต้ หลังถังประมาณ ${lv(T8.top)} ระยะและขนาดฝาประมาณจากวิดีโอ`], P) }, V(T8.x, T8.y, 1.2));
+      for (const [dy, r] of [[-1.15, 0.40], [0, 0.32], [1.15, 0.32]]) {
+        add('tanks', cylGeo(r - 0.05, -T8.top, T8.x, T8.y + dy, T8.top), 'tankOlder', { en: '8,000 L tank access riser', th: 'ปล่องเปิดถัง 8,000 ลิตร', nopick: 1 });
+        add('tanks', cylGeo(r, 0.04, T8.x, T8.y + dy, 0), 'cover', { en: '8,000 L tank lid', th: 'ฝาถัง 8,000 ลิตร', nopick: 1 });
+      }
+      add('air', merge([boxGeo(0.45, 1.5, 0.12, 26.2, T8.y + 0.3, 0, 0), ...[-0.45, -0.15, 0.15, 0.45].map((d) => cylGeo(0.035, 0.35, 26.2, T8.y + 0.3 + d, 0.12, 10))]), 'airPump',
+        { en: 'Air valves for the 8,000 L tank', th: 'วาล์วลมของถัง 8,000 ลิตร', tag: 'Air valves', tagTh: 'วาล์วลม', kind: 'air',
+          info: notes(['Four air pipes with valves on a small concrete pad against the building wall beside the tank lids, and an electrical box on the wall next to them (Brian\'s 2026 site video). Positions and sizes are approximate.'],
+            ['ท่อลม 4 ชุดพร้อมวาล์วบนแท่นคอนกรีตเล็กชิดผนังอาคารข้างฝาถัง และกล่องไฟฟ้าบนผนังข้างกัน (วิดีโอหน้างานปี 2026 ของ Brian) ตำแหน่งและขนาดโดยประมาณ'], C) }, V(26.2, T8.y + 0.3, 1.0));
+    }
 
     // ---- fuel: four underground tanks T1 to T4 (legend), fill point, vents, pipes; pump islands and canopy
     const FUEL = [
