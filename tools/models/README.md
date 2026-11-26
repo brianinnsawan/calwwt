@@ -30,6 +30,9 @@ Then run the site tests and ship as usual (CLAUDE.md, "How to ship a change").
 3. Write `<code>/site.mjs` (copy 0589), make `<code>/plan-lines.json` from the flattened lines, build, and compare the
    "Plan" view with the drawing before shipping.
 A site with only PDF drawings can still be done: read positions off the PDF at its scale; mark more things `part`.
+If the DWG will not convert here, ask Brian to open it in Civil 3D and Save As AutoCAD 2018 DXF; then
+`python3 dxf/dxf-flatten.py drawing.dxf flat.pkl x0 y0 x1 y1` (needs `pip install ezdxf`) and
+`python3 dxf/dxf-plan-lines.py flat.pkl <code>/plan-lines.json ox oy x0 y0 x1 y1 "note"` (used for 1642).
 
 ## 0589 Kathu (first version, 25 Nov 2026)
 Sources: `Spp Caltex Kathu Septic As Built Combined.dwg` (plan, manhole levels, new tanks and pipes),
@@ -124,3 +127,19 @@ Assumed: the ground. The layout has no ground levels; from the trap detail the w
 tank depths, round tank sizes, manhole floors, drain size. Nine manholes have no written level (interpolated and flagged).
 To check on site: at SP-T-20,000 the inlet (-1.75) is lower than the outlet (-1.65); the north-east corner manhole says
 -1.40 where the written falls give about -1.66. No north arrow.
+
+## 1642 Phun Phon (first version, 26 Nov 2026, from DWG saved as DXF)
+Sources: `A-104` (site plan with the treatment tank and clean-water tank positions, 1:200, drawn in metres) and `A-103`
+(water supply: 20,000 L water tank, Grundfos CMB5-46PT pump, HDPE 1"). `6-9` is a Bio-San catalogue sheet only.
+Brian saved the DWGs as DXF into `Sites\1642 Phun Phon Phuket\03 Drawings\_Working\calwwt\cad\`; read with `dxf/`.
+From Brian (26 Nov 2026): the clean-water tank is under the disabled parking bay (A-104 block on layer "Tank", two lids,
+outline about 2.7 x 4.0 m); the tank under the walkway behind the toilets (block "mc-12a_pl", layer FIBERGLASS TANK, three
+lids) is the septic tank; the sales building is two storeys, the office one storey; Aqua sampled both oil traps
+(entrance side and exit side) at the outlet pipe. The A-103 legend symbol for the water tank looks like the septic tank
+block: go by Brian.
+Also in it: the strapped tank in the front lawn (three MH-600 lids, +0.40; not named, taken as the shops' treatment tank
+after the four round tanks in the east planter), two round Bio-San-style tanks at the office, every grated manhole and
+drain run, the three outlet pits at the road (two are the sampled oil traps; the east-corner one is drawn the same way,
+to confirm), four fuel tanks (the middle two have two lids), buildings, canopy and islands.
+Assumed: every pipe level and size (no levels on any sheet: drains 0.30 m, 0.40 m cover at the start, 1:200; tank pipes
+0.3 m under the tank top), tank depths, round tank sizes, building heights. North from the A-104 arrow (314.6).
