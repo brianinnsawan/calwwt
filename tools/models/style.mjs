@@ -33,6 +33,14 @@ export const MATERIALS = {
   // surroundings outside the station (layer "surroundings", can be switched off): paler, so the station stays in front
   surroundGround: [0xe3e6dc, 0.55], surroundBuilding: [0xd3d8de, 0.3], surroundLine: [0xa3acb4],
   hedge: [0x4f8a3c, 0.6],       // hedges and rows of shrubs
+  // kerbs, walkways and parking (layer "paving"): raised walkways, painted kerbs, parking-bay paint
+  walkway: [0xcfc6b8, 0.85],     // raised walkway / footpath slab
+  kerbYellow: [0xe0b100],        // kerb painted yellow and black
+  kerbRed: [0xc8432f],           // kerb painted red and white
+  kerbPlain: [0x9c968c],         // plain concrete kerb
+  bayLine: [0xf4f2ec],           // white parking-bay lines
+  bayEV: [0x2f7fd1, 0.85],       // blue painted EV bay
+  grass: [0x6f9a4a, 0.75],       // grass and planting beds
   signPanel: [0xc8432f, 0.95],   // the head of a tall pole sign (plain panels, no logo)
   signDark: [0x2b3138],          // dark sign panels and round signs
 };
@@ -49,6 +57,7 @@ export const LAYERS = [
   { id: 'old', en: 'Tanks and pipes out of use', th: 'ถังและท่อที่เลิกใช้' },
   { id: 'fuel', en: 'Fuel tanks', th: 'ถังน้ำมันใต้ดิน' },
   { id: 'buildings', en: 'Buildings and canopy', th: 'อาคารและหลังคาคลุมหัวจ่าย' },
+  { id: 'paving', en: 'Kerbs, walkways and parking', th: 'ขอบคันหิน ทางเดิน และที่จอดรถ' },
   { id: 'surroundings', en: 'Surroundings (outside the station)', th: 'พื้นที่รอบสถานี (นอกแนวเขต)' },
   { id: 'plan', en: 'Drawing on the ground', th: 'แบบบนพื้น' },
   { id: 'ground', en: 'Ground surface', th: 'ผิวพื้น' },

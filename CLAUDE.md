@@ -105,4 +105,6 @@ Nothing is shared with calnkt: own logins, own databases, own file storage.
   to the road, one with two compartments; 3-chamber oil traps at both outlets; KFC grease trap 1 tank / 4 lids, treatment
   tank 1 tank / 5 lids (maybe 2 + 3) under the lane behind KFC after (west of) the grease trap, pump room midway along KFC; the box
   at the west end of KFC is the garbage building (about 2.5 m), and there is no order-point hut.
+- Kerbs, walkways and parking go in the shared layer "paving" (materials walkway, kerbYellow, kerbRed, kerbPlain, bayLine,
+  bayEV, grass in style.mjs); first used at 1156 (estimated from the video, 26 Nov 2026).
 - Site notes and starting timelines in `data/sites.json` / `data/timelines/` were written from Brian's site-visit notes; dates to confirm.

@@ -170,6 +170,13 @@ to confirm), four fuel tanks (the middle two have two lids), buildings, canopy a
 Assumed: every pipe level and size (no levels on any sheet: drains 0.30 m, 0.40 m cover at the start, 1:200; tank pipes
 0.3 m under the tank top), tank depths, round tank sizes, building heights. North from the A-104 arrow (314.6).
 
+## Kerbs, walkways and parking (shared layer "paving", from 26 Nov 2026)
+`style.mjs` has a layer "Kerbs, walkways and parking" and materials walkway, kerbYellow, kerbRed, kerbPlain, bayLine, bayEV,
+grass. First used at 1156 Samut Prakan, estimated from Brian's video stills and photo (no drawings): walkway along the KFC
+front and its drive-through side, the curved kerb at the drive-through entry, walkways at the toilets, office / Mini Big C
+and coffee shop, the coffee-shop planter, the pole-sign island (red-and-white kerb), the bays along the west wall (air pump,
+two blue EV bays, six car bays) and the public footpath in "surroundings". Other sites can use the same layer.
+
 ## Tank documents found (26 Nov 2026)
 Brian asked for more information on the tanks at every site from email and SharePoint. Filed in each site's
 `03 Drawings\Tank documents` folder in the NFR Projects library, and added to the site pages as layouts (no prices):
