@@ -90,4 +90,8 @@ Nothing is shared with calnkt: own logins, own databases, own file storage.
   two lids (size still to confirm). The existing drain along the road edge (sumps F1 to F6) runs west to a third oil trap at
   the middle outlet; all three outlets have the same 3-chamber trap. The two east traps are separate, almost touching.
   Narrow-mouth gutters (O-gutters) cross both driveways on the front drain. Above-ground PVC is light blue (`pvcAbove`).
+- Proposed works go in the shared layer "proposed" (pink, `proposedPipe` / `proposedTank`), never mixed into the as-built
+  layers. A model can carry long sections (`section()` in tools/models/build.mjs); the viewer shows a "Long section" button.
+  0589 Kathu has one: Brian's KFC option of 26 Nov 2026 (new 6" PVC + 20,000 L tank); at 1:200 it ends 0.19 m below the
+  west oil trap's outlet and clashes with two existing drains, so as drawn it does not work by gravity into the oil trap.
 - Site notes and starting timelines in `data/sites.json` / `data/timelines/` were written from Brian's site-visit notes; dates to confirm.

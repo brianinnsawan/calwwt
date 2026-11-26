@@ -54,6 +54,14 @@ Added 26 Nov 2026 from Brian's site photo and markup (not on the drawing unless 
 - narrow-mouth gutters (O-gutters) where the front drain crosses the two driveways (kerbs on the drawing: west 332.2 to
   342.5, east 367.3 to 376.7): the drain pipe with a neck up to a 5 cm slot in a concrete strip. Not detailed on the drawing.
 - the sink pipe is shown light blue (`pvcAbove` in style.mjs), like the real 2" PVC.
+- PROPOSED OPTION (layer "Proposed works (option, not built)", pink; Brian, 26 Nov 2026): new 6" PVC from the two BO-2600
+  tanks behind the middle building along the north boundary, picking up the KFC tank outlet (WTT-1) near N4 and WTT-2, down
+  the west side of KFC in the soil, along the front of the parking to a new 20,000 L tank (Ø2.40 x 5.00 m capsule) in the
+  parking in front of KFC, then to the west oil trap. Levels: 0.50 below the concrete at the start, KFC outlet 0.65 below
+  the concrete at N4 (+0.17), then 1:200. Result: the pipe arrives at the oil trap at -0.19, 0.19 m below the trap's
+  outlet (±0.00), and it crosses two existing drains at about the same level (+0.13 near N4, +0.07 south of KFC).
+  The model carries a long section of it (`section()` in build.mjs, `scene.userData.sections`); the viewer's
+  "Long section" button draws it like calcr's drainage sections.
 - the front site drain now runs from manhole E7 along the front channel into the road-side oil trap (as drawn), instead
   of a straight line to the east trap.
 Known gaps: sizes and depths of WTT-1, WTT-2, WTT-4, the two Biotech tanks, the grease traps and the old tank; pipe
