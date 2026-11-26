@@ -149,7 +149,7 @@ const fuelTank = (label, x, y, rot = 0, o = {}) => {
     info: notes([`Underground fuel tank ${label}: a lying 30,000 litre capsule tank with slightly rounded ends, ${dia.toFixed(2)} m across and ${len.toFixed(1)} m long.`, ...(o.en || []),
       `The depth is not on these drawings: the top is shown ${F.cover.toFixed(1)} m below ground (about ${lv(g0 - F.cover)}).`, 'Keep clear when planning any digging.'],
     [`ถังน้ำมันใต้ดิน ${label}: ถังแคปซูลแบบนอน 30,000 ลิตร ปลายโค้งเล็กน้อย กว้าง ${dia.toFixed(2)} ม. ยาว ${len.toFixed(1)} ม.`, ...(o.th || []),
-      `ในแบบชุดนี้ไม่มีความลึก แสดงหลังถังต่ำกว่าพื้น ${F.cover.toFixed(1)} ม. (ประมาณ ${lv(g0 - F.cover)})`, 'เว้นระยะเมื่อวางแผนงานขุด'], 'part') }, V(x, y, g0 + 0.5));
+      `ในแบบชุดนี้ไม่มีความลึก แสดงหลังถังต่ำกว่าพื้น ${F.cover.toFixed(1)} ม. (ประมาณ ${lv(g0 - F.cover)})`, 'เว้นระยะเมื่อวางแผนงานขุด'], o.src || 'part') }, V(x, y, g0 + 0.5));
 };
 /** Plan linework in a layer: lines(layer, [[x1, y1, x2, y2, ...] polylines in drawing metres], material, level(x, y) = height of the line). */
 const lines = (layer, polylines, material, level) => {
