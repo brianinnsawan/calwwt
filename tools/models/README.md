@@ -124,6 +124,9 @@ dispensing pipes, all station drains (open channels, 0.30 m pipes, sumps MH-11 t
 under-sink grease trap (item 15a) and its pipe to old tank 1, the 8,000 L tank (item 31; place confirmed by Brian 26 Nov 2026: lying capsule with 3 lids along the wall, size assumed),
 the full sales building. Layer "surroundings" (shared in style.mjs, can be switched off): Phetkasem Road at -0.80, the
 Robinson ground, the mall, the drive-through building, POP, car service and car wash as blocks, and the site plan linework.
+From Brian's 2026 site video and photos (26 Nov 2026): the air pump enclosure and power socket box of the 8,000 L tank, the
+~2 m hedge along the back (east) boundary planted on top of the drains MH-1 and MH-11 to MH-13 (layer buildings, `hedge`), and
+the McDonald's pole sign next door (about 20 m, pipe about 0.86 m, plain panel head, no logo; layer surroundings). Places estimated.
 Assumed: every depth outside the corner (pipes 1:200 from the existing drains, channels 0.25 m, fuel pipes 0.45 to 0.65 m,
 fuel tank tops 1.0 m), canopy and building heights, dispensers, Robinson ground flat at ±0.00 and all its heights.
 

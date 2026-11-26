@@ -126,7 +126,7 @@ export default {
     { id: 'site', from: [-28, -22, 38], to: [5, 38, -0.5] },
     { id: 'plan', from: [5, 40.2, 82], to: [5, 40.3, 0] },
     { id: 'new', en: 'New 3,000 L tanks', th: 'ถังใหม่ 3,000 ลิตร', from: [20.5, 8.5, 8], to: [22.3, 18.2, -0.8] },
-    { id: 'old', en: 'Existing tanks at the toilet', th: 'ถังเดิมข้างห้องน้ำ', from: [34, 20.5, 7], to: [26.6, 25.5, -0.6] },
+    { id: 'old', en: 'Existing tanks at the toilet', th: 'ถังเดิมข้างห้องน้ำ', from: [25.6, 14.5, 6.5], to: [26.6, 26.5, -0.8] },   // along the strip between the wall and the hedge
     { id: 'fuel', from: [-30, 38, 12], to: [-9, 55, -1.6] },
     { id: 'area', from: [60, -150, 150], to: [-60, 90, 0] },
     { id: 'under', from: [-14, -6, -16], to: [6, 36, -1] },
@@ -420,10 +420,14 @@ export default {
         add('tanks', cylGeo(r - 0.05, -T8.top, T8.x, T8.y + dy, T8.top), 'tankOlder', { en: '8,000 L tank access riser', th: 'ปล่องเปิดถัง 8,000 ลิตร', nopick: 1 });
         add('tanks', cylGeo(r, 0.04, T8.x, T8.y + dy, 0), 'cover', { en: '8,000 L tank lid', th: 'ฝาถัง 8,000 ลิตร', nopick: 1 });
       }
-      add('air', merge([boxGeo(0.45, 1.5, 0.12, 26.2, T8.y + 0.3, 0, 0), ...[-0.45, -0.15, 0.15, 0.45].map((d) => cylGeo(0.035, 0.35, 26.2, T8.y + 0.3 + d, 0.12, 10))]), 'airPump',
-        { en: 'Air valves for the 8,000 L tank', th: 'วาล์วลมของถัง 8,000 ลิตร', tag: 'Air valves', tagTh: 'วาล์วลม', kind: 'air',
-          info: notes(['Four air pipes with valves on a small concrete pad against the building wall beside the tank lids, and an electrical box on the wall next to them (Brian\'s 2026 site video). Positions and sizes are approximate.'],
-            ['ท่อลม 4 ชุดพร้อมวาล์วบนแท่นคอนกรีตเล็กชิดผนังอาคารข้างฝาถัง และกล่องไฟฟ้าบนผนังข้างกัน (วิดีโอหน้างานปี 2026 ของ Brian) ตำแหน่งและขนาดโดยประมาณ'], C) }, V(26.2, T8.y + 0.3, 1.0));
+      // air pump enclosure with a sloped lid against the wall at the north end of the lids, and the power socket box on the wall above it (Brian's 2026 site video)
+      const E = { x: 26.24, y: T8.y + 2.05 };
+      const lid = new THREE.BoxGeometry(0.72, 0.05, 1.0); lid.rotateZ(-0.18); { const c = V(E.x + 0.03, E.y, 0.62); lid.translate(c.x, c.y, c.z); }
+      add('air', merge([boxGeo(0.62, 0.9, 0.55, E.x, E.y, 0, 0), lid]), 'airPump', { en: 'Air pump enclosure (8,000 L tank)', th: 'ตู้ครอบปั๊มลม (ถัง 8,000 ลิตร)', tag: 'Air pump box', tagTh: 'ตู้ปั๊มลม', kind: 'air',
+        info: notes(['Box over the air pumps of the 8,000 L tank, with a sloped lid, standing on the ground against the building wall at the end of the row of tank lids. A power socket box is on the wall just above it (Brian\'s 2026 site video).', 'Size and exact place estimated from the video.'],
+          ['ตู้ครอบปั๊มลมของถัง 8,000 ลิตร ฝาลาดเอียง ตั้งบนพื้นชิดผนังอาคารที่ปลายแถวฝาถัง มีกล่องเต้ารับไฟฟ้าบนผนังเหนือตู้ (วิดีโอหน้างานปี 2026 ของ Brian)', 'ขนาดและตำแหน่งประมาณจากวิดีโอ'], C) }, V(E.x, E.y, 1.3));
+      add('air', boxGeo(0.12, 0.22, 0.32, 25.98, E.y + 0.25, 0.75, 0), 'cover', { en: 'Power socket box for the air pumps', th: 'กล่องเต้ารับไฟฟ้าของปั๊มลม', kind: 'air',
+        info: notes(['Power socket box on the building wall above the air pump enclosure (Brian\'s 2026 site video). Size and height estimated.'], ['กล่องเต้ารับไฟฟ้าบนผนังอาคารเหนือตู้ครอบปั๊มลม (วิดีโอหน้างานปี 2026 ของ Brian) ขนาดและความสูงโดยประมาณ'], C) });
     }
 
     // ---- fuel: four underground tanks T1 to T4 (legend), fill point, vents, pipes; pump islands and canopy
@@ -467,6 +471,18 @@ export default {
     add('buildings', boxGeo(9.4, 28.4, 0.8, 0.22, 33.61, 5.4, 0), 'roof', { en: 'Canopy', th: 'หลังคาคลุมหัวจ่าย', tag: 'Canopy', tagTh: 'หลังคาคลุมหัวจ่าย', kind: 'building',
       info: notes(['Canopy over the pump islands, 9.4 × 28.4 m (station plan item 6), on one steel column per island. Height assumed (underside 5.4 m).'], ['หลังคาคลุมตู้จ่ายน้ำมัน 9.4 × 28.4 ม. (รายการ 6 ในผังสถานี) เสาเหล็กเกาะละ 1 ต้น ความสูงเป็นค่าสมมติ (ใต้หลังคา 5.4 ม.)'], C) }, V(0.22, 33.6, 7.0));
 
+    // ---- hedge along the back (east) boundary, planted on top of the drain sumps and pipes (Brian, 26 Nov 2026, with site photos)
+    {
+      const run = [[27.75, 19.0], [27.75, 54.4]], parts = [];
+      for (let i = 0; i < run.length - 1; i++) {
+        const [ax, ay] = run[i], [bx, by] = run[i + 1], L = Math.hypot(bx - ax, by - ay);
+        parts.push(boxGeo(L, 1.1, 2.0, (ax + bx) / 2, (ay + by) / 2, 0, Math.atan2(by - ay, bx - ax) * 180 / Math.PI));
+      }
+      add('buildings', merge(parts), 'hedge', { en: 'Hedge along the back boundary', th: 'แนวพุ่มไม้ตามแนวเขตด้านหลัง', tag: 'Hedge (on top of the drains)', tagTh: 'แนวพุ่มไม้ (อยู่บนท่อระบายน้ำ)', kind: 'building',
+        info: notes(['Thick row of shrubs about 2 m tall along the back (east) boundary, behind the sales building. It is planted directly on top of the concrete sumps and drain pipes MH-1, MH-11, MH-12 and MH-13 (Brian, 26 Nov 2026, with site photos): any work on those drains means cutting back the hedge.', 'About 1.1 m thick; where it starts and ends is estimated.'],
+          ['แนวพุ่มไม้หนา สูงประมาณ 2 ม. ตามแนวเขตด้านหลัง (ด้านตะวันออก) หลังอาคาร ปลูกอยู่บนบ่อพักคอนกรีตและท่อระบายน้ำ MH-1, MH-11, MH-12 และ MH-13 โดยตรง (Brian 26 พ.ย. 2026 พร้อมรูปถ่ายหน้างาน): งานใดๆ ที่ท่อเหล่านี้ต้องตัดแต่งพุ่มไม้ก่อน', 'หนาประมาณ 1.1 ม. จุดเริ่มและจุดสิ้นสุดเป็นค่าประมาณ'], C) }, V(28.2, 46.0, 2.6));
+    }
+
     // =================================================================================================================
     // SURROUNDINGS (layer "surroundings", can be switched off): Phetkasem Road and the Robinson Phetchaburi site around the station,
     // from the Robinson site plan in "01 Robinson Petchburi_Laou4.dwg". Flat, outlines traced from that plan, heights assumed.
@@ -480,6 +496,14 @@ export default {
     add('surroundings', prismGeo([[-370, -42], [170, -42], [170, KERB], [-370, KERB]], ROAD - 0.05, 0.05), 'road', { en: 'Phetkasem Road (Highway 4)', th: 'ถนนเพชรเกษม (ทางหลวงหมายเลข 4)', tag: 'Phetkasem Road', tagTh: 'ถนนเพชรเกษม', kind: 'building',
       info: notes(['Phetkasem Road in front of the station and Robinson: to Ratchaburi to the north (left on the plan) and to Cha-am to the south (right), as written on the site plan.', 'The site plan writes ±0.00 on the road and +0.80 on the station forecourt, so the road is shown 0.80 m below the station. Lanes and far edge are traced roughly.'],
         ['ถนนเพชรเกษมหน้าสถานีและโรบินสัน: ไปราชบุรีทางเหนือ (ด้านซ้ายของผัง) และไปชะอำทางใต้ (ด้านขวา) ตามที่เขียนในผังโครงการ', 'ผังโครงการเขียนระดับถนน ±0.00 และลานสถานี +0.80 จึงแสดงถนนต่ำกว่าสถานี 0.80 ม. ช่องจราจรและขอบถนนอีกฝั่งเป็นแนวโดยประมาณ'], C) }, V(-60, -15, 1.2));
+    {  // the McDonald's pole sign just outside the back (east) boundary (Brian, 26 Nov 2026: about 20 m tall, pipe about 0.86 m across; place estimated)
+      const S = { x: 30.6, y: 42.0, h: 20.0, r: 0.43 };
+      add('surroundings', merge([boxGeo(1.6, 1.6, 0.3, S.x, S.y, -0.05, 0), cylGeo(0.62, 1.0, S.x, S.y, 0.25, 16), cylGeo(S.r, S.h - 3.4, S.x, S.y, 0.25, 24)]), 'column',
+        { en: 'McDonald\'s pole sign (neighbour)', th: 'เสาป้าย McDonald\'s (ที่ดินข้างเคียง)', tag: 'McDonald\'s sign (20 m)', tagTh: 'ป้าย McDonald\'s (20 ม.)', kind: 'building',
+          info: notes(['Tall pole sign of the McDonald\'s next door, standing in the grass just outside the station\'s back (east) boundary, beyond the hedge. About 20 m tall on a steel pipe about 0.86 m across, with a bolted base and stiffeners on a concrete pad (Brian, 26 Nov 2026, with site photos).', 'Its exact place is estimated. Keep it in mind for cranes and for any digging near the east boundary (its foundation is not on any drawing).'],
+            ['เสาป้ายสูงของร้าน McDonald\'s ข้างเคียง ตั้งอยู่บนพื้นหญ้านอกแนวเขตด้านหลัง (ด้านตะวันออก) ของสถานี ถัดจากแนวพุ่มไม้ สูงประมาณ 20 ม. เสาเหล็กขนาดประมาณ 0.86 ม. ฐานยึดน็อตและครีบบนแท่นคอนกรีต (Brian 26 พ.ย. 2026 พร้อมรูปถ่ายหน้างาน)', 'ตำแหน่งเป็นค่าประมาณ ควรคำนึงถึงเมื่อใช้รถเครนและเมื่อขุดใกล้แนวเขตด้านตะวันออก (ไม่มีฐานรากในแบบ)'], C) }, V(S.x, S.y, S.h + 0.8));
+      add('surroundings', boxGeo(1.2, 1.2, 3.4, S.x, S.y, S.h - 3.4, 0), 'signPanel', { en: 'Sign head', th: 'หัวป้าย', nopick: 1 });
+    }
     add('surroundings', boxGeo(540, 0.15, -ROAD, -100, KERB - 0.075, ROAD, 0), 'slab', { en: 'Road kerb', th: 'ขอบถนน', nopick: 1 });
     drawLines('surroundings', SURROUND.lines.map((l) => l.map((v) => v / 100)), 'surroundLine', (x, y) => (y < KERB ? ROAD + 0.02 : 0.02));
     const block = (poly, h, en, th, tag, tagTh, more) => add('surroundings', prismGeo(poly, 0, h), 'surroundBuilding', { en, th, tag, tagTh, kind: 'building',
