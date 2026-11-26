@@ -155,6 +155,24 @@
      "en": "Septic tank and manhole details (as-built rev 2)",
      "th": "แบบขยายถังบำบัด-บ่อพัก rev 2",
      "source": "Chevron As-build 14-07-63/PDF/SN"
+    },
+    {
+     "file": "1622/1622-kfc-sn01-sanitary-plan-2020",
+     "en": "KFC drive-through: sanitary plan, tanks and pipes (SN-01, Feb 2020)",
+     "th": "KFC ไดรฟ์ทรู: ผังระบบสุขาภิบาล ถังและท่อ (SN-01 ก.พ. 2020)",
+     "source": "Email 2020, KFC GSDT Caltex Ramintra M&E (THE QSR OF ASIA)"
+    },
+    {
+     "file": "1622/1622-kfc-sn02-tank-details-2020",
+     "en": "KFC drive-through: treatment tank and grease trap details (SN-02, Feb 2020)",
+     "th": "KFC ไดรฟ์ทรู: แบบขยายถังบำบัดและถังดักไขมัน (SN-02 ก.พ. 2020)",
+     "source": "Email 2020, KFC GSDT Caltex Ramintra M&E (THE QSR OF ASIA)"
+    },
+    {
+     "file": "1622/1622-kfc-biotech-tanks-2020",
+     "en": "KFC drive-through: Biotech drawing, 15,000 L treatment tank and 2 × 3,000 L grease traps",
+     "th": "KFC ไดรฟ์ทรู: แบบถัง Biotech ถังบำบัด 15,000 ลิตร และถังดักไขมัน 3,000 ลิตร 2 ถัง",
+     "source": "Email 2020, Biotech"
     }
    ],
    "lat": 13.812461,

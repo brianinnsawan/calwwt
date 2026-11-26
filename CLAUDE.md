@@ -97,4 +97,7 @@ Nothing is shared with calnkt: own logins, own databases, own file storage.
   layers. A model can carry long sections (`section()` in tools/models/build.mjs); the viewer shows a "Long section" button.
   0589 Kathu has one: Brian's KFC option of 26 Nov 2026 (new 6" PVC + 20,000 L tank); at 1:200 it ends 0.19 m below the
   west oil trap's outlet and clashes with two existing drains, so as drawn it does not work by gravity into the oil trap.
+- 1622 Ram Intra (26 Nov 2026): the KFC drive-through tanks (Biotech 15,000 L treatment tank, 2 grease traps, BS-3000, pump room)
+  are in the model from KFC's 2020 design sheets SN-01 / SN-02, fitted by the station drain manholes; design, not as-built.
+  Sheets are 1622 layouts and in Brian's `Sites\1622 Ram Intra\03 Drawings\CAD\KFC 2020 (from email)`.
 - Site notes and starting timelines in `data/sites.json` / `data/timelines/` were written from Brian's site-visit notes; dates to confirm.
