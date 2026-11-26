@@ -102,8 +102,8 @@ Feb 2020) and the Biotech drawing, found in Brian's 2020 email and filed in `Sit
 (also on the Sites page as layouts). SN-01 was fitted to the model by the station drain manholes it shows (W7, W9 to W13 land within
 about 0.1 m at about 29.5 px/m on the 240 dpi render): model X = 39.70 + (px - 855)/29.5, Y = 62.34 - (py - 128)/29.5. Items:
 Biotech BC-K-15-D2.5 treatment tank (Ø2.50 x 7.40 m, 4 lids, pile cap 3.10 x 7.40 m), two BG-R-3000 grease traps, round BS-3000
-for the KFC toilets, kitchen under-sink trap, SCB-50 blower and two water tanks in the KFC pump room, outlet manhole KFC-1 and
-0.30 m RCP into W10, and the KFC building outline. All tagged 'part' (design, not as-built); pipe levels and tank depth assumed.
+for the KFC toilets, kitchen under-sink trap, SCB-50 blower and two water tanks in the KFC pump room, outlet sump KFC-1 and the
+pipe north into W9 (as on site, Brian 26 Nov 2026 from the sampling video; SN-01 draws it south to W10), and the KFC building outline. All tagged 'part' (design, not as-built); pipe levels and tank depth assumed.
 
 ## 1687 Phetchaburi (first version 25 Nov 2026; whole station and surroundings 26 Nov 2026)
 The south-east corner (sales building, office toilet, old tanks, the two new tanks, drains to the public drain) comes from
