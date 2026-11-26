@@ -376,12 +376,12 @@ export default {
       const tx = 33.09, ty = 59.36, tLen = 7.4, tr = 1.25, g0 = r2(ground(tx, ty)), top = r2(g0 - 0.2), axis = top - tr, tIn = r2(top - 0.4), tOut = r2(tIn - 0.1);
       add('tanks', capsuleGeo(tr, tLen, tx, ty, axis, 0, 0.3), 'tank', { en: 'KFC treatment tank · Biotech BC-K-15-D2.5', th: 'ถังบำบัดน้ำเสีย KFC · Biotech BC-K-15-D2.5', tag: 'KFC BC-K-15', tagTh: 'KFC BC-K-15', kind: 'tank',
         info: lines(['KFC\'s wastewater treatment tank (Biotech BC-K-15-D2.5, flow 15 m³/day): lying, Ø2.50 m, 7.40 m long, four Ø0.60 m lids, aerated by the SCB-50 air blower in the KFC pump room. Solid separation, anaerobic filter, aerobic filter and settling chambers inside.',
-          'Takes the toilets (through the round BS-3000 tank) and the kitchen (through the two grease traps). Treated water out of the east end in 6" PVC to a manhole, then 0.30 m concrete pipe south into the station\'s west drain at W10.',
+          'Takes the toilets (through the round BS-3000 tank) and the kitchen (through the two grease traps). Treated water out of the east end in 6" PVC to a small sump (KFC-1), then north into the station\'s west drain at the corner manhole W9 (as on site, Brian, Nov 2026; SN-01 draws it south to W10).',
           `Ground about ${lv(g0)} · top of tank about ${lv(top)} · pipe in about ${lv(tIn)}, out about ${lv(tOut)} (assumed; SN-02 gives a hole about 2.7 m deep).`,
           'On a reinforced concrete pile cap (DB12 @ 0.25 m, 2 layers) 3.10 × 7.40 m on 32 piles, the tank strapped down with wire rope; piles not drawn.',
           'Aqua, 19–21 Nov 2026: KFC aeration weak, with fats, oils and grease in the sump.', KFC.en],
         ['ถังบำบัดน้ำเสียของ KFC (Biotech BC-K-15-D2.5 อัตรา 15 ลบ.ม./วัน) แบบนอน Ø2.50 ม. ยาว 7.40 ม. ฝา Ø0.60 ม. 4 ฝา เติมอากาศด้วยเครื่องเป่าลม SCB-50 ในห้องปั๊มของ KFC ภายในมีห้องแยกตะกอน กรองไร้อากาศ กรองใช้อากาศ และตกตะกอน',
-          'รับน้ำจากห้องน้ำ (ผ่านถังกลม BS-3000) และจากครัว (ผ่านถังดักไขมัน 2 ถัง) น้ำที่บำบัดแล้วออกปลายด้านตะวันออกด้วยท่อ PVC 6 นิ้วไปบ่อพัก แล้วท่อคอนกรีต 0.30 ม. ลงใต้เข้าท่อระบายน้ำด้านตะวันตกของสถานีที่ W10',
+          'รับน้ำจากห้องน้ำ (ผ่านถังกลม BS-3000) และจากครัว (ผ่านถังดักไขมัน 2 ถัง) น้ำที่บำบัดแล้วออกปลายด้านตะวันออกด้วยท่อ PVC 6 นิ้วไปบ่อพัก แล้วไปทางเหนือเข้าบ่อพักมุม W9 ของท่อระบายน้ำด้านตะวันตกของสถานี (ตามหน้างานจริง Brian พ.ย. 2026 แบบ SN-01 เขียนลงใต้ไป W10)',
           `ระดับพื้นประมาณ ${lv(g0)} · หลังถังประมาณ ${lv(top)} · ท่อเข้าประมาณ ${lv(tIn)} ท่อออกประมาณ ${lv(tOut)} (ค่าสมมติ แบบ SN-02 ระบุหลุมลึกประมาณ 2.7 ม.)`,
           'วางบนฐานคอนกรีตเสริมเหล็กบนเสาเข็ม (DB12 @ 0.25 ม. 2 ชั้น) ขนาด 3.10 × 7.40 ม. เสาเข็ม 32 ต้น ยึดถังด้วยลวดสลิง ไม่ได้แสดงเสาเข็ม',
           'Aqua 19–21 พ.ย. 2026: การเติมอากาศของ KFC อ่อน มีไขมันและน้ำมันในบ่อพัก', KFC.th], P) }, V(tx, ty, g0 + 0.8));
@@ -419,14 +419,14 @@ export default {
         info: (m) => lines([`4" pipe from the kitchen grease trap east, then north to grease trap 2, slope 1:200 on SN-01. About ${m} m.`, ASSUMED.en, KFC.en], [`ท่อ 4 นิ้วจากถังดักไขมันในครัวไปทางตะวันออกแล้วขึ้นเหนือไปถังดักไขมันใบที่ 2 ลาด 1:200 ตาม SN-01 ยาวประมาณ ${m} ม.`, ASSUMED.th, KFC.th], P) });
       pipe('sewer', [[29.35, 56.92, tIn + 0.05], [28.17, 56.92], [28.17, 59.1], [29.45, 59.2, tIn]], 0.05, 'sewerRaw', { en: 'KFC grease traps to the treatment tank', th: 'ท่อจากถังดักไขมัน KFC ไปถังบำบัด', kind: 'pipe',
         info: (m) => lines([`4" transfer pipe from grease trap 1 to the treatment tank inlet. About ${m} m.`, ASSUMED.en, KFC.en], [`ท่อ 4 นิ้วจากถังดักไขมันใบที่ 1 ไปท่อเข้าถังบำบัด ยาวประมาณ ${m} ม.`, ASSUMED.th, KFC.th], P) });
-      const w10 = mhLevel.W10 ?? r2(tOut - 0.3), kmh = r2(tOut - 0.02);
+      const kmh = r2(tOut - 0.02);
       pipe('sewer', [[36.8, 59.36, tOut], [38.68, 59.36, kmh]], 0.075, 'sewerTreated', { en: 'KFC treatment tank outlet', th: 'ท่อออกจากถังบำบัด KFC', kind: 'pipe',
         info: lines(['6" PVC (13.5) from the east end of the tank to the KFC outlet manhole, slope 1:200.', ASSUMED.en, KFC.en], ['ท่อ PVC 6 นิ้ว (13.5) จากปลายถังด้านตะวันออกไปบ่อพักท่อออกของ KFC ลาด 1:200', ASSUMED.th, KFC.th], P) });
-      pipe('drains', [[38.68, 59.36, kmh], [39.55, 53.6], [39.70, 53.31, Math.min(r2(kmh - 0.05), w10)]], 0.15, 'drain', { en: 'KFC outlet manhole to W10', th: 'ท่อจากบ่อพัก KFC ไป W10', kind: 'drain',
-        info: (m) => lines([`0.30 m concrete pipe (RCP) from the KFC outlet manhole south into the station\'s west drain at W10, slope 1:200 on SN-01. About ${m} m.`, ASSUMED.en, KFC.en], [`ท่อคอนกรีต 0.30 ม. จากบ่อพักท่อออกของ KFC ลงใต้เข้าท่อระบายน้ำด้านตะวันตกของสถานีที่ W10 ลาด 1:200 ตาม SN-01 ยาวประมาณ ${m} ม.`, ASSUMED.th, KFC.th], P) });
+      pipe('drains', [[38.68, 59.36, kmh], [39.70, 62.34, r2(kmh - 0.02)]], 0.15, 'drain', { en: 'KFC sump KFC-1 to W9', th: 'ท่อจากบ่อพัก KFC-1 ไป W9', kind: 'drain',
+        info: (m) => lines([`Pipe from the small KFC sump north into the corner manhole W9 of the station\'s west drain, as on site (Brian, from the Nov 2026 sampling video). SN-01 draws a 0.30 m concrete pipe south to W10 instead. Pipe size not known (drawn 0.30 m); shown entering W9 above the drain pipe there. About ${m} m.`, ASSUMED.en, KFC.en], [`ท่อจากบ่อพักเล็กของ KFC ไปทางเหนือเข้าบ่อพักมุม W9 ของท่อระบายน้ำด้านตะวันตกของสถานี ตามหน้างานจริง (Brian จากวิดีโอเก็บตัวอย่าง พ.ย. 2026) แบบ SN-01 เขียนท่อคอนกรีต 0.30 ม. ลงใต้ไป W10 แต่หน้างานจริงไป W9 ไม่ทราบขนาดท่อ (แสดง 0.30 ม.) แสดงเข้า W9 สูงกว่าท่อระบายน้ำเดิม ยาวประมาณ ${m} ม.`, ASSUMED.th, KFC.th], P) });
       { const mg = ground(38.68, 59.36);
-        add('drains', boxGeo(0.6, 0.6, mg - (kmh - 0.15), 38.68, 59.36, kmh - 0.15, 0), 'manhole', { en: 'Manhole KFC-1 (KFC outlet)', th: 'บ่อพัก KFC-1 (ท่อออก KFC)', lvl: lv(kmh), kind: 'manhole',
-          info: lines([`KFC outlet manhole drawn on SN-01. Pipe level about ${lv(kmh)} (assumed). Ground about ${lv(mg)}.`, KFC.en], [`บ่อพักท่อออกของ KFC ตาม SN-01 ระดับท่อประมาณ ${lv(kmh)} (ค่าสมมติ) ระดับพื้นประมาณ ${lv(mg)}`, KFC.th], P) });
+        add('drains', boxGeo(0.6, 0.6, mg - (kmh - 0.15), 38.68, 59.36, kmh - 0.15, 0), 'manhole', { en: 'Sump KFC-1 (KFC outlet)', th: 'บ่อพัก KFC-1 (ท่อออก KFC)', lvl: lv(kmh), kind: 'manhole',
+          info: lines([`Small sump with a square lid on the KFC tank outlet (sump 1 in Brian\'s video): tank → KFC-1 → W9. Drawn on SN-01. Pipe level about ${lv(kmh)} (assumed). Ground about ${lv(mg)}.`, KFC.en], [`บ่อพักเล็กฝาสี่เหลี่ยมที่ท่อออกถัง KFC (บ่อที่ 1 ในวิดีโอของ Brian): ถัง → KFC-1 → W9 ตาม SN-01 ระดับท่อประมาณ ${lv(kmh)} (ค่าสมมติ) ระดับพื้นประมาณ ${lv(mg)}`, KFC.th], P) });
         add('drains', boxGeo(0.7, 0.7, 0.03, 38.68, 59.36, mg, 0), 'cover', { en: 'Manhole cover', th: 'ฝาบ่อพัก', nopick: 1 }); }
       // KFC pump room: SCB-50 air blower (0.96 m³/min) and two round water tanks (size from the plan)
       { const pg = ground(23.4, 60.0);
