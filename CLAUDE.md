@@ -103,6 +103,6 @@ Nothing is shared with calnkt: own logins, own databases, own file storage.
 - Tank documents (26 Nov 2026): found in email / SharePoint and filed in each site's `03 Drawings\Tank documents` (1588, 1703,
   1750), also on the site pages as layouts; details in tools/models/README.md. 1156 (26 Nov 2026, Brian): 3 fuel tanks parallel
   to the road, one with two compartments; 3-chamber oil traps at both outlets; KFC grease trap 1 tank / 4 lids, treatment
-  tank 1 tank / 5 lids (maybe 2 + 3) under the lane along the west wall by the pump sump, pump room midway along KFC; the box
+  tank 1 tank / 5 lids (maybe 2 + 3) under the lane behind KFC after (west of) the grease trap, pump room midway along KFC; the box
   at the west end of KFC is the garbage building (about 2.5 m), and there is no order-point hut.
 - Site notes and starting timelines in `data/sites.json` / `data/timelines/` were written from Brian's site-visit notes; dates to confirm.
