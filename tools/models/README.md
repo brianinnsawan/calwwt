@@ -42,14 +42,18 @@ Fuel tanks (every site): `fuelTank()` in build.mjs draws a 30,000 L capsule tank
 depth is assumed (top 1.0 m below ground). Long lying tanks are capsules (`capsuleGeo`), never boxes.
 Not yet used: site photos, 360 videos and Street View (building heights and what is on the surface are assumed).
 Added 26 Nov 2026 from Brian's site photo and markup (not on the drawing unless said):
-- the two 3-chamber oil traps at the east outlet, side by side in an L (outlines from the DWG block "Z$W@#6334"; the
-  west outlet trap uses the same block). Depth assumed 0.5 m below the inlet.
+- the two 3-chamber oil traps at the east outlet, two separate traps in an L, almost touching (outlines from the DWG block
+  "Z$W@#6334"; the road-side one is set 0.26 m west so there is a 10 cm gap). The west and middle outlet traps use the same
+  block. Depth assumed 0.5 m below the inlet.
 - WTT-4 as a lying capsule tank with two lids, 1.25 x 2.5 m (about 3,000 L, size to confirm).
 - the shop sink against the east boundary wall (modelled like the photo: bowl, two wire shelves, dish rack, tap), its small
   (10 to 20 L) grease trap, the 2" PVC pipe lying on the ground the whole way along the wall and the mart front, and the
   sump on the west side of WTT-4. Positions from the markup; sizes and the sump depth assumed.
 - the existing drain along the road edge: sumps F1 to F6 (not numbered on the drawing), flowing west to the existing
   3-chamber oil trap at the middle outlet. Levels from the two written pit bottoms (+0.288 at F4, +0.208 at F2).
+- narrow-mouth gutters (O-gutters) where the front drain crosses the two driveways (kerbs on the drawing: west 332.2 to
+  342.5, east 367.3 to 376.7): the drain pipe with a neck up to a 5 cm slot in a concrete strip. Not detailed on the drawing.
+- the sink pipe is shown light blue (`pvcAbove` in style.mjs), like the real 2" PVC.
 - the front site drain now runs from manhole E7 along the front channel into the road-side oil trap (as drawn), instead
   of a straight line to the east trap.
 Known gaps: sizes and depths of WTT-1, WTT-2, WTT-4, the two Biotech tanks, the grease traps and the old tank; pipe
