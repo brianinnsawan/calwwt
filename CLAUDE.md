@@ -107,7 +107,10 @@ Nothing is shared with calnkt: own logins, own databases, own file storage.
   first drawn at the west end of KFC is the ORDER POINT (roof, menu boards, kerbed walkway), not a garbage building (Brian,
   26 Nov 2026); 2.0 m height limiter at the lane entry; PAY HERE booth behind KFC after the pump room; red DRIVE THRU tower at
   the KFC front-west corner. One garbage room only, by the toilets. Tank farm between the toilets and the office is a raised kerbed pad (material `pad`);
-  each fuel tank has a fibreglass tank sump (`fuelSump`) with a 1 m lid, two on the 2-compartment tank. The drive-through comes out between KFC (east wall x -4) and the toilets (west wall x 3.9):
+  each fuel tank has a fibreglass tank sump (`fuelSump`) with a 1 m lid, two on the 2-compartment tank.
+  Front (Brian's stills): entrance x -22 to -14, kerbed centre island x -14 to -4 with the price sign and IN sign, exit x -4
+  to 9; the front drain is a narrow-mouth gutter across both driveways and a U-drain with gratings between, to the oil trap at
+  each side. Coffee shop: raised timber deck (`deck`) under a red awning, white planter tubs (`planterTub`). The drive-through comes out between KFC (east wall x -4) and the toilets (west wall x 3.9):
   KFC sidewalk 1.2 m + 15 cm kerb, lane 4.0 m, toilet walkway 2.4 m + 15 cm kerb (40 cm tiles); pick-up window with roof on the KFC side.
 - Kerbs, walkways and parking go in the shared layer "paving" (materials walkway, kerbYellow, kerbRed, kerbPlain, bayLine,
   bayEV, grass in style.mjs); first used at 1156 (estimated from the video, 26 Nov 2026).
