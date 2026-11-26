@@ -84,7 +84,7 @@ export default {
       road: { en: 'Highway 4024 and entrances', th: 'ทางหลวง 4024 และทางเข้าออก' },
     },
   },
-  layers: ['tanks', 'sewer', 'drains', 'air', 'base', 'water', 'old', 'fuel', 'buildings', 'plan', 'ground'],   // names, order and colours: ../style.mjs
+  layers: ['tanks', 'sewer', 'drains', 'air', 'base', 'water', 'proposed', 'old', 'fuel', 'buildings', 'plan', 'ground'],   // names, order and colours: ../style.mjs
   views: [
     { id: 'site', en: 'Whole site', th: 'ทั้งสถานี', from: [338, 8, 78], to: [338, 88, 0] },
     { id: 'plan', en: 'Plan', th: 'ผัง', from: [338, 87.9, 125], to: [338, 88, 0] },
@@ -92,11 +92,12 @@ export default {
     { id: 'kfc', en: 'KFC tanks', th: 'ถังของ KFC', from: [289, 117, 12], to: [297, 101.5, -0.5] },
     { id: 'front', en: 'Front drain and sumps', th: 'ท่อระบายและบ่อพักด้านหน้า', from: [344, 47, 22], to: [347, 70.5, 0.2] },
     { id: 'east', en: 'Mart front and east outlet', th: 'หน้าร้านสะดวกซื้อและทางออกตะวันออก', from: [377.5, 61.5, 13], to: [385.3, 75.4, -0.3] },
+    { id: 'kfcopt', en: 'Option: new KFC pipe and tank', th: 'ทางเลือก: ท่อและถังใหม่ของ KFC', from: [280, 52, 34], to: [302, 88, -0.4] },
     { id: 'fuel', from: [341, 66, 6], to: [328.35, 82.5, -1.8] },
     { id: 'under', en: 'From below ground', th: 'มองจากใต้ดิน', from: [352, 90, -7], to: [366, 103.5, 0.2] },
   ],
 
-  build({ notes, fuelTank, capsuleGeo, V, ground, lv, add, boxGeo, cylGeo, hcylGeo, latheGeo, prismGeo, pipeGeo, merge }) {
+  build({ section, notes, fuelTank, capsuleGeo, V, ground, lv, add, boxGeo, cylGeo, hcylGeo, latheGeo, prismGeo, pipeGeo, merge }) {
     const lines = notes;   // (en lines, th lines, 'drawn' | 'part' | 'context')
 
     // ---------- the four new tanks, their base and piles
@@ -381,5 +382,131 @@ export default {
     const cols = [[343.46, 100.06], [344.70, 90.14], [345.93, 80.24], [359.34, 102.04], [360.58, 92.12], [361.81, 82.19]];
     add('buildings', merge(cols.map(([x, y]) => boxGeo(0.6, 0.6, 5.5, x, y, gAt(x, y), 7))), 'column', { en: 'Canopy columns', th: 'เสาหลังคาคลุมหัวจ่าย', kind: 'building', info: lines(['Six columns, positions from the plan.'], ['เสา 6 ต้น ตำแหน่งจากผัง'], C) });
     add('buildings', prismGeo([[341.7, 105.8], [358.6, 107.9], [362.0, 80.1], [345.2, 78.0]], 6.4, 0.9), 'roof', { en: 'Pump canopy', th: 'หลังคาคลุมหัวจ่าย', tag: 'Canopy', tagTh: 'หลังคาคลุมหัวจ่าย', kind: 'building', info: lines(['Canopy over the pump islands.'], ['หลังคาคลุมแท่นหัวจ่าย'], C) }, V(351.9, 93, 7.9));
+
+    // ================= PROPOSED OPTION (Brian, 26 Nov 2026): better treatment for the KFC water ==================
+    // The KFC grease traps and tanks may not treat the water well enough. Option: a new 6" PVC pipe from the two tanks behind the
+    // middle building, along the north boundary, picking up the KFC tank outlets at the north-west corner, then down the west side of
+    // KFC in the soil next to the kerb, to a new 20,000 L tank in the parking in front of KFC, and out to the west oil trap.
+    // Gravity only (Brian dropped the pump-sump idea). Levels from Brian: middle building pipe about 0.45-0.50 below the concrete
+    // (0.50 used), KFC outlet into the corner sump N4 about 0.65 below the concrete; then 1:200 to the new tank and on to the oil trap.
+    {
+      const OD = 0.168, R6 = OD / 2, FALL = 1 / 200, TANK = { x: 304.6, y: 73.9, len: 5.0, r: 1.2 };
+      const KFC_OUT = MH.N4[2] - 0.65;                           // +0.17
+      const N = [
+        { p: [326.20, 106.85], id: 'S', en: 'Start: BO-2600 tank 2', th: 'เริ่ม: ถัง BO-2600 ใบที่ 2', rel: 0.50 },
+        { p: [320.60, 107.15] }, { p: [318.70, 107.00] },
+        { p: [318.45, 106.55], id: 'J1', en: 'BO-2600 tank 1 joins', th: 'ถัง BO-2600 ใบที่ 1 เข้า', rel: 0.50 },
+        { p: [313.00, 106.25] }, { p: [304.50, 105.40] }, { p: [295.80, 104.85] }, { p: [290.50, 104.35] },
+        { p: [288.00, 103.18], id: 'J2', en: 'KFC tank outlet joins', th: 'ท่อออกถัง KFC เข้า', abs: KFC_OUT },
+        { p: [289.24, 96.80], id: 'J3', en: 'WTT-2 joins', th: 'WTT-2 เข้า' },
+        { p: [290.00, 92.80] }, { p: [293.30, 81.20] }, { p: [294.80, 76.30] }, { p: [296.30, 74.00] },
+        { p: [296.60, 71.00], id: 'B1', en: 'Front of KFC', th: 'หน้า KFC' },
+        { p: [308.60, 71.00] }, { p: [308.60, 73.90] },
+        { p: [TANK.x + TANK.len / 2, TANK.y], id: 'TI', en: 'New tank in', th: 'เข้าถังใหม่' },
+        { p: [TANK.x - TANK.len / 2, TANK.y], id: 'TO', en: 'New tank out', th: 'ออกถังใหม่' },
+        { p: [OWS_W[0] + OWS_W[3] / 2, 72.90], id: 'OW', en: 'West oil trap', th: 'บ่อดักน้ำมันตะวันตก' },
+      ];
+      let ch = 0;
+      N.forEach((n, i) => { if (i) ch += Math.hypot(n.p[0] - N[i - 1].p[0], n.p[1] - N[i - 1].p[1]); n.ch = ch; n.g = ground(...n.p); });
+      const at = (id) => N.find((n) => n.id === id);
+      // levels: fixed at S, J1, J2; straight between them; then 1:200 from J2 to the tank; the tank drops 75 mm in to out; 1:200 to the oil trap
+      for (const n of N) if (n.rel != null) n.inv = n.g - n.rel; else if (n.abs != null) n.inv = n.abs;
+      const S0 = at('S'), J1 = at('J1'), J2 = at('J2'), TI = at('TI'), TO = at('TO'), OW = at('OW');
+      N.forEach((n) => {
+        if (n.inv != null) return;
+        if (n.ch < J1.ch) n.inv = S0.inv + (J1.inv - S0.inv) * (n.ch - S0.ch) / (J1.ch - S0.ch);
+        else if (n.ch < J2.ch) n.inv = J1.inv + (J2.inv - J1.inv) * (n.ch - J1.ch) / (J2.ch - J1.ch);
+        else if (n.ch <= TI.ch) n.inv = J2.inv - (n.ch - J2.ch) * FALL;
+      });
+      TO.inv = TI.inv - 0.075; OW.inv = TO.inv - (OW.ch - TO.ch) * FALL;
+      const r2 = (v) => Math.round(v * 100) / 100, rr = (a, b, L) => `1:${Math.round(L / Math.max(1e-6, a - b))}`;
+      const OWS_IN = TRAP_W[3], OWS_OUT = PUBLIC_W[3];              // +0.05 in, ±0.00 out to the public manhole (drawing)
+      const short = OWS_OUT - OW.inv;                               // how far the new pipe arrives below the oil trap's water level
+      const dry = J2.ch + (J2.inv - OWS_OUT) / FALL;                // chainage where the pipe invert drops below ±0.00
+      const legA = N.filter((n) => n.ch <= TI.ch), legB = N.filter((n) => n.ch >= TO.ch);
+      // where the new pipe crosses an existing site drain (drawn levels): the 6" pipe must pass under or over it
+      const runPts = RUNS.map(([name, nodes]) => [name, nodes.map((q) => (typeof q === 'string' ? [MH[q][0], MH[q][1], MH[q][3]] : [q[0], q[1], q[3]]))]);
+      const cross = [];
+      for (let i = 0; i < legA.length - 1; i++) {
+        const [a, b] = [legA[i], legA[i + 1]];
+        for (const [name, pts] of runPts) for (let k = 0; k < pts.length - 1; k++) {
+          const [c, d] = [pts[k], pts[k + 1]], d1x = b.p[0] - a.p[0], d1y = b.p[1] - a.p[1], d2x = d[0] - c[0], d2y = d[1] - c[1], den = d1x * d2y - d1y * d2x;
+          if (Math.abs(den) < 1e-9) continue;
+          const t = ((c[0] - a.p[0]) * d2y - (c[1] - a.p[1]) * d2x) / den, u = ((c[0] - a.p[0]) * d1y - (c[1] - a.p[1]) * d1x) / den;
+          if (t <= 0 || t >= 1 || u <= 0 || u >= 1) continue;
+          const chx = a.ch + t * (b.ch - a.ch), our = a.inv + t * (b.inv - a.inv), theirs = c[2] + u * (d[2] - c[2]);
+          const clash = our < theirs + 0.30 + 0.05 && our + OD > theirs - 0.05;   // existing drain drawn 0.30 m; 50 mm clear wanted
+          cross.push({ ch: r2(chx), rl: r2(theirs), dia: 0.30, our: r2(our), clash, x: a.p[0] + t * d1x, y: a.p[1] + t * d1y,
+            en: 'Existing drain', th: 'ท่อระบายเดิม', run: name });
+        }
+      }
+      // ---- 3D
+      const pIn = legA.map((n) => [...n.p, n.inv]), pOut = legB.map((n) => [...n.p, n.inv]);
+      const fmt = (v) => lv(r2(v));
+      pipe('proposed', pIn, R6, 'proposedPipe', { en: 'Proposed 6" PVC: middle building to KFC to the new tank (option)', th: 'ท่อ PVC 6 นิ้วที่เสนอ: อาคารกลาง ถึง KFC ถึงถังใหม่ (ทางเลือก)', tag: 'New 6" PVC (option)', tagTh: 'ท่อ PVC 6 นิ้วใหม่ (ทางเลือก)', kind: 'pipe',
+        info: (m) => lines([`Proposed, not built (Brian, 26 Nov 2026). New 6" PVC, about ${m} m by gravity: from the two BO-2600 tanks behind the middle building west along the north boundary (under concrete), picking up the KFC tank outlet at the north-west corner and WTT-2, down the west side of KFC in the soil next to the kerb, along the front of the parking and into the new 20,000 L tank.`,
+            `Invert ${fmt(S0.inv)} at the start (0.50 below the concrete), ${fmt(J1.inv)} where BO-2600 tank 1 joins, ${fmt(J2.inv)} where the KFC outlet joins (0.65 below the concrete at N4), then 1:200 to ${fmt(TI.inv)} at the new tank (${(TI.g - TI.inv).toFixed(2)} m below the parking).`,
+            cross.length ? `It crosses ${cross.length} existing site drain${cross.length > 1 ? 's' : ''} at about the same level (${cross.map((c) => `${c.rl >= 0 ? '+' : ''}${c.rl.toFixed(2)}`).join(', ')}): ${cross.some((c) => c.clash) ? 'at 1:200 the new pipe hits ' + (cross.filter((c) => c.clash).length > 1 ? 'them' : 'it') + ', so it would have to drop under' : 'clear'}. See the long section.` : 'It crosses no existing site drain.',
+            'Levels at the start and at the KFC outlet are Brian\'s site estimates; the rest are worked out. Open "Long section" for the levels along the whole pipe.'],
+          [`ที่เสนอ ยังไม่ได้ก่อสร้าง (Brian, 26 พ.ย. 2026) ท่อ PVC 6 นิ้วใหม่ ยาวประมาณ ${m} ม. ไหลด้วยแรงโน้มถ่วง: จากถัง BO-2600 สองใบหลังอาคารกลาง ไปทางตะวันตกตามแนวเขตด้านเหนือ (ใต้พื้นคอนกรีต) รับท่อออกถัง KFC ที่มุมตะวันตกเฉียงเหนือและ WTT-2 ลงมาด้านตะวันตกของ KFC ในดินข้างคันหิน เลียบด้านหน้าที่จอดรถ เข้าถังใหม่ 20,000 ลิตร`,
+            `ท้องท่อ ${fmt(S0.inv)} ที่จุดเริ่ม (ต่ำกว่าพื้นคอนกรีต 0.50) ${fmt(J1.inv)} ที่ถัง BO-2600 ใบที่ 1 เข้า ${fmt(J2.inv)} ที่ท่อออก KFC เข้า (ต่ำกว่าพื้นคอนกรีต 0.65 ที่ N4) แล้วลาด 1:200 ถึง ${fmt(TI.inv)} ที่ถังใหม่ (ต่ำกว่าพื้นที่จอดรถ ${(TI.g - TI.inv).toFixed(2)} ม.)`,
+            cross.length ? `ตัดผ่านท่อระบายน้ำเดิม ${cross.length} จุดที่ระดับใกล้กัน (${cross.map((c) => `${c.rl >= 0 ? '+' : ''}${c.rl.toFixed(2)}`).join(', ')}): ${cross.some((c) => c.clash) ? 'ที่ความลาด 1:200 ท่อใหม่ชนท่อเดิม ต้องลดระดับลอดใต้' : 'ไม่ชน'} ดูรูปตัดตามยาว` : 'ไม่ตัดผ่านท่อระบายน้ำเดิม',
+            'ระดับที่จุดเริ่มและที่ท่อออก KFC เป็นค่าประมาณจากหน้างานของ Brian จุดอื่นคำนวณ เปิด "รูปตัดตามยาว" เพื่อดูระดับตลอดแนวท่อ'], P) });
+      pipe('proposed', pOut, R6, 'proposedPipe', { en: 'Proposed 6" PVC: new tank to the west oil trap (option)', th: 'ท่อ PVC 6 นิ้วที่เสนอ: ถังใหม่ถึงบ่อดักน้ำมันตะวันตก (ทางเลือก)', tag: 'Tank outlet (option)', tagTh: 'ท่อออกถังใหม่ (ทางเลือก)', kind: 'pipe',
+        info: (m) => lines([`Proposed, not built. 6" PVC from the west end of the new tank to the west oil trap, about ${m} m at 1:200.`,
+            `It arrives at ${fmt(OW.inv)}, but the oil trap takes water in at ${lv(OWS_IN)} and lets it out to the public manhole at ${lv(OWS_OUT)} (drawing). So the new pipe arrives ${short.toFixed(2)} m below the oil trap's water level: by gravity, water would stand in the last ${(OW.ch - dry).toFixed(0)} m of the new pipe and in the new tank.`,
+            'Ways round it: take this pipe straight to the public manhole next to the oil trap (its bottom is -1.64 on the drawing), or lift the water from the new tank with a small pump.'],
+          [`ที่เสนอ ยังไม่ได้ก่อสร้าง ท่อ PVC 6 นิ้วจากปลายด้านตะวันตกของถังใหม่ไปบ่อดักน้ำมันตะวันตก ยาวประมาณ ${m} ม. ลาด 1:200`,
+            `ถึงบ่อที่ระดับ ${fmt(OW.inv)} แต่บ่อดักน้ำมันรับน้ำเข้าที่ ${lv(OWS_IN)} และปล่อยออกไปบ่อสาธารณะที่ ${lv(OWS_OUT)} (ตามแบบ) ท่อใหม่จึงต่ำกว่าระดับน้ำในบ่อดัก ${short.toFixed(2)} ม. ถ้าไหลด้วยแรงโน้มถ่วง น้ำจะขังในท่อใหม่ช่วงท้ายประมาณ ${(OW.ch - dry).toFixed(0)} ม. และในถังใหม่`,
+            'ทางแก้: ต่อท่อนี้ตรงไปบ่อพักสาธารณะข้างบ่อดักน้ำมัน (ก้นบ่อ -1.64 ตามแบบ) หรือสูบน้ำจากถังใหม่ด้วยปั๊มขนาดเล็ก'], P) });
+      // branches into the new pipe
+      const branch = (from, to, en, th) => pipe('proposed', [[...from, to.inv + 0.02], [...to.p, to.inv]], R6, 'proposedPipe', { en, th, kind: 'pipe',
+        info: lines([`Proposed, not built. Short 6" PVC into the new pipe at ${fmt(to.inv)}.`, 'Level assumed.'], [`ที่เสนอ ยังไม่ได้ก่อสร้าง ท่อ PVC 6 นิ้วช่วงสั้นต่อเข้าท่อใหม่ที่ระดับ ${fmt(to.inv)}`, 'ระดับเป็นค่าสมมติ'], P) });
+      branch([318.65, 106.20], J1, 'BO-2600 tank 1 into the new pipe (option)', 'ถัง BO-2600 ใบที่ 1 เข้าท่อใหม่ (ทางเลือก)');
+      branch([291.27, 102.27], J2, 'KFC tank outlet (WTT-1) into the new pipe (option): the old outlet into N4 is closed', 'ท่อออกถัง KFC (WTT-1) เข้าท่อใหม่ (ทางเลือก) ปิดท่อออกเดิมที่เข้า N4');
+      branch([290.93, 96.80], at('J3'), 'WTT-2 outlet into the new pipe (option)', 'ท่อออก WTT-2 เข้าท่อใหม่ (ทางเลือก)');
+      // the new tank: 20,000 L lying capsule, Ø2.40 × 5.00 m, top 0.35 above the inlet invert
+      const tTop = TI.inv + 0.35, tAxis = tTop - TANK.r, tBot = tAxis - TANK.r, gT = ground(TANK.x, TANK.y);
+      add('proposed', capsuleGeo(TANK.r, TANK.len, TANK.x, TANK.y, tAxis, 0, 0.29), 'proposedTank', { en: 'Proposed new tank, 20,000 L (option)', th: 'ถังใหม่ที่เสนอ 20,000 ลิตร (ทางเลือก)', tag: 'New tank 20,000 L (option)', tagTh: 'ถังใหม่ 20,000 ลิตร (ทางเลือก)', kind: 'tank',
+        info: lines(['Proposed, not built (Brian, 26 Nov 2026): a further treatment tank for the KFC and middle-building water, in the parking in front of KFC.',
+            `Shown as a lying capsule tank 2.40 m across and 5.00 m long (about 20,000 L). In at the east end ${fmt(TI.inv)}, out at the west end ${fmt(TO.inv)}.`,
+            `Top about ${fmt(tTop)} (${(gT - tTop).toFixed(2)} m below the parking), bottom about ${fmt(tBot)}: the hole would be about ${(gT - tBot + 0.3).toFixed(1)} m deep with the base. Tank make and size to choose.`],
+          ['ที่เสนอ ยังไม่ได้ก่อสร้าง (Brian, 26 พ.ย. 2026): ถังบำบัดเพิ่มสำหรับน้ำจาก KFC และอาคารกลาง วางในที่จอดรถหน้า KFC',
+            `แสดงเป็นถังแคปซูลแบบนอน กว้าง 2.40 ม. ยาว 5.00 ม. (ประมาณ 20,000 ลิตร) น้ำเข้าปลายด้านตะวันออก ${fmt(TI.inv)} ออกปลายด้านตะวันตก ${fmt(TO.inv)}`,
+            `หลังถังประมาณ ${fmt(tTop)} (ต่ำกว่าพื้นที่จอดรถ ${(gT - tTop).toFixed(2)} ม.) ก้นถังประมาณ ${fmt(tBot)} หลุมขุดลึกประมาณ ${(gT - tBot + 0.3).toFixed(1)} ม. รวมฐาน ยี่ห้อและขนาดถังยังต้องเลือก`], P) }, V(TANK.x, TANK.y, gT + 0.6));
+      for (const k of [-1.25, 1.25]) {
+        add('proposed', cylGeo(0.3, gT - tTop + 0.05, TANK.x + k, TANK.y, tTop - 0.05), 'proposedTank', { en: 'New tank access', th: 'ช่องเปิดถังใหม่', nopick: 1 });
+        add('proposed', cylGeo(0.33, 0.03, TANK.x + k, TANK.y, gT), 'cover', { en: 'New tank lid', th: 'ฝาถังใหม่', nopick: 1 });
+      }
+      add('proposed', boxGeo(TANK.len + 0.4, 2 * TANK.r + 0.4, 0.2, TANK.x, TANK.y, tBot - 0.2, 0), 'slab', { en: 'New tank base', th: 'ฐานถังใหม่', nopick: 1 });
+      // ---- long section (opened with the "Long section" button in the viewer)
+      const station = (n) => ({ ch: r2(n.ch), en: n.en, th: n.th, g: r2(n.g), inv: [r2(n.inv), r2(n.id === 'TI' ? TO.inv : n.inv)] });
+      const cols = N.filter((n) => n.id && n.id !== 'TO').map(station);
+      cols.find((c) => c.en === at('TI').en).en = 'New tank in / out'; cols.find((c) => c.th === at('TI').th).th = 'ถังใหม่ เข้า / ออก';
+      const segPts = [S0, J1, J2, at('J3'), at('B1'), TI, TO, OW];
+      const segs = segPts.slice(0, -1).map((a, i) => { const b = segPts[i + 1]; if (a.id === 'TI') return null; const L = b.ch - a.ch; return { ch0: r2(a.ch), ch1: r2(b.ch), L: r2(L), fall: r2(((a.inv - b.inv) / L) * 100), rr: rr(a.inv, b.inv, L) }; }).filter(Boolean);
+      const surf = []; for (let i = 0; i < N.length - 1; i++) { const a = N[i], b = N[i + 1], k = Math.max(1, Math.ceil((b.ch - a.ch) / 2)); for (let j = 0; j < k; j++) { const t = j / k, x = a.p[0] + (b.p[0] - a.p[0]) * t, y = a.p[1] + (b.p[1] - a.p[1]) * t; surf.push([r2(a.ch + (b.ch - a.ch) * t), r2(ground(x, y))]); } }
+      surf.push([r2(OW.ch), r2(OW.g)], [r2(OW.ch + OWS_W[3]), r2(OW.g)]);
+      section({
+        id: 'kfc', en: 'Proposed 6" PVC: middle building → KFC → new tank → west oil trap (option)', th: 'ท่อ PVC 6 นิ้วที่เสนอ: อาคารกลาง → KFC → ถังใหม่ → บ่อดักน้ำมันตะวันตก (ทางเลือก)',
+        length: r2(OW.ch + OWS_W[3]), datum: -2.4, top: 1.2, ve: 10,
+        surface: surf, cols, segs,
+        pipes: [...legA.slice(0, -1).map((a, i) => [a, legA[i + 1]]), ...legB.slice(0, -1).map((a, i) => [a, legB[i + 1]])].map(([a, b]) => ({ ch0: r2(a.ch), ch1: r2(b.ch), ila: r2(a.inv), ilb: r2(b.inv), dia: OD })),
+        joins: ['J1', 'J2', 'J3'].map((id) => ({ ch: r2(at(id).ch), rl: r2(at(id).inv), dia: OD })),
+        cross: cross.map(({ ch, rl, dia, clash, en, th, run }) => ({ ch, rl, dia, clash, en, th, run })),
+        tank: { ch0: r2(TI.ch), ch1: r2(TO.ch), top: r2(tTop), bot: r2(tBot), inl: r2(TI.inv), outl: r2(TO.inv), en: 'New tank 20,000 L', th: 'ถังใหม่ 20,000 ลิตร' },
+        ows: { ch0: r2(OW.ch), ch1: r2(OW.ch + OWS_W[3]), top: r2(OW.g), bot: r2(OWS_IN - 0.5), inl: OWS_IN, out: OWS_OUT, en: 'West oil trap', th: 'บ่อดักน้ำมันตะวันตก' },
+        water: OW.inv < OWS_OUT ? { ch0: r2(dry), ch1: r2(OW.ch + OWS_W[3]), rl: OWS_OUT, en: `Water would stand at ±0.00 (oil trap outlet): new pipe ${short.toFixed(2)} m too low`, th: `น้ำจะขังที่ ±0.00 (ท่อออกบ่อดักน้ำมัน) ท่อใหม่ต่ำไป ${short.toFixed(2)} ม.` } : null,
+        key: {
+          boundary: this.boundary,
+          blds: [[[293.3, 100.25], [298.4, 100.75], [298.3, 102.1], [303.85, 102.6], [303.95, 101.2], [309.0, 101.65], [310.55, 85.65], [296.25, 84.3], [295.45, 93.0], [294.0, 92.95]], [[314.6, 104.7], [328.4, 106.1], [329.2, 96.9], [315.5, 95.7]]],
+          drains: runPts.map(([, pts]) => pts.map((q) => [r2(q[0]), r2(q[1])])),
+          route: N.map((n) => n.p), tank: [[TANK.x - TANK.len / 2, TANK.y - TANK.r], [TANK.x + TANK.len / 2, TANK.y - TANK.r], [TANK.x + TANK.len / 2, TANK.y + TANK.r], [TANK.x - TANK.len / 2, TANK.y + TANK.r]],
+          box: [284, 332, 66, 110], marks: [[288.0, 103.18, 'KFC'], [304.6, 73.9, '20,000 L'], [295.17, 71.75, 'OWS']],
+        },
+        foot: { en: `Levels in metres from the drawing datum (BMP ±0.00 on highway 4024). Proposed, not built: start and KFC-outlet levels are Brian's site estimates (0.50 and 0.65 below the concrete); after the KFC outlet the pipe falls 1:200. 6" PVC drawn 168 mm outside. Existing drains from the as-built drawing (drawn 0.30 m). Oil trap: in ${lv(OWS_IN)}, out to the public manhole ${lv(OWS_OUT)}.`,
+          th: `ระดับเป็นเมตรจากระดับอ้างอิงของแบบ (BMP ±0.00 บนทางหลวง 4024) ที่เสนอ ยังไม่ได้ก่อสร้าง: ระดับที่จุดเริ่มและที่ท่อออก KFC เป็นค่าประมาณจากหน้างานของ Brian (ต่ำกว่าพื้นคอนกรีต 0.50 และ 0.65) หลังท่อออก KFC ท่อลาด 1:200 ท่อ PVC 6 นิ้ว แสดงขนาดนอก 168 มม. ท่อระบายน้ำเดิมจากแบบก่อสร้างจริง (แสดง 0.30 ม.) บ่อดักน้ำมัน: เข้า ${lv(OWS_IN)} ออกไปบ่อสาธารณะ ${lv(OWS_OUT)}` },
+      });
+    }
   },
 };

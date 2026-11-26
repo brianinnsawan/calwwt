@@ -3,6 +3,8 @@
 // the site's security rules only allow its own files).
 // What you can do: turn with the mouse or a finger, switch layers on and off, see through the ground, jump to ready-made
 // views, and click a tank, pipe or manhole to read its size and levels. The names and notes come from inside the .glb file.
+// A model can carry long sections (scene userData "sections", made in tools/models from the same levels as the 3D pipes):
+// a "Long section" button then opens a profile with a level table and key plan, like the drainage sections on calcr.sppwork.com.
 import * as THREE from '/sites/vendor/three.module.min.js';
 import { OrbitControls } from '/sites/vendor/OrbitControls.js';
 import { GLTFLoader } from '/sites/vendor/GLTFLoader.js';
@@ -10,10 +12,14 @@ import { GLTFLoader } from '/sites/vendor/GLTFLoader.js';
 const T = {
   en: { layers: 'Layers', views: 'Views', labels: 'Names', levels: 'Pipe levels at manholes', see: 'See through the ground', tall: 'Stretch height ×3',
     hint: 'Click a tank, pipe or manhole to see its size and levels. Drag to turn, scroll or pinch to zoom, right-drag or two fingers to move.',
-    close: 'Close', north: 'North', loading: 'Loading the 3D model…', failed: 'The 3D model could not be shown on this device.', built: 'Model updated' },
+    close: 'Close', north: 'North', loading: 'Loading the 3D model…', failed: 'The 3D model could not be shown on this device.', built: 'Model updated',
+    section: 'Long section', vert: 'Vertical ×', rows: ['Ground RL', 'Invert RL  in / out', 'Pipe top RL', 'Depth to invert (m)', 'Chainage (m)', 'Length · fall'], datum: 'Datum RL', key: 'Key plan',
+    leg: ['Proposed pipe', 'Ground', 'Existing drain crossing', 'Clash with existing drain', 'Water level'], clash: 'clash', clear: 'clear', grating: 'Grating', in: 'In', out: 'Out', water: 'Water', top: 'Top', bottom: 'Bottom' },
   th: { layers: 'ชั้นข้อมูล', views: 'มุมมอง', labels: 'ชื่อ', levels: 'ระดับท่อที่บ่อพัก', see: 'มองทะลุพื้น', tall: 'ขยายความสูง ×3',
     hint: 'คลิกที่ถัง ท่อ หรือบ่อพัก เพื่อดูขนาดและระดับ ลากเพื่อหมุน เลื่อนลูกกลิ้งหรือใช้สองนิ้วเพื่อซูม คลิกขวาลากหรือใช้สองนิ้วเพื่อเลื่อน',
-    close: 'ปิด', north: 'ทิศเหนือ', loading: 'กำลังโหลดโมเดล 3D…', failed: 'ไม่สามารถแสดงโมเดล 3D บนอุปกรณ์นี้ได้', built: 'ปรับปรุงโมเดลเมื่อ' },
+    close: 'ปิด', north: 'ทิศเหนือ', loading: 'กำลังโหลดโมเดล 3D…', failed: 'ไม่สามารถแสดงโมเดล 3D บนอุปกรณ์นี้ได้', built: 'ปรับปรุงโมเดลเมื่อ',
+    section: 'รูปตัดตามยาว', vert: 'แนวดิ่งขยาย ×', rows: ['ระดับพื้น RL', 'ระดับท้องท่อ เข้า / ออก', 'ระดับหลังท่อ RL', 'ความลึกถึงท้องท่อ (ม.)', 'ระยะ (ม.)', 'ความยาว · ความลาด'], datum: 'ระดับอ้างอิง RL', key: 'แปลนตำแหน่ง',
+    leg: ['ท่อที่เสนอ', 'ผิวพื้น', 'ท่อระบายน้ำเดิมที่ตัดผ่าน', 'ชนท่อระบายน้ำเดิม', 'ระดับน้ำ'], clash: 'ชน', clear: 'ไม่ชน', grating: 'ตะแกรง', in: 'เข้า', out: 'ออก', water: 'น้ำ', top: 'หลังถัง', bottom: 'ก้นถัง' },
 };
 const CSS = `
 .v3 { position: absolute; inset: 0; overflow: hidden; touch-action: none; }
@@ -39,6 +45,29 @@ const CSS = `
 .v3-lab span.v3-lvl { font: 500 10.5px var(--font-mono); border-color: transparent; padding: 0 3px; }
 .v3-n { position: absolute; right: 12px; bottom: 12px; z-index: 5; width: 44px; height: 44px; border-radius: 50%; background: color-mix(in srgb, var(--panel) 92%, transparent); border: 1px solid var(--rule); display: grid; place-items: center; }
 .v3-n svg { width: 34px; height: 34px; }
+/* long sections (as on calcr.sppwork.com) */
+.v3-views button.v3-secbtn { border-color: #d9468f; color: #b02a6f; font-weight: 600; }
+.v3-sect { position: absolute; inset: 0; z-index: 20; background: var(--panel); display: grid; grid-template-rows: auto minmax(0, 1fr) auto; }
+.v3-sect[hidden] { display: none; }
+.v3-sect .sh { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 14px; padding: 8px 12px 8px 16px; border-bottom: 1px solid var(--rule); }
+.v3-sect .st { font: 600 16px/1.2 var(--font-display); flex: 1 1 320px; }
+.v3-sect .sc { font: 11px var(--font-mono); color: var(--muted); }
+.v3-sect .sb { overflow: auto; padding: 10px 12px 10px 16px; }
+.v3-sect svg { display: block; }
+.v3-sect svg text { fill: var(--ink); font: 11px var(--font-mono); }
+.v3-sect svg text.v2 { font-size: 10px; }
+.v3-sect svg text.ax { font-size: 10.5px; fill: var(--muted); }
+.v3-sect svg text.rt { font: 500 11.5px var(--font-body); }
+.v3-sect svg text.lb { font: 600 12px var(--font-body); }
+.v3-sect svg text.bad { fill: #d62728; font: 600 11.5px var(--font-body); }
+.v3-sect svg text.wt { fill: #2f6db5; font: 600 11.5px var(--font-body); }
+.v3-sect .sf { border-top: 1px solid var(--rule); padding: 8px 12px 10px 16px; font-size: 12px; color: var(--muted); display: grid; grid-template-columns: auto 1fr; gap: 6px 18px; align-items: start; max-height: 330px; overflow: auto; }
+.v3-sect .sf .kt { font: 600 11px var(--font-mono); margin-bottom: 2px; }
+.v3-sect .sf svg { max-width: 100%; }
+.v3-sect .sf svg text { font: 600 10px var(--font-body); fill: var(--ink); }
+.v3-sect .lg { display: flex; flex-wrap: wrap; gap: 4px 16px; margin-bottom: 6px; }
+.v3-sect .lg i { display: inline-block; width: 18px; height: 3px; margin-right: 6px; vertical-align: middle; }
+@media (max-width: 760px) { .v3-sect .sf { grid-template-columns: 1fr; } }
 @media (max-width: 760px) { .v3-views { max-width: calc(100% - 20px); top: 46px; } .v3-panel { width: 210px; } .v3-info { max-height: 40%; } .v3-n { bottom: auto; top: 132px; right: 10px; } }
 `;
 const el = (tag, attrs = {}, text) => { const n = document.createElement(tag); for (const [k, v] of Object.entries(attrs)) if (v != null) n.setAttribute(k, v); if (text != null) n.textContent = text; return n; };
@@ -145,6 +174,15 @@ export async function show(view, url, w, lang = 'en') {
     hit ? pick(hit.object) : idle();
   });
 
+  // ---- long sections
+  if (meta.sections?.length) {
+    const ov = el('div', { class: 'v3-sect' }); ov.hidden = true; box.append(ov);
+    const sb = el('button', { type: 'button', class: 'v3-secbtn' }, t.section); vbar.append(sb);
+    sb.onclick = () => { ov.hidden = false; drawSection(ov, meta.sections[0], l, t); };
+    ov.addEventListener('click', (e) => { if (e.target.closest('.x')) ov.hidden = true; });
+    ['pointerdown', 'wheel'].forEach((k) => ov.addEventListener(k, (e) => e.stopPropagation()));
+  }
+
   // ---- north arrow (turns with the view)
   let needle = null;
   if (Number.isFinite(meta.north)) {
@@ -179,4 +217,120 @@ export async function show(view, url, w, lang = 'en') {
     }
   });
   return { go: (id) => { const x = views.find((q) => q.id === id); if (x) go(scaled(x.pos), scaled(x.target)); } };
+}
+
+// ---------------------------------------------------------------- long section drawing
+const SC = { surf: '#3a9d4a', pipe: '#d9468f', exist: '#7b8794', bad: '#d62728', water: '#3d7ea6', flow: '#16a34a', tank: '#a0662f' };
+const esc = (x) => String(x).replace(/&/g, '&amp;').replace(/</g, '&lt;');
+const f2 = (v) => (v == null ? '' : Math.abs(v) < 0.005 ? '±0.00' : (v > 0 ? '+' : '') + v.toFixed(2));
+function drawSection(ov, s, l, t) {
+  const nm = (o) => (l === 'th' && o.th) || o.en || '';
+  ov.replaceChildren();
+  const head = el('div', { class: 'sh' }), body = el('div', { class: 'sb' }), foot = el('div', { class: 'sf' });
+  head.append(el('div', { class: 'st' }, nm(s)), el('span', { class: 'sc' }, `${t.vert}${s.ve}`));
+  const x = el('button', { type: 'button', class: 'x', title: t.close, 'aria-label': t.close }, '×'); head.append(x);
+  ov.append(head, body, foot);
+  // ---- profile
+  const VE = s.ve || 10, TC = 150, L0 = TC + 20, RH = 26, NR = 6, avail = Math.max(700, (ov.clientWidth || 1200) - 40);
+  const PX = Math.max(6, Math.min(26, (avail - L0 - 70) / s.length)), VY = PX * VE, D0 = s.datum, TOP = s.top;
+  const yD = 52 + (TOP - D0) * VY, W = L0 + s.length * PX + 70, H = yD + NR * RH + 8;
+  const X = (c) => L0 + c * PX, Y = (rl) => yD - (rl - D0) * VY, o = [];
+  const line = (x1, y1, x2, y2, c, w = 1, d = '') => o.push(`<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" stroke="${c}" stroke-width="${w}"${d ? ` stroke-dasharray="${d}"` : ''}/>`);
+  const poly = (pts, c, w = 1.5, fill = 'none', d = '') => o.push(`<polyline points="${pts.map((p) => p.map((v) => v.toFixed(1)).join(',')).join(' ')}" fill="${fill}" stroke="${c}" stroke-width="${w}"${d ? ` stroke-dasharray="${d}"` : ''}/>`);
+  const text = (x0, y0, s0, a = 'middle', cls = '') => o.push(`<text x="${x0.toFixed(1)}" y="${y0.toFixed(1)}" text-anchor="${a}"${cls ? ` class="${cls}"` : ''}>${esc(s0)}</text>`);
+  const mut = 'var(--muted)', rule = 'var(--rule)', ink = 'var(--ink)';
+  for (let k = Math.ceil(D0 / 0.5); k <= Math.floor(TOP / 0.5); k++) {
+    const rl = k * 0.5; line(TC, Y(rl), TC + 5, Y(rl), mut); text(TC - 4, Y(rl) + 4, f2(rl), 'end', 'ax');
+    line(X(0), Y(rl), X(s.length), Y(rl), 'color-mix(in srgb, var(--muted) 40%, transparent)', 1, '1.5 4');
+  }
+  line(TC + 5, Y(TOP), TC + 5, yD, mut); text(6, yD - 4, `${t.datum} ${D0.toFixed(2)}`, 'start', 'ax');
+  // table
+  const xe = X(s.length) + 40;
+  for (let r = 0; r <= NR; r++) line(0, yD + r * RH, xe, yD + r * RH, rule);
+  line(0, yD, 0, yD + NR * RH, rule); line(TC, yD, TC, yD + NR * RH, rule); line(xe, yD, xe, yD + NR * RH, rule);
+  t.rows.forEach((n, r) => text(6, yD + r * RH + RH / 2 + 4, n, 'start', 'rt'));
+  const cx = s.cols.map((c) => X(c.ch)), tx = cx.slice();
+  for (let i = 1; i < tx.length; i++) if (tx[i] - tx[i - 1] < 50) { const m = (tx[i] + tx[i - 1]) / 2; tx[i - 1] = Math.min(tx[i - 1], m - 25); tx[i] = Math.max(tx[i], m + 25); }
+  const cell = (i, r, vals) => { const yc = yD + r * RH + RH / 2; if (vals.length === 1) text(tx[i], yc + 4, vals[0]); else { text(tx[i], yc - 2, vals[0], 'middle', 'v2'); text(tx[i], yc + 9, vals[1], 'middle', 'v2'); } };
+  s.cols.forEach((c, i) => {
+    line(cx[i], yD, cx[i], Y(Math.min(...c.inv)), rule);
+    const two = Math.abs(c.inv[0] - c.inv[1]) > 0.004;
+    cell(i, 0, [f2(c.g)]);
+    cell(i, 1, two ? [f2(c.inv[0]), f2(c.inv[1])] : [f2(c.inv[0])]);
+    cell(i, 2, two ? [f2(c.inv[0] + 0.168), f2(c.inv[1] + 0.168)] : [f2(c.inv[0] + 0.168)]);
+    cell(i, 3, [(c.g - Math.min(...c.inv)).toFixed(2)]);
+    cell(i, 4, [c.ch.toFixed(2)]);
+  });
+  const mctx = document.createElement('canvas').getContext('2d'); mctx.font = '11px monospace';
+  for (const g of s.segs) {
+    const wpx = (g.ch1 - g.ch0) * PX, xm = X((g.ch0 + g.ch1) / 2), yc = yD + 5 * RH + RH / 2;
+    const full = `${g.L.toFixed(1)} m · ${g.fall.toFixed(2)}% · ${g.rr}`, sh = `${g.fall.toFixed(2)}% · ${g.rr}`;
+    if (mctx.measureText(full).width < wpx - 8) text(xm, yc + 4, full); else if (mctx.measureText(sh).width < wpx - 4) text(xm, yc + 4, sh);
+    else { text(xm, yc - 2, `${g.fall.toFixed(2)}%`, 'middle', 'v2'); text(xm, yc + 9, g.rr, 'middle', 'v2'); }
+  }
+  // ground
+  poly(s.surface.map(([a, b]) => [X(a), Y(b)]), SC.surf, 2);
+  // tank
+  if (s.tank) {
+    const k = s.tank, x0 = Math.min(X(k.ch0), X(k.ch1)), w = Math.abs(X(k.ch1) - X(k.ch0)), rx = Math.min(w / 2, (k.top - k.bot) / 2 * VY * 0.35);
+    o.push(`<rect x="${x0.toFixed(1)}" y="${Y(k.top).toFixed(1)}" width="${w.toFixed(1)}" height="${((k.top - k.bot) * VY).toFixed(1)}" rx="${rx.toFixed(1)}" fill="color-mix(in srgb, ${SC.pipe} 12%, transparent)" stroke="${SC.pipe}" stroke-width="1.8"/>`);
+    line(x0 + 3, Y(k.outl + 0.168 / 2), x0 + w - 3, Y(k.outl + 0.168 / 2), SC.water, 1.4, '5 3');
+    const ym = Y((k.top + k.bot) / 2);
+    text(x0 - 8, ym - 8, nm(k), 'end', 'lb');
+    text(x0 - 8, ym + 7, `${t.in} ${f2(k.inl)} · ${t.out} ${f2(k.outl)}`, 'end', 'v2');
+    text(x0 - 8, ym + 20, `${t.top} ${f2(k.top)} · ${t.bottom} ${f2(k.bot)}`, 'end', 'v2');
+  }
+  // oil trap
+  if (s.ows) {
+    const k = s.ows, x0 = X(k.ch0), w = X(k.ch1) - X(k.ch0);
+    o.push(`<rect x="${x0.toFixed(1)}" y="${Y(k.top).toFixed(1)}" width="${w.toFixed(1)}" height="${((k.top - k.bot) * VY).toFixed(1)}" fill="color-mix(in srgb, var(--ink) 6%, transparent)" stroke="${ink}" stroke-width="1.6"/>`);
+    line(x0, Y(k.top), x0 + w, Y(k.top), ink, 4);
+    line(x0 + 2, Y(k.out), x0 + w - 2, Y(k.out), SC.water, 1.6, '5 3');
+    text(x0 + w + 6, Y(k.inl) - 2, `${t.in} ${f2(k.inl)}`, 'start', 'v2'); text(x0 + w + 6, Y(k.out) + 10, `${t.out} ${f2(k.out)}`, 'start', 'v2');
+  }
+  // pipes, with flow arrows
+  for (const p of s.pipes) {
+    poly([[X(p.ch0), Y(p.ila)], [X(p.ch1), Y(p.ilb)], [X(p.ch1), Y(p.ilb + p.dia)], [X(p.ch0), Y(p.ila + p.dia)], [X(p.ch0), Y(p.ila)]], SC.pipe, 1.4, `color-mix(in srgb, ${SC.pipe} 22%, transparent)`);
+    if (X(p.ch1) - X(p.ch0) > 46) { const xm = (X(p.ch0) + X(p.ch1)) / 2, ym = Y((p.ila + p.ilb) / 2 + p.dia + 0.1); o.push(`<path d="M${(xm - 9).toFixed(1)},${(ym - 4.5).toFixed(1)} L${(xm + 9).toFixed(1)},${ym.toFixed(1)} L${(xm - 9).toFixed(1)},${(ym + 4.5).toFixed(1)} Z" fill="${SC.flow}"/>`); }
+  }
+  for (const j of s.joins || []) o.push(`<circle cx="${X(j.ch).toFixed(1)}" cy="${Y(j.rl + j.dia / 2).toFixed(1)}" r="4.5" fill="var(--panel)" stroke="${SC.pipe}" stroke-width="2"/>`);
+  // standing water
+  if (s.water) { const w = s.water; line(X(w.ch0), Y(w.rl), X(w.ch1), Y(w.rl), SC.water, 2, '7 4'); line(X(w.ch0), Y(w.rl), X(w.ch0) - 10, Y(w.rl - 0.26), SC.water, 1); text(X(w.ch0) - 12, Y(w.rl - 0.30), nm(w), 'end', 'wt'); }
+  // existing drains the pipe crosses
+  const labs = s.cols.map((c, i) => [cx[i], nm(c), '']);
+  for (const c of s.cross || []) {
+    const col = c.clash ? SC.bad : SC.exist;
+    o.push(`<ellipse cx="${X(c.ch).toFixed(1)}" cy="${Y(c.rl + c.dia / 2).toFixed(1)}" rx="${Math.max(3, (c.dia / 2) * PX).toFixed(1)}" ry="${((c.dia / 2) * VY).toFixed(1)}" fill="color-mix(in srgb, ${col} 18%, transparent)" stroke="${col}" stroke-width="2"/>`);
+    line(X(c.ch), Y(c.rl + c.dia), X(c.ch), Y(TOP - 0.18), col, 1, '2 2');
+    labs.push([X(c.ch), `${nm(c)} ${f2(c.rl)} · ${c.clash ? t.clash : t.clear}`, c.clash ? 'bad' : '']);
+  }
+  // station names above the ground, up to 3 rows, no overlaps
+  const rows = [Y(TOP) - 2, Y(TOP) + 13, Y(TOP) + 28], placed = [[], [], []];
+  labs.sort((a, b) => a[0] - b[0]).forEach(([x0, s0, cls]) => {
+    const w = mctx.measureText(s0).width * 1.12 + 10;
+    for (let r = 0; r < 3; r++) if (placed[r].every(([a, b]) => x0 + w / 2 < a || x0 - w / 2 > b)) { placed[r].push([x0 - w / 2, x0 + w / 2]); text(x0, rows[r], s0, 'middle', cls || 'lb'); break; }
+  });
+  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svg.setAttribute('viewBox', `0 0 ${W.toFixed(0)} ${H.toFixed(0)}`); svg.setAttribute('width', W.toFixed(0)); svg.setAttribute('height', H.toFixed(0)); svg.innerHTML = o.join('');
+  body.append(svg);
+  // ---- key plan, legend, notes
+  const kbox = el('div'); kbox.append(el('div', { class: 'kt' }, t.key));
+  if (s.key) {
+    const K = s.key, [x0, x1, y0, y1] = K.box, sc = 300 / (x1 - x0), P = (q) => `${((q[0] - x0) * sc).toFixed(1)},${((y1 - q[1]) * sc).toFixed(1)}`, k = [];
+    const pl = (pts, attrs, close) => k.push(`<${close ? 'polygon' : 'polyline'} points="${pts.map(P).join(' ')}" ${attrs}/>`);
+    if (K.boundary) pl(K.boundary, 'fill="none" stroke="var(--ink)" stroke-width="1.2"', true);
+    (K.blds || []).forEach((b) => pl(b, 'fill="color-mix(in srgb, var(--ink) 10%, transparent)" stroke="var(--muted)" stroke-width=".8"', true));
+    (K.drains || []).forEach((d) => pl(d, `fill="none" stroke="${SC.exist}" stroke-width="1" stroke-dasharray="3 2"`));
+    if (K.tank) pl(K.tank, `fill="color-mix(in srgb, ${SC.pipe} 30%, transparent)" stroke="${SC.pipe}" stroke-width="1.2"`, true);
+    pl(K.route, `fill="none" stroke="${SC.pipe}" stroke-width="3" stroke-linejoin="round"`);
+    for (const c of s.cross || []) if (c.clash) { /* crossing points are not in the key data: shown in the section */ }
+    (K.marks || []).forEach(([mx, my, s0]) => k.push(`<text x="${((mx - x0) * sc).toFixed(1)}" y="${((y1 - my) * sc - 6).toFixed(1)}" text-anchor="middle">${esc(s0)}</text>`));
+    const e = K.route[K.route.length - 1], f = K.route[K.route.length - 2], ang = (Math.atan2(-(e[1] - f[1]), e[0] - f[0]) * 180) / Math.PI;
+    k.push(`<path d="M0,0 L-9,-4.5 L-9,4.5 Z" fill="${SC.pipe}" transform="translate(${P(e)}) rotate(${ang.toFixed(1)})"/>`);
+    const ks = document.createElementNS('http://www.w3.org/2000/svg', 'svg'); ks.setAttribute('viewBox', `0 0 300 ${((y1 - y0) * sc).toFixed(0)}`); ks.setAttribute('width', 240); ks.setAttribute('height', ((y1 - y0) * sc * 0.8).toFixed(0)); ks.innerHTML = k.join(''); kbox.append(ks);
+  }
+  const ft = el('div'), lg = el('div', { class: 'lg' });
+  [[SC.pipe, 0], [SC.surf, 1], [SC.exist, 2], [SC.bad, 3], [SC.water, 4]].forEach(([c, i]) => { const sp = el('span'), sw = el('i'); sw.style.background = c; sp.append(sw, t.leg[i]); lg.append(sp); });
+  ft.append(lg); if (s.foot) ft.append(el('div', {}, nm(s.foot)));
+  foot.append(kbox, ft);
 }

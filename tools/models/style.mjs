@@ -23,6 +23,8 @@ export const MATERIALS = {
   pvcAbove: [0x3ea9e6],          // small PVC pipe lying above ground, shown light blue like the real pipe (Brian, 26 Nov 2026)
   fixture: [0xb3bcc6, 0.9],      // sinks and other fixtures above ground (stainless grey)
   waterTank: [0x58b7e6, 0.5],    // clean-water storage tank and its pumps (light blue): not wastewater, shown because it is in the way of digging
+  // proposed works (options, not built): one pink for every site so a proposal never looks like something that is there
+  proposedPipe: [0xd9468f], proposedTank: [0xd9468f, 0.55],
   // structure and context
   slab: [0xb7b1a8, 0.9], pile: [0x8c857b],
   fuel: [0xf2a51a, 0.6], building: [0xc4ccd4, 0.22], roof: [0xdfe5ea, 0.3], column: [0x9aa5b1],
@@ -36,6 +38,7 @@ export const LAYERS = [
   { id: 'air', en: 'Air pumps and air lines', th: 'ปั๊มลมและท่อลม' },
   { id: 'base', en: 'Tank base slabs and piles', th: 'ฐานถังและเสาเข็ม' },
   { id: 'water', en: 'Clean-water tank and pumps', th: 'ถังเก็บน้ำดีและปั๊มน้ำ' },
+  { id: 'proposed', en: 'Proposed works (option, not built)', th: 'งานที่เสนอ (ทางเลือก ยังไม่ได้ก่อสร้าง)' },
   { id: 'old', en: 'Tanks and pipes out of use', th: 'ถังและท่อที่เลิกใช้' },
   { id: 'fuel', en: 'Fuel tanks', th: 'ถังน้ำมันใต้ดิน' },
   { id: 'buildings', en: 'Buildings and canopy', th: 'อาคารและหลังคาคลุมหัวจ่าย' },

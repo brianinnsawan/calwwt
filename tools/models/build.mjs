@@ -151,7 +151,8 @@ const fuelTank = (label, x, y, rot = 0, o = {}) => {
     [`ถังน้ำมันใต้ดิน ${label}: ถังแคปซูลแบบนอน 30,000 ลิตร ปลายโค้งเล็กน้อย กว้าง ${dia.toFixed(2)} ม. ยาว ${len.toFixed(1)} ม.`, ...(o.th || []),
       `ในแบบชุดนี้ไม่มีความลึก แสดงหลังถังต่ำกว่าพื้น ${F.cover.toFixed(1)} ม. (ประมาณ ${lv(g0 - F.cover)})`, 'เว้นระยะเมื่อวางแผนงานขุด'], 'part') }, V(x, y, g0 + 0.5));
 };
-const api = { notes, SRC, FUEL_TANK, fuelTank, capsuleGeo, V, ground, lv, add, boxGeo, cylGeo, hcylGeo, latheGeo, prismGeo, pipeGeo, merge: (list) => mergeGeometries(list.every((g) => g.index) ? list : list.map((g) => (g.index ? g.toNonIndexed() : g))), THREE };
+const sections = [];   // long sections the viewer can open ("Long section" button), drawn from the same levels as the model
+const api = { section: (x) => sections.push(x), notes, SRC, FUEL_TANK, fuelTank, capsuleGeo, V, ground, lv, add, boxGeo, cylGeo, hcylGeo, latheGeo, prismGeo, pipeGeo, merge: (list) => mergeGeometries(list.every((g) => g.index) ? list : list.map((g) => (g.index ? g.toNonIndexed() : g))), THREE };
 
 // ---- ground surface and plan linework
 {
@@ -187,7 +188,7 @@ const api = { notes, SRC, FUEL_TANK, fuelTank, capsuleGeo, V, ground, lv, add, b
 
 site.build(api);
 
-scene.userData = { site: code, name: site.name, datum: site.datum, note: site.note, views: site.views.map((v) => ({ ...v, ...(VIEWS[v.id] || {}), pos: V(...v.from).toArray().map((n) => +n.toFixed(2)), target: V(...v.to).toArray().map((n) => +n.toFixed(2)), from: undefined, to: undefined })), north: site.north, built: site.built };
+scene.userData = { site: code, name: site.name, datum: site.datum, note: site.note, views: site.views.map((v) => ({ ...v, ...(VIEWS[v.id] || {}), pos: V(...v.from).toArray().map((n) => +n.toFixed(2)), target: V(...v.to).toArray().map((n) => +n.toFixed(2)), from: undefined, to: undefined })), north: site.north, built: site.built, ...(sections.length ? { sections } : {}) };
 scene.updateMatrixWorld(true);
 const out = path.join(here, '..', '..', 'portal-proposal', 'public', 'sites', 'models', `${code}.glb`);
 fs.mkdirSync(path.dirname(out), { recursive: true });
