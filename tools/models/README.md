@@ -173,8 +173,10 @@ Assumed: every pipe level and size (no levels on any sheet: drains 0.30 m, 0.40 
 1156 drive-through exit (Brian, 26 Nov 2026): KFC east wall at x -4.0, toilets x 3.9 to 11.8; KFC sidewalk 3 rows of 40 cm
 tiles + 15 cm kerb, lane 4.0 m, toilet walkway 6 rows + 15 cm kerb; red pick-up booth with its window, flat roof over the
 lane and PICK UP HERE sign, bollards; toilets drawn with walls, open front, red slatted screens, sink counters, red roof edge.
-View "Drive-through exit: pick-up window and toilets". Only one garbage room by the toilets (Brian) plus the garbage building
-at the west end of KFC.
+View "Drive-through exit: pick-up window and toilets". One garbage room only, by the toilets. Drive-through entry (Brian's
+stills): 2.0 m height limiter, kerbed island, order point with roof on the west side of KFC (the box first drawn there and
+called a garbage building); PAY HERE booth with roof and sign behind KFC after the pump room, AC condensers before it.
+Views "Drive-through entry" and "Behind KFC: pump room and pay window".
 
 ## Kerbs, walkways and parking (shared layer "paving", from 26 Nov 2026)
 `style.mjs` has a layer "Kerbs, walkways and parking" and materials walkway, kerbYellow, kerbRed, kerbPlain, bayLine, bayEV,
