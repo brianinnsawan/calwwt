@@ -28,6 +28,7 @@ export const MATERIALS = {
   // structure and context
   slab: [0xb7b1a8, 0.9], pile: [0x8c857b],
   fuel: [0xf2a51a, 0.6], building: [0xc4ccd4, 0.22], roof: [0xdfe5ea, 0.3], column: [0x9aa5b1],
+  fuelSump: [0x2f6e4f, 0.85],    // fibreglass tank sump (manhole chamber) on top of a fuel tank, under its 1 m lid
   fuelPipe: [0xd9860b],          // underground fuel pipes (fill, vent and dispensing lines), darker than the fuel tanks
   islands: [0x8f98a1, 0.9],      // pump islands and dispensers
   // surroundings outside the station (layer "surroundings", can be switched off): paler, so the station stays in front
@@ -35,6 +36,7 @@ export const MATERIALS = {
   hedge: [0x4f8a3c, 0.6],       // hedges and rows of shrubs
   // kerbs, walkways and parking (layer "paving"): raised walkways, painted kerbs, parking-bay paint
   walkway: [0xcfc6b8, 0.85],     // raised walkway / footpath slab
+  pad: [0xcfc6b8, 0.35],         // large raised pad over tanks (tank farm): see-through so the tanks under it show
   kerbYellow: [0xe0b100],        // kerb painted yellow and black
   kerbRed: [0xc8432f],           // kerb painted red and white
   kerbPlain: [0x9c968c],         // plain concrete kerb

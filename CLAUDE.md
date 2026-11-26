@@ -106,7 +106,8 @@ Nothing is shared with calnkt: own logins, own databases, own file storage.
   tank 1 tank / 5 lids (maybe 2 + 3) under the lane behind KFC after (west of) the grease trap, pump room midway along KFC; the box
   first drawn at the west end of KFC is the ORDER POINT (roof, menu boards, kerbed walkway), not a garbage building (Brian,
   26 Nov 2026); 2.0 m height limiter at the lane entry; PAY HERE booth behind KFC after the pump room; red DRIVE THRU tower at
-  the KFC front-west corner. One garbage room only, by the toilets. The drive-through comes out between KFC (east wall x -4) and the toilets (west wall x 3.9):
+  the KFC front-west corner. One garbage room only, by the toilets. Tank farm between the toilets and the office is a raised kerbed pad (material `pad`);
+  each fuel tank has a fibreglass tank sump (`fuelSump`) with a 1 m lid, two on the 2-compartment tank. The drive-through comes out between KFC (east wall x -4) and the toilets (west wall x 3.9):
   KFC sidewalk 1.2 m + 15 cm kerb, lane 4.0 m, toilet walkway 2.4 m + 15 cm kerb (40 cm tiles); pick-up window with roof on the KFC side.
 - Kerbs, walkways and parking go in the shared layer "paving" (materials walkway, kerbYellow, kerbRed, kerbPlain, bayLine,
   bayEV, grass in style.mjs); first used at 1156 (estimated from the video, 26 Nov 2026).
