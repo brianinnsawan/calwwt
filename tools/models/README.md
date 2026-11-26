@@ -91,6 +91,19 @@ The two sheets do not agree: the as-built shows one lying tank in front of build
 tanks. Both are in the model, the as-built outlines in their own layer. No sheet has any level: the ground is flat at
 ±0.00 and every depth is assumed. No north arrow.
 
+## 1156 Samut Prakan (rough first version, 26 Nov 2026, NO DRAWINGS)
+There are no drawings of this site. Outlines come from the Esri World Imagery satellite image (zoom 19, 0.29 m a pixel),
+turned 35.5° so the road runs along x, read on a 1 m grid (`1156/plan-lines.json` is that tracing, not a drawing); north
+125.5°. What is where comes from Brian's notes of 26 Nov 2026 and stills of Aqua's 360° sampling video, plus the Caltex
+deck slides 27-28 (G2.1 / G2.2 sampling points). In the model: KFC grease traps behind the kitchen, a line of KFC tanks
+under the drive-through lane (about eight round lids; shown as three tanks), the KFC pump sump at the back-west corner
+and its blue PVC pumped line along the west wall into the U-drain; the toilets' solids tank behind the building and the
+aeration tank on the east side; the Mini Big C tank behind the exit-side oil trap between the east wall and the 12 m
+pole signs; four fuel tanks between the toilets and the office (number assumed from the vent pipes); U-drains round the
+site; KFC, toilets, garbage room, office / Mini Big C, coffee shop, canopy, EV chargers, air pump; road and the elevated
+structure in "surroundings". Every size, depth, level and pipe route is assumed. Notes use the source kinds `aerial`
+and `aerialContext` (style.mjs) instead of drawn / part / context. Replace with real positions if Caltex sends drawings.
+
 ## 1622 Ram Intra (first version, 25 Nov 2026, from PDFs)
 Sources: layout `A-07` and details `A-14` to `A-17` ("FOR AS-BUILD", 2020): positions, pipe sizes, 1:200 slopes, ground
 levels, tank model (Biotech BO-6000), road pit size and levels.
