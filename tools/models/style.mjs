@@ -33,7 +33,8 @@ export const MATERIALS = {
   // surroundings outside the station (layer "surroundings", can be switched off): paler, so the station stays in front
   surroundGround: [0xe3e6dc, 0.55], surroundBuilding: [0xd3d8de, 0.3], surroundLine: [0xa3acb4],
   hedge: [0x4f8a3c, 0.6],       // hedges and rows of shrubs
-  signPanel: [0xc8432f, 0.9],    // the head of a tall pole sign (plain panel, no logo)
+  signPanel: [0xc8432f, 0.95],   // the head of a tall pole sign (plain panels, no logo)
+  signDark: [0x2b3138],          // dark sign panels and round signs
 };
 
 /** Layers, in the order they are listed in the viewer. A site uses the ones it needs. */

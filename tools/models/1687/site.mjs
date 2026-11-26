@@ -498,11 +498,16 @@ export default {
         ['ถนนเพชรเกษมหน้าสถานีและโรบินสัน: ไปราชบุรีทางเหนือ (ด้านซ้ายของผัง) และไปชะอำทางใต้ (ด้านขวา) ตามที่เขียนในผังโครงการ', 'ผังโครงการเขียนระดับถนน ±0.00 และลานสถานี +0.80 จึงแสดงถนนต่ำกว่าสถานี 0.80 ม. ช่องจราจรและขอบถนนอีกฝั่งเป็นแนวโดยประมาณ'], C) }, V(-60, -15, 1.2));
     {  // the McDonald's pole sign just outside the back (east) boundary (Brian, 26 Nov 2026: about 20 m tall, pipe about 0.86 m across; place estimated)
       const S = { x: 30.6, y: 42.0, h: 20.0, r: 0.43 };
-      add('surroundings', merge([boxGeo(1.6, 1.6, 0.3, S.x, S.y, -0.05, 0), cylGeo(0.62, 1.0, S.x, S.y, 0.25, 16), cylGeo(S.r, S.h - 3.4, S.x, S.y, 0.25, 24)]), 'column',
+      add('surroundings', merge([boxGeo(1.6, 1.6, 0.3, S.x, S.y, -0.05, 0), cylGeo(0.62, 1.0, S.x, S.y, 0.25, 16), cylGeo(S.r, 14.2, S.x, S.y, 0.25, 24), cylGeo(0.30, 2.9, S.x, S.y, 14.45, 20)]), 'column',
         { en: 'McDonald\'s pole sign (neighbour)', th: 'เสาป้าย McDonald\'s (ที่ดินข้างเคียง)', tag: 'McDonald\'s sign (20 m)', tagTh: 'ป้าย McDonald\'s (20 ม.)', kind: 'building',
-          info: notes(['Tall pole sign of the McDonald\'s next door, standing in the grass just outside the station\'s back (east) boundary, beyond the hedge. About 20 m tall on a steel pipe about 0.86 m across, with a bolted base and stiffeners on a concrete pad (Brian, 26 Nov 2026, with site photos).', 'Its exact place is estimated. Keep it in mind for cranes and for any digging near the east boundary (its foundation is not on any drawing).'],
+          info: notes(['Tall pole sign of the McDonald\'s next door, standing in the grass just outside the station\'s back (east) boundary, beyond the hedge. About 20 m tall to the top of the logo (the model stops at the sign panels, about 19 m), on a steel pipe about 0.86 m across that narrows near the top, with a bolted base and stiffeners on a concrete pad (Brian, 26 Nov 2026, with site photos).', 'Its exact place is estimated. Keep it in mind for cranes and for any digging near the east boundary (its foundation is not on any drawing).'],
             ['เสาป้ายสูงของร้าน McDonald\'s ข้างเคียง ตั้งอยู่บนพื้นหญ้านอกแนวเขตด้านหลัง (ด้านตะวันออก) ของสถานี ถัดจากแนวพุ่มไม้ สูงประมาณ 20 ม. เสาเหล็กขนาดประมาณ 0.86 ม. ฐานยึดน็อตและครีบบนแท่นคอนกรีต (Brian 26 พ.ย. 2026 พร้อมรูปถ่ายหน้างาน)', 'ตำแหน่งเป็นค่าประมาณ ควรคำนึงถึงเมื่อใช้รถเครนและเมื่อขุดใกล้แนวเขตด้านตะวันออก (ไม่มีฐานรากในแบบ)'], C) }, V(S.x, S.y, S.h + 0.8));
-      add('surroundings', boxGeo(1.2, 1.2, 3.4, S.x, S.y, S.h - 3.4, 0), 'signPanel', { en: 'Sign head', th: 'หัวป้าย', nopick: 1 });
+      // sign head as in Brian's photo: a dark lower panel and a wide red bar on top, facing the station (west); two round signs on a short arm
+      // lower down the pole. The brand's arches logo on top is not drawn: the panels are plain.
+      add('surroundings', merge([boxGeo(0.45, 3.6, 0.95, S.x, S.y, 17.2, 0), boxGeo(0.55, 4.4, 0.8, S.x, S.y, 18.15, 0)]), 'signPanel', { en: 'Sign head', th: 'หัวป้าย', nopick: 1 });
+      add('surroundings', boxGeo(0.47, 3.5, 0.85, S.x - 0.01, S.y, 17.25, 0), 'signDark', { en: 'Sign head lower panel', th: 'แผ่นป้ายส่วนล่าง', nopick: 1 });
+      const discs = [15.75, 14.45].map((z) => { const g = new THREE.CylinderGeometry(0.62, 0.62, 0.22, 32); g.rotateZ(Math.PI / 2); const c = V(S.x, S.y + 0.95, z); g.translate(c.x, c.y, c.z); return g; });
+      add('surroundings', merge([...discs, boxGeo(0.12, 0.7, 0.1, S.x, S.y + 0.45, 16.45, 0), boxGeo(0.12, 0.7, 0.1, S.x, S.y + 0.45, 15.15, 0)]), 'signDark', { en: 'Round signs on the pole', th: 'ป้ายกลมบนเสา', nopick: 1 });
     }
     add('surroundings', boxGeo(540, 0.15, -ROAD, -100, KERB - 0.075, ROAD, 0), 'slab', { en: 'Road kerb', th: 'ขอบถนน', nopick: 1 });
     drawLines('surroundings', SURROUND.lines.map((l) => l.map((v) => v / 100)), 'surroundLine', (x, y) => (y < KERB ? ROAD + 0.02 : 0.02));
