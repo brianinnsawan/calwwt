@@ -32,7 +32,7 @@ async function world() {
   app.prepare('INSERT INTO users VALUES(?,?)').run('owner-id', 'owner@example.com');
   app.prepare('INSERT INTO users VALUES(?,?)').run('reader-id', 'reader@example.com');
   for (const m of ['0001_identity.sql', '0002_audit_lock.sql', '0003_two_step.sql']) auth.exec(readFileSync(new URL(`../../identity-proposal/migrations/${m}`, import.meta.url), 'utf8'));
-  for (const f of ['0001_tasks.sql', '0002_hidden_from.sql', '0003_language.sql', '0004_page_access.sql', '0005_files.sql', '0006_trackers.sql', '0007_meetings.sql', '0008_meeting_docs.sql', '0009_repeat_days.sql', '0010_agent_keys.sql', '0011_site_timelines.sql', '0012_site_subfolders.sql']) tasks.exec(readFileSync(new URL(`../../tasks/schema/${f}`, import.meta.url), 'utf8'));
+  for (const f of ['0001_tasks.sql', '0002_hidden_from.sql', '0003_language.sql', '0004_page_access.sql', '0005_files.sql', '0006_trackers.sql', '0007_meetings.sql', '0008_meeting_docs.sql', '0009_repeat_days.sql', '0010_agent_keys.sql', '0011_site_timelines.sql', '0012_site_subfolders.sql', '0013_kp3_site.sql']) tasks.exec(readFileSync(new URL(`../../tasks/schema/${f}`, import.meta.url), 'utf8'));
   const TASKS_DB = d1(tasks);
   await TASKS_DB.batch(rosterStatements(TASKS_DB));
   const brianPw = 'synthetic owner phrase for tests 501!', mingPw = 'synthetic reader phrase for tests 502!';
@@ -548,7 +548,7 @@ test('Sites data: 8 sites, starting timelines valid, every layout has its PDF an
   }
 });
 
-test('Sites data: site videos are YouTube ids with a date and both languages; only the YouTube player may be framed', async () => {
+test('Sites data: site videos are YouTube ids with a date and both languages; only the YouTube player and calcr may be framed', async () => {
   const { SITES_CSP } = await import('../src/sites.mjs');
   const data = JSON.parse(readFileSync(new URL('../public/sites/data/sites.json', import.meta.url), 'utf8'));
   const videos = data.sites.flatMap((s) => (s.videos || []).map((v) => ({ code: s.code, ...v })));
@@ -558,7 +558,8 @@ test('Sites data: site videos are YouTube ids with a date and both languages; on
     assert.match(v.date, /^2026-\d\d-\d\d$/, v.code);
     assert.ok(v.en && v.th, v.code);
   }
-  assert.match(SITES_CSP, /frame-src 'self' https:\/\/www\.youtube-nocookie\.com;/);
+  // and the KP3 model from calcr.sppwork.com (8888, Brian 27 Nov 2026; src/calcr-link.mjs)
+  assert.match(SITES_CSP, /frame-src 'self' https:\/\/www\.youtube-nocookie\.com https:\/\/calcr\.sppwork\.com;/);
   assert.doesNotMatch(SITES_CSP, /youtube\.com[^-]|connect-src[^;]*youtube/);
 });
 

@@ -483,6 +483,37 @@
    "lat": 14.573519,
    "lng": 100.987598,
    "company": "Daoyada 2019 Company Limited Branch 1 Kaengkoi"
+  },
+  {
+   "code": "8888",
+   "name": {
+    "en": "Chiang Rai (KP3)",
+    "th": "เชียงราย (KP3)"
+   },
+   "region": "Chiang Rai",
+   "sampled": "2026-11-19",
+   "sampledLabel": {
+    "en": "18–19 Nov 2026",
+    "th": "18–19 พ.ย. 2026"
+   },
+   "improvement": {
+    "en": "Improvement needed: site wastewater drainage, new septic tanks and grease trap (proposal in progress).",
+    "th": "ต้องปรับปรุง: ระบบระบายน้ำเสียของสถานี ถังบำบัดและบ่อดักไขมันใหม่ (กำลังทำข้อเสนอ)"
+   },
+   "notes": {
+    "en": [
+     "Separate 2026 job (not one of the 8 programme sites). 8888 stands in until Caltex gives the site code."
+    ],
+    "th": [
+     "งานแยกปี 2026 (ไม่อยู่ใน 8 สถานีของโครงการ) ใช้รหัส 8888 ไปก่อนจนกว่า Caltex จะให้รหัสสถานี"
+    ]
+   },
+   "calcr": "https://calcr.sppwork.com",
+   "links": [],
+   "layouts": [],
+   "lat": 19.91448,
+   "lng": 99.84585,
+   "company": "Caltex Chiang Rai KP3 · Phahon Yothin Rd (AH2)"
   }
  ]
 }

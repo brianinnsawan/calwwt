@@ -23,6 +23,17 @@ Nothing is shared with calnkt: own logins, own databases, own file storage.
 1687 Phetchaburi · 1703 King Kaew · 1750 Kaeng Khoi Saraburi. The list lives in `portal-proposal/src/sites.mjs` (SITE_CODES),
 `portal-proposal/public/sites/data/sites.json` (names, notes, layouts) and `tasks/schema/0011_site_timelines.sql`.
 
+**Plus 8888 Chiang Rai (KP3)** (Brian, 27 Nov 2026): a separate 2026 Caltex job added as a 9th site so it works like the others
+(site page, Files folder with the 4 sub-folders, CAD workspace, task area, own timeline; `tasks/schema/0013_kp3_site.sql`,
+applied to calwwt-tasks on 27 Nov 2026 with Brian's OK). **8888 is a stand-in**: change it everywhere (SITE_CODES, files.mjs
+BUILT_IN_FOLDERS, sites.json, timelines/8888.json, the site_timelines CHECK, folder and area ids, CALCR_SITES) when Caltex
+gives the real code. Not part of the 8-site programme timeline ("all"). Its 3D model stays on **calcr.sppwork.com**
+(repo `brianinnsawan/calcr`, which keeps its own shared password for now): the site page's 3D model tab frames
+`/api/sites/8888/calcr-link`, which signs the person in to calcr with a 2-minute ticket signed from AUTH_RATE_KEY;
+calcr checks it at `POST /api/calcr-link/verify` through its service binding `CALWWT` (`src/calcr-link.mjs`). One way only:
+calcr never links here. Later (Brian): move everyone to calwwt logins, bring the calcr viewer tools (measure, long sections,
+septic options, truck paths, levels) into viewer.mjs, then retire the calcr password.
+
 ## Folders
 - `portal-proposal/`: the site (`src/` server, `public/` pages, `tests/`).
 - `portal-proposal/public/sites/`: the Sites tab. `index.html` + `sites.mjs` = all sites; `site.html` + `site.mjs` = one site

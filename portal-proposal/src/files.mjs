@@ -141,7 +141,7 @@ async function routeBin(request, db, path, liveFolders, log, namesOf) {
 }
 
 /** Folders the site itself relies on (Safety, the weekly safety meetings with their Caltex sharing rule, Engineering). */
-const BUILT_IN_FOLDERS = new Set(['safety', 'safety-weekly', 'engineering', 'sites', ...['0589', '1156', '1588', '1622', '1642', '1687', '1703', '1750'].flatMap((c) => [`site-${c}`, ...['drawings', 'photos', 'lab', 'reports'].map((s) => `site-${c}-${s}`)])]);
+const BUILT_IN_FOLDERS = new Set(['safety', 'safety-weekly', 'engineering', 'sites', ...['0589', '1156', '1588', '1622', '1642', '1687', '1703', '1750', '8888'].flatMap((c) => [`site-${c}`, ...['drawings', 'photos', 'lab', 'reports'].map((s) => `site-${c}-${s}`)])]);
 /** File name a built-in site layout gets in Files: its English title, made safe for a file name, + .pdf. */
 export const builtInName = (x) => `${String(x.en || x.file.split('/').pop()).normalize('NFC').replace(/[\x00-\x1f\x7f/\\:*?"<>|]/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 190)}.pdf`;
 export async function routeFiles(request, env, actor, access, viewer) {

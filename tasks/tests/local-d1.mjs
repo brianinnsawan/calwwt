@@ -6,7 +6,7 @@ import { readFileSync } from 'node:fs';
 export function localD1() {
   const sql = new DatabaseSync(':memory:');
   sql.exec('PRAGMA foreign_keys=ON');
-  for (const f of ['0001_tasks.sql', '0002_hidden_from.sql', '0003_language.sql', '0004_page_access.sql', '0005_files.sql', '0006_trackers.sql', '0007_meetings.sql', '0008_meeting_docs.sql', '0009_repeat_days.sql', '0010_agent_keys.sql', '0011_site_timelines.sql', '0012_site_subfolders.sql']) sql.exec(readFileSync(new URL(`../schema/${f}`, import.meta.url), 'utf8'));
+  for (const f of ['0001_tasks.sql', '0002_hidden_from.sql', '0003_language.sql', '0004_page_access.sql', '0005_files.sql', '0006_trackers.sql', '0007_meetings.sql', '0008_meeting_docs.sql', '0009_repeat_days.sql', '0010_agent_keys.sql', '0011_site_timelines.sql', '0012_site_subfolders.sql', '0013_kp3_site.sql']) sql.exec(readFileSync(new URL(`../schema/${f}`, import.meta.url), 'utf8'));
   const norm = (v) => (v === undefined ? null : typeof v === 'boolean' ? Number(v) : v);
   // Cloudflare D1 takes at most 100 bound values in one query (plain SQLite takes 32,766). Refused here too, with D1's
   // wording, so a query that would fail on the live site fails in the tests.

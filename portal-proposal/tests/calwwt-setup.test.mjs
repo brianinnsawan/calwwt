@@ -42,13 +42,13 @@ function live() {
 const post = (path, body, cookie, extra = {}) => new Request(origin + path, { method: 'POST', headers: { origin, 'content-type': 'application/json', ...(cookie ? { cookie } : {}), ...extra }, body: JSON.stringify(body) });
 const get = (path, cookie, accept = 'application/json') => new Request(origin + path, { headers: { cookie, accept } });
 
-test('calwwt live setup: 8 people, 9 task areas, site folders, no NTI rows', () => {
+test('calwwt live setup: 8 people, 10 task areas (8 sites + KP3 8888 + all), site folders, no NTI rows', () => {
   const w = live();
   assert.equal(origin, 'https://calwwt.sppwork.com');
   assert.deepEqual(w.tasks.prepare('SELECT id FROM people ORDER BY id').all().map((r) => r.id), ['bas', 'boss', 'brian', 'keng', 'ming', 'oat', 'praew', 'thada']);
   assert.deepEqual(w.tasks.prepare("SELECT id FROM people WHERE company='caltex' ORDER BY id").all().map((r) => r.id), ['bas', 'oat', 'thada']);
-  assert.equal(w.tasks.prepare('SELECT COUNT(*) n FROM areas').get().n, 9);
-  assert.equal(w.tasks.prepare("SELECT COUNT(*) n FROM file_folders WHERE parent_id='sites'").get().n, 8);
+  assert.equal(w.tasks.prepare('SELECT COUNT(*) n FROM areas').get().n, 10);
+  assert.equal(w.tasks.prepare("SELECT COUNT(*) n FROM file_folders WHERE parent_id='sites'").get().n, 9);
   assert.equal(w.tasks.prepare("SELECT COUNT(*) n FROM milestones WHERE name LIKE '%Kick-Off%' OR name LIKE '%DOEB%'").get().n, 0);
   assert.equal(w.tasks.prepare("SELECT COUNT(*) n FROM page_access WHERE subject LIKE 'person:%'").get().n, 0);
   assert.match(config, /"database_id": "bba26309-c326-4afb-89cb-a95d9c7ca315"/, 'tasks database is calwwt-tasks, not calnkt');

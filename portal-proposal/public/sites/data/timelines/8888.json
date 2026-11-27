@@ -1,0 +1,197 @@
+{
+ "note": "Copied from calcr.sppwork.com/timeline.json on 27 Nov 2026 (the chart in the calcr repository; edits saved on calcr since 23 Nov are not in it). Saved changes on this site replace this for everyone.",
+ "title": {
+  "en": "Timeline · 8888 Chiang Rai KP3",
+  "th": "แผนงาน · 8888 เชียงราย KP3"
+ },
+ "from": "2026-11-02",
+ "to": "2027-03-14",
+ "milestones": [
+  {
+   "date": "2026-11-22",
+   "en": "Scope complete",
+   "th": "ขอบเขตงานเสร็จ"
+  },
+  {
+   "date": "2026-12-20",
+   "en": "Design complete",
+   "th": "ออกแบบเสร็จ"
+  },
+  {
+   "date": "2026-12-31",
+   "en": "Permit complete",
+   "th": "ได้รับอนุญาต"
+  },
+  {
+   "date": "2027-03-01",
+   "en": "Construction complete",
+   "th": "ก่อสร้างเสร็จ"
+  }
+ ],
+ "phases": [
+  {
+   "en": "Development",
+   "th": "พัฒนาโครงการ",
+   "color": "#3b6fd4",
+   "ink": "#ffffff",
+   "groups": [
+    {
+     "en": "Scoping",
+     "th": "กำหนดขอบเขตงาน",
+     "tasks": [
+      {
+       "ms": true,
+       "date": "2026-11-07",
+       "en": "Site visit",
+       "th": "สำรวจหน้างาน"
+      },
+      {
+       "start": "2026-11-07",
+       "end": "2026-11-25",
+       "dur": 13,
+       "pct": 50,
+       "en": "Review scope of work",
+       "th": "ทบทวนขอบเขตงาน"
+      },
+      {
+       "start": "2026-11-18",
+       "end": "2026-11-25",
+       "dur": 6,
+       "pct": 0,
+       "en": "Collect wastewater samples",
+       "th": "เก็บตัวอย่างน้ำเสีย"
+      },
+      {
+       "start": "2026-11-26",
+       "end": "2026-12-04",
+       "dur": 7,
+       "pct": 0,
+       "en": "Wastewater report",
+       "th": "รายงานผลน้ำเสีย"
+      },
+      {
+       "start": "2026-12-05",
+       "end": "2027-01-01",
+       "dur": 20,
+       "pct": 0,
+       "en": "Design and detail drawing",
+       "th": "ออกแบบและเขียนแบบรายละเอียด"
+      }
+     ]
+    },
+    {
+     "en": "Budgeting",
+     "th": "งบประมาณ",
+     "tasks": [
+      {
+       "start": "2026-12-15",
+       "end": "2027-01-01",
+       "dur": 14,
+       "pct": 0,
+       "en": "Review quotation",
+       "th": "พิจารณาใบเสนอราคา"
+      },
+      {
+       "start": "2027-01-01",
+       "end": "2027-01-12",
+       "dur": 7,
+       "pct": 0,
+       "en": "Create PR/PO",
+       "th": "ออก PR/PO"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "en": "Construction",
+   "th": "ก่อสร้าง",
+   "color": "#f2b705",
+   "ink": "#3a2c00",
+   "groups": [
+    {
+     "en": "Wastewater treatment",
+     "th": "ระบบบำบัดน้ำเสีย",
+     "tasks": [
+      {
+       "start": "2027-01-13",
+       "end": "2027-02-02",
+       "dur": 20,
+       "pct": 0,
+       "en": "Excavation",
+       "th": "งานขุดดิน"
+      },
+      {
+       "start": "2027-02-01",
+       "end": "2027-03-01",
+       "dur": 20,
+       "pct": 0,
+       "en": "Installation & commissioning",
+       "th": "ติดตั้งและทดสอบระบบ"
+      }
+     ]
+    },
+    {
+     "en": "Lifting",
+     "th": "ยกติดตั้ง",
+     "tasks": [
+      {
+       "ms": true,
+       "date": "2027-02-01",
+       "en": "Sewage treatment tank",
+       "th": "ยกถังบำบัดน้ำเสีย"
+      }
+     ]
+    },
+    {
+     "en": "ATG",
+     "th": "ATG",
+     "tasks": [
+      {
+       "start": "2027-01-13",
+       "end": "2027-02-02",
+       "dur": 20,
+       "pct": 0,
+       "en": "ATG improvement",
+       "th": "ปรับปรุงระบบ ATG"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "en": "Handover",
+   "th": "ส่งมอบงาน",
+   "color": "#4f8f35",
+   "ink": "#ffffff",
+   "groups": [
+    {
+     "en": "Report",
+     "th": "รายงาน",
+     "tasks": [
+      {
+       "start": "2027-03-01",
+       "end": "2027-03-08",
+       "dur": 6,
+       "pct": 0,
+       "en": "Final wastewater report",
+       "th": "รายงานน้ำเสียฉบับสุดท้าย"
+      },
+      {
+       "ms": true,
+       "date": "2027-03-02",
+       "en": "As-built drawing",
+       "th": "แบบก่อสร้างจริง (As-built)"
+      },
+      {
+       "ms": true,
+       "date": "2027-03-09",
+       "en": "Handover and recheck list report",
+       "th": "ส่งมอบงานและรายงาน Recheck list"
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

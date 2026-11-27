@@ -16,6 +16,7 @@ import {routeAgent,routeAgentAdmin} from './agent.mjs';
 import {canonicalPath} from './paths.mjs';
 import {routeBackup,scheduledJob} from './backup.mjs';
 import {requireAdminGate} from './admin-gate.mjs';
+import {routeCalcrVerify} from './calcr-link.mjs';
 export {MeetingRoom} from './meeting-room.mjs';
 import {serveSiteAsset,legacySiteAPI,originalDrawing,siteDrawings,isSiteViewer,requireSiteViewer} from './site-assets.mjs';
 const MAX_BYTES = 25 * 1024 * 1024;
@@ -317,6 +318,8 @@ export function createHandler(authenticateOverride=authenticate) {
         if(canon!==u.pathname){if(!['GET','HEAD'].includes(request.method))fail(404,'Not found.');return secure(new Response(null,{status:308,headers:{Location:canon+u.search}}));}}
       // Chief, Brian's AI assistant: /api/agent/* with its key only (src/agent.mjs); never a browser session.
       {const agentResponse=await routeAgent(request,env);if(agentResponse)return secure(agentResponse);}
+      // calcr.sppwork.com asks whether a KP3 sign-in ticket is good (src/calcr-link.mjs); no browser session here.
+      {const calcrVerify=await routeCalcrVerify(request,env);if(calcrVerify)return secure(calcrVerify);}
       const recoveryPath=new URL(request.url).pathname;
       if(recoveryPath==='/owner-recovery'||recoveryPath.startsWith('/owner-recovery/')){
         const owner=await authenticateOverride(request,env);
