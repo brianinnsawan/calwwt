@@ -1,5 +1,11 @@
 # Open CAD Studio 2026.47: review before use on calwwt (27 Nov 2026)
 
+**Outcome (27 Nov 2026, 08:00):** 2026.47 went live and was taken back within the hour. Brian got the renderer error on the
+live site: the web build of Open CAD Studio only has the WebGL2 path (iced `webgl` feature), so bug 1 below hits every
+browser, not only those without WebGPU as first written. calwwt now runs 2026.41, the same files as calnkt. The page
+hardening (address, Save-as picker, save hook) stays; it does nothing harmful with 2026.41. Before the next upgrade, open a
+drawing in a real browser with the new version first.
+
 Brian asked for calnkt's CAD workspace on calwwt, with the newest Open CAD Studio from GitHub, checked for bugs, viruses
 and backdoors first. calnkt runs 2026.41 (11 Oct 2026); upstream had six newer releases (2026.42 to 2026.47).
 

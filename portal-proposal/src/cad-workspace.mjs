@@ -1,6 +1,7 @@
 // Sites -> CAD workspace: calwwt.sppwork.com/cad-workspace/ (screens) and /api/cad/* (this module). Copied from calnkt
 // (brianinnsawan/nti-city-park-portal, 27 Nov 2026). calwwt: no project DWG catalog (see PROJECT below); the drawings are the
-// DWG / DXF files in Files. Full CAD program: Open CAD Studio 2026.47 (scripts/import-cad-program.mjs).
+// DWG / DXF files in Files. Full CAD program: Open CAD Studio 2026.41, as on calnkt
+// (2026.47 was tried and taken back the same day: it cannot draw in a browser; docs/cad-program-review-2026.47.md).
 // Brought over from the old brian-cad-version2 site (Brian, 2 Nov 2026): open the project's DWG drawings and the DWG / DXF
 // files in Project files, measure (distance, chain, area, angle) and draw markups (line, arrow, rectangle, circle, cloud,
 // text) on top. Drawing files are never changed; what is saved is the "notes" of a drawing (its measurements + markups).

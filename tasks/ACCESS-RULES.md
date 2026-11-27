@@ -219,7 +219,8 @@ Some tabs have a second row of links, shown only for the parts a person may open
 rules as below (Drawings page level = the Sites page level here). Differences from calnkt: there are **no project DWG sheets**
 (calnkt's 31 NTI sheets are never listed or served here, even though site-release.mjs still carries their list); the drawings
 are the DWG / DXF files in **Files** that the person may see (Files rules, including Caltex sharing). The full CAD program is
-**Open CAD Studio 2026.47** (calnkt: 2026.41), reviewed before use (docs/cad-program-review-2026.47.md). Its page keeps only
+**Open CAD Studio 2026.41**, as on calnkt (2026.47 was reviewed and put live on 27 Nov 2026, then taken back the same day
+because its web build cannot draw; docs/cad-program-review-2026.47.md). Its page keeps only
 its own ?dwg= / ?copy= in the address (the program can otherwise open a drawing from any ?file= address) and takes away the
 browser's "Save as" picker, so saving always goes through the site's rules below. The old calnkt addresses /workspace/, /cad/
 and /app/ lead to the CAD workspace.

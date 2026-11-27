@@ -1,6 +1,7 @@
 // Sites -> CAD workspace -> Full CAD program (calwwt.sppwork.com/cad-workspace/full/?dwg=<drawing>). Copied from calnkt.
-// Open CAD Studio 2026.47 (GPL-3.0, github.com/HakanSeven12/OpenCADStudio; calnkt runs 2026.41). Its files are the
-// official web build of the v2026.47 release, checked against the tagged source (scripts/import-cad-program.mjs); this page
+// Open CAD Studio 2026.41 (GPL-3.0, github.com/HakanSeven12/OpenCADStudio), the same files as calnkt (official web build,
+// Brian's archive). 2026.47 was tried on 27 Nov 2026 and taken back: its web build cannot draw (docs/cad-program-review-2026.47.md);
+// scripts/import-cad-program.mjs imports a newer release once one draws. This page
 // replaces the program's own start page so it runs under the site's strict CSP (no inline scripts, no outside loads).
 // - Opens the chosen drawing (a project DWG, a Project files DWG / DXF, or a copy saved earlier) through the program's own
 //   control channel (op "open" with the file's bytes).
@@ -26,7 +27,6 @@ const W = {
     noteLabel: 'Note for this copy (optional)', toSite: 'Save to the site', toDevice: 'Download to this device', saving: 'Saving the copy…', saved: 'Saved as copy {seq} of {name}.',
     leave: 'Changes in the CAD program that are not saved will be lost. Continue?',
     outside: 'Links to outside sites are not opened from the project site.',
-    noWebgpu: 'This browser has no WebGPU: Open CAD Studio 2026.47 may not draw the drawing (fixed for its next release). Use a recent Chrome or Edge, or the CAD workspace.',
     aboutText: 'Open CAD Studio {version} (source commit {commit}), free software under the GNU General Public License v3. Source: github.com/HakanSeven12/OpenCADStudio, tag v{version}. The program\'s own menus are in English.',
   },
   th: {
@@ -42,7 +42,6 @@ const W = {
     noteLabel: 'หมายเหตุของสำเนานี้ (ไม่บังคับ)', toSite: 'บันทึกลงเว็บไซต์', toDevice: 'ดาวน์โหลดลงเครื่องนี้', saving: 'กำลังบันทึกสำเนา…', saved: 'บันทึกเป็นสำเนาที่ {seq} ของ {name} แล้ว',
     leave: 'การแก้ไขในโปรแกรม CAD ที่ยังไม่ได้บันทึกจะหายไป ต้องการทำต่อหรือไม่',
     outside: 'เว็บไซต์โครงการไม่เปิดลิงก์ไปยังเว็บไซต์ภายนอก',
-    noWebgpu: 'เบราว์เซอร์นี้ไม่มี WebGPU: Open CAD Studio 2026.47 อาจแสดงแบบไม่ได้ (แก้แล้วในรุ่นถัดไป) กรุณาใช้ Chrome หรือ Edge รุ่นใหม่ หรือใช้พื้นที่ทำงาน CAD',
     aboutText: 'Open CAD Studio {version} (source commit {commit}) ซอฟต์แวร์เสรีภายใต้สัญญาอนุญาต GNU GPL v3 ซอร์สโค้ด: github.com/HakanSeven12/OpenCADStudio แท็ก v{version} เมนูของโปรแกรมเป็นภาษาอังกฤษ',
   },
 };
@@ -62,15 +61,14 @@ async function getJSON(path, opts = {}) {
 
 let me = null, list = null, item = null, copyInfo = null, canSave = false, savedSeq = 0;
 const params = new URL(location.href).searchParams;
-// The program itself reads the page address at start: ?file=<address> opens a drawing from that address (2026.42 and
-// later), ?embed=1 / ?automation=1 change how it runs. Only this page's own ?dwg= and ?copy= are kept, so a link cannot
+// Newer releases of the program (2026.42 and later) read the page address at start: ?file=<address> opens a drawing from that address, ?embed=1 / ?automation=1 change how it runs. Only this page's own ?dwg= and ?copy= are kept, so a link cannot
 // make the program fetch or open anything else (the site's CSP also blocks outside addresses).
 {
   const u = new URL(location.href), keep = new URLSearchParams();
   for (const k of ['dwg', 'copy']) if (u.searchParams.has(k)) keep.set(k, u.searchParams.get(k));
   if (u.searchParams.toString() !== keep.toString()) history.replaceState(null, '', `${u.pathname}${keep.toString() ? '?' + keep : ''}`);
 }
-// Since 2026.42 the program saves with the browser's "Save as" picker (File System Access, Chrome / Edge) when it can,
+// From 2026.42 the program saves with the browser's "Save as" picker (File System Access, Chrome / Edge) when it can,
 // writing straight to the person's computer. That would bypass the site's Save rules below (view only: no saving or
 // downloading; edit: "Save to the site" or download). Without the picker the program falls back to its download, which
 // this page catches. Removed before the program starts; opening files from the computer is unchanged.
@@ -208,8 +206,8 @@ async function startProgram() {
   // The program finds its worker and fonts next to the page, so the page's base address is that folder.
   const dir = `/cad-workspace/full/${meta.dir}`;
   const base = document.createElement('base'); base.href = dir; document.head.prepend(base);
-  // The WebAssembly file is stored gzip-compressed in parts (each static file is at most 25 MiB; 2026.47 is 50 MB
-  // compressed): fetched one after the other, joined, then unpacked and checked below.
+  // The WebAssembly file is stored gzip-compressed in parts (each static file is at most 25 MiB; newer releases are
+  // 50 MB compressed; 2026.41 is one file): fetched one after the other, joined, then unpacked and checked below.
   const names = meta.wasmParts || [meta.wasm];
   const pieces = [];
   let got = 0;
@@ -294,11 +292,6 @@ async function main() {
   for (let i = 0; i < 200 && !document.querySelector('body > canvas'); i++) await new Promise((r) => setTimeout(r, 50));
   hideLoading();
   loadCopies();
-  try { await openInProgram(); } catch (e) { setStatus(t('openFailed', { e: String(e?.message || e).slice(0, 100) }), 'bad'); return; }
-  // 2026.47 draws circles and arcs with a shader that the browser's older graphics path (WebGL2, used when there is no
-  // WebGPU) refuses, so nothing is drawn there; its source after the release has the fix. Say so instead of a blank screen.
-  let gpu = null;
-  try { gpu = navigator.gpu ? await navigator.gpu.requestAdapter() : null; } catch { gpu = null; }
-  if (!gpu) setStatus(t('noWebgpu'), 'bad');
+  try { await openInProgram(); } catch (e) { setStatus(t('openFailed', { e: String(e?.message || e).slice(0, 100) }), 'bad'); }
 }
 main();

@@ -1,10 +1,9 @@
 /* @ts-self-types="./ocs_web_worker.d.ts" */
 
 /**
- * Parse DWG/DXF (or a listed converter's format) on a dedicated browser
- * worker and return a compact serialized document. The main wasm instance
- * only deserializes and installs it, so the expensive bit/handle/object
- * decode never occupies the browser UI thread.
+ * Parse DWG/DXF on a dedicated browser worker and return a compact serialized
+ * document. The main wasm instance only deserializes and installs it, so the
+ * expensive bit/handle/object decode never occupies the browser UI thread.
  * @param {string} name
  * @param {Uint8Array} bytes
  * @param {boolean} recovery_mode
@@ -18,26 +17,6 @@ export function parse_document(name, bytes, recovery_mode, initial_error, report
     const ptr1 = passStringToWasm0(initial_error, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
     const len1 = WASM_VECTOR_LEN;
     const ret = wasm.parse_document(ptr0, len0, bytes, recovery_mode, ptr1, len1, report_stage);
-    if (ret[2]) {
-        throw takeFromExternrefTable0(ret[1]);
-    }
-    return takeFromExternrefTable0(ret[0]);
-}
-
-/**
- * Serialize an already-prepared document to DWG/DXF bytes on the dedicated
- * browser worker, so the expensive writer pass (bit-level DWG encoding /
- * ASCII DXF formatting) never occupies the UI thread. `encoded_document` is
- * the shared `ocs_save` request payload (document + runtime-field sidecar +
- * target extension); the reply is the shared response payload (protocol
- * version + `Result<bytes, error text>`). The main wasm instance only decodes
- * the result — the save-side counterpart of [`parse_document`].
- * @param {Uint8Array} encoded_document
- * @param {Function} report_stage
- * @returns {Uint8Array}
- */
-export function serialize_document(encoded_document, report_stage) {
-    const ret = wasm.serialize_document(encoded_document, report_stage);
     if (ret[2]) {
         throw takeFromExternrefTable0(ret[1]);
     }
@@ -90,9 +69,6 @@ function __wbg_get_imports() {
                 wasm.__wbindgen_free(deferred0_0, deferred0_1, 1);
             }
         },
-        __wbg_getRandomValues_1c61fac11405ffdc: function() { return handleError(function (arg0, arg1) {
-            globalThis.crypto.getRandomValues(getArrayU8FromWasm0(arg0, arg1));
-        }, arguments); },
         __wbg_length_32ed9a279acd054c: function(arg0) {
             const ret = arg0.length;
             return ret;
@@ -111,10 +87,6 @@ function __wbg_get_imports() {
         },
         __wbg_now_2c95c9de01293173: function(arg0) {
             const ret = arg0.now();
-            return ret;
-        },
-        __wbg_now_a3af9a2f4bbaa4d1: function() {
-            const ret = Date.now();
             return ret;
         },
         __wbg_performance_7a3ffd0b17f663ad: function(arg0) {

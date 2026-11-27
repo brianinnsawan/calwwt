@@ -1,17 +1,12 @@
 {
  "name": "Open CAD Studio",
- "version": "2026.47",
- "dir": "v2026.47/",
- "commit": "8e5f39f6ee0468a7e29260d57b5390d7d01207e8",
+ "version": "2026.41",
+ "dir": "v2026.41/",
+ "commit": "cff240ef71b4d7d0e4832c8d260c5af7f2fe3b17",
  "license": "GPL-3.0",
- "source": "https://github.com/HakanSeven12/OpenCADStudio (tag v2026.47); web build: release asset OpenCADStudio-v2026.47-web.zip (SHA-256 e0ab57e86d107b845e3efc6fc92f94e79afae0ba4602ad679f64faa14e97de4e)",
- "glue": "OpenCADStudio-9dc7e3ef079a978d.js",
- "wasmParts": [
-  "OpenCADStudio-22d74cd89d000cea_bg.wasm.gz.0",
-  "OpenCADStudio-22d74cd89d000cea_bg.wasm.gz.1",
-  "OpenCADStudio-22d74cd89d000cea_bg.wasm.gz.2"
- ],
- "wasmGzipBytes": 50770057,
- "wasmBytes": 153326427,
- "wasmIntegrity": "sha384-ejwzTMGYtf2teUAQSydIs6FP4x6YK7e2mfJ98+lULaLCg1v6YV7HJ8Bii4TEslHL"
+ "source": "https://github.com/HakanSeven12/OpenCADStudio (tag v2026.41); private copy: brianinnsawan/open-source-cad-project",
+ "glue": "OpenCADStudio-456a1b1a39ae2ed2.js",
+ "wasm": "OpenCADStudio-456a1b1a39ae2ed2_bg.wasm.gz",
+ "wasmBytes": 57204064,
+ "wasmIntegrity": "sha384-Fj1+xHaVHJdr31SnFVl6BeQmxGGZTiEdKwzs9ld5C4CNRvjj2tc50uLTMamJc1Yy"
 }
