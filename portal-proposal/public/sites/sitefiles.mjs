@@ -17,14 +17,16 @@ const T = {
     noFiles: 'Files are not open to you, so only the drawings built into the site are shown.', cadNote: 'DWG / DXF drawings open in the CAD workspace: measure, mark up, or open them in the full CAD program.',
     move: 'Move into Files', moveText: '{n} drawings of this site are still built into the site page. Move the built-in drawings of all 8 sites into each site\'s Files folder "Drawings", so everything is in one place?',
     moving: 'Moving… {code}', moved: 'Moved {n} drawings into Files.', uploading: 'Uploading {name}…', uploaded: 'Uploaded {name}.', refused: 'Not uploaded: {e}',
-    other: 'This file opens in the Files viewer.', youtube: 'Watch on YouTube', photos: 'Photos & video' },
+    other: 'This file opens in the Files viewer.', youtube: 'Watch on YouTube', photos: 'Photos & video',
+    v360: '360° video. On this page it plays as a normal video: YouTube does not let you turn the view in a player inside another site. To look around (drag with the mouse, swipe, or turn your phone), open it on YouTube.', open360: 'Look around on YouTube ›' },
   th: { pick: 'แบบหรือไฟล์', builtIn: 'แบบที่ติดมากับเว็บไซต์ (ยังไม่ได้ย้ายไปไฟล์)', openPdf: 'เปิด PDF', download: 'ดาวน์โหลด', openCad: 'เปิดในพื้นที่ทำงาน CAD',
     fullCad: 'โปรแกรม CAD เต็มรูปแบบ', openFile: 'เปิด', pdf: 'PDF', cad: 'CAD', upload: 'อัปโหลด', into: 'อัปโหลดไปที่', folder: 'โฟลเดอร์ในไฟล์',
     empty: 'ยังไม่มีแบบหรือไฟล์ของสถานีนี้', emptyEdit: 'ยังไม่มีแบบหรือไฟล์ของสถานีนี้ อัปโหลดได้ที่นี่หรือที่หน้าไฟล์ (สถานี › {code})',
     noFiles: 'คุณไม่มีสิทธิ์หน้าไฟล์ จึงแสดงเฉพาะแบบที่ติดมากับเว็บไซต์', cadNote: 'แบบ DWG / DXF เปิดในพื้นที่ทำงาน CAD: วัดระยะ เขียนโน้ต หรือเปิดในโปรแกรม CAD เต็มรูปแบบ',
     move: 'ย้ายไปไฟล์', moveText: 'สถานีนี้ยังมีแบบ {n} แผ่นที่ติดมากับหน้าสถานี ย้ายแบบของทั้ง 8 สถานีไปไว้ในโฟลเดอร์ "แบบ" ของแต่ละสถานีในหน้าไฟล์ เพื่อให้อยู่ที่เดียวกันหรือไม่',
     moving: 'กำลังย้าย… {code}', moved: 'ย้ายแบบ {n} แผ่นไปที่ไฟล์แล้ว', uploading: 'กำลังอัปโหลด {name}…', uploaded: 'อัปโหลด {name} แล้ว', refused: 'อัปโหลดไม่ได้: {e}',
-    other: 'ไฟล์นี้เปิดในโปรแกรมดูไฟล์', youtube: 'ดูบน YouTube', photos: 'รูปและวิดีโอ' },
+    other: 'ไฟล์นี้เปิดในโปรแกรมดูไฟล์', youtube: 'ดูบน YouTube', photos: 'รูปและวิดีโอ',
+    v360: 'วิดีโอ 360° ในหน้านี้จะเล่นเป็นวิดีโอธรรมดา เพราะ YouTube ไม่ให้หมุนมุมมองในเครื่องเล่นที่ฝังอยู่ในเว็บไซต์อื่น ถ้าต้องการหมุนดูรอบๆ (ลากเมาส์ ปัดนิ้ว หรือหมุนโทรศัพท์) ให้เปิดใน YouTube', open360: 'หมุนดูรอบๆ ใน YouTube ›' },
 };
 const CSS = `
 .sf { position: absolute; inset: 0; display: grid; grid-template-rows: auto auto 1fr; background: var(--paper); }
@@ -39,6 +41,8 @@ const CSS = `
 .sf-msg[data-kind="bad"] { color: var(--bad); }
 .sf-msg:empty { display: none; }
 .sf-msg button { margin-left: 8px; }
+.sf-msg[data-kind="note"] { color: var(--ink); }
+.sf-msg a { margin-left: 8px; white-space: nowrap; }
 /* The viewer always sits in the third row: the message row above it is hidden when empty, and without a fixed row the
    viewer moved up into the short row and had no height (27 Nov 2026: PDFs and videos showed nothing). */
 .sf-msg { grid-row: 2; }
@@ -156,7 +160,12 @@ export function showSiteFiles(view, site, l, state, sites, reload) {
     const fileUrl = it.kind === 'builtIn' ? itemHref(it) : `/api/files/${it.id}/download`;
     actions.replaceChildren();
     stage.classList.toggle('video', it.kind === 'video');
+    // 360° videos (Brian, 27 Nov 2026): YouTube's player inside another site plays them flat (no drag to look around), so
+    // say so and point to YouTube, where they turn. The note goes when another item is shown.
+    if (msg.dataset.kind === 'note') say('');
     if (it.kind === 'video') {
+      say(t.v360, 'note');
+      msg.append(el('a', { href: itemHref(it), target: '_blank', rel: 'noopener noreferrer' }, t.open360));
       // The site sends no referrer by default; YouTube's player needs the site's address to play, so this frame sends it.
       actions.append(el('a', { href: itemHref(it), target: '_blank', rel: 'noopener noreferrer' }, t.youtube));
       stage.replaceChildren(el('iframe', { src: `https://www.youtube-nocookie.com/embed/${it.youtube}?rel=0`, title: itemLabel(it, l),
