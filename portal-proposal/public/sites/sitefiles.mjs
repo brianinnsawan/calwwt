@@ -17,7 +17,7 @@ const T = {
     noFiles: 'Files are not open to you, so only the drawings built into the site are shown.', cadNote: 'DWG / DXF drawings open in the CAD workspace: measure, mark up, or open them in the full CAD program.',
     move: 'Move into Files', moveText: '{n} drawings of this site are still built into the site page. Move the built-in drawings of all 8 sites into each site\'s Files folder "Drawings", so everything is in one place?',
     moving: 'Moving… {code}', moved: 'Moved {n} drawings into Files.', uploading: 'Uploading {name}…', uploaded: 'Uploaded {name}.', refused: 'Not uploaded: {e}',
-    other: 'This file opens in the Files viewer.', youtube: 'Watch on YouTube', photos: 'Photos & video',
+    other: 'This file opens in the Files viewer.', youtube: 'Watch on YouTube', photos: 'Photos & video', phonePdf: 'Opens full screen in your phone\'s PDF viewer: pinch to zoom, swipe through every page.',
     v360: '360° video. On this page it plays as a normal video: YouTube does not let you turn the view in a player inside another site. To look around (drag with the mouse, swipe, or turn your phone), open it on YouTube.', open360: 'Look around on YouTube ›' },
   th: { pick: 'แบบหรือไฟล์', builtIn: 'แบบที่ติดมากับเว็บไซต์ (ยังไม่ได้ย้ายไปไฟล์)', openPdf: 'เปิด PDF', download: 'ดาวน์โหลด', openCad: 'เปิดในพื้นที่ทำงาน CAD',
     fullCad: 'โปรแกรม CAD เต็มรูปแบบ', openFile: 'เปิด', pdf: 'PDF', cad: 'CAD', upload: 'อัปโหลด', into: 'อัปโหลดไปที่', folder: 'โฟลเดอร์ในไฟล์',
@@ -25,7 +25,7 @@ const T = {
     noFiles: 'คุณไม่มีสิทธิ์หน้าไฟล์ จึงแสดงเฉพาะแบบที่ติดมากับเว็บไซต์', cadNote: 'แบบ DWG / DXF เปิดในพื้นที่ทำงาน CAD: วัดระยะ เขียนโน้ต หรือเปิดในโปรแกรม CAD เต็มรูปแบบ',
     move: 'ย้ายไปไฟล์', moveText: 'สถานีนี้ยังมีแบบ {n} แผ่นที่ติดมากับหน้าสถานี ย้ายแบบของทั้ง 8 สถานีไปไว้ในโฟลเดอร์ "แบบ" ของแต่ละสถานีในหน้าไฟล์ เพื่อให้อยู่ที่เดียวกันหรือไม่',
     moving: 'กำลังย้าย… {code}', moved: 'ย้ายแบบ {n} แผ่นไปที่ไฟล์แล้ว', uploading: 'กำลังอัปโหลด {name}…', uploaded: 'อัปโหลด {name} แล้ว', refused: 'อัปโหลดไม่ได้: {e}',
-    other: 'ไฟล์นี้เปิดในโปรแกรมดูไฟล์', youtube: 'ดูบน YouTube', photos: 'รูปและวิดีโอ',
+    other: 'ไฟล์นี้เปิดในโปรแกรมดูไฟล์', youtube: 'ดูบน YouTube', photos: 'รูปและวิดีโอ', phonePdf: 'เปิดเต็มจอในโปรแกรมดู PDF ของโทรศัพท์ ใช้สองนิ้วซูม และเลื่อนดูได้ทุกหน้า',
     v360: 'วิดีโอ 360° ในหน้านี้จะเล่นเป็นวิดีโอธรรมดา เพราะ YouTube ไม่ให้หมุนมุมมองในเครื่องเล่นที่ฝังอยู่ในเว็บไซต์อื่น ถ้าต้องการหมุนดูรอบๆ (ลากเมาส์ ปัดนิ้ว หรือหมุนโทรศัพท์) ให้เปิดใน YouTube', open360: 'หมุนดูรอบๆ ใน YouTube ›' },
 };
 const CSS = `
@@ -54,6 +54,19 @@ const CSS = `
 .sf-card .row { display: flex; flex-wrap: wrap; gap: 8px; }
 .sf-card a.btn { display: inline-block; padding: 6px 12px; border: 1px solid var(--rule); border-radius: 6px; text-decoration: none; color: inherit; }
 .sf-card a.btn.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+/* Phones (27 Nov 2026; desktop unchanged): bigger controls; a PDF shows as a card with "Open PDF" (full screen in the
+   phone's own PDF viewer, pinch to zoom, every page), because phone browsers do not show a PDF inside a page. */
+.sf-phone { margin: 14px; max-width: none; }
+.sf-phone img { display: block; width: 100%; height: auto; border: 1px solid var(--rule); border-radius: 6px; background: #fff; }
+.sf-phone a.btn { padding: 10px 16px; font-weight: 600; }
+@media (max-width: 760px), (max-height: 500px) and (pointer: coarse) {
+  .sf-bar { padding: 8px; gap: 8px; }
+  .sf-bar select { flex: 1 1 100%; max-width: 100%; min-height: 40px; }
+  .sf-bar button, .sf-bar a, .sf-seg button { min-height: 38px; }
+  .sf-bar a { display: inline-flex; align-items: center; padding: 0 4px; }
+  .sf-bar .sp { display: none; }
+  .sf-stage { -webkit-overflow-scrolling: touch; }
+}
 `;
 const el = (tag, attrs = {}, ...kids) => { const n = document.createElement(tag); for (const [k, v] of Object.entries(attrs)) { if (v == null) continue; if (k.startsWith('on')) n[k] = v; else n.setAttribute(k, v); } for (const k of kids) if (k != null) n.append(k); return n; };
 const ext = (name) => (/\.([a-z0-9]{1,8})$/i.exec(name)?.[1] || '').toLowerCase();
@@ -173,7 +186,12 @@ export function showSiteFiles(view, site, l, state, sites, reload) {
     } else if (e === 'pdf') {
       const inline = it.kind === 'builtIn' ? fileUrl : `${fileUrl}?inline=1`;
       actions.append(el('a', { href: inline, target: '_blank', rel: 'noopener' }, t.openPdf));
-      stage.replaceChildren(el('iframe', { src: `${inline}#view=FitH`, title: itemLabel(it, l) }));
+      if (matchMedia('(max-width: 760px), (max-height: 500px) and (pointer: coarse)').matches) {
+        // phone: the page picture when there is one (built-in layouts), and the PDF opens full screen
+        const pic = it.kind === 'builtIn' ? el('a', { href: inline, target: '_blank', rel: 'noopener' }, el('img', { src: `/sites/layouts/${it.title.file}.png`, alt: itemLabel(it, l), loading: 'lazy' })) : null;
+        stage.replaceChildren(el('div', { class: 'sf-card sf-phone' }, el('b', {}, itemLabel(it, l)), el('span', {}, t.phonePdf),
+          el('div', { class: 'row' }, el('a', { class: 'btn primary', href: inline, target: '_blank', rel: 'noopener' }, t.openPdf), link(fileUrl, t.download)), pic));
+      } else stage.replaceChildren(el('iframe', { src: `${inline}#view=FitH`, title: itemLabel(it, l) }));
     } else if (IMG.has(e)) {
       actions.append(el('a', { href: fileUrl, download: it.name }, t.download));
       stage.replaceChildren(el('img', { src: `${fileUrl}?inline=1`, alt: it.name }));

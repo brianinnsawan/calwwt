@@ -116,9 +116,36 @@ const CSS = `
 .v3-info .nav { display: flex; gap: 6px; align-items: center; margin-top: 6px; }
 .v3-panel .leg { display: grid; gap: 2px; padding: 0 0 4px; color: var(--muted); font-size: 11.5px; }
 .v3-panel .leg b { color: var(--ink); font-weight: 600; }
-@media (max-width: 760px) { .v3-stage { bottom: auto; top: 88px; } .v3-stage button { padding: 5px 7px; font-size: 11.5px; } }
-@media (max-width: 760px) { .v3-sect .sf { grid-template-columns: 1fr; } }
-@media (max-width: 760px) { .v3-views { max-width: calc(100% - 20px); top: 46px; } .v3-panel { width: 210px; } .v3-info { max-height: 40%; } .v3-n { bottom: auto; top: 132px; right: 10px; } }
+/* Phones, upright or turned sideways (27 Nov 2026; desktop and tablets unchanged): Views top left, Layers top right, north
+   arrow under Layers, the stage switch as a full-width bar at the foot and the sampling card just above it. Bigger buttons
+   and tick boxes for fingers. */
+@media (max-width: 760px), (max-height: 500px) and (pointer: coarse) {
+  .v3-views { left: 8px; top: 8px; max-width: calc(100% - 130px); flex-direction: column; gap: 6px; z-index: 8; }
+  .v3-views[open] { max-width: calc(100% - 16px); }
+  .v3-views > summary { min-height: 36px; display: flex; align-items: center; padding: 6px 12px; }
+  .v3-views[open] > .v3-row { padding: 6px; background: color-mix(in srgb, var(--panel) 96%, transparent); border: 1px solid var(--rule); border-radius: 8px; box-shadow: 0 6px 18px rgba(0, 0, 0, .15); }
+  .v3-views button, .v3-row select { min-height: 38px; font-size: 13px; }
+  .v3-row select { max-width: 100%; flex: 1 1 100%; }
+  .v3-panel { right: 8px; top: 8px; width: auto; max-width: calc(100% - 16px); max-height: calc(100% - 82px); font-size: 13.5px; }
+  .v3-panel[open] { width: min(300px, calc(100% - 16px)); box-shadow: 0 6px 18px rgba(0, 0, 0, .15); z-index: 9; }
+  .v3-panel > summary { min-height: 36px; display: flex; align-items: center; padding: 6px 12px; }
+  .v3-panel label { padding: 5px 0; }
+  .v3-panel label input { width: 18px; height: 18px; }
+  .v3-panel .grp > summary, .v3-panel .rows summary { padding: 7px 0; }
+  .v3-n { top: 54px; right: 10px; bottom: auto; width: 38px; height: 38px; }
+  .v3-n svg { width: 30px; height: 30px; }
+  .v3-stage { left: 8px; right: 8px; bottom: 8px; transform: none; }
+  .v3-stage button { flex: 1 1 0; min-height: 44px; padding: 4px 4px; font-size: 12px; line-height: 1.25; }
+  .v3-info { left: 8px; right: 8px; bottom: 8px; width: auto; max-width: none; max-height: 36%; font-size: 13px; }
+  .v3:has(.v3-stage) .v3-info { bottom: 62px; }
+  .v3-info .hd { min-height: 30px; }
+  .v3-info button { min-height: 36px; }
+  .v3-lab span { font-size: 11px; }
+  .v3-sect .sh { padding: 8px 10px; }
+  .v3-sect .sh button { min-height: 36px; }
+  .v3-sect .sb { padding: 8px 10px; }
+  .v3-sect .sf { grid-template-columns: 1fr; max-height: 40%; padding: 8px 10px; }
+}
 `;
 // light up a picked thing. A see-through sampled sump uses a basic material with no "emissive": setting one there broke
 // three.js's drawing (seen on the walk-through), so those are brightened instead.
@@ -132,6 +159,13 @@ export async function show(view, url, w, lang = 'en', title = '') {
   const l = lang === 'th' ? 'th' : 'en', t = T[l];
   if (!document.getElementById('v3-css')) { const s = el('style', { id: 'v3-css' }); s.textContent = CSS; document.head.append(s); }
   const box = el('div', { class: 'v3' }); view.append(box);
+  // Phones, upright or sideways (same rule as the CSS; 27 Nov 2026). The ready-made views were set for a wide desktop window; on a
+  // tall phone screen the camera steps back along the same line so the same width of the site still fits. Desktop: unchanged.
+  const phoneQ = matchMedia('(max-width: 760px), (max-height: 500px) and (pointer: coarse)');
+  const fit = (pos, target) => {
+    const W = box.clientWidth, H = box.clientHeight, k = phoneQ.matches && W && H ? Math.min(2.2, Math.max(1, 1.6 / (W / H))) : 1;
+    return k === 1 ? pos : pos.map((p, i) => target[i] + (p - target[i]) * k);
+  };
   const msg = el('div', { class: 'v3-msg' }, t.loading); box.append(msg);
   let renderer;
   try { renderer = new THREE.WebGLRenderer({ antialias: true }); } catch (e) { msg.textContent = t.failed; throw e; }
@@ -159,7 +193,7 @@ export async function show(view, url, w, lang = 'en', title = '') {
   // ---- views
   let fly = null;
   let beforeView = () => {};   // a view marked stage: 'final' (a proposed option) switches the model to "Final design" first
-  const go = (pos, target, ms = 550) => { fly = { p0: camera.position.clone(), t0: controls.target.clone(), p1: new THREE.Vector3(...pos), t1: new THREE.Vector3(...target), at: performance.now(), ms }; };
+  const go = (pos, target, ms = 550) => { fly = { p0: camera.position.clone(), t0: controls.target.clone(), p1: new THREE.Vector3(...fit(pos, target)), t1: new THREE.Vector3(...target), at: performance.now(), ms }; };
   const views = meta.views?.length ? meta.views : [{ id: 'site', en: 'Whole site', th: 'ทั้งสถานี', pos: [mid.x, mid.y + Math.max(size.x, size.z) * 0.6, mid.z + Math.max(size.x, size.z) * 0.7], target: mid.toArray() }];
   const yScale = () => root.scale.y;
   const scaled = (p) => [p[0], p[1] < 0 ? p[1] * yScale() : p[1], p[2]];   // "stretch height" on: only points below ground move
@@ -178,7 +212,7 @@ export async function show(view, url, w, lang = 'en', title = '') {
     vbar.append(sel);
   }
   box.append(vwrap);
-  camera.position.set(...views[0].pos); controls.target.set(...views[0].target); controls.update();
+  camera.position.set(...fit(views[0].pos, views[0].target)); controls.target.set(...views[0].target); controls.update();
 
   // ---- layers, labels and other switches
   const layers = root.children.filter((c) => c.userData?.layer);
@@ -248,12 +282,15 @@ export async function show(view, url, w, lang = 'en', title = '') {
   let sampleSummary = () => {}, pickSample = () => {}, pickTarget = () => false, onlySampleLabels = false;
   // The card folds to its title bar instead of closing (Brian, 27 Nov 2026: a closed card could not be found again).
   // Folded or open is remembered in this browser and kept when another thing is clicked.
-  let folded = false; try { folded = localStorage.getItem('calwwt.v3.card') === 'folded'; } catch { /* storage off */ }
+  // On phones the card covers much of the model: it starts folded there (remembered apart from the desktop card) and opens
+  // by itself when something in the model is tapped.
+  const cardKey = phoneQ.matches ? 'calwwt.v3.cardPhone' : 'calwwt.v3.card';
+  let folded = phoneQ.matches; try { const v = localStorage.getItem(cardKey); if (v) folded = v === 'folded'; } catch { /* storage off */ }
   const frame = (...title) => {
     card.replaceChildren(); card.hidden = false; card.classList.toggle('folded', folded);
     const hd = el('div', { class: 'hd', role: 'button', tabindex: '0' }), fd = el('span', { class: 'fd', 'aria-hidden': 'true' }, folded ? '▸' : '▾');
     hd.title = folded ? t.unfold : t.fold; hd.setAttribute('aria-expanded', String(!folded));
-    const flip = () => { folded = !folded; try { localStorage.setItem('calwwt.v3.card', folded ? 'folded' : 'open'); } catch { /* not remembered */ }
+    const flip = () => { folded = !folded; try { localStorage.setItem(cardKey, folded ? 'folded' : 'open'); } catch { /* not remembered */ }
       card.classList.toggle('folded', folded); fd.textContent = folded ? '▸' : '▾'; hd.title = folded ? t.unfold : t.fold; hd.setAttribute('aria-expanded', String(!folded)); };
     hd.onclick = flip; hd.onkeydown = (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); flip(); } };
     hd.append(fd, ...title); const bd = el('div', { class: 'bd' }); card.append(hd, bd); return bd;
@@ -295,6 +332,7 @@ export async function show(view, url, w, lang = 'en', title = '') {
     const hits = ray.intersectObject(root, true).filter((h) => h.object.isMesh && h.object.userData.en && !h.object.userData.nopick && shown(h.object));
     // what is under the ground wins over the building or fuel-tank outline in front of it
     const hit = hits.find((h) => h.object.userData.sample) || hits.find((h) => !['building', 'fuel'].includes(h.object.userData.kind)) || hits[0];
+    if (hit && phoneQ.matches) folded = false;
     hit ? pick(hit.object) : idle();
   });
 
