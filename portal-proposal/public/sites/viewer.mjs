@@ -16,7 +16,7 @@ const T = {
     section: 'Long section', vert: 'Vertical ×', rows: ['Ground RL', 'Invert RL  in / out', 'Pipe top RL', 'Depth to invert (m)', 'Chainage (m)', 'Length · fall'], datum: 'Datum RL', key: 'Key plan',
     leg: ['Proposed pipe', 'Ground', 'Existing drain crossing', 'Clash with existing drain', 'Water level'], clash: 'clash', clear: 'clear', grating: 'Grating', in: 'In', out: 'Out', water: 'Water', top: 'Top', bottom: 'Bottom',
     stages: ['Existing', '2026 sampling', 'Final design (concept)'], stageTip: ['What is on site today', 'Where the water is sampled in 2026', 'The proposed new works and new sampling points (concept, not built)'],
-    walk: 'Walk the sampling points', of: 'of', prev: '‹ Back', next: 'Next ›', byResult: 'Colour sampling points by test result', risk: 'Risk', samples: (n) => `${n} sample${n > 1 ? 's' : ''}`, params: (n) => `${n} parameters tested`,
+    fold: 'Fold this card', unfold: 'Open this card', walk: 'Walk the sampling points', of: 'of', prev: '‹ Back', next: 'Next ›', byResult: 'Colour sampling points by test result', risk: 'Risk', samples: (n) => `${n} sample${n > 1 ? 's' : ''}`, params: (n) => `${n} parameters tested`,
     take: 'Where to take it', tested: 'Tested for', limit: 'Limit', result: 'Result', noResult: 'Lab results not in yet.', pass: 'Within limit', fail: 'Over limit', drains: 'What drains here (lit up)', sump: 'Sampled at', framed: 'The sampled sump is coloured', flag: 'To fix in the final design', red: 'Red pipes: G2.1 system', blue: 'Blue pipes: G2.2 system',
     level: (a, b, as) => `Water taken at about ${a} (${b} m below ground${as ? ', assumed' : ''}).`, sampleLeg: 'Sampling points', g21: 'G2.1 oil side (forecourt, fuel, oil change)', g22: 'G2.2 wastewater side (toilets, kitchens, shops)',
     st: { existing: 'Existing sampling point', new: 'New sampling point', construction: 'Construction sampling point (final design)', ows: 'New OWS or new WWT (final design)' }, mgl: 'mg/L', resultOn: (d, lab) => `Result ${d}${lab ? ` (${lab})` : ''}:` },
@@ -26,7 +26,7 @@ const T = {
     section: 'รูปตัดตามยาว', vert: 'แนวดิ่งขยาย ×', rows: ['ระดับพื้น RL', 'ระดับท้องท่อ เข้า / ออก', 'ระดับหลังท่อ RL', 'ความลึกถึงท้องท่อ (ม.)', 'ระยะ (ม.)', 'ความยาว · ความลาด'], datum: 'ระดับอ้างอิง RL', key: 'แปลนตำแหน่ง',
     leg: ['ท่อที่เสนอ', 'ผิวพื้น', 'ท่อระบายน้ำเดิมที่ตัดผ่าน', 'ชนท่อระบายน้ำเดิม', 'ระดับน้ำ'], clash: 'ชน', clear: 'ไม่ชน', grating: 'ตะแกรง', in: 'เข้า', out: 'ออก', water: 'น้ำ', top: 'หลังถัง', bottom: 'ก้นถัง',
     stages: ['สภาพปัจจุบัน', 'เก็บตัวอย่างปี 2026', 'แบบสุดท้าย (แนวคิด)'], stageTip: ['สิ่งที่มีอยู่หน้างานวันนี้', 'จุดที่เก็บตัวอย่างน้ำในปี 2026', 'งานใหม่ที่เสนอและจุดเก็บตัวอย่างใหม่ (แนวคิด ยังไม่ได้สร้าง)'],
-    walk: 'ไล่ดูจุดเก็บตัวอย่าง', of: 'จาก', prev: '‹ ก่อนหน้า', next: 'ถัดไป ›', byResult: 'แสดงสีจุดเก็บตัวอย่างตามผลตรวจ', risk: 'ความเสี่ยง', samples: (n) => `${n} ตัวอย่าง`, params: (n) => `ตรวจ ${n} พารามิเตอร์`,
+    fold: 'พับการ์ดนี้', unfold: 'เปิดการ์ดนี้', walk: 'ไล่ดูจุดเก็บตัวอย่าง', of: 'จาก', prev: '‹ ก่อนหน้า', next: 'ถัดไป ›', byResult: 'แสดงสีจุดเก็บตัวอย่างตามผลตรวจ', risk: 'ความเสี่ยง', samples: (n) => `${n} ตัวอย่าง`, params: (n) => `ตรวจ ${n} พารามิเตอร์`,
     take: 'จุดตักน้ำ', tested: 'รายการตรวจ', limit: 'ค่ามาตรฐาน', result: 'ผล', noResult: 'ยังไม่ได้รับผลจากห้องแล็บ', pass: 'ผ่านเกณฑ์', fail: 'เกินเกณฑ์', drains: 'สิ่งที่ระบายมาที่จุดนี้ (ไฮไลต์)', sump: 'เก็บที่', framed: 'บ่อที่เก็บตัวอย่างแสดงเป็นสี', flag: 'ต้องแก้ไขในแบบสุดท้าย', red: 'ท่อสีแดง: ระบบ G2.1', blue: 'ท่อสีน้ำเงิน: ระบบ G2.2',
     level: (a, b, as) => `ตักน้ำที่ระดับประมาณ ${a} (ต่ำกว่าพื้น ${b} ม.${as ? ' ค่าสมมติ' : ''})`, sampleLeg: 'จุดเก็บตัวอย่าง', g21: 'G2.1 ฝั่งน้ำมัน (ลานจ่ายน้ำมัน เปลี่ยนน้ำมันเครื่อง)', g22: 'G2.2 ฝั่งน้ำเสีย (ห้องน้ำ ครัว ร้านค้า)',
     st: { existing: 'จุดเก็บตัวอย่างเดิม', new: 'จุดเก็บตัวอย่างใหม่', construction: 'จุดเก็บตัวอย่างที่จะก่อสร้าง (แบบสุดท้าย)', ows: 'OWS ใหม่ หรือระบบบำบัดใหม่ (แบบสุดท้าย)' }, mgl: 'มก./ล.', resultOn: (d, lab) => `ผลตรวจ ${d}${lab ? ` (${lab})` : ''}:` },
@@ -97,7 +97,13 @@ const CSS = `
 .v3-info table { border-collapse: collapse; margin: 4px 0; font-size: 12px; }
 .v3-info td, .v3-info th { padding: 1px 8px 1px 0; text-align: left; }
 .v3-info td.bad { color: #dc2626; font-weight: 600; } .v3-info td.ok { color: #16a34a; }
-.v3-info .x0 { float: right; margin: -3px -6px 0 8px; padding: 0 7px; line-height: 1.3; }
+.v3-info .hd { display: flex; align-items: center; gap: 6px; cursor: pointer; user-select: none; margin-right: 4px; }
+.v3-info .hd b { display: inline; margin: 0; font: 600 15px/1.25 var(--font-display); }
+.v3-info .hd .fd { flex: none; border: 0; background: none; padding: 0 2px; color: var(--muted); font-size: 12px; line-height: 1; }
+.v3-info .hd .risk { margin-right: 0; }
+.v3-info .bd { margin-top: 5px; }
+.v3-info.folded { padding: 6px 10px; }
+.v3-info.folded .bd { display: none; }
 .v3-info .nav { display: flex; gap: 6px; align-items: center; margin-top: 6px; }
 .v3-panel .leg { display: grid; gap: 2px; padding: 0 0 4px; color: var(--muted); font-size: 11.5px; }
 .v3-panel .leg b { color: var(--ink); font-weight: 600; }
@@ -197,23 +203,33 @@ export async function show(view, url, w, lang = 'en') {
   let picked = null, pickedMat = null;
   const lit = [];   // things lit up because they drain to the picked sampling point
   const unpick = () => { if (picked) { picked.material = pickedMat; picked = null; } for (const [m, mt] of lit.splice(0)) m.material = mt; };
-  let sampleSummary = () => {}, pickSample = () => {}, pickTarget = () => false, onlySampleLabels = false, quiet = false;
+  let sampleSummary = () => {}, pickSample = () => {}, pickTarget = () => false, onlySampleLabels = false;
+  // The card folds to its title bar instead of closing (Brian, 27 Nov 2026: a closed card could not be found again).
+  // Folded or open is remembered in this browser and kept when another thing is clicked.
+  let folded = false; try { folded = localStorage.getItem('calwwt.v3.card') === 'folded'; } catch { /* storage off */ }
+  const frame = (...title) => {
+    card.replaceChildren(); card.hidden = false; card.classList.toggle('folded', folded);
+    const hd = el('div', { class: 'hd', role: 'button', tabindex: '0' }), fd = el('span', { class: 'fd', 'aria-hidden': 'true' }, folded ? '▸' : '▾');
+    hd.title = folded ? t.unfold : t.fold; hd.setAttribute('aria-expanded', String(!folded));
+    const flip = () => { folded = !folded; try { localStorage.setItem('calwwt.v3.card', folded ? 'folded' : 'open'); } catch { /* not remembered */ }
+      card.classList.toggle('folded', folded); fd.textContent = folded ? '▸' : '▾'; hd.title = folded ? t.unfold : t.fold; hd.setAttribute('aria-expanded', String(!folded)); };
+    hd.onclick = flip; hd.onkeydown = (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); flip(); } };
+    hd.append(fd, ...title); const bd = el('div', { class: 'bd' }); card.append(hd, bd); return bd;
+  };
   // Brian, 27 Nov 2026: the how-to hint, datum and model notes at the bottom were too much and are left out for now (they
   // are still in each .glb: meta.datum, meta.note). With nothing picked the card shows only the short sampling summary.
   const idle = () => {
     unpick(); card.replaceChildren(); card.hidden = true;
-    if (meta.sampling && !quiet) { sampleSummary(); card.hidden = !card.childElementCount; }
+    if (meta.sampling) sampleSummary();
   };
   const pick = (o) => {
     if (o.userData.sample) return pickSample(o);
     if (pickTarget(o)) return;
-    unpick(); picked = o; pickedMat = o.material; card.hidden = false;
+    unpick(); picked = o; pickedMat = o.material;
     const m = glow(o.material.clone(), 0xff9d00, 0.55); m.opacity = Math.max(m.opacity, 0.9); o.material = m;
-    const u = o.userData; card.replaceChildren();
-    const x = el('button', { type: 'button', class: 'x', title: t.close, 'aria-label': t.close }, '×'); x.onclick = idle;
-    card.append(x, el('b', {}, name(u)));
+    const u = o.userData, body = frame(el('b', {}, name(u)));
     const lines = (l === 'th' ? u.infoTh : u.infoEn) || [];
-    lines.forEach((line, i) => card.append(el('p', i === lines.length - 1 && lines.length > 1 ? { class: 's' } : {}, line)));
+    lines.forEach((line, i) => body.append(el('p', i === lines.length - 1 && lines.length > 1 ? { class: 's' } : {}, line)));
   };
   idle();
   const ray = new THREE.Raycaster(); let down = null;
@@ -314,31 +330,25 @@ export async function show(view, url, w, lang = 'en') {
     check(t.byResult, false, (on) => { byResult = on; stage(stageAt); });
     // ---- summary on the idle card, in the deck's words ("2.1 – 2 samples – 4 parameters tested")
     sampleSummary = () => {
-      const p0 = el('p'), x0 = el('button', { type: 'button', class: 'x0', title: t.close, 'aria-label': t.close }, '×');
-      x0.onclick = () => { quiet = true; idle(); }; p0.append(x0);
-      if (S.risk) p0.append(el('span', { class: 'risk ' + S.risk }, `${S.risk}`));
-      card.insertBefore(p0, card.firstChild);
-      let after = p0;
-      for (const c of (stageAt === 2 ? S.futureCounts : S.counts)) { const p = el('p'); p.append(el('span', { class: c.group === 'G2.1' ? 'g21' : 'g22' }, c.group.replace(/G/g, '')), ` – ${t.samples(c.samples)} – ${t.params(c.params)}`); after.after(p); after = p; }
-      if (stageAt === 2 && S.systems?.length) { const p = el('p'); p.append(el('span', { class: 'g21' }, t.red), ' · ', el('span', { class: 'g22' }, t.blue)); after.after(p); }
+      const body = frame(...(S.risk ? [el('span', { class: 'risk ' + S.risk }, `${S.risk}`)] : []), el('b', {}, t.sampleLeg));
+      for (const c of (stageAt === 2 ? S.futureCounts : S.counts)) { const p = el('p'); p.append(el('span', { class: c.group === 'G2.1' ? 'g21' : 'g22' }, c.group.replace(/G/g, '')), ` – ${t.samples(c.samples)} – ${t.params(c.params)}`); body.append(p); }
+      if (stageAt === 2 && S.systems?.length) { const p = el('p'); p.append(el('span', { class: 'g21' }, t.red), ' · ', el('span', { class: 'g22' }, t.blue)); body.append(p); }
     };
     // ---- the card of one sampling point
     let walkAt = -1, order = [];
     pickSample = (o) => {
-      unpick(); card.hidden = false; const sm = o.userData.sample, fr = frameOf(sm.id) || o;
+      unpick(); const sm = o.userData.sample, fr = frameOf(sm.id) || o;
       picked = fr; pickedMat = fr.material;
       const m = glow(fr.material.clone(), 0xffffff, 0.35); fr.material = m;
       for (const n of sm.upstream || []) root.traverse((q) => {
         const u = q.userData; if (!q.isMesh || u.sample || !u.en || !(u.en === n || u.en.startsWith(n) || u.tag === n)) return;
         const mm = glow(q.material.clone(), 0x00c2ff, 0.6); mm.opacity = Math.max(mm.opacity, 0.9); lit.push([q, q.material]); q.material = mm;
       });
-      card.replaceChildren();
-      const x = el('button', { type: 'button', class: 'x', title: t.close, 'aria-label': t.close }, '×'); x.onclick = () => { walkAt = -1; idle(); };
-      card.append(x, el('b', {}, name(fr.userData)));
-      const gl = el('p'); sm.group.split('+').forEach((g, i) => { if (i) gl.append(' + '); gl.append(el('span', { class: g === 'G2.1' ? 'g21' : 'g22' }, name(S.groups[g]))); }); card.append(gl);
-      if (sm.targets?.length) card.append(el('p', {}, `${t.sump}: ${sm.targets.join(', ')}`));
-      if (sm.where) card.append(el('p', {}, `${t.take}: ${name(sm.where)}`));
-      card.append(el('p', {}, `${t.samples(sm.samples)} · ${t.level(f2s(sm.level), (sm.ground - sm.level).toFixed(2), sm.levelAssumed)}`));
+      const body = frame(el('b', {}, name(fr.userData)));
+      const gl = el('p'); sm.group.split('+').forEach((g, i) => { if (i) gl.append(' + '); gl.append(el('span', { class: g === 'G2.1' ? 'g21' : 'g22' }, name(S.groups[g]))); }); body.append(gl);
+      if (sm.targets?.length) body.append(el('p', {}, `${t.sump}: ${sm.targets.join(', ')}`));
+      if (sm.where) body.append(el('p', {}, `${t.take}: ${name(sm.where)}`));
+      body.append(el('p', {}, `${t.samples(sm.samples)} · ${t.level(f2s(sm.level), (sm.ground - sm.level).toFixed(2), sm.levelAssumed)}`));
       const v = sm.result?.values || null, tb = el('table'), hr = el('tr');
       for (const h of [t.tested, t.limit, ...(v ? [t.result] : [])]) hr.append(el('th', {}, h));
       tb.append(hr);
@@ -348,12 +358,12 @@ export async function show(view, url, w, lang = 'en') {
         if (v) { const xv = v[k], bad = xv != null && ((lo != null && xv < lo) || (hi != null && xv > hi)); tr.append(el('td', { class: xv == null ? '' : bad ? 'bad' : 'ok', title: xv == null ? '' : bad ? t.fail : t.pass }, xv == null ? '–' : String(xv))); }
         tb.append(tr);
       }
-      if (v) card.append(el('p', {}, t.resultOn(sm.result.date || '', sm.result.lab || '')));
-      card.append(tb);
-      if (!v) card.append(el('p', { class: 's' }, t.noResult));
-      if (sm.upstream?.length) card.append(el('p', {}, `${t.drains}: ${sm.upstream.join(', ')}`));
-      if (sm.note) card.append(el('p', {}, name(sm.note)));
-      const src = (l === 'th' ? fr.userData.infoTh : fr.userData.infoEn) || []; if (src.length) card.append(el('p', { class: 's' }, src[src.length - 1]));
+      if (v) body.append(el('p', {}, t.resultOn(sm.result.date || '', sm.result.lab || '')));
+      body.append(tb);
+      if (!v) body.append(el('p', { class: 's' }, t.noResult));
+      if (sm.upstream?.length) body.append(el('p', {}, `${t.drains}: ${sm.upstream.join(', ')}`));
+      if (sm.note) body.append(el('p', {}, name(sm.note)));
+      const src = (l === 'th' ? fr.userData.infoTh : fr.userData.infoEn) || []; if (src.length) body.append(el('p', { class: 's' }, src[src.length - 1]));
       if (walkAt >= 0) {
         const nav = el('div', { class: 'nav' }), a = el('button', { type: 'button' }, t.prev), b = el('button', { type: 'button' }, t.next);
         a.disabled = walkAt === 0; b.disabled = walkAt === order.length - 1;
