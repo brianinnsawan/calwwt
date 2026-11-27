@@ -94,6 +94,15 @@ async function main() {
       const pm = pane('model'); pl.hidden = true;   // the 3D model is the tab that opens first (Brian, 25 Nov 2026)
       views = [{ id: 'model', en: W.en.model3d, th: W.th.model3d }, { id: 'layouts', en: W.en.drawingsTab, th: W.th.drawingsTab }];
       onView = (id) => { pl.hidden = id !== 'layouts'; pm.hidden = id !== 'model'; if (id === 'model') start(pm); };
+    } else if (site.calcr) {
+      // 8888 Chiang Rai KP3 (Brian, 27 Nov 2026): its 3D model stays on calcr.sppwork.com and opens here in a frame; the
+      // server signs the person in to calcr on the way (src/calcr-link.mjs), so no calcr password is needed. One way only.
+      let started = false;
+      const pm = pane('model'); pm.classList.add('calcr'); pl.hidden = true;
+      const start = () => { if (started) return; started = true;
+        pm.append(el('iframe', { src: `/api/sites/${code}/calcr-link?lang=${l}`, title: w.model3d, allow: 'fullscreen', referrerpolicy: 'no-referrer' })); };
+      views = [{ id: 'model', en: W.en.model3d, th: W.th.model3d }, { id: 'layouts', en: W.en.drawingsTab, th: W.th.drawingsTab }];
+      onView = (id) => { pl.hidden = id !== 'layouts'; pm.hidden = id !== 'model'; if (id === 'model') start(); };
     } else modelTab = { en: W.en.drawingsTab, th: W.th.drawingsTab };
   }
   // Timeline: same chart as calcr.sppwork.com. Editing for people with Project timeline = edit (Admin page).

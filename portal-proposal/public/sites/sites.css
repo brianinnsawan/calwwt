@@ -117,3 +117,7 @@ html.rail-off .rail-btn { right: 4px; top: 10px; }
   #rail header { padding: 10px 44px 8px 14px; }
   #rail header h1 { font-size: 20px; }
 }
+
+/* 8888 Chiang Rai KP3: the calcr.sppwork.com model in a frame (site.mjs) */
+.pane.calcr { padding: 0; }
+.pane.calcr iframe { display: block; width: 100%; height: 100%; border: 0; }

@@ -8,6 +8,7 @@
 // Timelines are kept in the tasks database (table site_timelines, tasks/schema/0011_site_timelines.sql): every save is a
 // new row, so nothing is ever overwritten and the weekly backup copies all of them.
 import { HttpError } from './auth.mjs';
+import { CALCR_SITES, calcrLinkResponse } from './calcr-link.mjs';
 
 // The Sites pages show a map (public/sites/map.mjs, Leaflet in vendor/) whose background pictures ("tiles") come from
 // OpenStreetMap (map) and Esri World Imagery (satellite). Only these pages may load pictures from there; everything else
@@ -15,8 +16,10 @@ import { HttpError } from './auth.mjs';
 // The site videos (Brian's 360° walkthroughs, sites.json "videos") play in a frame from youtube-nocookie.com, allowed on
 // these pages only (Brian, 27 Nov 2026).
 export const MAP_TILES = ['https://tile.openstreetmap.org', 'https://server.arcgisonline.com'];
-export const SITES_CSP = "default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: " + MAP_TILES.join(' ') + "; font-src 'self' data:; connect-src 'self'; worker-src 'self' blob:; frame-src 'self' https://www.youtube-nocookie.com; frame-ancestors 'self'; object-src 'none'; base-uri 'self'; form-action 'self'";
-export const SITE_CODES = ['0589', '1156', '1588', '1622', '1642', '1687', '1703', '1750'];
+export const SITES_CSP = "default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: " + MAP_TILES.join(' ') + "; font-src 'self' data:; connect-src 'self'; worker-src 'self' blob:; frame-src 'self' https://www.youtube-nocookie.com https://calcr.sppwork.com; frame-ancestors 'self'; object-src 'none'; base-uri 'self'; form-action 'self'";
+// 8888 = Caltex Chiang Rai KP3 (Brian, 27 Nov 2026): a separate 2026 job, added so it works like the 8 programme sites (Files,
+// CAD workspace, timeline). 8888 stands in until Caltex gives the site code. Its 3D model stays on calcr.sppwork.com (src/calcr-link.mjs).
+export const SITE_CODES = ['0589', '1156', '1588', '1622', '1642', '1687', '1703', '1750', '8888'];
 const ALL = 'all';
 const CODE = new RegExp(`^(${[...SITE_CODES, ALL].join('|')})$`);
 const ISO = /^\d{4}-\d{2}-\d{2}$/;
@@ -97,6 +100,8 @@ export async function routeSites(request, env, actor, access) {
   if (!isPage && !isApi) return null;
   if (!access.areas.has('drawings')) fail(404, 'Not found.');
   if (isApi) {
+    const link = p.match(/^\/api\/sites\/(\d{4})\/calcr-link$/);
+    if (link) { if (!CALCR_SITES[link[1]] || !['GET', 'HEAD'].includes(request.method)) fail(404, 'Not found.'); return calcrLinkResponse(env, link[1], access, url); }
     const m = p.match(/^\/api\/sites\/([0-9a-z]{3,4})\/timeline((?:\/.*)?)$/);
     if (!m || !CODE.test(m[1])) fail(404, 'Not found.');
     return timelineApi(request, env, access, m[1], m[2] || '');
