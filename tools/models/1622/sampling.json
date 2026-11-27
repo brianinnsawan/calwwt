@@ -83,7 +83,9 @@
     "Site drain TB",
     "Site drain TW",
     "Building A grease trap to the east pit",
-    "BO-6000"
+    "BO-6000",
+    "Building B grease trap to the building A grease trap",
+    "Grease trap DOS HRGT-1000L"
    ],
    "note": {
     "en": "Takes the east line with the treated water from both toilet tanks, and building A's grease trap.",
@@ -125,7 +127,9 @@
    },
    "upstream": [
     "Commercial building A",
-    "Building A to its grease trap"
+    "Building A to its grease trap",
+    "Building B grease trap to the building A grease trap",
+    "Grease trap DOS HRGT-1000L"
    ]
   }
  ],
@@ -181,15 +185,14 @@
     "Men's toilets to their BO-6000",
     "Women's toilets to their BO-6000",
     "Building B to its grease trap",
-    "Building B grease trap to",
-    "Line from building B",
     "Treated water from the",
     "Building A to its grease trap",
     "Building A grease trap to the east pit",
     "Small pit",
     "Lines from the small pits",
     "Line from small pit 1",
-    "Manhole A1 to manhole A2"
+    "Manhole A1 to manhole A2",
+    "Building B grease trap to the building A grease trap"
    ]
   }
  ],
