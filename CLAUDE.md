@@ -135,5 +135,6 @@ Nothing is shared with calnkt: own logins, own databases, own file storage.
 - Calmer site page (Brian, 27 Nov 2026): every left-panel section folds and the « button hides the whole panel (remembered per
   browser); the 3D view bar shows only Whole site / Plan / Sampling points + a "More views" list, and folds; the bottom card no
   longer shows the how-to hint, datum, model notes or deck source (still in each .glb) — only the short sampling summary.
+  The bottom card never closes: its title bar folds it (no × button; Brian, 27 Nov 2026), remembered per browser.
   Brian will say what site notes to add later; do not add notes on his behalf.
 - Site notes and starting timelines in `data/sites.json` / `data/timelines/` were written from Brian's site-visit notes; dates to confirm.
