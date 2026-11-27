@@ -72,6 +72,12 @@
    "links": [],
    "layouts": [
     {
+     "file": "1156/1156-combined-layout-site-plan-kfc-wastewater",
+     "en": "Combined layout: 2019 Caltex site plan + KFC 2019 sanitary plan + KFC as-built tanks + SPP site observation and sampling points (A3, 1:300, 27 Nov 2026)",
+     "th": "ผังรวม: ผังบริเวณ Caltex ปี 2019 + ผังสุขาภิบาล KFC ปี 2019 + ถัง KFC ตามแบบก่อสร้างจริง + ข้อมูลสำรวจหน้างานของ SPP และจุดเก็บตัวอย่าง (A3 1:300 27 พ.ย. 2026)",
+     "source": "1156 Combined Layout.dwg (SPP, Sites\\1156 Samut Prakan\\03 Drawings\\_Working), plotted from Civil 3D"
+    },
+    {
      "file": "1156/1156-site-plan-proposed-2019",
      "en": "Caltex site plan, 1156 Hitex Theppratarn Branch 1 (\"Proposed 1\", Feb 2019)",
      "th": "ผังบริเวณสถานี Caltex 1156 Hitex Theppratarn สาขา 1 (\"Proposed 1\" ก.พ. 2019)",
@@ -111,8 +117,8 @@
     }
    ],
    "layoutNote": {
-    "en": "KFC drawings and the 2019 Caltex site plan received 27 Nov 2026. The two A-sheets were plotted from the DWGs here; their title blocks say Phuket in the location box (check). No as-built wastewater layout of the station itself yet.",
-    "th": "ได้รับแบบ KFC และผังบริเวณ Caltex ปี 2019 เมื่อ 27 พ.ย. 2026 แบบ A-101 / A-102 พิมพ์จากไฟล์ DWG ช่องสถานที่ในกรอบชื่อแบบเขียนว่า ภูเก็ต (ต้องตรวจสอบ) ยังไม่มีผังระบบน้ำเสียตามจริงของตัวสถานี"
+    "en": "KFC drawings and the 2019 Caltex site plan received 27 Nov 2026. The two A-sheets were plotted from the DWGs here; their title blocks say Phuket in the location box (check). No as-built wastewater layout of the station itself yet. The combined layout lays the 2019 plan over the real site: its buildings fit the satellite image only when turned 7.4°, and its lot line does not match the walls.",
+    "th": "ได้รับแบบ KFC และผังบริเวณ Caltex ปี 2019 เมื่อ 27 พ.ย. 2026 แบบ A-101 / A-102 พิมพ์จากไฟล์ DWG ช่องสถานที่ในกรอบชื่อแบบเขียนว่า ภูเก็ต (ต้องตรวจสอบ) ยังไม่มีผังระบบน้ำเสียตามจริงของตัวสถานี ผังรวมวางผังปี 2019 ลงบนสถานีจริง: อาคารตรงกับภาพถ่ายดาวเทียมเมื่อหมุน 7.4° และแนวเขตที่ดินในผังไม่ตรงกับกำแพงจริง"
    },
    "lat": 13.64117,
    "lng": 100.60475,

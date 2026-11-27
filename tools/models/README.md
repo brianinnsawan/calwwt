@@ -109,7 +109,20 @@ and `aerialContext` (style.mjs) instead of drawn / part / context. Replace with 
 Drawings received 27 Nov 2026 (Brian; filed in SharePoint `Sites\1156 Samut Prakan\03 Drawings\CAD` and `CAD\KFC`, and on
 the Sites page as layouts; the DWGs were plotted here with `dwg/dwg-to-json.mjs` and a matplotlib plot of the JSON):
 - `1156 # Hitex Theppratarn Branch 1.dwg`: Caltex site plan "PROPOSED 1" (Star Fuels, 21.02.19, 1:200): lot 3,049 m²,
-  frontage 52.05 m, KFC drive-through 24 × 10 m (260 m²) at the back. A proposal, not as-built; not yet fitted to the model.
+  frontage 52.05 m, KFC drive-through 24 × 10 m (260 m²) at the back. A proposal, not as-built. Checked against the
+  satellite image (27 Nov 2026): the plan's buildings sit on the real roofs only when the plan is turned -7.4° (the plan
+  draws the road straight across); turned like that its lot line misses the walls by up to about 3 m (east side 1.6 m
+  outside), and KFC, toilets, mart and fuel tanks as built differ from it by up to about 4 m. Brian's decisions: keep the
+  satellite walls (48.4 x 62 m, 3,001 m² against the plan's 3,049 m²) and the model's building outlines (KFC is already
+  24.0 m as on the plan); take only the fuel tank size and spacing from the plan (7.5 x 2.38 m, 3.38 m c/c, kept centred
+  on the pad seen on site); keep the KFC tanks where Brian marked them (the 2019 KFC sheet puts its design tanks along the
+  same back wall).
+- Combined layout (27 Nov 2026): `Sites\1156 Samut Prakan\03 Drawings\_Working\1156 Combined Layout.dwg` (+ DXF) and
+  `Issued PDF\1156 Combined Layout A3 R3.pdf`, on the site page as the first layout. Model coordinates (metres, x along
+  the road); Caltex plan in grey turned -7.4°; KFC sheet 3 (the PDF's vectors; its base fits the Caltex plan to 1 cm) in
+  orange, KFC part only; KFC as-built tanks in red; SPP observation in cyan; fuel tanks green; sampling points magenta.
+  Built with ezdxf from a DXF copy of the site plan and the model objects (a build.mjs run with the shape helpers wrapped
+  to record each object's footprint), then saved and plotted in Brian's Civil 3D.
 - `A-101 ... BG-R-3000-1-M4+BG-R-3000-2-M4+BC-K-10-D2.2-UR As Built DWG.dwg` (TRI Architects / Astive, as-built 30/10/63):
   two BG-R-3000 grease traps (2.15 × 1.45 × 1.35 m, two 0.50 m covers each) in one 5.80 × 2.45 m pit, top 0.275 / in 0.30 m
   under the road; BC-K-10-D2.2 treatment tank Ø2.20, slab 7.50 × 3.20 m on 32 piles, 4 manholes Ø0.60 at 1.25 / 2.65 / 4.80 /
