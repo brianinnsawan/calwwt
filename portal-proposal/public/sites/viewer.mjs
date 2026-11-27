@@ -10,7 +10,7 @@ import { OrbitControls } from '/sites/vendor/OrbitControls.js';
 import { GLTFLoader } from '/sites/vendor/GLTFLoader.js';
 
 const T = {
-  en: { layers: 'Layers', views: 'Views', more: 'More views…', labels: 'Names', levels: 'Pipe levels at manholes', see: 'See through the ground', tall: 'Stretch height ×3',
+  en: { layers: 'Layers', views: 'Views', more: 'More views…', grpWW: 'Wastewater and treatment', grpSite: 'Buildings and site', display: 'Display', tidy: 'Tidy names (more appear as you zoom in)', labels: 'Names', levels: 'Pipe levels at manholes', see: 'See through the ground', tall: 'Stretch height ×3',
     hint: 'Click a tank, pipe or manhole to see its size and levels. Drag to turn, scroll or pinch to zoom, right-drag or two fingers to move.',
     close: 'Close', north: 'North', loading: 'Loading the 3D model…', failed: 'The 3D model could not be shown on this device.', built: 'Model updated',
     section: 'Long section', vert: 'Vertical ×', rows: ['Ground RL', 'Invert RL  in / out', 'Pipe top RL', 'Depth to invert (m)', 'Chainage (m)', 'Length · fall'], datum: 'Datum RL', key: 'Key plan',
@@ -20,7 +20,7 @@ const T = {
     take: 'Where to take it', tested: 'Tested for', limit: 'Limit', result: 'Result', noResult: 'Lab results not in yet.', pass: 'Within limit', fail: 'Over limit', drains: 'What drains here (lit up)', sump: 'Sampled at', framed: 'The sampled sump is coloured', flag: 'To fix in the final design', red: 'Red pipes: G2.1 system', blue: 'Blue pipes: G2.2 system',
     level: (a, b, as) => `Water taken at about ${a} (${b} m below ground${as ? ', assumed' : ''}).`, sampleLeg: 'Sampling points', g21: 'G2.1 oil side (forecourt, fuel, oil change)', g22: 'G2.2 wastewater side (toilets, kitchens, shops)',
     st: { existing: 'Existing sampling point', new: 'New sampling point', construction: 'Construction sampling point (final design)', ows: 'New OWS or new WWT (final design)' }, mgl: 'mg/L', resultOn: (d, lab) => `Result ${d}${lab ? ` (${lab})` : ''}:` },
-  th: { layers: 'ชั้นข้อมูล', views: 'มุมมอง', more: 'มุมมองอื่น…', labels: 'ชื่อ', levels: 'ระดับท่อที่บ่อพัก', see: 'มองทะลุพื้น', tall: 'ขยายความสูง ×3',
+  th: { layers: 'ชั้นข้อมูล', views: 'มุมมอง', more: 'มุมมองอื่น…', grpWW: 'ระบบน้ำเสียและการบำบัด', grpSite: 'อาคารและพื้นที่สถานี', display: 'การแสดงผล', tidy: 'จัดชื่อให้อ่านง่าย (ซูมเข้าเพื่อดูเพิ่ม)', labels: 'ชื่อ', levels: 'ระดับท่อที่บ่อพัก', see: 'มองทะลุพื้น', tall: 'ขยายความสูง ×3',
     hint: 'คลิกที่ถัง ท่อ หรือบ่อพัก เพื่อดูขนาดและระดับ ลากเพื่อหมุน เลื่อนลูกกลิ้งหรือใช้สองนิ้วเพื่อซูม คลิกขวาลากหรือใช้สองนิ้วเพื่อเลื่อน',
     close: 'ปิด', north: 'ทิศเหนือ', loading: 'กำลังโหลดโมเดล 3D…', failed: 'ไม่สามารถแสดงโมเดล 3D บนอุปกรณ์นี้ได้', built: 'ปรับปรุงโมเดลเมื่อ',
     section: 'รูปตัดตามยาว', vert: 'แนวดิ่งขยาย ×', rows: ['ระดับพื้น RL', 'ระดับท้องท่อ เข้า / ออก', 'ระดับหลังท่อ RL', 'ความลึกถึงท้องท่อ (ม.)', 'ระยะ (ม.)', 'ความยาว · ความลาด'], datum: 'ระดับอ้างอิง RL', key: 'แปลนตำแหน่ง',
@@ -50,6 +50,9 @@ const CSS = `
 .v3-panel label input { margin: 0; flex: none; padding: 0; }
 .v3-panel i { flex: none; width: 10px; height: 10px; border-radius: 2px; border: 1px solid color-mix(in srgb, var(--ink) 25%, transparent); }
 .v3-panel .rows summary { padding: 2px 0; font-weight: 600; }
+.v3-panel .grp > summary { padding: 3px 0; font-weight: 600; }
+.v3-panel .grp .sub { display: grid; gap: 3px; padding: 1px 0 4px 14px; }
+.v3-lab span.v3-site { font: 600 15px/1.3 var(--font-display); padding: 2px 9px; border-color: var(--accent); }
 .v3-panel hr { width: 100%; border: 0; border-top: 1px solid var(--rule); margin: 4px 0; }
 .v3-info { position: absolute; left: 10px; bottom: 10px; z-index: 6; width: max-content; max-width: min(440px, calc(100% - 20px)); max-height: 46%; overflow: auto; background: color-mix(in srgb, var(--panel) 95%, transparent); border: 1px solid var(--rule); border-radius: 8px; padding: 9px 12px 10px; font-size: 12.5px; line-height: 1.45; }
 .v3-info b { display: block; font: 600 16px/1.2 var(--font-display); margin: 0 26px 4px 0; }
@@ -117,9 +120,12 @@ const CSS = `
 // light up a picked thing. A see-through sampled sump uses a basic material with no "emissive": setting one there broke
 // three.js's drawing (seen on the walk-through), so those are brightened instead.
 const glow = (m, hex, k) => { if ('emissive' in m && m.emissive) { m.emissive = new THREE.Color(hex); m.emissiveIntensity = k; } else m.color.lerp(new THREE.Color(hex), k * 0.6); return m; };
+// how far from the camera a name still shows, in site-widths, by importance (see "prio" in show()); the closest and most
+// important names win where two would overlap
+const REACH = [Infinity, 2.4, 1.25, 0.6, 0.5];
 const el = (tag, attrs = {}, text) => { const n = document.createElement(tag); for (const [k, v] of Object.entries(attrs)) if (v != null) n.setAttribute(k, v); if (text != null) n.textContent = text; return n; };
 
-export async function show(view, url, w, lang = 'en') {
+export async function show(view, url, w, lang = 'en', title = '') {
   const l = lang === 'th' ? 'th' : 'en', t = T[l];
   if (!document.getElementById('v3-css')) { const s = el('style', { id: 'v3-css' }); s.textContent = CSS; document.head.append(s); }
   const box = el('div', { class: 'v3' }); view.append(box);
@@ -176,30 +182,59 @@ export async function show(view, url, w, lang = 'en') {
   const panel = el('details', { class: 'v3-panel' }); if (view.clientWidth > 760) panel.open = true;
   panel.append(el('summary', {}, t.layers));
   const rows = el('div', { class: 'rows' }); panel.append(rows);
-  const check = (text, on, change, colour) => {
+  const check = (text, on, change, colour, into = rows) => {
     const lab = el('label'), i = el('input', { type: 'checkbox' }); i.checked = on; i.onchange = () => change(i.checked);
-    lab.append(i); if (colour) { const sw = el('i'); sw.style.background = colour; lab.append(sw); } lab.append(el('span', {}, text)); rows.append(lab); return i;
+    lab.append(i); if (colour) { const sw = el('i'); sw.style.background = colour; lab.append(sw); } lab.append(el('span', {}, text)); into.append(lab); return i;
   };
+  // The panel is split into folds (Brian, 27 Nov 2026): the wastewater and treatment layers, the buildings and the rest of
+  // the site, the names, and the display switches. Which folds are open is remembered in this browser.
+  const fold = (text, open, key) => {
+    const d = el('details', { class: 'grp' }); d.open = open;
+    try { const v = localStorage.getItem('calwwt.v3.grp.' + key); if (v) d.open = v === 'open'; } catch { /* storage off */ }
+    d.addEventListener('toggle', () => { try { localStorage.setItem('calwwt.v3.grp.' + key, d.open ? 'open' : 'closed'); } catch { /* not remembered */ } });
+    const sub = el('div', { class: 'sub' }); d.append(el('summary', {}, text), sub); rows.append(d); return sub;
+  };
+  const WW = new Set(['tanks', 'sewer', 'drains', 'air', 'base', 'sampling', 'proposed', 'old', 'asbuilt']);   // the rest is "buildings and site"
+  const gWW = fold(t.grpWW, true, 'ww'), gSite = fold(t.grpSite, false, 'site');
   const colourOf = (g) => { let c = null; g.traverse((o) => { if (!c && (o.isMesh || o.isLineSegments) && o.material?.color) c = '#' + o.material.color.getHexString(THREE.SRGBColorSpace); }); return c; };
   const layerBox = new Map();
-  for (const g of layers) { g.visible = g.userData.on !== false; layerBox.set(g.name, check(name(g.userData), g.visible, (on) => { g.visible = on; }, colourOf(g))); }
-  rows.append(el('hr'));
+  for (const g of layers) { g.visible = g.userData.on !== false; layerBox.set(g.name, check(name(g.userData), g.visible, (on) => { g.visible = on; }, colourOf(g), WW.has(g.name) ? gWW : gSite)); }
+  for (const g of [gWW, gSite]) if (!g.childElementCount) g.parentElement.hidden = true;
   const lab = el('div', { class: 'v3-lab' }); box.append(lab);
   const marks = [];
   const layerOf = (o) => { let p = o; while (p && !p.userData?.layer) p = p.parent; return p; };
   root.traverse((o) => {
     const u = o.userData || {};
-    if (u.tag && u.at) { const s = el('span', {}, (l === 'th' && u.tagTh) || u.tag); lab.append(s); marks.push({ s, p: new THREE.Vector3(...u.at), kind: 'tag', layer: layerOf(o), o }); }
-    if (u.lvl && o.isMesh) { const b = new THREE.Box3().setFromObject(o), c = b.getCenter(new THREE.Vector3()); const s = el('span', { class: 'v3-lvl' }, u.lvl); lab.append(s); marks.push({ s, p: new THREE.Vector3(c.x, b.max.y + 0.25, c.z), kind: 'lvl', layer: layerOf(o) }); }
+    if (u.tag && u.at) {
+      const s = el('span', {}, (l === 'th' && u.tagTh) || u.tag); lab.append(s);
+      const layer = layerOf(o), id = layer?.name, ww = WW.has(id);
+      // how important a name is: sampling points first, then tanks, drains and oil traps, then the other wastewater things,
+      // then buildings, fuel tanks and the rest of the site, then the surroundings
+      const prio = ['sample', 'flag', 'future'].includes(u.kind) ? 0 : ['tanks', 'drains', 'proposed'].includes(id) ? 1 : ww ? 2 : id === 'surroundings' ? 4 : 3;
+      marks.push({ s, p: new THREE.Vector3(...u.at), grp: ww || prio === 0 ? 'ww' : 'site', prio, layer, o });
+    }
+    if (u.lvl && o.isMesh) { const b = new THREE.Box3().setFromObject(o), c = b.getCenter(new THREE.Vector3()); const s = el('span', { class: 'v3-lvl' }, u.lvl); lab.append(s); marks.push({ s, p: new THREE.Vector3(c.x, b.max.y + 0.25, c.z), grp: 'lvl', prio: 2, layer: layerOf(o) }); }
   });
-  const showKind = { tag: true, lvl: false };
-  check(t.labels, true, (on) => { showKind.tag = on; });
-  check(t.levels, false, (on) => { showKind.lvl = on; });
+  // ---- names that tidy themselves (Brian, 27 Nov 2026): zoomed far out only the site's name shows; closer in the wastewater
+  // names come first, and the names of buildings and the rest of the site only near the camera; names never sit on each other.
+  const showKind = { ww: true, site: true, lvl: false };
+  let tidy = true;
+  const core = marks.filter((m) => m.prio < 4), cx = core.map((m) => m.p.x), cz = core.map((m) => m.p.z);
+  const D = core.length > 1 ? Math.max(Math.max(...cx) - Math.min(...cx), Math.max(...cz) - Math.min(...cz), 20) : Math.max(size.x, size.z);
+  const siteMark = { s: el('span', { class: 'v3-site' }, title || name({ en: meta.name, th: meta.nameTh || meta.name })),
+    p: core.length ? new THREE.Vector3((Math.max(...cx) + Math.min(...cx)) / 2, 1, (Math.max(...cz) + Math.min(...cz)) / 2) : mid.clone() };
+  lab.append(siteMark.s);
+  const gN = fold(t.labels, true, 'names');
+  check(t.grpWW, true, (on) => { showKind.ww = on; }, null, gN);
+  check(t.grpSite, true, (on) => { showKind.site = on; }, null, gN);
+  check(t.levels, false, (on) => { showKind.lvl = on; }, null, gN);
+  check(t.tidy, true, (on) => { tidy = on; }, null, gN);
+  const gD = fold(t.display, false, 'display');
   // the ground and the buildings are see-through in the file; "see through the ground" off makes the ground solid
   const groundMats = []; root.traverse((o) => { if (o.isMesh && layerOf(o)?.name === 'ground') groundMats.push([o.material, o.material.opacity]); });
   const solid = (on) => { for (const [m, op] of groundMats) { m.opacity = on ? op : 1; m.transparent = on; m.depthWrite = !on; m.needsUpdate = true; } };
-  check(t.see, true, solid);
-  check(t.tall, false, (on) => { const k = on ? 3 : 1; controls.target.y *= k / root.scale.y; root.scale.y = k; controls.update(); });
+  check(t.see, true, solid, null, gD);
+  check(t.tall, false, (on) => { const k = on ? 3 : 1; controls.target.y *= k / root.scale.y; root.scale.y = k; controls.update(); }, null, gD);
   box.append(panel);
 
   // ---- information card
@@ -339,9 +374,8 @@ export async function show(view, url, w, lang = 'en') {
     key('#d7263d', t.g21, ''); key('#1f6fe0', t.g22, '');
     leg.append(el('span', {}, t.framed));
     if (S.hasFuture) { key('#ff66cc', t.st.ows, 'clip-path:polygon(50% 0,100% 100%,0 100%)'); key('#f08c00', t.flag, 'clip-path:polygon(0 0,100% 0,50% 100%)'); }
-    const legBox = el('details'); legBox.append(el('summary', {}, t.sampleLeg), leg);
-    rows.append(el('hr'), legBox);
-    check(t.byResult, false, (on) => { byResult = on; stage(stageAt); });
+    const gS = fold(t.sampleLeg, false, 'samplekey'); gS.append(leg);
+    check(t.byResult, false, (on) => { byResult = on; stage(stageAt); }, null, gS);
     // ---- summary on the idle card, in the deck's words ("2.1 – 2 samples – 4 parameters tested")
     sampleSummary = () => {
       const body = frame(...(S.risk ? [el('span', { class: 'risk ' + S.risk }, `${S.risk}`)] : []), el('b', {}, t.sampleLeg));
@@ -422,12 +456,30 @@ export async function show(view, url, w, lang = 'en') {
     }
     controls.update(); renderer.render(scene, camera);
     const W = box.clientWidth, H = box.clientHeight, ky = root.scale.y;
+    // far: the camera is more than 2.4 site-widths from where it looks; then only the site's name shows
+    const far = tidy && camera.position.distanceTo(controls.target) > 2.4 * D, cand = [];
     for (const m of marks) {
-      let on = showKind[m.kind] && (!m.layer || m.layer.visible) && (!m.o || m.o.visible) && (!onlySampleLabels || ['sample', 'flag', 'future'].includes(m.o?.userData.kind));
-      if (on) { v.set(m.p.x, m.p.y * ky, m.p.z).project(camera); on = v.z < 1 && Math.abs(v.x) < 1.05 && Math.abs(v.y) < 1.05; }
-      m.s.style.display = on ? '' : 'none';
-      if (on) m.s.style.transform = `translate(${((v.x + 1) / 2 * W).toFixed(1)}px, ${((1 - v.y) / 2 * H).toFixed(1)}px) translate(-50%, -50%)`;
+      let on = !far && showKind[m.grp] && (!m.layer || m.layer.visible) && (!m.o || m.o.visible) && (!onlySampleLabels || ['sample', 'flag', 'future'].includes(m.o?.userData.kind));
+      if (on) {
+        v.set(m.p.x, m.p.y * ky, m.p.z); m.dl = camera.position.distanceTo(v);
+        if (tidy && m.dl > REACH[m.prio] * D) on = false;
+        else { v.project(camera); on = v.z < 1 && Math.abs(v.x) < 1.05 && Math.abs(v.y) < 1.05; m.x = (v.x + 1) / 2 * W; m.y = (1 - v.y) / 2 * H; }
+      }
+      if (on) cand.push(m); else m.s.style.display = 'none';
     }
+    if (tidy) cand.sort((a, b) => a.prio - b.prio || a.dl - b.dl);
+    const placed = [];
+    for (const m of cand) {
+      if (m.s.style.display === 'none') m.s.style.display = '';
+      if (!m.w) { m.w = m.s.offsetWidth; m.h = m.s.offsetHeight; }
+      const r = [m.x - m.w / 2 - 3, m.y - m.h / 2 - 1, m.x + m.w / 2 + 3, m.y + m.h / 2 + 1];
+      if (tidy && placed.some((q) => r[0] < q[2] && r[2] > q[0] && r[1] < q[3] && r[3] > q[1])) { m.s.style.display = 'none'; continue; }
+      placed.push(r); m.s.style.transform = `translate(${m.x.toFixed(1)}px, ${m.y.toFixed(1)}px) translate(-50%, -50%)`;
+    }
+    let sOn = far;
+    if (sOn) { v.copy(siteMark.p).project(camera); sOn = v.z < 1 && Math.abs(v.x) < 1.05 && Math.abs(v.y) < 1.05; }
+    siteMark.s.style.display = sOn ? '' : 'none';
+    if (sOn) siteMark.s.style.transform = `translate(${((v.x + 1) / 2 * W).toFixed(1)}px, ${((1 - v.y) / 2 * H).toFixed(1)}px) translate(-50%, -50%)`;
     if (needle) {
       // where north points on the screen: compare the middle of the view with a point 1 m north of it
       v.copy(controls.target).project(camera); const x0 = v.x * camera.aspect, y0 = v.y;
