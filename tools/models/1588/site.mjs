@@ -133,13 +133,13 @@ export default {
     { id: 'a', en: 'Building A tanks', th: 'ถังที่อาคาร A', from: [52, 20.5, 13], to: [53, 38, -1] },
     { id: 'b', en: 'Building B tanks', th: 'ถังที่อาคาร B', from: [80.5, 26.5, 10], to: [76.3, 38.6, -1] },
     { id: 'garbage', en: 'Garbage room tank (design)', th: 'ถังที่ห้องพักขยะ (ตามแบบออกแบบ)', from: [103.5, 31.5, 6.5], to: [99.3, 39.8, -0.6] },
-    { id: 'bld', en: 'Buildings, kiosks and water tanks', th: 'อาคาร ซุ้มร้านค้า และถังน้ำ', from: [30, 60, 16], to: [50, 41, 2] },
+    { id: 'bld', en: 'Buildings, kiosks and water tanks', th: 'อาคาร ซุ้มร้านค้า และถังน้ำ', from: [30, 58, 14], to: [52, 40, 1] },
     { id: 'carwash', en: 'Car wash (south-east plot)', th: 'ล้างรถ (แปลงตะวันออกเฉียงใต้)', from: [92, 2, 18], to: [113, 22, 1] },
     { id: 'fuel', from: [85, 49, 6], to: [72.7, 65.8, -1.8] },
     { id: 'under', from: [58, 20, -8], to: [60, 38, -0.8] },
   ],
 
-  build({ notes, fuelTank, capsuleGeo, V, ground, lv, add, boxGeo, cylGeo, hcylGeo, prismGeo, pipeGeo, merge, THREE }) {
+  build({ notes, fuelTank, capsuleGeo, V, ground, lv, add, boxGeo, cylGeo, hcylGeo, latheGeo, prismGeo, pipeGeo, merge, THREE }) {
     const r2 = (n) => Math.round(n * 100) / 100;
     const as = (n) => '~' + lv(r2(n));   // every level in this model is assumed: always shown with "~"
     // notes(en, th, kind) adds the shared source line; ab() / des() first add which sheet the thing comes from
@@ -370,6 +370,44 @@ export default {
         ['ร้านกาแฟที่สร้างภายหลังสถานี (ไม่มีในผังปี 2021): ชั้นเดียว กล่องสีขาวหลังคาแบน ขอบหลังคาสีขาวลึก หน้าร้านกระจกสีเขียวหันออกที่จอดรถ มีขั้นบันไดเตี้ยตลอดหน้าร้าน อยู่ปลายแถวอาคารด้านทางหลวง ทางตะวันตกของซุ้มร้านค้าและห้องน้ำ (Brian, 28 พ.ย. 2026) ขนาดประมาณ 6.8 × 4.2 ม. สูง 3.6 ม. ประมาณจากวิดีโอ']) }, V(39.2, 40.6, 4.4));
     add('buildings', tbox(6.6, 0.08, 2.2, 39.2, 42.72, 0.2, ROT_A), 'glassGreen', { en: 'Coffee shop front', th: 'หน้าร้านกาแฟ', nopick: 1 });
     add('paving', tbox(6.8, 0.6, 0.15, 39.2, 43.0, 0, ROT_A), 'walkway', { en: 'Coffee shop step', th: 'ขั้นหน้าร้านกาแฟ', nopick: 1 });
+
+    // Coffee shop front and side (Brian's stills, video 7:55 and 8:02): dark-green awning over a timber deck with a low
+    // bench step, artificial-grass strips in the paving; on its highway side a grey water tank and a food cart under a tent.
+    add('buildings', merge([tbox(6.8, 1.6, 0.08, 39.2, 43.5, 2.9, ROT_A), ...[36.0, 42.4].map((x) => cylGeo(0.04, 2.9, x, 44.25, 0, 6))]), 'awningGreen', { en: 'Coffee shop awning', th: 'กันสาดร้านกาแฟ', kind: 'building',
+      info: vid(['Dark-green awning on thin steel arms over the coffee shop front and its timber deck.'], ['กันสาดสีเขียวเข้มบนแขนเหล็กเหนือหน้าร้านกาแฟและพื้นไม้']) });
+    add('paving', tbox(6.4, 1.2, 0.35, 39.2, 43.1, 0, ROT_A), 'deck', { en: 'Coffee shop timber deck', th: 'พื้นไม้หน้าร้านกาแฟ', nopick: 1 });
+    add('water', cylGeo(0.6, 2.0, 35.1, 41.6, 0, 20), 'waterTankGrey', { en: 'Grey water tank (coffee shop)', th: 'ถังน้ำสีเทา (ร้านกาแฟ)', kind: 'tank',
+      info: vid(['Grey plastic water tank (about 1,000 to 1,500 L) on the highway side of the coffee shop, with a pump and blue pipes at its foot.'], ['ถังน้ำพลาสติกสีเทา (ประมาณ 1,000 ถึง 1,500 ลิตร) ด้านทางหลวงของร้านกาแฟ มีปั๊มและท่อสีฟ้าที่ฐาน']) });
+    add('buildings', merge([tbox(1.6, 0.9, 0.9, 34.6, 39.2, 0, ROT_A), cylGeo(0.03, 2.4, 34.6, 39.2, 0, 6), tbox(2.4, 2.4, 0.06, 34.6, 39.2, 2.3, ROT_A + 10)]), 'clutter', { en: 'Food cart under a tent', th: 'รถเข็นขายอาหารใต้เต็นท์', kind: 'building',
+      info: vid(['Food cart with blue tubs and boxes under a brown sun tent, on the highway side of the coffee shop.'], ['รถเข็นขายอาหารพร้อมถังและกล่องสีฟ้า ใต้เต็นท์กันแดดสีน้ำตาล ด้านทางหลวงของร้านกาแฟ']) });
+
+    // Lean-to sheds and storage behind the buildings (video 1:00 to 2:00, Brian's still at 8:06 and the lean-to beside the
+    // red stall): metal-sheet roofs on light posts against the back walls and the boundary wall, used as stores and stall kitchens.
+    const leanTo = (x0, x1, y0, y1, hi, lo, en, th, lines, linesTh) => add('buildings', merge([
+      (() => { const g = tbox(x1 - x0, y1 - y0, 0.06, (x0 + x1) / 2, (y0 + y1) / 2, (hi + lo) / 2, ROT_A); g.rotateX(0); return g; })(),
+      ...[[x0 + 0.1, y0 + 0.1], [x1 - 0.1, y0 + 0.1]].map(([x, y]) => cylGeo(0.04, lo, x, y, 0, 6))]), 'roofSheet', { en, th, kind: 'building', info: vid(lines, linesTh) }, V((x0 + x1) / 2, (y0 + y1) / 2, hi + 0.6));
+    leanTo(42.65, 44.05, 37.0, 41.9, 2.7, 2.5, 'Lean-to store between the coffee shop and building A', 'เพิงเก็บของระหว่างร้านกาแฟกับอาคาร A',
+      ['Narrow metal-sheet lean-to over the alley between the coffee shop and the toilets, used as a store (crates, gas bottles, tables).'], ['เพิงหลังคาเมทัลชีทแคบ ๆ คลุมช่องทางระหว่างร้านกาแฟกับห้องน้ำ ใช้เก็บของ (ลัง ถังแก๊ส โต๊ะ)']);
+    leanTo(44.4, 52.0, 36.55, 38.15, 2.6, 2.3, 'Tarp-roofed stall area behind building A', 'พื้นที่ร้านหลังคาผ้าใบหลังอาคาร A',
+      ['Stall and kitchen space behind the 8 m wing of the toilets: tarp and sheet roof on posts, red sheet walls, cupboards, cool boxes and tables.'], ['พื้นที่ร้านและครัวหลังปีก 8 ม. ของห้องน้ำ หลังคาผ้าใบและเมทัลชีทบนเสา ผนังเมทัลชีทสีแดง ตู้ ถังน้ำแข็ง และโต๊ะ']);
+    leanTo(66.2, 74.2, 36.55, 38.45, 2.8, 2.4, 'Lean-to stores behind the office (building B)', 'เพิงเก็บของหลังสำนักงาน (อาคาร B)',
+      ['Metal-sheet lean-to along the back of the office, out to the boundary wall: small lockers and storage for the station staff and the stalls.'], ['เพิงหลังคาเมทัลชีทตามแนวหลังสำนักงานถึงกำแพงเขต เป็นตู้ล็อกเกอร์เล็กและที่เก็บของของพนักงานสถานีและร้านค้า']);
+    add('buildings', merge([[67.2, 37.15], [68.2, 37.15], [69.2, 37.15], [72.4, 37.2]].map(([x, y]) => tbox(0.9, 0.55, 1.8, x, y, 0, ROT_A))), 'locker', { en: 'Lockers and storage cabinets behind the office', th: 'ตู้ล็อกเกอร์และตู้เก็บของหลังสำนักงาน', kind: 'building',
+      info: vid(['Steel lockers and storage cabinets under the lean-to behind the office (number and sizes estimated).'], ['ตู้ล็อกเกอร์เหล็กและตู้เก็บของใต้เพิงหลังสำนักงาน (จำนวนและขนาดประมาณ)']) });
+
+    // Benches, tables, bins, crates and umbrellas along the walkway and in the stall areas (video): clutter shown loosely
+    const clutter = [];
+    [47.2, 51.4, 58.6, 64.6, 69.0, 72.8].forEach((x) => clutter.push(tbox(1.6, 0.45, 0.45, x, 45.35, 0, ROT_A)));           // benches on the walkway
+    [[64.3, 40.6], [64.3, 42.3], [46.5, 37.4]].forEach(([x, y]) => clutter.push(tbox(1.5, 0.75, 0.75, x, y, 0, ROT_A)));     // stall tables
+    [[44.8, 44.7], [45.4, 44.7], [62.9, 44.8], [74.6, 44.9], [75.2, 44.9]].forEach(([x, y]) => clutter.push(cylGeo(0.3, 0.95, x, y, 0, 12)));   // wheelie bins
+    [[43.4, 38.0], [43.4, 38.6], [49.5, 37.1], [50.2, 37.1], [70.6, 37.15], [71.3, 37.15]].forEach(([x, y]) => clutter.push(tbox(0.6, 0.45, 0.5, x, y, 0, 0)));   // crates and cool boxes
+    add('buildings', merge(clutter), 'clutter', { en: 'Benches, tables, bins and crates', th: 'ม้านั่ง โต๊ะ ถังขยะ และลัง', kind: 'building',
+      info: vid(['Benches along the walkway, tables in the stall areas, wheelie bins, crates and cool boxes, shown loosely to give an idea of how busy the area is. Not surveyed.'],
+        ['ม้านั่งตามทางเดิน โต๊ะในพื้นที่ร้าน ถังขยะล้อเลื่อน ลังและถังน้ำแข็ง แสดงคร่าว ๆ ให้เห็นว่าพื้นที่มีของวางอยู่มาก ไม่ได้สำรวจ']) });
+    add('buildings', merge([[54.2, 37.3], [56.4, 37.3]].map(([x, y]) => merge([cylGeo(0.03, 2.2, x, y, 0, 6), latheGeo([[0.02, 0], [1.2, -0.45], [0.01, -0.46]], x, y, 2.4, 16)]))), 'umbrellaBlue', { en: 'Market umbrellas behind building A', th: 'ร่มร้านค้าหลังอาคาร A', kind: 'building',
+      info: vid(['Large blue market umbrellas over the stall area behind the toilets.'], ['ร่มร้านค้าสีน้ำเงินขนาดใหญ่เหนือพื้นที่ร้านหลังห้องน้ำ']) });
+    add('buildings', merge([cylGeo(0.03, 2.4, 44.1, 42.2, 0, 6), latheGeo([[0.02, 0], [1.4, -0.6], [0.01, -0.61]], 44.1, 42.2, 2.9, 4)]), 'tentRed', { en: 'Red sun tent in the alley', th: 'เต็นท์สีแดงในช่องทาง', kind: 'building',
+      info: vid(['Red pyramid sun tent over the alley between kiosk 1 and the toilets (Brian\'s still at 8:06).'], ['เต็นท์ทรงพีระมิดสีแดงคลุมช่องทางระหว่างซุ้มร้านค้า 1 กับห้องน้ำ (ภาพนิ่งของ Brian ที่ 8:06)']) });
 
     // Stall and kitchen area with sinks behind the buildings (video 1:00 to 1:50): a sheet-roofed area against the boundary
     // wall in the gap between buildings A and B, with two stainless sinks, each with a small under-sink grease trap.
