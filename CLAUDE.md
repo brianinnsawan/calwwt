@@ -140,4 +140,10 @@ Nothing is shared with calnkt: own logins, own databases, own file storage.
   The hint, datum, model notes and deck source are back in a closed "About this model" fold at the foot of that card
   (Brian, 27 Nov 2026; he will say what to change in it).
   Brian will say what site notes to add later; do not add notes on his behalf.
+- Layers panel and names (Brian, 27 Nov 2026; viewer.mjs): folds "Wastewater and treatment" (layers tanks, sewer, drains, air,
+  base, sampling, proposed, old, asbuilt) / "Buildings and site" (the rest) / "Names" / "Display" / "Sampling points". Names tidy
+  themselves (switch "Tidy names", on by default): camera more than 2.4 site-widths away = only the site's name; closer, each
+  name shows within REACH[prio] site-widths of the camera (sampling 0: always; tanks/drains/proposed 1: 2.4; other wastewater
+  2: 1.25; buildings and site 3: 0.6; surroundings 4: 0.5) and overlapping names give way to the more important / nearer one.
+  He does not want users to have to switch layers often: keep it automatic.
 - Site notes and starting timelines in `data/sites.json` / `data/timelines/` were written from Brian's site-visit notes; dates to confirm.

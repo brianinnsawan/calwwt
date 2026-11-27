@@ -90,7 +90,7 @@ async function main() {
     pager = sf.showSiteFiles(pl, site, l, state, data.sites, reload);
     if (site.model) {
       let started = false;
-      const start = (into) => { if (started) return; started = true; import('/sites/viewer.mjs').then((v) => v.show(into, `/sites/models/${site.model}`, w, l)).catch((e) => { console.warn('model', e); }); };
+      const start = (into) => { if (started) return; started = true; import('/sites/viewer.mjs').then((v) => v.show(into, `/sites/models/${site.model}`, w, l, `${site.code} ${site.name[l]}`)).catch((e) => { console.warn('model', e); }); };
       const pm = pane('model'); pl.hidden = true;   // the 3D model is the tab that opens first (Brian, 25 Nov 2026)
       views = [{ id: 'model', en: W.en.model3d, th: W.th.model3d }, { id: 'layouts', en: W.en.drawingsTab, th: W.th.drawingsTab }];
       onView = (id) => { pl.hidden = id !== 'layouts'; pm.hidden = id !== 'model'; if (id === 'model') start(pm); };
