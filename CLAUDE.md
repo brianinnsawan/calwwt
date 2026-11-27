@@ -48,6 +48,11 @@ Nothing is shared with calnkt: own logins, own databases, own file storage.
   Drawings tab is `public/sites/sitefiles.mjs` (reads /api/files); the old built-in layouts (sites.json "layouts",
   public/sites/layouts) show until an admin presses "Move into Files" (/api/files/import-site-layouts/<code>); after that,
   add drawings by uploading to Files, not by changing the repository. DWG / DXF everywhere open in the CAD workspace.
+  27 Nov 2026: the 29 built-in layouts were moved into Files, and 40 original DWGs (15 paired with their PDF by name),
+  the 3 reports sent to Caltex (Reports to Caltex) and Caltex's CORO scope deck (Reference) were copied from SharePoint.
+  CAD program saves become new Files next to the original ("<name> – copy <n> (<person>).dwg"); SPP and Caltex see each
+  other's CAD notes. Site videos (Brian's 360° YouTube walkthroughs) are sites.json "videos", shown with Photos & video;
+  1703 King Kaew and 1750 Saraburi have none yet.
 - `tasks/`: the Tasks app (`src/policy.mjs`, `src/service.mjs`, `src/pages.mjs` = page list and default access, `public/` screens,
   `schema/` database changes). After changing `tasks/public/*`: `cd tasks && node scripts/build-ui-module.mjs`.
 - `portal-proposal/files-viewer/`: Office viewers (rebuild: `cd portal-proposal/files-viewer && npm ci && npm run build`).

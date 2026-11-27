@@ -683,7 +683,7 @@ function toolState(action) {
   if (action === 'save') return canSave() ? {} : { disabled: true, title: notes ? t('viewOnlySave') : '' };
   if (action === 'share') {
     const sh = sharing();
-    if (!sh) return { disabled: true, hidden: !notes || notes.own !== 'spp' };
+    if (!sh) return { disabled: true, hidden: true };   // calwwt: SPP and Caltex already see each other's notes
     if (!sh.canChange) return { disabled: true, title: t('viewOnlySave') };
     if (!sh.shared && !sh.caltexCanOpen) return { disabled: true, title: t('shareNo') };
     return { pressed: sh.shared, label: sh.shared ? t('unshare') : t('share') };

@@ -548,6 +548,20 @@ test('Sites data: 8 sites, starting timelines valid, every layout has its PDF an
   }
 });
 
+test('Sites data: site videos are YouTube ids with a date and both languages; only the YouTube player may be framed', async () => {
+  const { SITES_CSP } = await import('../src/sites.mjs');
+  const data = JSON.parse(readFileSync(new URL('../public/sites/data/sites.json', import.meta.url), 'utf8'));
+  const videos = data.sites.flatMap((s) => (s.videos || []).map((v) => ({ code: s.code, ...v })));
+  assert.deepEqual(videos.map((v) => v.code), ['0589', '1156', '1588', '1622', '1642', '1687']);
+  for (const v of videos) {
+    assert.match(v.youtube, /^[A-Za-z0-9_-]{11}$/, v.code);
+    assert.match(v.date, /^2026-\d\d-\d\d$/, v.code);
+    assert.ok(v.en && v.th, v.code);
+  }
+  assert.match(SITES_CSP, /frame-src 'self' https:\/\/www\.youtube-nocookie\.com;/);
+  assert.doesNotMatch(SITES_CSP, /youtube\.com[^-]|connect-src[^;]*youtube/);
+});
+
 test('Sites data: a site that names a 3D model has the file, with layers and names the viewer can show', async () => {
   const data = JSON.parse(readFileSync(new URL('../public/sites/data/sites.json', import.meta.url), 'utf8'));
   const withModel = data.sites.filter((s) => s.model);

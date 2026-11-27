@@ -244,6 +244,15 @@ its own ?dwg= / ?copy= in the address (the program can otherwise open a drawing 
 browser's "Save as" picker, so saving always goes through the site's rules below. The old calnkt addresses /workspace/, /cad/
 and /app/ lead to the CAD workspace.
 
+**calwwt changes (27 Nov 2026, Brian):**
+- **Saved copies are files in Files.** "Save to the site" in the full CAD program makes a new file in the original's folder,
+  named `<original name> – copy <n> (<person>).dwg` (or .dxf). The original drawing and earlier copies are never changed;
+  a copy of a copy joins the same series under the saver's name. Everyone who sees Files sees it (SPP and Caltex); only
+  SPP can delete it, like any file. Its log entry says which drawing it was copied from, the name the program gave it
+  and the note. Copies saved before this change stay in private storage and are still listed.
+- **Notes (markups and measurements): SPP and Caltex see each other's**, with their history; each company still saves only
+  its own set. The "Share with Caltex" step is not used on calwwt (its address answers 410).
+
 Brian: bring over the CAD tool of the old site (brian-cad-version2) so people can draw and take measurements.
 - Drawings -> **CAD workspace**. Opens the 31 project DWG drawings (the verified copies already in private storage), the DWG / DXF
   files in Project files that the person may see (Files rules, including Caltex sharing), and, for Brian's owner login only, his

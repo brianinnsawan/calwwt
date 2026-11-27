@@ -6,6 +6,8 @@
 //   picture: shown here; DWG / DXF: Sites -> CAD workspace (the one CAD tool of the site);
 //   Excel, Word, PowerPoint and the rest: the Files viewer.
 // A drawing kept as both PDF and DWG (same folder, same name before the extension) gets a "PDF | CAD" switch.
+// Site videos (Brian's 360° walkthroughs on YouTube, sites.json "videos"; 27 Nov 2026) are listed with Photos & video and
+// play here from youtube-nocookie.com (the one outside page the Sites pages may show, SITES_CSP in src/sites.mjs).
 // The wastewater layouts that used to be built into the site (public/sites/layouts, sites.json "layouts") are still shown
 // until they are moved into Files (admins: "Move into Files", /api/files/import-site-layouts); then only Files is used.
 const T = {
@@ -15,14 +17,14 @@ const T = {
     noFiles: 'Files are not open to you, so only the drawings built into the site are shown.', cadNote: 'DWG / DXF drawings open in the CAD workspace: measure, mark up, or open them in the full CAD program.',
     move: 'Move into Files', moveText: '{n} drawings of this site are still built into the site page. Move the built-in drawings of all 8 sites into each site\'s Files folder "Drawings", so everything is in one place?',
     moving: 'Moving… {code}', moved: 'Moved {n} drawings into Files.', uploading: 'Uploading {name}…', uploaded: 'Uploaded {name}.', refused: 'Not uploaded: {e}',
-    other: 'This file opens in the Files viewer.' },
+    other: 'This file opens in the Files viewer.', youtube: 'Watch on YouTube', photos: 'Photos & video' },
   th: { pick: 'แบบหรือไฟล์', builtIn: 'แบบที่ติดมากับเว็บไซต์ (ยังไม่ได้ย้ายไปไฟล์)', openPdf: 'เปิด PDF', download: 'ดาวน์โหลด', openCad: 'เปิดในพื้นที่ทำงาน CAD',
     fullCad: 'โปรแกรม CAD เต็มรูปแบบ', openFile: 'เปิด', pdf: 'PDF', cad: 'CAD', upload: 'อัปโหลด', into: 'อัปโหลดไปที่', folder: 'โฟลเดอร์ในไฟล์',
     empty: 'ยังไม่มีแบบหรือไฟล์ของสถานีนี้', emptyEdit: 'ยังไม่มีแบบหรือไฟล์ของสถานีนี้ อัปโหลดได้ที่นี่หรือที่หน้าไฟล์ (สถานี › {code})',
     noFiles: 'คุณไม่มีสิทธิ์หน้าไฟล์ จึงแสดงเฉพาะแบบที่ติดมากับเว็บไซต์', cadNote: 'แบบ DWG / DXF เปิดในพื้นที่ทำงาน CAD: วัดระยะ เขียนโน้ต หรือเปิดในโปรแกรม CAD เต็มรูปแบบ',
     move: 'ย้ายไปไฟล์', moveText: 'สถานีนี้ยังมีแบบ {n} แผ่นที่ติดมากับหน้าสถานี ย้ายแบบของทั้ง 8 สถานีไปไว้ในโฟลเดอร์ "แบบ" ของแต่ละสถานีในหน้าไฟล์ เพื่อให้อยู่ที่เดียวกันหรือไม่',
     moving: 'กำลังย้าย… {code}', moved: 'ย้ายแบบ {n} แผ่นไปที่ไฟล์แล้ว', uploading: 'กำลังอัปโหลด {name}…', uploaded: 'อัปโหลด {name} แล้ว', refused: 'อัปโหลดไม่ได้: {e}',
-    other: 'ไฟล์นี้เปิดในโปรแกรมดูไฟล์' },
+    other: 'ไฟล์นี้เปิดในโปรแกรมดูไฟล์', youtube: 'ดูบน YouTube', photos: 'รูปและวิดีโอ' },
 };
 const CSS = `
 .sf { position: absolute; inset: 0; display: grid; grid-template-rows: auto auto 1fr; background: var(--paper); }
@@ -40,6 +42,7 @@ const CSS = `
 .sf-stage { position: relative; overflow: auto; background: #fff; }
 .sf-stage iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
 .sf-stage img { display: block; max-width: 100%; margin: 0 auto; }
+.sf-stage.video { background: #000; }
 .sf-card { margin: 40px auto; max-width: 520px; display: grid; gap: 12px; padding: 20px; border: 1px solid var(--rule); border-radius: 10px; background: var(--panel); color: var(--ink); }
 .sf-card .row { display: flex; flex-wrap: wrap; gap: 8px; }
 .sf-card a.btn { display: inline-block; padding: 6px 12px; border: 1px solid var(--rule); border-radius: 6px; text-decoration: none; color: inherit; }
@@ -70,15 +73,23 @@ export async function loadSiteFiles(site, sites) {
   const drawingNames = new Set(files.filter((f) => f.folder === `${root}-drawings`).map((f) => f.name.toLowerCase()));
   const builtIns = (site.layouts || []).filter((x) => !drawingNames.has(builtInName(x).toLowerCase()))
     .map((x) => ({ kind: 'builtIn', id: `builtin:${x.file}`, name: builtInName(x), title: x, folder: '', folderName: '' }));
-  return { items: [...files, ...builtIns], canEdit: !!data?.canEdit, isAdmin: !!data?.canDeleteFolders, filesOn: !!data,
+  // Site videos on YouTube, listed with the site's Photos & video folder.
+  const photos = `${root}-photos`;
+  const videos = (site.videos || []).filter((v) => /^[A-Za-z0-9_-]{11}$/.test(v.youtube || '')).map((v) => ({ kind: 'video', id: `video:${v.youtube}`, name: '', title: v,
+    youtube: v.youtube, folder: photos, folderName: folderName(photos) || 'รูปและวิดีโอ · Photos & video' }));
+  return { items: [...files, ...videos, ...builtIns], canEdit: !!data?.canEdit, isAdmin: !!data?.canDeleteFolders, filesOn: !!data,
     uploadFolders: folders.filter((f) => inSite.has(f.id) && f.id !== root).sort((a, b) => rank(a.id) - rank(b.id) || a.name.localeCompare(b.name)), root };
 }
 // Same rule as the server (src/files.mjs builtInName).
 export const builtInName = (x) => `${String(x.en || x.file.split('/').pop()).normalize('NFC').replace(/[\x00-\x1f\x7f/\\:*?"<>|]/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 190)}.pdf`;
 
-export function itemLabel(it, l) { return it.kind === 'builtIn' ? (it.title[l] || it.title.en) : it.name; }
+export function itemLabel(it, l) {
+  if (it.kind === 'video') return `${it.title[l] || it.title.en}${it.title.date ? ` · ${it.title.date}` : ''}`;
+  return it.kind === 'builtIn' ? (it.title[l] || it.title.en) : it.name;
+}
 export function itemHref(it) {
   if (it.kind === 'builtIn') return `/sites/layouts/${it.title.file}.pdf`;
+  if (it.kind === 'video') return `https://youtu.be/${it.youtube}`;
   const e = ext(it.name);
   if (CAD.has(e)) return `/cad-workspace/?dwg=${encodeURIComponent(it.sha256 || '')}${it.site ? `&site=${it.site}` : ''}`;
   return `/files/view.html?id=${encodeURIComponent(it.id)}`;
@@ -141,7 +152,13 @@ export function showSiteFiles(view, site, l, state, sites, reload) {
     }
     const fileUrl = it.kind === 'builtIn' ? itemHref(it) : `/api/files/${it.id}/download`;
     actions.replaceChildren();
-    if (e === 'pdf') {
+    stage.classList.toggle('video', it.kind === 'video');
+    if (it.kind === 'video') {
+      // The site sends no referrer by default; YouTube's player needs the site's address to play, so this frame sends it.
+      actions.append(el('a', { href: itemHref(it), target: '_blank', rel: 'noopener noreferrer' }, t.youtube));
+      stage.replaceChildren(el('iframe', { src: `https://www.youtube-nocookie.com/embed/${it.youtube}?rel=0`, title: itemLabel(it, l),
+        referrerpolicy: 'strict-origin-when-cross-origin', allow: 'accelerometer; gyroscope; encrypted-media; picture-in-picture; fullscreen', allowfullscreen: '' }));
+    } else if (e === 'pdf') {
       const inline = it.kind === 'builtIn' ? fileUrl : `${fileUrl}?inline=1`;
       actions.append(el('a', { href: inline, target: '_blank', rel: 'noopener' }, t.openPdf));
       stage.replaceChildren(el('iframe', { src: `${inline}#view=FitH`, title: itemLabel(it, l) }));
