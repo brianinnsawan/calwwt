@@ -69,7 +69,8 @@ Nothing is shared with calnkt: own logins, own databases, own file storage.
 - Brian is not a programmer: explain in plain words, lead with what changed for the people using the site.
 
 ## Open items (23 Nov 2026)
-- Layouts still missing: 1156 Samut Prakan (Brian asked Thada). 1642 Phun Phon has A-104 and A-103 (26 Nov 2026,
+- 1156 Samut Prakan layouts (27 Nov 2026): 2019 Caltex site plan "Proposed 1" (DWG), KFC sanitary set SN-01 to SN-10 (2019),
+  KFC tank as-builts A-101 / A-102 (2020, DWGs plotted here). Still no as-built wastewater layout of the station itself. 1642 Phun Phon has A-104 and A-103 (26 Nov 2026,
   plotted from Brian's CAD files). 1750 Saraburi has LAY-SN-02 and LAY-ST-03
   (from Brian's separate folder `Chevron Hub Site - NTI Saraburi CPF 2022\01. Drawings\As Built Saraburi`, a full SPP as-built set).
 - 3D models (first versions, 25 Nov 2026; sources and gaps per site in tools/models/README.md): 0589 Kathu, 1750 Saraburi

@@ -1,8 +1,16 @@
 // 1156 Samut Prakan (Hitex Theppratarn Company Limited Branch 1): what the 3D model shows.
 // Built by tools/models/build.mjs into public/sites/models/1156.glb.
 //
-// THERE ARE NO DRAWINGS OF THIS SITE (Brian's folder Sites\1156 Samut Prakan\03 Drawings is empty; Brian asked Thada).
-// This first version is a rough model put together on 26 Nov 2026 from:
+// NO AS-BUILT LAYOUT OF THE STATION. On 27 Nov 2026 Brian added (Sites\1156 Samut Prakan\03 Drawings\CAD and \CAD\KFC):
+//   D  "1156 # Hitex Theppratarn Branch 1.dwg": Caltex site plan "PROPOSED 1" (Star Fuels, 21.02.19), 1:200: lot 3,049 m²,
+//      KFC drive-through 24 × 10 m (260 m²) at the back. A proposal, not as-built; not yet fitted to the model.
+//   T  KFC tank as-builts (TRI Architects / Astive, "For As Built Dwg" 30/10/63): A-101 = two Biotech BG-R-3000 grease traps
+//      in one 5.80 × 2.45 m pit + BC-K-10-D2.2 treatment tank (Ø2.20, slab 7.50 × 3.20 m), levels under the road; A-102 =
+//      Biotech BO-5000-UR (place not given, not modelled). Title blocks say Phuket in the location box: Brian to confirm.
+//   N  KFC's sanitary set "83077 GSDT Caltex Theparak OB.pdf" (KFC1901, Apr 2019; SN-04 missing, SN-10 twice): the SN-03
+//      design shows 2 × 15 m³/day treatment tanks + 2 × 3 m³/day grease traps behind KFC, 6" out to the existing west drain.
+// The KFC tanks use T for type, size and depth; their places are still from Brian's markup. Everything else is still the
+// rough model of 26 Nov 2026 from:
 //   S  the Esri World Imagery satellite image (zoom 19, about 0.29 m a pixel), turned 35.5° so the road runs left to right,
 //      with a 1 m grid laid over it to read positions and sizes (the image is the same one as the aerial in the Caltex deck);
 //   K  the Caltex deck "Caltex WWT Improvement - All Sites" slides 27-28 (aerial with KFC, Toilet, Coffee, Canopy, Office,
@@ -35,9 +43,9 @@ const X0 = -34.2, X1 = 14.2, Y0 = -26.0, Y1 = 36.0;   // boundary read off the i
 export default {
   name: 'Samut Prakan',
   origin: [-10, 5],
-  datum: { en: 'No levels are known for this site (no drawings): the forecourt is shown flat at ±0.00 and the road 0.20 m lower. Every depth is assumed.', th: 'ไม่ทราบระดับของสถานีนี้ (ไม่มีแบบ) แสดงลานสถานีเป็นพื้นราบที่ ±0.00 และถนนต่ำกว่า 0.20 ม. ความลึกทั้งหมดเป็นค่าสมมติ' },
-  note: { en: 'Rough first version with NO DRAWINGS: outlines from the satellite image, what is where from Brian\'s notes and the Nov 2026 sampling video. Tank sizes, depths, pipe routes and levels are assumed. Not for digging or setting out.', th: 'ฉบับแรกแบบคร่าว ๆ ไม่มีแบบ: แนวอาคารจากภาพถ่ายดาวเทียม ตำแหน่งสิ่งต่าง ๆ จากบันทึกของ Brian และวิดีโอเก็บตัวอย่าง พ.ย. 2026 ขนาดถัง ความลึก แนวท่อ และระดับเป็นค่าสมมติ ห้ามใช้ขุดหรือวางผัง' },
-  built: '2026-11-26',
+  datum: { en: 'No site levels are known (no as-built layout of the station): the forecourt is shown flat at ±0.00 and the road 0.20 m lower. KFC tank depths are from sheet A-101, measured down from the lane; every other depth is assumed.', th: 'ไม่ทราบระดับของสถานี (ไม่มีผังตามจริงของสถานี) แสดงลานสถานีเป็นพื้นราบที่ ±0.00 และถนนต่ำกว่า 0.20 ม. ความลึกถัง KFC มาจากแบบ A-101 วัดจากผิวช่องทาง ความลึกอื่นทั้งหมดเป็นค่าสมมติ' },
+  note: { en: 'Rough model with NO AS-BUILT LAYOUT of the station: outlines from the satellite image, what is where from Brian\'s notes and the Nov 2026 sampling video. The KFC grease traps and treatment tank now carry their type, size and depth from KFC\'s as-built tank sheet A-101 (Oct 2020); their places are still from Brian\'s markup. Other tank sizes, depths, pipe routes and levels are assumed. Not for digging or setting out.', th: 'โมเดลคร่าว ๆ ยังไม่มีผังตามจริงของสถานี: แนวอาคารจากภาพถ่ายดาวเทียม ตำแหน่งสิ่งต่าง ๆ จากบันทึกของ Brian และวิดีโอเก็บตัวอย่าง พ.ย. 2026 ถังดักไขมันและถังบำบัดของ KFC ใช้รุ่น ขนาด และความลึกจากแบบก่อสร้างจริง A-101 (ต.ค. 2020) แล้ว แต่ตำแหน่งยังมาจากภาพที่ Brian ระบุ ขนาดถังอื่น ความลึก แนวท่อ และระดับเป็นค่าสมมติ ห้ามใช้ขุดหรือวางผัง' },
+  built: '2026-11-27',
   // North, anticlockwise from +x: the image was turned 35.5° anticlockwise to put the road along x, so north is 90 + 35.5.
   north: 125.5,
   boundary: [[X0, Y0], [X1, Y0], [X1, Y1], [X0, Y1]],
@@ -51,7 +59,7 @@ export default {
   views: [
     { id: 'site', from: [-10, -72, 46], to: [-10, 6, 0] },
     { id: 'plan', from: [-10, 4.9, 120], to: [-10, 5, 0] },
-    { id: 'kfc', en: 'KFC tanks and pump sump (drive-through lane)', th: 'ถัง KFC และบ่อสูบ (ช่องทางไดรฟ์ทรู)', from: [-30, 20, 12], to: [-18, 34, -1] },
+    { id: 'kfc', en: 'KFC tanks (grease traps, BC-K-10 treatment tank) and pump sump', th: 'ถัง KFC (ถังดักไขมัน ถังบำบัด BC-K-10) และบ่อสูบ', from: [-31, 44, 11], to: [-17.5, 33.8, -1.4] },
     { id: 'front', en: 'Front: entrance, centre island, exit and coffee shop', th: 'ด้านหน้า: ทางเข้า เกาะกลาง ทางออก และร้านกาแฟ', from: [-10, -41, 10], to: [-12, -19, 0] },
     { id: 'entry', en: 'Drive-through entry: height limiter and order point', th: 'ทางเข้าไดรฟ์ทรู: โครงจำกัดความสูงและจุดสั่งอาหาร', from: [-37.5, 16.5, 5.0], to: [-29.5, 26.0, 1.5] },
     { id: 'pay', en: 'Behind KFC: pump room and pay window', th: 'หลัง KFC: ห้องปั๊มและช่องชำระเงิน', from: [-18.5, 35.8, 4.2], to: [-8.0, 33.6, 1.4] },
@@ -165,36 +173,54 @@ export default {
         info: lines(['Out under the road edge to the public drain. Size, route and level assumed.'], ['ออกใต้ขอบถนนไปท่อระบายน้ำสาธารณะ ขนาด แนว และระดับเป็นค่าสมมติ'], A) });
     }
 
-    // ---------- KFC: one grease trap and one treatment tank in a line under the drive-through lane behind KFC, the pump /
-    // blower room midway along the back of KFC, pump sump at the back-west corner (Brian, 26 Nov 2026)
+    // ---------- KFC: two grease traps and one treatment tank in a line under the drive-through lane behind KFC, the pump /
+    // blower room midway along the back of KFC, pump sump at the back-west corner (Brian, 26 Nov 2026).
+    // Tank types, sizes and depths from the KFC as-built sheets A-101 / A-102 (TRI Architects / Astive, "For As Built Dwg"
+    // 30/10/63 = Oct 2020) and KFC's sanitary set SN-01 to SN-10 (KFC1901, Apr 2019), received 27 Nov 2026. Positions along the
+    // lane are still Brian's markup (the sheets are tank details, not a site plan). A-101 is drawn with the grease traps on
+    // the left and the treatment tank on the right, kitchen pipe in at the grease trap end: on site the grease traps are east.
     const LANE = 34.3;   // middle of the drive-through lane behind KFC (between the building, about y 32.5, and the back wall)
     const ROOM_X = -15.2;   // the room with the pumps and controls, about midway along KFC (x -28 to -4)
+    const KFCD = { en: 'From KFC as-built sheet A-101 (Biotech, Oct 2020).', th: 'จากแบบก่อสร้างจริง A-101 ของ KFC (Biotech ต.ค. 2020)' };
+    const P = 'aerialTank';
     {
-      const top = r2(ground(-18, LANE) - 0.35);
-      // grease trap: one large lying tank with four lids, east of the treatment tank, next to the pump room
-      const gR = 0.7, gX = -13.9, gLen = 5.4, gAxis = top - gR, gIn = r2(top - 0.2), gOut = r2(gIn - 0.05);
-      add('tanks', capsuleGeo(gR, gLen, gX, LANE, gAxis, 0, 0.2), 'grease', { en: 'KFC grease trap (one large tank, 4 lids)', th: 'ถังดักไขมัน KFC (ถังใหญ่ 1 ถัง 4 ฝา)', tag: 'KFC grease trap', tagTh: 'ถังดักไขมัน KFC', kind: 'tank', lvl: `${lv(gIn)} / ${lv(gOut)}`,
-        info: lines(['Grease trap for the KFC kitchen: one large tank with four lids under the drive-through lane, by the rolling door to the pump room (Brian, 26 Nov 2026).', `Type and size are not known: shown as a lying tank ${(gR * 2).toFixed(1)} m across and ${gLen.toFixed(1)} m long, top about ${lv(top)}. Takes the kitchen water; out west to the treatment tank.`],
-          ['ถังดักไขมันของครัว KFC: ถังใหญ่ 1 ถัง มี 4 ฝา ใต้ช่องทางไดรฟ์ทรู ข้างประตูม้วนของห้องปั๊ม (ตาม Brian 26 พ.ย. 2026)', `ไม่ทราบรุ่นและขนาด แสดงเป็นถังนอน กว้าง ${(gR * 2).toFixed(1)} ม. ยาว ${gLen.toFixed(1)} ม. หลังถังประมาณ ${lv(top)} รับน้ำจากครัว ออกไปทางตะวันตกเข้าถังบำบัด`], A) }, V(gX, LANE, ground(gX, LANE) + 0.8));
-      for (const lx of [-16.0, -14.6, -13.2, -11.8]) lid(lx, LANE, top, 0.3, 'Grease trap lid', 'ฝาถังดักไขมัน');
-      // treatment tank: one large lying tank with five lids under the lane behind KFC, west of (after) the grease trap
-      // (Brian's markup, 26 Nov 2026)
-      const tR = 1.0, tX = -22.5, tY = LANE, tLen = 8.6, tTop = r2(ground(tX, tY) - 0.35), tAxis = tTop - tR, tIn = r2(gOut - 0.05), tOut = r2(tIn - 0.1);
-      add('tanks', capsuleGeo(tR, tLen, tX, tY, tAxis, 0, 0.25), 'tank', { en: 'KFC treatment tank (one large tank, 5 lids)', th: 'ถังบำบัด KFC (ถังใหญ่ 1 ถัง 5 ฝา)', tag: 'KFC treatment tank', tagTh: 'ถังบำบัด KFC', kind: 'tank', lvl: `${lv(tIn)} / ${lv(tOut)}`,
-        info: lines(['KFC\'s treatment tank, under the drive-through lane behind KFC, after the grease trap (west of it), towards the pump sump in the back-west corner (Brian\'s markup, 26 Nov 2026). Brian: one large tank with five lids, or possibly two tanks, one with two lids and one with three: not sure. Shown as one tank.',
-          `Type and size are not known: shown as a lying tank ${(tR * 2).toFixed(1)} m across and ${tLen.toFixed(1)} m long along the lane, top about ${lv(tTop)} (0.35 m under the lane), pipe in about ${lv(tIn)} at the east end (assumed). Out at the west end, along the lane to the pump sump.`,
-          'The blowers and controls are in the room behind the rolling door, about midway along the back of KFC (Brian).'],
-          ['ถังบำบัดของ KFC ใต้ช่องทางไดรฟ์ทรูหลัง KFC ต่อจากถังดักไขมัน (ด้านตะวันตกของถังดักไขมัน) ไปทางบ่อสูบที่มุมหลังด้านตะวันตก (ตามที่ Brian ระบุในภาพ 26 พ.ย. 2026) Brian: ถังใหญ่ 1 ถัง มี 5 ฝา หรืออาจเป็น 2 ถัง (ถังหนึ่ง 2 ฝา อีกถัง 3 ฝา) ยังไม่แน่ใจ แสดงเป็น 1 ถัง',
-            `ไม่ทราบรุ่นและขนาด แสดงเป็นถังนอนตามแนวช่องทาง กว้าง ${(tR * 2).toFixed(1)} ม. ยาว ${tLen.toFixed(1)} ม. หลังถังประมาณ ${lv(tTop)} (ต่ำกว่าช่องทาง 0.35 ม.) ท่อเข้าประมาณ ${lv(tIn)} ที่ปลายด้านตะวันออก (ค่าสมมติ) ออกที่ปลายด้านตะวันตก เดินตามช่องทางไปบ่อสูบ`,
-            'เครื่องเป่าลมและตู้ควบคุมอยู่ในห้องหลังประตูม้วน ประมาณกึ่งกลางด้านหลัง KFC (ตาม Brian)'], A) }, V(tX, tY, ground(tX, tY) + 0.8));
-      for (const lx of [-25.9, -24.2, -22.5, -20.8, -19.1]) lid(lx, tY, tTop, 0.3, 'Treatment tank lid', 'ฝาถังบำบัด');
-      add('base', boxGeo(5.8, 2.0, 0.2, gX, LANE, gAxis - gR - 0.2, 0), 'slab', { en: 'KFC grease trap base (assumed)', th: 'ฐานถังดักไขมัน KFC (ค่าสมมติ)', kind: 'base', info: lines(['A concrete base under the grease trap is assumed; not seen.'], ['ฐานคอนกรีตใต้ถังดักไขมันเป็นค่าสมมติ มองไม่เห็น'], A) });
-      add('base', boxGeo(9.0, 2.4, 0.2, tX, tY, tAxis - tR - 0.2, 0), 'slab', { en: 'KFC treatment tank base (assumed)', th: 'ฐานถังบำบัด KFC (ค่าสมมติ)', kind: 'base', info: lines(['A concrete base under the treatment tank is assumed; not seen.'], ['ฐานคอนกรีตใต้ถังบำบัดเป็นค่าสมมติ มองไม่เห็น'], A) });
-      // pipes: kitchen -> grease trap -> treatment tank -> sump
-      pipe('sewer', [[-11.0, 32.5, gIn + 0.08], [-11.0, LANE, gIn + 0.04], [gX + gLen / 2, LANE, gIn]], 0.05, 'sewerRaw', { en: 'KFC kitchen to the grease trap', th: 'ท่อจากครัว KFC ไปถังดักไขมัน', kind: 'pipe', info: lines(['4" pipe from the kitchen out through the back wall.', ASSUMED.en], ['ท่อ 4 นิ้วจากครัวออกผ่านผนังด้านหลัง', ASSUMED.th], A) });
-      pipe('sewer', [[gX - gLen / 2, LANE, gOut], [tX + tLen / 2, LANE, tIn]], 0.05, 'sewerRaw', { en: 'Grease trap to the treatment tank', th: 'ท่อจากถังดักไขมันไปถังบำบัด', kind: 'pipe', info: lines(['4" pipe.', ASSUMED.en], ['ท่อ 4 นิ้ว', ASSUMED.th], A) });
+      const g0 = ground(-18, LANE);
+      // grease traps: Biotech BG-R-3000-1-M4 and BG-R-3000-2-M4 (3 m³/day each), 2.15 × 1.45 m, 1.35 m deep, side by side
+      // in a 5.80 × 2.45 m concrete pit; top 0.275 m under the road, pipe in 0.30 m under the road, two 0.50 × 0.50 m
+      // covers each (4 covers in all = Brian's "one large tank with 4 lids")
+      const gX = -13.9, gLen = 5.8, gTop = r2(g0 - 0.275), gBot = r2(gTop - 1.35), gIn = r2(g0 - 0.30), gOut = r2(g0 - 0.35);
+      const gE = gX + gLen / 2;   // east end of the pit (kitchen side)
+      [[gE - 0.5 - 1.075, 'KFC grease trap 2', 'ถังดักไขมัน KFC ถังที่ 2', 'BG-R-3000-2-M4', 'takes the kitchen 4" pipe at its east end; out to trap 1'],
+       [gE - 0.5 - 1.075 - 2.65, 'KFC grease trap 1', 'ถังดักไขมัน KFC ถังที่ 1', 'BG-R-3000-1-M4', 'from trap 2; out west to the treatment tank (4" transfer pipe)']].forEach(([x, en, th, model, flow], i) => {
+        add('tanks', boxGeo(2.15, 1.45, 1.35, x, LANE, gBot, 0), 'grease', { en: `${en} · Biotech ${model} (3,000 L)`, th: `${th} · Biotech ${model} (3,000 ลิตร)`, ...(i === 0 ? { tag: 'KFC grease traps (2)', tagTh: 'ถังดักไขมัน KFC (2 ถัง)' } : {}), kind: 'tank', lvl: `${lv(gIn)} / ${lv(gOut)}`,
+          info: lines([`Kitchen grease trap, Biotech ${model}, 3 m³/day, 2.15 × 1.45 m and 1.35 m deep, two 0.50 × 0.50 m covers; ${flow}. Top about ${lv(gTop)} (0.275 m under the lane), pipe in about ${lv(gIn)}, bottom about ${lv(gBot)}.`, 'The two traps sit side by side in one 5.80 × 2.45 m concrete pit on a 0.15 m slab and 28 piles (A-101): on site they look like one large tank with 4 lids (Brian).', KFCD.en],
+            [`ถังดักไขมันของครัว Biotech ${model} 3 ลบ.ม./วัน ขนาด 2.15 × 1.45 ม. ลึก 1.35 ม. ฝา 0.50 × 0.50 ม. 2 ฝา หลังถังประมาณ ${lv(gTop)} (ต่ำกว่าช่องทาง 0.275 ม.) ท่อเข้าประมาณ ${lv(gIn)} ก้นถังประมาณ ${lv(gBot)}`, 'ถังดักไขมัน 2 ถังวางคู่กันในบ่อคอนกรีต 5.80 × 2.45 ม. บนพื้น 0.15 ม. และเสาเข็ม 28 ต้น (A-101) หน้างานจึงเห็นเหมือนถังใหญ่ 1 ถัง 4 ฝา (ตาม Brian)', KFCD.th], P) }, i === 0 ? V(gX, LANE, g0 + 0.8) : null);
+      });
+      for (const d of [1.075, 2.075, 3.9, 4.7]) plate(gE - d, LANE, 0.5, 0.5, 'Grease trap cover 0.50 × 0.50 m', 'ฝาถังดักไขมัน 0.50 × 0.50 ม.');
+      add('base', boxGeo(gLen, 2.45, 0.15, gX, LANE, gBot - 0.15, 0), 'slab', { en: 'KFC grease trap pit slab (A-101)', th: 'พื้นบ่อถังดักไขมัน KFC (A-101)', kind: 'base',
+        info: lines(['Reinforced concrete slab 5.80 × 2.45 m, 0.15 m thick (DB12 @ 0.15 m top and bottom), on lean concrete and compacted sand, on 28 piles (safe load over 1.7 t each), as drawn on A-101.', KFCD.en], ['พื้นคอนกรีตเสริมเหล็ก 5.80 × 2.45 ม. หนา 0.15 ม. (DB12 @ 0.15 ม. บน-ล่าง) บนคอนกรีตหยาบและทรายบดอัด เสาเข็ม 28 ต้น (รับน้ำหนักมากกว่า 1.7 ตัน/ต้น) ตามแบบ A-101', KFCD.th], P) });
+      // treatment tank: Biotech BC-K-10-D2.2 (10 m³/day): lying tank Ø2.20 m, about 7.0 m long, solid separation, anaerobic
+      // filter, aerobic filter and sedimentation chambers; 4 manholes Ø0.60 m; in 0.45 m and out (6") 0.65 m under the road;
+      // bottom 2.70 m under the road; 7.50 × 3.20 m slab on 32 piles with concrete strapping beams; air blower SCB-40
+      const tR = 1.1, tLen = 7.0, tX = -21.6, tY = LANE, tTop = r2(ground(tX, tY) - 0.275), tAxis = r2(tTop - tR), tIn = r2(g0 - 0.45), tOut = r2(g0 - 0.65), tBot = r2(g0 - 2.70);
+      add('tanks', capsuleGeo(tR, tLen, tX, tY, tAxis, 0, 0.25), 'tank', { en: 'KFC treatment tank · Biotech BC-K-10-D2.2 (10 m³/day)', th: 'ถังบำบัด KFC · Biotech BC-K-10-D2.2 (10 ลบ.ม./วัน)', tag: 'KFC treatment tank BC-K-10', tagTh: 'ถังบำบัด KFC BC-K-10', kind: 'tank', lvl: `${lv(tIn)} / ${lv(tOut)}`,
+        info: lines(['KFC\'s treatment tank, Biotech BC-K-10-D2.2, 10 m³/day: a lying tank Ø2.20 m, about 7.0 m long, with four chambers in a row (solid separation, anaerobic filter, aerobic filter, sedimentation with tube settler) and four Ø0.60 m manholes. Air from the SCB-40 blower (A-101) through a 1½" air pipe.',
+          `Pipe in (4", from the grease traps) about ${lv(tIn)}, out (6") about ${lv(tOut)}, bottom about ${lv(tBot)}: 0.45, 0.65 and 2.70 m under the lane (A-101). Out at the west end, along the lane to the pump sump.`,
+          'Brian counted five lids on site; A-101 draws four manholes. The fifth may be the separate Biotech BO-5000-UR tank on sheet A-102 (Ø2.035 m, 2.28 m high, one Ø0.60 m lid, own 100 L/min air pump): no sheet says where it is, so it is not in the model yet.',
+          'KFC\'s 2019 design (SN-03) showed two 15 m³/day treatment tanks and two 3 m³/day grease traps here, out by gravity (6") to the existing drain; the as-built sheets show one 10 m³/day tank, and on site the water goes to a pump sump.', KFCD.en],
+          ['ถังบำบัดของ KFC Biotech BC-K-10-D2.2 10 ลบ.ม./วัน ถังนอน Ø2.20 ม. ยาวประมาณ 7.0 ม. มี 4 ห้องเรียงกัน (แยกตะกอน กรองไร้อากาศ กรองเติมอากาศ ตกตะกอนพร้อม tube settler) ฝา Ø0.60 ม. 4 ฝา ลมจากเครื่องเป่าลม SCB-40 (A-101) ผ่านท่อลม 1½ นิ้ว',
+            `ท่อเข้า (4 นิ้ว จากถังดักไขมัน) ประมาณ ${lv(tIn)} ท่อออก (6 นิ้ว) ประมาณ ${lv(tOut)} ก้นถังประมาณ ${lv(tBot)} คือต่ำกว่าช่องทาง 0.45 / 0.65 / 2.70 ม. (A-101) ออกที่ปลายด้านตะวันตก เดินตามช่องทางไปบ่อสูบ`,
+            'Brian นับฝาหน้างานได้ 5 ฝา แบบ A-101 มี 4 ฝา ฝาที่ 5 อาจเป็นถัง Biotech BO-5000-UR แยกอีกถังตามแบบ A-102 (Ø2.035 ม. สูง 2.28 ม. ฝา Ø0.60 ม. 1 ฝา มีปั๊มลม 100 ลิตร/นาที ของตัวเอง) ไม่มีแบบแผ่นใดบอกตำแหน่ง จึงยังไม่ได้ใส่ในโมเดล',
+            'แบบออกแบบของ KFC ปี 2019 (SN-03) แสดงถังบำบัด 15 ลบ.ม./วัน 2 ถัง และถังดักไขมัน 3 ลบ.ม./วัน 2 ถัง ระบายออกด้วยแรงโน้มถ่วง (6 นิ้ว) ลงรางเดิม แบบก่อสร้างจริงแสดงถังบำบัด 10 ลบ.ม./วัน 1 ถัง และหน้างานน้ำไปลงบ่อสูบ', KFCD.th], P) }, V(tX, tY, ground(tX, tY) + 0.8));
+      // manholes at 1.25, 2.65, 4.80 and 6.25 m from the east end of the 7.50 m slab (A-101 top slab plan)
+      for (const d of [1.25, 2.65, 4.80, 6.25]) lid(tX + 3.75 - d, tY, tTop, 0.3, 'Treatment tank manhole Ø0.60 m', 'ฝาถังบำบัด Ø0.60 ม.');
+      add('base', boxGeo(7.5, 3.2, 0.3, tX, tY, tBot - 0.3, 0), 'slab', { en: 'KFC treatment tank slab and piles (A-101)', th: 'ฐานรากและเสาเข็มถังบำบัด KFC (A-101)', kind: 'base',
+        info: lines(['Reinforced concrete slab 7.50 × 3.20 m, 0.30 m thick (DB12 @ 0.15 m top and bottom), on 32 piles (8 × 4, safe load over 1.7 t each); columns 0.25 × 0.25 m and beams 0.25 × 0.40 m round the tank, with galvanised wire-rope anchors over it (A-101).', KFCD.en], ['พื้นคอนกรีตเสริมเหล็ก 7.50 × 3.20 ม. หนา 0.30 ม. (DB12 @ 0.15 ม. บน-ล่าง) เสาเข็ม 32 ต้น (8 × 4 รับน้ำหนักมากกว่า 1.7 ตัน/ต้น) เสา 0.25 × 0.25 ม. และคาน 0.25 × 0.40 ม. รอบถัง ยึดถังด้วยลวดสลิงชุบสังกะสี (A-101)', KFCD.th], P) });
+      // pipes: kitchen -> grease traps -> treatment tank -> sump (4" in and between, 6" out: A-101; routes assumed)
+      pipe('sewer', [[-11.0, 32.5, gIn + 0.08], [-11.0, LANE, gIn + 0.04], [gE, LANE, gIn]], 0.05, 'sewerRaw', { en: 'KFC kitchen to the grease traps (4")', th: 'ท่อจากครัว KFC ไปถังดักไขมัน (4 นิ้ว)', kind: 'pipe', info: lines(['4" pipe from the kitchen out through the back wall, in at about 0.30 m under the lane (A-101).', 'Route from the kitchen is assumed.'], ['ท่อ 4 นิ้วจากครัวออกผ่านผนังด้านหลัง เข้าถังที่ความลึกประมาณ 0.30 ม. (A-101)', 'แนวท่อจากครัวเป็นค่าสมมติ'], A) });
+      pipe('sewer', [[gX - gLen / 2, LANE, gOut], [tX + tLen / 2, LANE, tIn]], 0.05, 'sewerRaw', { en: 'Grease traps to the treatment tank (4" transfer pipe)', th: 'ท่อจากถังดักไขมันไปถังบำบัด (ท่อ 4 นิ้ว)', kind: 'pipe', info: lines(['4" transfer pipe, out of trap 1 at about 0.35 m and into the treatment tank at about 0.45 m under the lane (A-101).', KFCD.en], ['ท่อ 4 นิ้ว ออกจากถังดักไขมันที่ 1 ลึกประมาณ 0.35 ม. เข้าถังบำบัดลึกประมาณ 0.45 ม. (A-101)', KFCD.th], P) });
       const sx = X0 + 1.3, sy = 34.6, sTop = ground(sx, sy), sFloor = r2(tOut - 1.5), outT = tOut;
-      pipe('sewer', [[tX - tLen / 2, LANE, outT], [sx + 0.6, LANE, r2(outT - 0.06)], [sx + 0.6, sy, r2(outT - 0.07)]], 0.05, 'sewerTreated', { en: 'KFC treatment tank to the pump sump', th: 'ท่อจากถังบำบัด KFC ไปบ่อสูบ', kind: 'pipe', info: lines(['From the west end of the treatment tank along the lane to the sump.', ASSUMED.en], ['จากปลายด้านตะวันตกของถังบำบัดตามช่องทางไปบ่อสูบ', ASSUMED.th], A) });
+      pipe('sewer', [[tX - tLen / 2, LANE, outT], [sx + 0.6, LANE, r2(outT - 0.06)], [sx + 0.6, sy, r2(outT - 0.07)]], 0.05, 'sewerTreated', { en: 'KFC treatment tank to the pump sump (6")', th: 'ท่อจากถังบำบัด KFC ไปบ่อสูบ (6 นิ้ว)', kind: 'pipe', info: lines(['6" outflow pipe from the west end of the treatment tank (A-101) along the lane to the sump. Route to the sump assumed.'], ['ท่อออก 6 นิ้วจากปลายด้านตะวันตกของถังบำบัด (A-101) ตามช่องทางไปบ่อสูบ แนวท่อไปบ่อสูบเป็นค่าสมมติ'], A) });
       add('tanks', boxGeo(1.2, 1.6, sTop - sFloor, sx, sy, sFloor, 0), 'manhole', { en: 'KFC pump sump (electric pumps)', th: 'บ่อสูบ KFC (ปั๊มไฟฟ้า)', tag: 'KFC pump sump', tagTh: 'บ่อสูบ KFC', lvl: lv(outT), kind: 'manhole',
         info: lines(['The KFC tanks drain to a sump with electric pumps, which pump the water towards the front of the station into the U-drain further along (Brian). Shown at the back-west corner of the lane: the video (1:40) shows a large grating there with blue PVC pipes coming up, next to an electrical box. The Caltex deck marks a new sampling point G2.2 here.',
           `Size and depth assumed: 1.2 × 1.6 m, floor about ${lv(sFloor)}.`],
@@ -208,9 +234,9 @@ export default {
         info: (m) => lines([`Pumped water from the KFC sump towards the front, into the U-drain further along (Brian). Shown as the blue PVC pipe lying along the foot of the west wall in the video (1:31), about ${m} m, emptying into the west U-drain south of KFC.`, 'Where it actually empties into the U-drain is not known: check on site.'],
           [`น้ำที่สูบจากบ่อสูบ KFC ส่งไปทางด้านหน้าลงรางระบายน้ำ (ตาม Brian) แสดงเป็นท่อ PVC สีฟ้าวางตามโคนกำแพงด้านตะวันตกในวิดีโอ (1:31) ยาวประมาณ ${m} ม. ปล่อยลงรางด้านตะวันตกทางใต้ของ KFC`, 'ไม่ทราบจุดที่ปล่อยลงรางจริง ต้องตรวจสอบหน้างาน'], A) });
       // blowers and controls behind the rolling door
-      add('air', boxGeo(1.6, 0.6, 0.8, ROOM_X, 31.9, 0.15, 0), 'airPump', { en: 'KFC pump room: air pumps and controls (behind the rolling door)', th: 'ห้องปั๊ม KFC: เครื่องเป่าลมและตู้ควบคุม (หลังประตูม้วน)', tag: 'KFC pump room', tagTh: 'ห้องปั๊ม KFC', kind: 'tank',
-        info: lines(['Behind the rolling door at the back of KFC, by the grease trap, is the room with the air pumps and controls, about midway along the KFC building (Brian, 26 Nov 2026; video 2:00-2:04). Shown as one box; how many and which pumps are not known. The air pipe route to the tanks is not known and not drawn.'],
-          ['หลังประตูม้วนด้านหลัง KFC ข้างถังดักไขมัน เป็นห้องเครื่องเป่าลมและตู้ควบคุม ประมาณกึ่งกลางอาคาร KFC (ตาม Brian 26 พ.ย. 2026 วิดีโอ 2:00-2:04) แสดงเป็นกล่องเดียว ไม่ทราบจำนวนและรุ่น ไม่ทราบแนวท่อลมไปถังจึงไม่ได้แสดง'], A) });
+      add('air', boxGeo(1.6, 0.6, 0.8, ROOM_X, 31.9, 0.15, 0), 'airPump', { en: 'KFC pump room: air blower (SCB-40) and controls, behind the rolling door', th: 'ห้องปั๊ม KFC: เครื่องเป่าลม (SCB-40) และตู้ควบคุม หลังประตูม้วน', tag: 'KFC pump room (blower)', tagTh: 'ห้องปั๊ม KFC (เครื่องเป่าลม)', kind: 'tank',
+        info: lines(['Behind the rolling door at the back of KFC, by the grease traps, is the room with the air pumps and controls, about midway along the KFC building (Brian, 26 Nov 2026; video 2:00-2:04). Shown as one box.', 'A-101 gives an SCB-40 air blower and control panel for the BC-K-10 treatment tank (1½" air pipe); KFC\'s 2019 design SN-03 says SCB-50. A-102 adds a 100 L/min air pump for the BO-5000-UR tank. The air pipe route to the tanks is not known and not drawn.'],
+          ['หลังประตูม้วนด้านหลัง KFC ข้างถังดักไขมัน เป็นห้องเครื่องเป่าลมและตู้ควบคุม ประมาณกึ่งกลางอาคาร KFC (ตาม Brian 26 พ.ย. 2026 วิดีโอ 2:00-2:04) แสดงเป็นกล่องเดียว', 'แบบ A-101 ระบุเครื่องเป่าลม SCB-40 และตู้ควบคุมสำหรับถังบำบัด BC-K-10 (ท่อลม 1½ นิ้ว) แบบออกแบบ KFC ปี 2019 SN-03 ระบุ SCB-50 แบบ A-102 มีปั๊มลม 100 ลิตร/นาที สำหรับถัง BO-5000-UR ไม่ทราบแนวท่อลมไปถังจึงไม่ได้แสดง'], A) });
       add('buildings', boxGeo(2.6, 0.08, 2.8, ROOM_X, 32.55, 0.15, 0), 'cover', { en: 'Rolling door to the KFC pump room', th: 'ประตูม้วนห้องปั๊ม KFC', kind: 'building',
         info: lines(['Metal rolling door at the back of KFC, about midway along the building, open to the room with the air pumps and controls (Brian; video 2:00-2:04). Width judged from the video.'], ['ประตูม้วนเหล็กด้านหลัง KFC ประมาณกึ่งกลางอาคาร เปิดเข้าห้องเครื่องเป่าลมและตู้ควบคุม (ตาม Brian วิดีโอ 2:00-2:04) ความกว้างประมาณจากวิดีโอ'], AC) });
     }
@@ -294,8 +320,8 @@ export default {
       o.tag ? V(poly.reduce((s, p) => s + p[0], 0) / poly.length, poly.reduce((s, p) => s + p[1], 0) / poly.length, floor + h + 0.7) : null);
     const rect = (x0, y0, x1, y1) => [[x0, y0], [x1, y0], [x1, y1], [x0, y1]];
     building(rect(-28.0, 22.0, -4.0, 32.5), 0.15, 5.5, 'building', { en: 'KFC drive-through restaurant', th: 'ร้าน KFC (ไดรฟ์ทรู)', tag: 'KFC', tagTh: 'KFC',
-      lines: ['Restaurant at the back-left of the site, with the drive-through lane round its west side and behind it (order point on the west side, PAY HERE booth at the back after the pump room, pick-up window on the east side; the lane comes out between KFC and the toilets). Red DRIVE THRU tower at the front-west corner.'],
-      linesTh: ['ร้านอาหารที่มุมหลังซ้ายของสถานี ช่องทางไดรฟ์ทรูอ้อมด้านตะวันตกและด้านหลัง (จุดสั่งที่ปลายด้านตะวันตก ช่องจ่ายเงินและรับสินค้าที่ปลายด้านตะวันออก) ถังดักไขมันและประตูม้วนห้องเครื่องเป่าลมอยู่ด้านหลัง'] });
+      lines: ['Restaurant at the back-left of the site, with the drive-through lane round its west side and behind it (order point on the west side, PAY HERE booth at the back after the pump room, pick-up window on the east side; the lane comes out between KFC and the toilets). Red DRIVE THRU tower at the front-west corner.', 'The 2019 Caltex site plan ("Proposed 1") draws it 24 × 10 m, 260 m²; shown 24 × 10.5 m from the satellite image.'],
+      linesTh: ['ร้านอาหารที่มุมหลังซ้ายของสถานี ช่องทางไดรฟ์ทรูอ้อมด้านตะวันตกและด้านหลัง (จุดสั่งที่ปลายด้านตะวันตก ช่องจ่ายเงินและรับสินค้าที่ปลายด้านตะวันออก) ถังดักไขมันและประตูม้วนห้องเครื่องเป่าลมอยู่ด้านหลัง', 'ผังบริเวณ Caltex ปี 2019 ("Proposed 1") เขียนขนาด 24 × 10 ม. 260 ตร.ม. ในโมเดลแสดง 24 × 10.5 ม. จากภาพถ่ายดาวเทียม'] });
     building(rect(-28.0, 22.0, -26.6, 23.4), 0.15, 9.0, 'signPanel', { en: 'KFC "DRIVE THRU" tower', th: 'หอป้าย "DRIVE THRU" ของ KFC',
       lines: ['Red tower with the DRIVE THRU sign at the front-west corner of KFC (video 1:09). Height judged from the video.'], linesTh: ['หอสีแดงมีป้าย DRIVE THRU ที่มุมหน้าด้านตะวันตกของ KFC (วิดีโอ 1:09) ความสูงประมาณจากวิดีโอ'] });
     // toilets (Brian's photos and video 2:14, 2:43): white-clad walls, open front onto the tiled walkway along the drive-through

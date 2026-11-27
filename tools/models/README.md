@@ -106,6 +106,21 @@ pole signs; three fuel tanks lying parallel to the road between the toilets and 
 not pipes; Brian, 26 Nov 2026) round the site; KFC, toilets, garbage room, office / Mini Big C, coffee shop, canopy, EV chargers, air pump; road and the elevated
 structure in "surroundings". Every size, depth, level and pipe route is assumed. Notes use the source kinds `aerial`
 and `aerialContext` (style.mjs) instead of drawn / part / context. Replace with real positions if Caltex sends drawings.
+Drawings received 27 Nov 2026 (Brian; filed in SharePoint `Sites\1156 Samut Prakan\03 Drawings\CAD` and `CAD\KFC`, and on
+the Sites page as layouts; the DWGs were plotted here with `dwg/dwg-to-json.mjs` and a matplotlib plot of the JSON):
+- `1156 # Hitex Theppratarn Branch 1.dwg`: Caltex site plan "PROPOSED 1" (Star Fuels, 21.02.19, 1:200): lot 3,049 m²,
+  frontage 52.05 m, KFC drive-through 24 × 10 m (260 m²) at the back. A proposal, not as-built; not yet fitted to the model.
+- `A-101 ... BG-R-3000-1-M4+BG-R-3000-2-M4+BC-K-10-D2.2-UR As Built DWG.dwg` (TRI Architects / Astive, as-built 30/10/63):
+  two BG-R-3000 grease traps (2.15 × 1.45 × 1.35 m, two 0.50 m covers each) in one 5.80 × 2.45 m pit, top 0.275 / in 0.30 m
+  under the road; BC-K-10-D2.2 treatment tank Ø2.20, slab 7.50 × 3.20 m on 32 piles, 4 manholes Ø0.60 at 1.25 / 2.65 / 4.80 /
+  6.25 m from the grease-trap end, in 0.45 / out 6" 0.65 / bottom 2.70 m under the road; SCB-40 blower. In the model now
+  (source kind `aerialTank`: type, size and depth drawn, place from Brian's markup).
+- `A-102 KFC BO-5000-UR As Built DWG.dwg`: Biotech BO-5000-UR (Ø2.035 × 2.28 m, one lid, 100 L/min air pump). Place not on any
+  sheet: NOT in the model. Brian counted 5 lids at the treatment tank, A-101 has 4: the fifth may be this tank.
+- A-101 / A-102 title blocks say Phuket (จังหวัดภูเก็ต) in the location box: Brian to confirm they are this site's.
+- `83077 GSDT Caltex Theparak OB.pdf`: KFC's sanitary set SN-01 to SN-10 (KFC1901, ES Design / EEE, Apr 2019; SN-04 missing,
+  SN-10 twice). SN-03 (design) shows 2 × 15 m³/day treatment tanks + 2 × 3 m³/day grease traps behind KFC, 6" out by gravity
+  to the existing west drain; on site the water goes to a pump sump (Brian).
 
 ## 1622 Ram Intra (first version, 25 Nov 2026, from PDFs)
 Sources: layout `A-07` and details `A-14` to `A-17` ("FOR AS-BUILD", 2020): positions, pipe sizes, 1:200 slopes, ground

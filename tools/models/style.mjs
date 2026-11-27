@@ -82,7 +82,9 @@ export const SRC = {
   part: { en: 'Position is from the drawings. Size or depth is assumed or from a standard detail.', th: 'ตำแหน่งมาจากแบบ ขนาดหรือความลึกเป็นค่าสมมติหรือมาจากแบบมาตรฐาน' },
   context: { en: 'Outline is from the drawings. Height is assumed, for context only.', th: 'แนวมาจากแบบ ความสูงเป็นค่าสมมติ ใช้ดูประกอบเท่านั้น' },
   // a site with no drawings at all (1156 Samut Prakan): placed from the satellite image and Brian's site video
-  aerial: { en: 'No drawings of this site: position is from the satellite image and Brian\'s site video; size and depth are assumed.', th: 'ไม่มีแบบของสถานีนี้: ตำแหน่งมาจากภาพถ่ายดาวเทียมและวิดีโอหน้างานของ Brian ขนาดและความลึกเป็นค่าสมมติ' },
+  aerial: { en: 'No as-built layout of this station: position is from the satellite image and Brian\'s site video; size and depth are assumed.', th: 'ไม่มีผังตามจริงของสถานีนี้: ตำแหน่งมาจากภาพถ่ายดาวเทียมและวิดีโอหน้างานของ Brian ขนาดและความลึกเป็นค่าสมมติ' },
+  // a tank whose type, size and depth come from its own drawing, but whose place is not on any drawing (1156 KFC tanks)
+  aerialTank: { en: 'Type, size and depth are from the tank drawing; position is from the satellite image, Brian\'s markup and site video (no site layout).', th: 'รุ่น ขนาด และความลึกมาจากแบบถัง ตำแหน่งมาจากภาพถ่ายดาวเทียม ภาพที่ Brian ระบุ และวิดีโอหน้างาน (ไม่มีผังบริเวณ)' },
   aerialContext: { en: 'Outline is from the satellite image; height is judged from Brian\'s site video, for context only.', th: 'แนวมาจากภาพถ่ายดาวเทียม ความสูงประมาณจากวิดีโอหน้างานของ Brian ใช้ดูประกอบเท่านั้น' },
 };
 /** Underground fuel tanks, the same on every site (Brian, 25 Nov 2026): a lying 30,000 litre capsule tank with slightly
@@ -90,7 +92,7 @@ export const SRC = {
  *  as-built drawings. The depth is not on the wastewater drawings: the top is shown `cover` below ground. */
 export const FUEL_TANK = { litres: 30000, dia: 2.3, len: 7.5, dish: 0.28, cover: 1.0 };
 
-/** notes(en lines, th lines, 'drawn' | 'part' | 'context' | 'aerial' | 'aerialContext') -> the info object for add(). */
+/** notes(en lines, th lines, 'drawn' | 'part' | 'context' | 'aerial' | 'aerialTank' | 'aerialContext') -> the info object for add(). */
 export const notes = (en, th, kind) => ({ en: [...en, SRC[kind].en], th: [...th, SRC[kind].th] });
 
 // Naming, so the same thing reads the same on every site:
