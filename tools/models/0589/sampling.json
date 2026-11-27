@@ -1,0 +1,257 @@
+{
+ "risk": "HIGH",
+ "source": {
+  "en": "Caltex deck \"Caltex WWT Improvement - SPP Sites R1\" (Thada, 15 Oct 2026), the site slide and its FUTURE slide; point counts as in the Sampling Counts R2 sheet. Each marker is put on the outlet, trap or tank it sits on in the deck.",
+  "th": "เอกสารของ Caltex \"Caltex WWT Improvement - SPP Sites R1\" (คุณธาดา 15 ต.ค. 2026) หน้าสถานีและหน้า FUTURE จำนวนจุดตามตาราง Sampling Counts R2 แต่ละจุดวางบนบ่อทางออก บ่อดัก หรือถังที่จุดนั้นอยู่ในเอกสาร"
+ },
+ "points": [
+  {
+   "id": "S1",
+   "group": "G2.2",
+   "status": "existing",
+   "samples": 1,
+   "src": "deck",
+   "at": "Oil trap (west outfall)",
+   "where": {
+    "en": "at the outlet chamber of the trap, where the water leaves for the public drain",
+    "th": "ที่ช่องทางออกของบ่อดัก ก่อนน้ำออกสู่ท่อสาธารณะ"
+   },
+   "upstream": [
+    "WTT-1",
+    "WTT-2",
+    "KFC"
+   ],
+   "note": {
+    "en": "Entrance-side outlet: takes the KFC, laundry and massage-shop water (site visit 20 Nov 2026: smelly and discoloured).",
+    "th": "ทางออกฝั่งทางเข้า รับน้ำจาก KFC ร้านซักผ้า และร้านนวด (สำรวจ 20 พ.ย. 2026: มีกลิ่นและสีขุ่น)"
+   }
+  },
+  {
+   "id": "S2",
+   "group": "G2.1",
+   "status": "existing",
+   "samples": 1,
+   "src": "deck",
+   "at": "Oil trap (middle outfall)",
+   "where": {
+    "en": "at the outlet chamber of the trap, where the water leaves for the public drain",
+    "th": "ที่ช่องทางออกของบ่อดัก ก่อนน้ำออกสู่ท่อสาธารณะ"
+   },
+   "upstream": [
+    "Site drain: along the road edge",
+    "Pump canopy"
+   ]
+  },
+  {
+   "id": "S3",
+   "group": "G2.1",
+   "status": "existing",
+   "samples": 1,
+   "src": "deck",
+   "at": "Oil trap 1 (east outfall, along the road)",
+   "where": {
+    "en": "at the outlet chamber of the trap, where the water leaves for the public drain",
+    "th": "ที่ช่องทางออกของบ่อดัก ก่อนน้ำออกสู่ท่อสาธารณะ"
+   },
+   "upstream": [
+    "Pump canopy"
+   ],
+   "note": {
+    "en": "Exit side: the pipe from the forecourt drains to this trap was found clogged on 20 Nov 2026.",
+    "th": "ฝั่งทางออก: ท่อจากรางลานจ่ายน้ำมันมาบ่อนี้อุดตัน (สำรวจ 20 พ.ย. 2026)"
+   }
+  },
+  {
+   "id": "S4",
+   "group": "G2.2",
+   "status": "existing",
+   "samples": 1,
+   "src": "deck",
+   "at": "Oil trap 2 (east outfall, along the east boundary)",
+   "where": {
+    "en": "at the outlet chamber of the trap, where the water leaves for the public drain",
+    "th": "ที่ช่องทางออกของบ่อดัก ก่อนน้ำออกสู่ท่อสาธารณะ"
+   },
+   "upstream": [
+    "WTT-4",
+    "Small grease trap",
+    "Shop sink",
+    "Mart"
+   ]
+  },
+  {
+   "id": "S5",
+   "group": "G2.2",
+   "status": "new",
+   "samples": 1,
+   "src": "deck",
+   "stage": "now",
+   "at": "WTT-1 · KFC treatment tank",
+   "where": {
+    "en": "at the outlet of the KFC treatment tank WTT-1, behind KFC",
+    "th": "ที่ทางออกถังบำบัด KFC WTT-1 ด้านหลัง KFC"
+   },
+   "upstream": [
+    "KFC grease trap",
+    "Grease trap to WTT-1",
+    "KFC"
+   ]
+  },
+  {
+   "id": "S6",
+   "group": "G2.2",
+   "status": "new",
+   "samples": 1,
+   "src": "deck",
+   "stage": "now",
+   "at": "Manhole N1",
+   "where": {
+    "en": "in manhole N1 on the back drain, below the two Biotech BO-2600 tanks of the middle building",
+    "th": "ในบ่อพัก N1 ท่อระบายด้านหลัง ถัดจากถัง Biotech BO-2600 สองใบของอาคารกลาง"
+   },
+   "upstream": [
+    "Biotech BO-2600",
+    "Middle building"
+   ]
+  }
+ ],
+ "routes": [
+  {
+   "group": "G2.1",
+   "pts": [
+    [
+     331.02,
+     106.16
+    ],
+    [
+     371.13,
+     107.46
+    ]
+   ]
+  },
+  {
+   "group": "G2.1",
+   "pts": [
+    [
+     372.23,
+     68.48
+    ],
+    [
+     370.95,
+     107.97
+    ]
+   ]
+  },
+  {
+   "group": "G2.1",
+   "pts": [
+    [
+     317.28,
+     73.89
+    ],
+    [
+     319.41,
+     96.11
+    ]
+   ]
+  },
+  {
+   "group": "G2.1",
+   "pts": [
+    [
+     318.91,
+     95.5
+    ],
+    [
+     331.96,
+     95.97
+    ]
+   ]
+  },
+  {
+   "group": "G2.1",
+   "pts": [
+    [
+     331.17,
+     106.75
+    ],
+    [
+     331.63,
+     95.85
+    ]
+   ]
+  },
+  {
+   "group": "G2.1",
+   "pts": [
+    [
+     317.07,
+     72.78
+    ],
+    [
+     374.61,
+     68.63
+    ]
+   ]
+  },
+  {
+   "group": "G2.2",
+   "pts": [
+    [
+     382.98,
+     101.52
+    ],
+    [
+     384.02,
+     69.79
+    ]
+   ]
+  },
+  {
+   "group": "G2.2",
+   "pts": [
+    [
+     328.27,
+     107.27
+    ],
+    [
+     287.8,
+     105.9
+    ]
+   ]
+  },
+  {
+   "group": "G2.2",
+   "pts": [
+    [
+     288.21,
+     106.35
+    ],
+    [
+     294.4,
+     75.6
+    ]
+   ]
+  }
+ ],
+ "future": [
+  {
+   "type": "ows",
+   "x": 292.2,
+   "y": 103.7,
+   "note": {
+    "en": "Behind KFC, by the KFC tanks: new treatment for the KFC water (Brian's KFC option of 26 Nov 2026 is one way to do it).",
+    "th": "ด้านหลัง KFC ข้างถังของ KFC: ระบบบำบัดใหม่สำหรับน้ำจาก KFC (ทางเลือก KFC ของ Brian วันที่ 26 พ.ย. 2026 เป็นวิธีหนึ่ง)"
+   }
+  },
+  {
+   "type": "ows",
+   "x": 382.7,
+   "y": 87.75,
+   "note": {
+    "en": "East side, behind the shops: new treatment for the shop and toilet water.",
+    "th": "ด้านตะวันออก หลังร้านค้า: ระบบบำบัดใหม่สำหรับน้ำจากร้านค้าและห้องน้ำ"
+   }
+  }
+ ]
+}

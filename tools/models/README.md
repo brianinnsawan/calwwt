@@ -212,3 +212,26 @@ Brian asked for more information on the tanks at every site from email and Share
   drawings from `NFR Projects\24 25 Grease and Septic repair\Saraburi Kaeng Khoi`), and DOS's 2022 diagram (a proposal).
 - Nothing new found for 0589, 1156, 1622, 1642, 1687.
 
+
+## Water sampling points and the final design (all 8 sites, 27 Nov 2026)
+Brian asked for the models to show the testing points and the final designs so people can see and understand them.
+- Each site has `<code>/sampling.json` (format at the top of `sampling.mjs`); build.mjs draws it into the layer
+  "Water sampling points" (and "Proposed works" for the final design). No site file changes are needed.
+- Source: the Caltex deck `03 Reports to Caltex\Caltex WWT Improvement - SPP Sites - Editable R1.pptx` (Thada, 15 Oct 2026),
+  each site's slide and its FUTURE slide. The marker positions were read straight from the slide shapes and mapped onto the
+  drawing coordinates by fitting the slide's building labels to the model buildings (1-2 m at most sites; 1588 has no labels,
+  fitted on the canopy). Each marker is then put on the outlet, trap, tank or manhole it sits on (`"at"`). Counts match
+  Brian's Sampling Counts R2 sheet (28 points).
+- Markers in the deck's own colours: red ball = existing, yellow ball = new, blue cube = construction sampling point (with a
+  standard 0.80 x 0.80 m sampling chamber), pink triangle = new OWS or new WWT; red / cyan band, ring and route = G2.1 / G2.2.
+  A combined G2.1+G2.2 point has both bands.
+- Stages in the viewer: Existing / 2026 sampling / Final design (concept). `"stage": "now"` = only in 2026 sampling,
+  `"future"` = only in the final design (e.g. 1156's combined points become G2.1 in the final design; S = 2026, F = final).
+- The FUTURE slides' routes are drawn on the ground as concept lines; the pink triangles mark a place, not a design (no size).
+- The PCD limits (Sampling Counts R2 sheet) are in `SAMPLE_GROUPS` in style.mjs; when Aqua's results come in, add
+  `"result": { "date", "lab", "values": { "pH": 7.1, ... } }` to a point and rebuild: the card shows each value against its
+  limit and "Colour sampling points by test result" turns the markers green / red / grey.
+- Judgement calls to confirm: 1588 S2 (deck draws it ~10 m north of the west outfall pit, taken as that pit); 1642 S4 / F2,
+  1687 F2 and 1703 F5 and its new treatment were drawn just outside the boundary on the deck and are pulled inside; the water
+  level where each sample is taken is assumed 0.8 m below ground unless `"take"` is given. Aqua's extra 19 Nov sample of
+  the King Kaew combined tank is not on the deck map and is not shown.

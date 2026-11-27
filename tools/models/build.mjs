@@ -14,6 +14,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { MATERIALS, LAYERS, VIEWS, SRC, FUEL_TANK, notes } from './style.mjs';   // one look for every site
+import { buildSampling } from './sampling.mjs';   // water sampling points + final-design concept (sampling.json)
 
 // GLTFExporter writes its binary file through the browser's FileReader; Node has Blob but not FileReader.
 globalThis.FileReader = class {
@@ -27,6 +28,8 @@ if (!/^\d{4}$/.test(code || '')) { console.error('Usage: node build.mjs <site co
 const site = (await import(`./${code}/site.mjs`)).default;
 const plan = JSON.parse(fs.readFileSync(path.join(here, code, 'plan-lines.json'), 'utf8'));
 const [OX, OY] = site.origin;
+const samplingFile = path.join(here, code, 'sampling.json');
+const sampling = fs.existsSync(samplingFile) ? JSON.parse(fs.readFileSync(samplingFile, 'utf8')) : null;
 
 const V = (x, y, level) => new THREE.Vector3(x - OX, level, -(y - OY));
 const rad = (deg) => deg * Math.PI / 180;
@@ -81,6 +84,7 @@ const scene = new THREE.Scene(); scene.name = `${code} ${site.name}`;
 const layers = new Map();
 { // layers: the site names the ones it uses (ids, or objects from older site files); names and order come from the shared style
   const wanted = site.layers.map((l) => (typeof l === 'string' ? { id: l } : l));
+  if (sampling) for (const id of ['sampling', ...((sampling.future || []).length || (sampling.routes || []).length || sampling.points.some((p) => p.status === 'construction') ? ['proposed'] : [])]) if (!wanted.some((w) => w.id === id)) wanted.push({ id });
   const std = LAYERS.filter((l) => wanted.some((w) => w.id === l.id)), extra = wanted.filter((w) => !LAYERS.some((l) => l.id === w.id));
   for (const l of [...std.filter((l) => !['plan', 'ground'].includes(l.id)), ...extra, ...std.filter((l) => ['plan', 'ground'].includes(l.id))]) {
     if (!l.en || !l.th) throw new Error(`Layer ${l.id} is not in style.mjs and has no en / th name`);
@@ -160,7 +164,7 @@ const lines = (layer, polylines, material, level) => {
   layers.get(layer).add(l); return l;
 };
 const sections = [];   // long sections the viewer can open ("Long section" button), drawn from the same levels as the model
-const api = { section: (x) => sections.push(x), lines, notes, SRC, FUEL_TANK, fuelTank, capsuleGeo, V, ground, lv, add, boxGeo, cylGeo, hcylGeo, latheGeo, prismGeo, pipeGeo, merge: (list) => mergeGeometries(list.every((g) => g.index) ? list : list.map((g) => (g.index ? g.toNonIndexed() : g))), THREE };
+const api = { origin: [OX, OY], section: (x) => sections.push(x), lines, notes, SRC, FUEL_TANK, fuelTank, capsuleGeo, V, ground, lv, add, boxGeo, cylGeo, hcylGeo, latheGeo, prismGeo, pipeGeo, merge: (list) => mergeGeometries(list.every((g) => g.index) ? list : list.map((g) => (g.index ? g.toNonIndexed() : g))), THREE };
 
 // ---- ground surface and plan linework
 {
@@ -195,8 +199,10 @@ const api = { section: (x) => sections.push(x), lines, notes, SRC, FUEL_TANK, fu
 }
 
 site.build(api);
+const samp = sampling ? buildSampling(sampling, api, scene) : null;
+if (samp) { const k = site.views.findIndex((v) => v.id === 'plan'); site.views.splice(k + 1, 0, samp.view); }
 
-scene.userData = { site: code, name: site.name, datum: site.datum, note: site.note, views: site.views.map((v) => ({ ...v, ...(VIEWS[v.id] || {}), pos: V(...v.from).toArray().map((n) => +n.toFixed(2)), target: V(...v.to).toArray().map((n) => +n.toFixed(2)), from: undefined, to: undefined })), north: site.north, built: site.built, ...(sections.length ? { sections } : {}) };
+scene.userData = { site: code, name: site.name, datum: site.datum, note: site.note, views: site.views.map((v) => ({ ...v, ...(VIEWS[v.id] || {}), pos: V(...v.from).toArray().map((n) => +n.toFixed(2)), target: V(...v.to).toArray().map((n) => +n.toFixed(2)), from: undefined, to: undefined })), north: site.north, built: site.built, ...(sections.length ? { sections } : {}), ...(samp ? { sampling: samp.meta } : {}) };
 scene.updateMatrixWorld(true);
 const out = path.join(here, '..', '..', 'portal-proposal', 'public', 'sites', 'models', `${code}.glb`);
 fs.mkdirSync(path.dirname(out), { recursive: true });

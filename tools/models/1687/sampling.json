@@ -1,0 +1,121 @@
+{
+ "risk": "MEDIUM",
+ "source": {
+  "en": "Caltex deck \"Caltex WWT Improvement - SPP Sites R1\" (Thada, 15 Oct 2026), the site slide and its FUTURE slide; point counts as in the Sampling Counts R2 sheet. Each marker is put on the outlet, trap or tank it sits on in the deck.",
+  "th": "เอกสารของ Caltex \"Caltex WWT Improvement - SPP Sites R1\" (คุณธาดา 15 ต.ค. 2026) หน้าสถานีและหน้า FUTURE จำนวนจุดตามตาราง Sampling Counts R2 แต่ละจุดวางบนบ่อทางออก บ่อดัก หรือถังที่จุดนั้นอยู่ในเอกสาร"
+ },
+ "points": [
+  {
+   "id": "S1",
+   "group": "G2.1",
+   "status": "existing",
+   "samples": 1,
+   "src": "deck",
+   "stage": "now",
+   "at": "Existing 3-compartment grease trap (grating covers)",
+   "where": {
+    "en": "at the outlet chamber of the trap, where the water leaves for the public drain",
+    "th": "ที่ช่องทางออกของบ่อดัก ก่อนน้ำออกสู่ท่อสาธารณะ"
+   },
+   "upstream": [
+    "New 3,000 L treatment tank",
+    "Canopy"
+   ],
+   "note": {
+    "en": "20 Nov 2026: almost dry; the toilet water is lost through a broken pipe under the hedge before it gets here.",
+    "th": "สำรวจ 20 พ.ย. 2026: เกือบแห้ง น้ำจากห้องน้ำรั่วออกจากท่อที่แตกใต้แนวรั้วต้นไม้ก่อนมาถึง"
+   }
+  },
+  {
+   "id": "F1",
+   "group": "G2.2",
+   "status": "existing",
+   "samples": 1,
+   "src": "deck",
+   "stage": "future",
+   "at": "Existing 3-compartment grease trap (grating covers)",
+   "where": {
+    "en": "at the outlet chamber of the trap, where the water leaves for the public drain",
+    "th": "ที่ช่องทางออกของบ่อดัก ก่อนน้ำออกสู่ท่อสาธารณะ"
+   },
+   "upstream": [
+    "New 3,000 L treatment tank",
+    "Treatment tank 8,000 L"
+   ],
+   "note": {
+    "en": "In the final design this outlet takes only the building wastewater (G2.2).",
+    "th": "ในแบบสุดท้าย ทางออกนี้รับเฉพาะน้ำเสียจากอาคาร (G2.2)"
+   }
+  },
+  {
+   "id": "F2",
+   "group": "G2.1",
+   "status": "construction",
+   "samples": 1,
+   "src": "deck",
+   "x": 14.6,
+   "y": 13.0,
+   "where": {
+    "en": "new sampling chamber for the forecourt water, at the front by manhole MH-7",
+    "th": "บ่อเก็บตัวอย่างใหม่สำหรับน้ำจากลานจ่ายน้ำมัน ด้านหน้าข้างบ่อพัก MH-7"
+   },
+   "upstream": [
+    "Canopy"
+   ]
+  }
+ ],
+ "routes": [
+  {
+   "group": "G2.1",
+   "pts": [
+    [
+     -13.44,
+     63.91
+    ],
+    [
+     27.25,
+     45.4
+    ]
+   ]
+  },
+  {
+   "group": "G2.1",
+   "pts": [
+    [
+     -16.5,
+     10.61
+    ],
+    [
+     -13.22,
+     63.88
+    ]
+   ]
+  },
+  {
+   "group": "G2.1",
+   "pts": [
+    [
+     -17.06,
+     11.81
+    ],
+    [
+     12.1,
+     10.04
+    ]
+   ]
+  },
+  {
+   "group": "G2.2",
+   "pts": [
+    [
+     26.64,
+     11.33
+    ],
+    [
+     28.48,
+     41.75
+    ]
+   ]
+  }
+ ]
+}

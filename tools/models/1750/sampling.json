@@ -1,0 +1,42 @@
+{
+ "risk": "HIGH",
+ "source": {
+  "en": "Caltex deck \"Caltex WWT Improvement - SPP Sites R1\" (Thada, 15 Oct 2026), the site slide and its FUTURE slide; point counts as in the Sampling Counts R2 sheet. Each marker is put on the outlet, trap or tank it sits on in the deck. The deck's FUTURE note for this site: \"Need to discuss NFR strategy\".",
+  "th": "เอกสารของ Caltex \"Caltex WWT Improvement - SPP Sites R1\" (คุณธาดา 15 ต.ค. 2026) หน้าสถานีและหน้า FUTURE จำนวนจุดตามตาราง Sampling Counts R2 แต่ละจุดวางบนบ่อทางออก บ่อดัก หรือถังที่จุดนั้นอยู่ในเอกสาร หมายเหตุหน้า FUTURE ของสถานีนี้ในเอกสาร: \"ต้องหารือกลยุทธ์ NFR\""
+ },
+ "points": [
+  {
+   "id": "S1",
+   "group": "G2.1",
+   "status": "existing",
+   "samples": 1,
+   "src": "deck",
+   "at": "Oil trap (west outfall)",
+   "where": {
+    "en": "at the outlet chamber of the trap, where the water leaves for the public drain",
+    "th": "ที่ช่องทางออกของบ่อดัก ก่อนน้ำออกสู่ท่อสาธารณะ"
+   },
+   "upstream": [
+    "Site drain: west side",
+    "DLFN-15Q"
+   ]
+  },
+  {
+   "id": "S2",
+   "group": "G2.1",
+   "status": "existing",
+   "samples": 1,
+   "src": "deck",
+   "at": "Oil trap (east outfall)",
+   "where": {
+    "en": "at the outlet chamber of the trap, where the water leaves for the public drain",
+    "th": "ที่ช่องทางออกของบ่อดัก ก่อนน้ำออกสู่ท่อสาธารณะ"
+   },
+   "upstream": [
+    "Site drain: east side",
+    "DLFN-12Q",
+    "DTNC-15Q"
+   ]
+  }
+ ]
+}
