@@ -232,6 +232,9 @@ Brian: do not copy the PowerPoint's lines; use the model's own sumps and pipes, 
   runs on into the red west V-gutter, Brian), canopy drains, front drains, entrance and exit pits; blue = rear line, west
   side and KFC line (KFC-1 into W9) to the SW pit, east line with both toilet tanks to the SE pit, building A and B pipes.
   Pink places for a new OWS / WWT at the KFC outlet sump and the building A grease trap (Brian: show both).
+- Proposed works (layer "proposed", e.g. Brian's Kathu KFC option) show ONLY in "Final design": they are not built (Brian,
+  27 Nov 2026). A view of a proposed option carries `stage: 'final'` in the site file, and the Long section button does the
+  same: both switch the model to "Final design" first.
 - Other 6 sites (until each is done with Brian): only the sampled sumps from the deck are highlighted; no pipe colours,
   no PowerPoint lines, no deck-placed extras.
 - The PCD limits (Sampling Counts R2) are `SAMPLE_GROUPS` in style.mjs. Lab results: add `"result": { "date", "lab",

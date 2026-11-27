@@ -149,6 +149,7 @@ export async function show(view, url, w, lang = 'en') {
 
   // ---- views
   let fly = null;
+  let beforeView = () => {};   // a view marked stage: 'final' (a proposed option) switches the model to "Final design" first
   const go = (pos, target, ms = 550) => { fly = { p0: camera.position.clone(), t0: controls.target.clone(), p1: new THREE.Vector3(...pos), t1: new THREE.Vector3(...target), at: performance.now(), ms }; };
   const views = meta.views?.length ? meta.views : [{ id: 'site', en: 'Whole site', th: 'ทั้งสถานี', pos: [mid.x, mid.y + Math.max(size.x, size.z) * 0.6, mid.z + Math.max(size.x, size.z) * 0.7], target: mid.toArray() }];
   const yScale = () => root.scale.y;
@@ -159,12 +160,12 @@ export async function show(view, url, w, lang = 'en') {
   const vbar = el('div', { class: 'v3-row' }); vwrap.append(el('summary', {}, t.views), vbar);
   const MAIN = ['site', 'plan', 'samples'], mainViews = views.filter((v) => MAIN.includes(v.id));
   if (!mainViews.length) mainViews.push(views[0]);
-  for (const v of mainViews) { const b = el('button', { type: 'button' }, name(v)); b.onclick = () => go(scaled(v.pos), scaled(v.target)); vbar.append(b); }
+  for (const v of mainViews) { const b = el('button', { type: 'button' }, name(v)); b.onclick = () => { beforeView(v); go(scaled(v.pos), scaled(v.target)); }; vbar.append(b); }
   const moreViews = views.filter((v) => !mainViews.includes(v));
   if (moreViews.length) {
     const sel = el('select', { 'aria-label': t.more }); sel.append(el('option', { value: '' }, t.more));
     moreViews.forEach((v, i) => sel.append(el('option', { value: String(i) }, name(v))));
-    sel.onchange = () => { const v = moreViews[Number(sel.value)]; if (v) go(scaled(v.pos), scaled(v.target)); sel.value = ''; };
+    sel.onchange = () => { const v = moreViews[Number(sel.value)]; if (v) { beforeView(v); go(scaled(v.pos), scaled(v.target)); } sel.value = ''; };
     vbar.append(sel);
   }
   box.append(vwrap);
@@ -262,7 +263,7 @@ export async function show(view, url, w, lang = 'en') {
   if (meta.sections?.length) {
     const ov = el('div', { class: 'v3-sect' }); ov.hidden = true; box.append(ov);
     const sb = el('button', { type: 'button', class: 'v3-secbtn' }, t.section); vbar.append(sb);
-    sb.onclick = () => { ov.hidden = false; drawSection(ov, meta.sections[0], l, t); };
+    sb.onclick = () => { beforeView({ stage: 'final' }); ov.hidden = false; drawSection(ov, meta.sections[0], l, t); };
     ov.addEventListener('click', (e) => { if (e.target.closest('.x')) ov.hidden = true; });
     ['pointerdown', 'wheel'].forEach((k) => ov.addEventListener(k, (e) => e.stopPropagation()));
   }
@@ -313,13 +314,13 @@ export async function show(view, url, w, lang = 'en') {
     const staged = []; root.traverse((o) => { if (o.isMesh && o.userData?.stage) staged.push(o); });
     const shownAt = (st, k) => (st === 'future' ? k === 2 : st === 'now' ? k === 1 : k >= 1);
     let stageAt = 1;
-    const planOn = lay('plan')?.visible !== false, proposedOn = lay('proposed')?.visible !== false;
+    const planOn = lay('plan')?.visible !== false;
     const bar = el('div', { class: 'v3-stage' }), sbtn = [];
     const stage = (k) => {
       stageAt = k; walkAt = -1; unpick(); unpaint();
       sbtn.forEach((b, i) => b && b.classList.toggle('on', i === k));
       setLayer('sampling', k >= 1); setLayer('plan', k === 0 ? planOn : false);
-      if (lay('proposed')) setLayer('proposed', k === 0 ? proposedOn : k === 2);   // a proposed option the site shows (Kathu KFC option) comes back with "Existing"
+      if (lay('proposed')) setLayer('proposed', k === 2);   // proposed works (e.g. the Kathu KFC option) are not built: only in "Final design" (Brian, 27 Nov 2026)
       for (const o of staged) o.visible = o.userData.sample ? shownAt(o.userData.sample.stage, k) : o.userData.stage === 'future' ? k === 2 : true;
       onlySampleLabels = k >= 1;
       if (k === 2) for (const s of S.systems || []) for (const n of s.names) for (const o of byName.get(n) || []) { paint(o, s.group); boldLine(o, s.group); }
@@ -397,6 +398,7 @@ export async function show(view, url, w, lang = 'en') {
       const w0 = walkAt; go(scaled(pos), scaled(tgt), 700); pickSample(frameOf(order[w0])); 
     };
     const wb = el('button', { type: 'button', class: 'v3-walk' }, `▶ ${t.walk}`); wb.onclick = () => walk(walkAt < 0 ? 0 : walkAt); vbar.append(wb);
+    beforeView = (v) => { if (v.stage === 'final' && stageAt !== 2 && sbtn[2]) stage(2); };
     stage(1);
   }
 
