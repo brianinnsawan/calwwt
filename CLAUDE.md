@@ -124,6 +124,6 @@ Nothing is shared with calnkt: own logins, own databases, own file storage.
   bayEV, grass in style.mjs); first used at 1156 (estimated from the video, 26 Nov 2026).
 - Water sampling and final design (27 Nov 2026): `tools/models/<code>/sampling.json` + `tools/models/sampling.mjs`; viewer stages
   Existing / 2026 sampling / Final design. Brian: never copy the PowerPoint's lines; colour the model's OWN sumps and pipes
-  red (G2.1) / blue (G2.2), add only what is needed, and agree each site with him (ask, with a plan picture). 0589 Kathu is
-  done; the other 7 only highlight their sampled sumps so far. Details in tools/models/README.md.
+  red (G2.1) / blue (G2.2), add only what is needed, and agree each site with him (ask, with a plan picture). 0589 Kathu and
+  1622 Ram Intra are done; the other 6 only highlight their sampled sumps so far. Details in tools/models/README.md.
 - Site notes and starting timelines in `data/sites.json` / `data/timelines/` were written from Brian's site-visit notes; dates to confirm.
