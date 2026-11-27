@@ -9,12 +9,12 @@ const W = {
 model3d: '3D model', open3d: 'Open the 3D model', all: 'All sites', sampled: (d) => `Sampled ${d}`, notSampled: 'Sampling date to confirm', noModel: 'No 3D model yet',
     noModelSub: 'The 3D model of this site will be added here. The Timeline tab already works.', noLayout: 'No wastewater layout yet for this site.',
     prog: 'Programme · all 8 sites', progSub: 'One timeline for the whole programme. Each site also has its own timeline.',
-    foot: 'Caltex 2027 wastewater improvement · SPP', hidePanel: 'Hide this panel', showPanel: 'Show the site panel', reset: 'Reset view', layoutOf: 'Layout' },
+    foot: 'Caltex 2027 wastewater improvement · SPP', hidePanel: 'Hide this panel', showPanel: 'Show the site panel', info: 'Site info', showInfo: 'Show the site status, notes, drawings and links', hideInfo: 'Fold the site info away', reset: 'Reset view', layoutOf: 'Layout' },
   th: { status: 'สถานะ', notes: 'บันทึกหน้างาน', links: 'เปิด', layouts: 'แบบและไฟล์', drawingsTab: 'แบบ', cad: 'พื้นที่ทำงาน CAD', files: 'ไฟล์', tasks: 'งาน', meetings: 'ประชุม',
 model3d: 'โมเดล 3D', open3d: 'เปิดโมเดล 3D', all: 'สถานีทั้งหมด', sampled: (d) => `เก็บตัวอย่าง ${d}`, notSampled: 'รอยืนยันวันที่เก็บตัวอย่าง', noModel: 'ยังไม่มีโมเดล 3D',
     noModelSub: 'โมเดล 3D ของสถานีนี้จะเพิ่มที่นี่ แท็บแผนงานใช้งานได้แล้ว', noLayout: 'ยังไม่มีแบบระบบน้ำเสียของสถานีนี้',
     prog: 'แผนงานรวม · 8 สถานี', progSub: 'แผนงานเดียวสำหรับทั้งโครงการ แต่ละสถานีมีแผนงานของตัวเองด้วย',
-    foot: 'ปรับปรุงระบบน้ำเสีย Caltex 2027 · SPP', hidePanel: 'ซ่อนแถบนี้', showPanel: 'แสดงแถบข้อมูลสถานี', reset: 'มุมมองเริ่มต้น', layoutOf: 'แบบ' },
+    foot: 'ปรับปรุงระบบน้ำเสีย Caltex 2027 · SPP', hidePanel: 'ซ่อนแถบนี้', showPanel: 'แสดงแถบข้อมูลสถานี', info: 'ข้อมูลสถานี', showInfo: 'แสดงสถานะ บันทึก แบบ และลิงก์ของสถานี', hideInfo: 'พับข้อมูลสถานีเก็บ', reset: 'มุมมองเริ่มต้น', layoutOf: 'แบบ' },
 };
 const MON = { en: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
   th: ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'] };
@@ -107,13 +107,25 @@ function railFolding(w) {
   const get = (k) => { try { return localStorage.getItem('calwwt.rail.' + k); } catch { return null; } };
   const put = (k, v) => { try { localStorage.setItem('calwwt.rail.' + k, v); } catch { /* storage off: not remembered */ } };
   const btn = $('railBtn');
+  // Phones (narrow screens, same rule as sites.css): the panel is the fold-down "Site info", folded when the page opens,
+  // and remembered apart from the desktop panel so folding one never changes the other.
+  const phone = matchMedia('(max-width: 760px)');
+  const key = () => (phone.matches ? 'offPhone' : 'off');
+  const isOff = () => (phone.matches ? get('offPhone') !== '0' : get('off') === '1');
   const set = (off) => {
     document.documentElement.classList.toggle('rail-off', off);
-    btn.textContent = off ? '»' : '«'; btn.title = off ? w.showPanel : w.hidePanel; btn.setAttribute('aria-label', btn.title); btn.setAttribute('aria-expanded', String(!off));
+    if (phone.matches) { btn.textContent = `${w.info} ${off ? '▾' : '▴'}`; btn.title = off ? w.showInfo : w.hideInfo; }
+    else { btn.textContent = off ? '»' : '«'; btn.title = off ? w.showPanel : w.hidePanel; }
+    btn.setAttribute('aria-label', btn.title); btn.setAttribute('aria-expanded', String(!off));
     dispatchEvent(new Event('resize'));
   };
-  set(get('off') === '1');
-  btn.onclick = () => { const off = !document.documentElement.classList.contains('rail-off'); put('off', off ? '1' : '0'); set(off); };
+  set(isOff());
+  phone.addEventListener('change', () => set(isOff()));   // phone turned, or a window made narrow / wide
+  const toggle = (off) => { put(key(), off ? '1' : '0'); set(off); };
+  btn.onclick = () => toggle(!document.documentElement.classList.contains('rail-off'));
+  // on a phone the open panel covers the view: a tap on the view, or opening something from the panel, folds it again
+  $('view').addEventListener('click', (e) => { if (phone.matches && !document.documentElement.classList.contains('rail-off')) { e.stopPropagation(); e.preventDefault(); toggle(true); } }, true);
+  $('drawer').addEventListener('click', (e) => { if (phone.matches && e.target.closest('a')) toggle(true); });
   const fold = (d) => { const k = d.dataset.k; if (!k) return; if (get(k) === '0') d.open = false; d.addEventListener('toggle', () => put(k, d.open ? '1' : '0')); };
   document.querySelectorAll('#scroll details').forEach(fold);
   new MutationObserver((ms) => ms.forEach((m) => m.addedNodes.forEach((n) => { if (n.matches?.('details[data-k]')) fold(n); }))).observe($('scroll'), { childList: true });

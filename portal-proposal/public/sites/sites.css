@@ -72,11 +72,48 @@ html.rail-off .rail-btn { right: 4px; top: 10px; }
 .nomodel { position: absolute; inset: 0; display: grid; place-content: center; text-align: center; gap: 8px; padding: 24px; color: var(--muted); }
 .nomodel b { font: 600 22px var(--font-display); color: var(--ink); }
 .vtools { position: absolute; top: 10px; right: 10px; display: flex; gap: 6px; z-index: 5; }
+#drawer { display: contents; }   /* desktop: the panel exactly as before; on phones it becomes the fold-down "Site info" */
+
+/* Phones (Brian, 27 Nov 2026: one site for desktop and phone; the desktop look must not change, so every phone rule is
+   inside this narrow-screen block). The page fills the screen without scrolling: menu bar, a short site header with the
+   tabs, then the 3D model / drawings / timeline. The rest of the left panel (status, notes, drawings, links) folds down
+   from the "Site info" button over the view, and folds back with the same button or a tap on the view. */
 @media (max-width: 760px) {
-  html.site body { overflow: auto; }
-  #app { grid-template-columns: 1fr; grid-template-rows: auto 70vh; }
-  #rail { border-right: 0; border-bottom: 1px solid var(--rule); max-height: 50vh; }
-  #gantt { position: fixed; }
-  html.rail-off #app { grid-template-columns: 1fr; }
-  html.rail-off #rail header { min-height: 40px; }
+  html.site body { height: 100%; height: 100dvh; overflow: hidden; }
+  html.site body > :not(#app) { flex: none; }
+  #app, html.rail-off #app { grid-template-columns: 1fr; grid-template-rows: auto minmax(0, 1fr); }
+  #rail { position: relative; z-index: 2; border-right: 0; border-bottom: 1px solid var(--rule); min-height: 0; }
+  #view { z-index: 1; }
+  #rail header, html.rail-off #rail header { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0 8px; padding: 8px 12px 10px; border-bottom: 0; }
+  html.rail-off #rail header > :not(.rail-btn) { display: revert; }
+  html.rail-off #rail header > #tabs { display: flex; }
+  #rail header h1 { font-size: 21px; flex: 1 1 0; min-width: 0; margin-right: 118px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  #rail header .sub { flex: 1 1 100%; min-width: 0; margin-right: 118px; font-size: 12px; line-height: 1.35; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
+  .rail-btn, html.rail-off .rail-btn { top: 8px; right: 10px; min-height: 34px; padding: 4px 10px; font-size: 13px; font-weight: 600; color: var(--ink); white-space: nowrap; }
+  html:not(.rail-off) .rail-btn { background: var(--accent); border-color: var(--accent); color: #fff; }
+  #tabs { flex: 1 1 100%; display: flex; margin-top: 8px; }
+  #tabs button { flex: 1 1 0; min-height: 40px; padding: 6px 4px; }
+  #drawer { display: flex; flex-direction: column; position: absolute; left: 0; right: 0; top: 100%; max-height: min(72vh, 72dvh);
+    background: var(--panel); border-bottom: 1px solid var(--rule); box-shadow: 0 12px 28px rgba(0, 0, 0, .22); }
+  #drawer #scroll { min-height: 0; padding: 10px 14px 14px; }
+  #scroll summary { min-height: 36px; }
+  #scroll .links a { padding: 8px 12px; font-size: 14px; }
+  #scroll ul li { padding: 3px 0; }
+  html:not(.rail-off) #view::after { content: ''; position: absolute; inset: 0; z-index: 100000; background: rgba(0, 0, 0, .28); }
+  .vtools { top: 8px; right: 8px; }
+  /* timeline: stays inside the view under the tabs (it used to cover the whole phone screen); the chart scrolls in its own box */
+  #view #gantt { position: absolute; grid-template-rows: auto minmax(0, 1fr) auto; }
+  #view #gantt .gh { padding: 8px 10px 8px 12px; }
+  #view #gantt-title { font-size: 17px; flex-basis: 100%; }
+  #view #gantt .gb { padding: 8px 10px 6px 12px; -webkit-overflow-scrolling: touch; }
+  #view #gantt .gf { padding: 6px 10px 8px 12px; font-size: 11.5px; }
+  #view #gantt button { min-height: 36px; }
+  #view #gantt-x { display: none; }   /* the tabs above do the same */
+}
+/* A phone turned sideways keeps the desktop layout (panel on the left, « to hide it); only the menu bars must not be
+   squeezed into the short screen. Mouse screens never match this rule. */
+@media (max-height: 500px) and (pointer: coarse) and (min-width: 761px) {
+  html.site body > :not(#app) { flex: none; }
+  #rail header { padding: 10px 44px 8px 14px; }
+  #rail header h1 { font-size: 20px; }
 }
