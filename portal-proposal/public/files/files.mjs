@@ -11,9 +11,9 @@ const WORDS = {
     drop: 'วางไฟล์เพื่ออัปโหลด', uploading: 'กำลังอัปโหลด {i}/{n}: {name}', uploaded: 'อัปโหลดแล้ว {n} ไฟล์', failed: 'อัปโหลดไม่สำเร็จ: {name} — {msg}',
     teamOnly: 'เฉพาะทีม SPP', caltexFrom: 'Caltex เห็นตั้งแต่ {d}', caltexNow: 'Caltex เห็นแล้ว', share: 'แชร์กับ Caltex',
     shareAsk: 'Caltex เห็นไฟล์นี้ได้ตั้งแต่วันที่ — เว้นว่างเพื่อไม่แชร์', badDate: 'ใช้วันที่แบบ 2026-11-02',
-    noteSpp: 'ทีม SPP และทีมหน้างานเห็นทุกไฟล์ Caltex เห็นเฉพาะไฟล์ที่แชร์ให้ (ป้ายสีเขียว)',
+    noteSpp: 'SPP และ Caltex เห็นทุกไฟล์ ไม่เก็บเอกสารราคาหรือสัญญา (BOQ ใบเสนอราคา สัญญา) ในเว็บไซต์นี้ ให้ส่งทางอีเมล',
     noteWeekly: 'โฟลเดอร์นี้: Caltex เห็นแต่ละไฟล์ตั้งแต่วันจันทร์ของสัปดาห์ประชุม ตามวันที่ในชื่อไฟล์ (เช่น 2026-11-04) กดชื่อไฟล์เพื่อเปิดดู แล้วกด "นำเสนอ" เพื่อแสดงเต็มจอ',
-    notePartner: 'ไฟล์ที่ทีม SPP แชร์ให้คุณ', items: '{n} รายการ', by: 'โดย {name}', close: 'ปิด', fullscreen: 'เต็มจอ',
+    notePartner: 'SPP และ Caltex เห็นทุกไฟล์ ไม่เก็บเอกสารราคาหรือสัญญาในเว็บไซต์นี้', items: '{n} รายการ', by: 'โดย {name}', close: 'ปิด', fullscreen: 'เต็มจอ',
     loadFail: 'โหลดรายการไฟล์ไม่ได้', viewOnly: 'ดูอย่างเดียว',
     delFolder: 'ลบโฟลเดอร์', delFolderAsk: 'ลบโฟลเดอร์ "{name}" และทุกอย่างในโฟลเดอร์ ({files} ไฟล์, {folders} โฟลเดอร์ย่อย)? ไฟล์ยังเก็บไว้ในระบบและบันทึก ผู้ดูแลระบบกู้คืนได้',
     folderDeleted: 'ลบโฟลเดอร์แล้ว ({files} ไฟล์)', newVersion: 'อัปเดตเป็นเวอร์ชันใหม่',
@@ -32,9 +32,9 @@ const WORDS = {
     drop: 'Drop files to upload', uploading: 'Uploading {i}/{n}: {name}', uploaded: 'Uploaded {n} file(s).', failed: 'Upload failed: {name} — {msg}',
     teamOnly: 'SPP team only', caltexFrom: 'Caltex from {d}', caltexNow: 'Caltex can see', share: 'Share with Caltex',
     shareAsk: 'Caltex can see this file from this date. Leave it empty to stop sharing.', badDate: 'Use a date like 2026-11-02.',
-    noteSpp: 'SPP staff and the site team see every file. Caltex sees only files shared with them (green label).',
+    noteSpp: 'SPP and Caltex see every file. Pricing and contract papers (BOQ, quotations, contracts) are not kept on this site: send them by email.',
     noteWeekly: 'This folder: Caltex sees each file from the Monday of its meeting week, from the date in the file name (for example 2026-11-04). Click a file name to open it, then "Present" to show it full screen.',
-    notePartner: 'Files the SPP team has shared with you.', items: '{n} items', by: 'by {name}', close: 'Close', fullscreen: 'Full screen',
+    notePartner: 'SPP and Caltex see every file. Pricing and contract papers are not kept on this site.', items: '{n} items', by: 'by {name}', close: 'Close', fullscreen: 'Full screen',
     loadFail: 'Could not load the file list.', viewOnly: 'View only',
     delFolder: 'Delete folder', delFolderAsk: 'Delete the folder "{name}" and everything in it ({files} files, {folders} sub-folders)? The files stay in storage and in the log; an admin can restore them.',
     folderDeleted: 'Folder deleted ({files} files).', newVersion: 'Upload new version',
@@ -105,7 +105,7 @@ function render() {
   } else if (data.team) acts.push(el('span', { class: 'chip' }, t('viewOnly')));
   if (data.canDeleteFolders) acts.unshift(el('a', { class: 'btn', href: `#${BIN}` }, t('bin')));
   $('actions').replaceChildren(...acts);
-  $('note').textContent = cur?.weekly ? t('noteWeekly') : data.team ? t('noteSpp') : t('notePartner');
+  $('note').textContent = data.team ? t('noteSpp') : t('notePartner');
   // Rows: sub-folders, then files.
   const subs = folders.filter((f) => (f.parent || null) === here).sort((a, b) => a.name.localeCompare(b.name));
   const files = cur ? data.files.filter((f) => f.folder === here).sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true })) : [];
@@ -132,7 +132,8 @@ function countIn(id) {
 }
 function fileRow(f) {
   const e = ext(f.name), url = `/api/files/${f.id}/download`, viewable = VIEWABLE.has(e);
-  const viewHref = ['dwg', 'dxf'].includes(e) ? `/files/cad/?dwg=${encodeURIComponent(f.id)}` : `/files/view.html?id=${encodeURIComponent(f.id)}`;
+  // DWG / DXF open in Sites -> CAD workspace (one CAD tool for the whole site, Brian 27 Nov 2026).
+  const viewHref = ['dwg', 'dxf'].includes(e) && f.sha256 ? `/cad-workspace/?dwg=${encodeURIComponent(f.sha256)}` : ['dwg', 'dxf'].includes(e) ? `/files/cad/?dwg=${encodeURIComponent(f.id)}` : `/files/view.html?id=${encodeURIComponent(f.id)}`;
   const nameEl = viewable ? el('a', { href: viewHref }, f.name) : el('a', { href: url, download: f.name }, f.name);
   const small = el('small', {}, el('span', { class: 'mob' }, `${date(f.at)}${f.by ? ' · ' : ''}`), f.by ? t('by', { name: f.by }) : '');
   if ('caltexFrom' in f) {
@@ -146,7 +147,7 @@ function fileRow(f) {
   if (data.team) ops.push(el('a', { class: 'btn sm', href: `/files/view.html?id=${encodeURIComponent(f.id)}&history=1` }, t('history')));
   if (data.canShare) ops.push(el('button', { type: 'button', class: 'btn sm', onclick: () => share(f) }, t('share')));
   if (data.canEdit) ops.push(el('button', { type: 'button', class: 'btn sm', onclick: () => newVersion(f) }, t('newVersion')));
-  if (data.canEdit) ops.push(el('button', { type: 'button', class: 'btn sm danger', onclick: () => remove(f) }, t('del')));
+  if (data.canDelete) ops.push(el('button', { type: 'button', class: 'btn sm danger', onclick: () => remove(f) }, t('del')));
   const row = el('div', { class: 'fm-row', 'data-drop': data.canEdit ? t('dropVersion') : null },
     el('span', { class: 'ic', 'aria-hidden': 'true' }, ICON[e] || '📄'),
     el('div', { class: 'nm' }, nameEl, small),

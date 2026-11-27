@@ -205,3 +205,4 @@ body.ws{display:flex;flex-direction:column;height:100dvh;overflow:hidden;backgro
   .ac-status{height:34px}
   .ac-startpage{padding:14px}
 }
+.ac-sitepick { width: 100%; margin: 4px 0 8px; }

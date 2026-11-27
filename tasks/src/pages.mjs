@@ -18,7 +18,7 @@ export const PAGES = [
   { id: 'scurve_station', name: 'S-curve: station portion', money: true, levels: ['none', 'view', 'edit'] },
   { id: 'scurve_caltex', name: 'S-curve: Caltex fuel portion', money: true, levels: ['none', 'view', 'edit'] },
   { id: 'tasks', name: 'Tasks', levels: ['none', 'view', 'edit'] },
-  // Project files (safety, engineering...). SPP people see every file; partners only files shared with them.
+  // Project files: the site folders (drawings, photos, lab results, reports). SPP and Caltex see every file; Caltex may upload.
   { id: 'files', name: 'Files', levels: ['none', 'view', 'edit'] },
   // SPP-Caltex meetings: agenda, shared notes, action items (Brian, 2 Nov 2026). SPP-only notes are never shown to partners.
   { id: 'meetings', name: 'Meetings (SPP–Caltex)', levels: ['none', 'view', 'edit'] },
@@ -40,8 +40,8 @@ export const DEFAULT_PAGE_ACCESS = {
   spp: D('view', 'view', 'view', 'view', 'view', 'edit', 'edit', 'edit'),
   // Meetings: from the site team only Tle, Jaran and Gift (person settings, schema 0007).
   team: D('view', 'view', 'view', 'none', 'none', 'edit', 'view', 'none'),
-  // Caltex: Files shows only files shared with Caltex (e.g. each weekly safety meeting from the Monday of its week).
-  caltex: D('view', 'view', 'view', 'view', 'view', 'edit', 'view', 'edit'),
+  // Caltex: Files shows every file and Caltex may upload (calwwt, Brian 27 Nov 2026; pricing / contract papers never on the site).
+  caltex: D('view', 'view', 'view', 'view', 'view', 'edit', 'edit', 'edit'),
   ks: D('none', 'none', 'view', 'view', 'none', 'edit', 'none', 'none'),
   owner: D('none', 'none', 'view', 'view', 'none', 'edit', 'none', 'none'),
 };

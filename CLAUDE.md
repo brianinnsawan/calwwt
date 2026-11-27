@@ -42,6 +42,12 @@ Nothing is shared with calnkt: own logins, own databases, own file storage.
   put live and taken back on 27 Nov 2026: the web build only has the WebGL2 path and 2026.47's circle / ellipse shaders
   cannot run on it, so nothing draws (review: docs/cad-program-review-2026.47.md). For a newer release: check it draws in a
   browser first, then `scripts/import-cad-program.mjs` (written for 2026.47: zip SHA-256, tagged-source checks, wasm in parts).
+- Files = the one home for documents (Brian, 27 Nov 2026; tasks/ACCESS-RULES.md "Files on calwwt"): SPP and Caltex see
+  everything, Caltex uploads, pricing / contract papers refused by name (`pricingName` in src/files.mjs). Each site folder
+  has Drawings / Photos & video / Lab results / Reports & notes (tasks/schema/0012_site_subfolders.sql). The site page's
+  Drawings tab is `public/sites/sitefiles.mjs` (reads /api/files); the old built-in layouts (sites.json "layouts",
+  public/sites/layouts) show until an admin presses "Move into Files" (/api/files/import-site-layouts/<code>); after that,
+  add drawings by uploading to Files, not by changing the repository. DWG / DXF everywhere open in the CAD workspace.
 - `tasks/`: the Tasks app (`src/policy.mjs`, `src/service.mjs`, `src/pages.mjs` = page list and default access, `public/` screens,
   `schema/` database changes). After changing `tasks/public/*`: `cd tasks && node scripts/build-ui-module.mjs`.
 - `portal-proposal/files-viewer/`: Office viewers (rebuild: `cd portal-proposal/files-viewer && npm ci && npm run build`).

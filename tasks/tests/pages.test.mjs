@@ -23,7 +23,7 @@ test('defaults: who sees what', async () => {
   for (const id of ['a', 'por']) assert.deepEqual(await pages(svc, id), P('view', 'view', 'view', 'none', 'none', 'edit', 'view', 'none'), `${id}: no S-curves, no meetings`);
   // Meetings: from the site team only Tle, Jaran and Gift (person rows in schema 0007).
   for (const id of ['tle', 'gift']) assert.deepEqual(await pages(svc, id), P('view', 'view', 'view', 'none', 'none', 'edit', 'view', 'edit'), `${id}: no S-curves, meetings`);
-  for (const id of ['bas', 'net', 'boy', 'oat']) assert.deepEqual(await pages(svc, id), P('view', 'view', 'view', 'view', 'view', 'edit', 'view', 'edit'), id);
+  for (const id of ['bas', 'net', 'boy', 'oat']) assert.deepEqual(await pages(svc, id), P('view', 'view', 'view', 'view', 'view', 'edit', 'edit', 'edit'), `${id}: Caltex uploads files (27 Nov 2026)`);
   for (const id of ['tom', 'men', 'wut', 'chai']) assert.deepEqual(await pages(svc, id), P('none', 'none', 'view', 'view', 'none', 'edit', 'none', 'none'), id);
 });
 

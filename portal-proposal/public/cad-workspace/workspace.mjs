@@ -38,7 +38,7 @@ const W = {
     noteView: 'View only: you can draw and measure on the screen, but your Drawings access does not include saving. What you draw is gone when you leave.',
     noteViewAs: 'You are viewing the site as someone else: nothing here can be saved.',
     rebuild: "This sheet is a rebuild of the designer's contract PDF (Annex C), made for working use. The contract PDF governs. Check against it before building.",
-    files: 'Project files', legacy: 'Your drawings from the old site', noted: '● notes', empty: 'No drawings to show.', listError: 'The drawing list could not be loaded.',
+    files: 'Project files', allSites: 'All sites', siteFilter: 'Site', otherFiles: 'Other folders', pdfOf: 'PDF', legacy: 'Your drawings from the old site', noted: '● notes', empty: 'No drawings to show.', listError: 'The drawing list could not be loaded.',
     opening: 'Opening {name}…', opened: 'Opened in {s} s', failed: 'This drawing could not be opened here. Use Download original.',
     notesLoaded: 'Notes version {seq} · {by} · {at}', noNotes: 'No saved notes on this drawing yet.', notesError: 'The saved notes could not be loaded.',
     keyed: '{n} texts converted from keyboard-coded Thai',
@@ -82,7 +82,7 @@ const W = {
     noteView: 'ดูอย่างเดียว: วาดและวัดบนหน้าจอได้ แต่สิทธิ์หน้าแบบก่อสร้างของคุณไม่รวมการบันทึก สิ่งที่วาดจะหายเมื่อออกจากหน้านี้',
     noteViewAs: 'คุณกำลังดูเว็บไซต์ในมุมมองของผู้อื่น: บันทึกอะไรไม่ได้',
     rebuild: 'แผ่นนี้เขียนขึ้นใหม่จาก PDF แบบสัญญาของผู้ออกแบบ (ภาคผนวก C) เพื่อใช้ทำงาน ให้ยึด PDF แบบสัญญาเป็นหลัก และตรวจสอบกับแบบสัญญาก่อนก่อสร้าง',
-    files: 'ไฟล์โครงการ', legacy: 'แบบของคุณจากเว็บไซต์เดิม', noted: '● มีโน้ต', empty: 'ไม่มีแบบให้แสดง', listError: 'โหลดรายการแบบไม่ได้',
+    files: 'ไฟล์โครงการ', allSites: 'ทุกสถานี', siteFilter: 'สถานี', otherFiles: 'โฟลเดอร์อื่น', pdfOf: 'PDF', legacy: 'แบบของคุณจากเว็บไซต์เดิม', noted: '● มีโน้ต', empty: 'ไม่มีแบบให้แสดง', listError: 'โหลดรายการแบบไม่ได้',
     opening: 'กำลังเปิด {name}…', opened: 'เปิดแล้วใน {s} วินาที', failed: 'เปิดแบบนี้ที่นี่ไม่ได้ กรุณาใช้ดาวน์โหลดต้นฉบับ',
     notesLoaded: 'โน้ตฉบับที่ {seq} · {by} · {at}', noNotes: 'แบบนี้ยังไม่มีโน้ตที่บันทึกไว้', notesError: 'โหลดโน้ตที่บันทึกไว้ไม่ได้',
     keyed: 'แปลงข้อความที่พิมพ์ด้วยแป้นภาษาไทยผิดโหมด {n} รายการ',
@@ -406,8 +406,17 @@ function itemButton(item) {
 }
 const fullUrl = (item) => `/cad-workspace/full/${item ? `?dwg=${encodeURIComponent(item.catalogId || item.sha256)}` : ''}`;
 function itemCard(item) {
-  return el('div', { class: 'ac-card' }, itemButton(item), el('a', { class: 'ac-fullcad', href: fullUrl(item) }, t('openFull')));
+  // The PDF of the same drawing (same Files folder, same name), when there is one (Brian, 27 Nov 2026: PDF | CAD).
+  return el('div', { class: 'ac-card' }, itemButton(item), el('a', { class: 'ac-fullcad', href: fullUrl(item) }, t('openFull')),
+    item.pdf ? el('a', { class: 'ac-fullcad', href: item.pdf }, `${t('pdfOf')} ›`) : null);
 }
+// calwwt (Brian, 27 Nov 2026): drawings by site. ?site=<code> (from a site page) or the picker shows one site's drawings.
+let siteFilter = new URL(location.href).searchParams.get('site') || '', siteNames = {};
+fetch('/sites/data/sites.json', { credentials: 'same-origin' }).then((r) => (r.ok ? r.json() : null)).then((d) => {
+  for (const x of d?.sites || []) siteNames[x.code] = x.name || {};
+  renderList();
+}).catch(() => {});
+const siteLabel = (code) => (code ? `${code} ${siteNames[code]?.[L] || siteNames[code]?.en || ''}`.trim() : t('otherFiles'));
 // The drawing list: in the Start tab and in the palette.
 function renderList() {
   for (const box of [$('list'), $('startList')]) {
@@ -422,8 +431,20 @@ function renderList() {
       for (const s of g.sheets) box.append(entry({ ...s, catalogId: s.id, rebuild: g.rebuild }));
     }
     if (list.files.length) {
-      box.append(el('h2', {}, t('files')));
-      for (const f of list.files) box.append(entry(f));
+      const codes = [...new Set(list.files.map((f) => f.site || ''))].sort((a, b) => (a || '9999').localeCompare(b || '9999'));
+      if (codes.length > 1 || siteFilter) {
+        const pick = el('select', { 'aria-label': t('siteFilter'), class: 'ac-sitepick' });
+        pick.append(el('option', { value: '' }, t('allSites')));
+        for (const c of codes) pick.append(el('option', { value: c || '-' }, siteLabel(c)));
+        pick.value = siteFilter && codes.includes(siteFilter === '-' ? '' : siteFilter) ? siteFilter : '';
+        pick.onchange = () => { siteFilter = pick.value; renderList(); };
+        box.append(pick);
+      }
+      for (const c of codes) {
+        if (siteFilter && (siteFilter === '-' ? '' : siteFilter) !== c) continue;
+        box.append(el('h2', {}, codes.length > 1 || c ? siteLabel(c) : t('files')));
+        for (const f of list.files.filter((x) => (x.site || '') === c)) box.append(entry(f));
+      }
     }
     if (list.legacy.length) {
       box.append(el('h2', {}, t('legacy')));
