@@ -48,8 +48,9 @@ export const MATERIALS = {
   signPanel: [0xc8432f, 0.95],   // the head of a tall pole sign (plain panels, no logo)
   signDark: [0x2b3138],          // dark sign panels and round signs
   // water sampling (layer "sampling"): red = G2.1 (oil side), blue = G2.2 (wastewater side), as in the Caltex deck (SPP Sites R1)
-  sampleG21: [0xd7263d],         // frame round a sampled sump, G2.1
-  sampleG22: [0x1f6fe0],         // frame round a sampled sump, G2.2
+  sampleG21: [0xd7263d],         // G2.1 (a new sampling sump that is not in the model yet)
+  sampleG22: [0x1f6fe0],         // G2.2
+  sampleAnchor: [0x1f6fe0, 0],   // invisible marker that carries a sampling point's label and data
   sampleOWS: [0xff66cc, 0.85],   // pink triangle = place for a new OWS or new WWT (final design)
   sampleFlag: [0xf08c00],        // orange flag = something to fix in the final design (e.g. waters mixing)
 };
