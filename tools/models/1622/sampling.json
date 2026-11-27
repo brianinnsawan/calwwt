@@ -1,80 +1,101 @@
 {
  "risk": "HIGH",
  "source": {
-  "en": "Caltex deck \"Caltex WWT Improvement - SPP Sites R1\" (Thada, 15 Oct 2026), the site slide and its FUTURE slide; point counts as in the Sampling Counts R2 sheet. Each marker is put on the outlet, trap or tank it sits on in the deck.",
-  "th": "เอกสารของ Caltex \"Caltex WWT Improvement - SPP Sites R1\" (คุณธาดา 15 ต.ค. 2026) หน้าสถานีและหน้า FUTURE จำนวนจุดตามตาราง Sampling Counts R2 แต่ละจุดวางบนบ่อทางออก บ่อดัก หรือถังที่จุดนั้นอยู่ในเอกสาร"
+  "en": "Sampling points from the Caltex deck \"Caltex WWT Improvement - SPP Sites R1\" (Thada, 15 Oct 2026), each put on the pit it marks. Red and blue pipe systems of the final design from the deck's concept, coloured on the model's own drains with Brian (27 Nov 2026).",
+  "th": "จุดเก็บตัวอย่างจากเอกสารของ Caltex \"Caltex WWT Improvement - SPP Sites R1\" (คุณธาดา 15 ต.ค. 2026) วางบนบ่อที่แต่ละจุดระบุ ระบบท่อสีแดงและสีน้ำเงินของแบบสุดท้ายตามแนวคิดในเอกสาร แสดงบนท่อจริงของโมเดล ร่วมกับ Brian (27 พ.ย. 2026)"
  },
  "points": [
   {
    "id": "S1",
    "group": "G2.2",
    "status": "existing",
-   "samples": 1,
    "src": "deck",
    "at": [
     "Grease trap pit (3 chambers) · south-west corner"
    ],
    "where": {
-    "en": "at the outlet chamber of the trap, where the water leaves for the public drain",
-    "th": "ที่ช่องทางออกของบ่อดัก ก่อนน้ำออกสู่ท่อสาธารณะ"
+    "en": "at the outlet chamber of the pit, where the water leaves for the public drain",
+    "th": "ที่ช่องทางออกของบ่อ ก่อนน้ำออกสู่ท่อสาธารณะ"
    },
    "upstream": [
-    "KFC"
-   ]
+    "Site drain W:",
+    "KFC sump KFC-1 to W9",
+    "KFC treatment tank"
+   ],
+   "note": {
+    "en": "Takes the rear line, the west side and the KFC line (KFC treatment tank through sump KFC-1 into W9).",
+    "th": "รับแนวท่อด้านหลัง ด้านตะวันตก และแนวท่อ KFC (ถังบำบัด KFC ผ่านบ่อ KFC-1 เข้า W9)"
+   }
   },
   {
    "id": "S2",
    "group": "G2.1",
    "status": "existing",
-   "samples": 1,
    "src": "deck",
    "at": [
     "Grease trap pit (3 chambers) · west of the entrance"
    ],
    "where": {
-    "en": "at the outlet chamber of the trap, where the water leaves for the public drain",
-    "th": "ที่ช่องทางออกของบ่อดัก ก่อนน้ำออกสู่ท่อสาธารณะ"
-   }
+    "en": "at the outlet chamber of the pit, where the water leaves for the public drain",
+    "th": "ที่ช่องทางออกของบ่อ ก่อนน้ำออกสู่ท่อสาธารณะ"
+   },
+   "upstream": [
+    "Concrete V-gutter: west side",
+    "Concrete V-gutter: across the forecourt, west half",
+    "Site drain B:",
+    "Site drain G2",
+    "Site drain FW"
+   ]
   },
   {
    "id": "S3",
    "group": "G2.1",
    "status": "existing",
-   "samples": 1,
    "src": "deck",
    "at": [
     "Grease trap pit (3 chambers) · east of the exit"
    ],
    "where": {
-    "en": "at the outlet chamber of the trap, where the water leaves for the public drain",
-    "th": "ที่ช่องทางออกของบ่อดัก ก่อนน้ำออกสู่ท่อสาธารณะ"
-   }
+    "en": "at the outlet chamber of the pit, where the water leaves for the public drain",
+    "th": "ที่ช่องทางออกของบ่อ ก่อนน้ำออกสู่ท่อสาธารณะ"
+   },
+   "upstream": [
+    "Concrete V-gutter: east side",
+    "Concrete V-gutter: across the forecourt, east half",
+    "Site drain FE",
+    "Site drain C:"
+   ]
   },
   {
    "id": "S4",
    "group": "G2.2",
    "status": "existing",
-   "samples": 1,
    "src": "deck",
    "at": [
     "Grease trap pit (3 chambers) · south-east corner"
    ],
    "where": {
-    "en": "at the outlet chamber of the trap, where the water leaves for the public drain",
-    "th": "ที่ช่องทางออกของบ่อดัก ก่อนน้ำออกสู่ท่อสาธารณะ"
+    "en": "at the outlet chamber of the pit, where the water leaves for the public drain",
+    "th": "ที่ช่องทางออกของบ่อ ก่อนน้ำออกสู่ท่อสาธารณะ"
    },
    "upstream": [
-    "Commercial building A",
-    "Grease trap DGLFN-2.0Q"
-   ]
+    "Site drain E:",
+    "Site drain TB",
+    "Site drain TW",
+    "Building A grease trap to the east pit",
+    "BO-6000"
+   ],
+   "note": {
+    "en": "Takes the east line with the treated water from both toilet tanks, and building A's grease trap.",
+    "th": "รับแนวท่อด้านตะวันออกที่มีน้ำบำบัดจากถังห้องน้ำทั้งสอง และถังดักไขมันของอาคาร A"
+   }
   },
   {
    "id": "S5",
    "group": "G2.2",
    "status": "new",
-   "samples": 1,
-   "src": "deck",
    "stage": "now",
+   "src": "deck",
    "at": [
     "Sump KFC-1 (KFC outlet)"
    ],
@@ -85,16 +106,16 @@
    "upstream": [
     "KFC treatment tank",
     "KFC grease trap",
-    "KFC kitchen grease trap"
+    "KFC kitchen grease trap",
+    "KFC solid separation tank"
    ]
   },
   {
    "id": "S6",
    "group": "G2.2",
    "status": "new",
-   "samples": 1,
-   "src": "deck",
    "stage": "now",
+   "src": "deck",
    "at": [
     "Grease trap DGLFN-2.0Q · building A"
    ],
@@ -103,8 +124,91 @@
     "th": "ที่ทางออกถังดักไขมัน DGLFN-2.0Q ของอาคาร A"
    },
    "upstream": [
-    "Commercial building A"
+    "Commercial building A",
+    "Building A to its grease trap"
    ]
+  }
+ ],
+ "systems": [
+  {
+   "group": "G2.1",
+   "names": [
+    "Site drain B:",
+    "Site drain G2:",
+    "Site drain C:",
+    "Site drain C3",
+    "Site drain C5",
+    "Site drain C7",
+    "Site drain FW",
+    "Site drain FE",
+    "Narrow-mouth concrete gutter",
+    "Concrete V-gutter",
+    "Link from manhole N6",
+    "Manhole B",
+    "Manhole C",
+    "Manhole F",
+    "Manhole N",
+    "Manhole GW",
+    "Manhole GE",
+    "Grease trap pit (3 chambers) · west of the entrance",
+    "Grease trap pit (3 chambers) · east of the exit",
+    "Outlet to the public drain · west of the entrance",
+    "Outlet to the public drain · east of the exit"
+   ]
+  },
+  {
+   "group": "G2.2",
+   "names": [
+    "Site drain W:",
+    "Site drain E:",
+    "Site drain TB",
+    "Site drain TW",
+    "Manhole W",
+    "Manhole E",
+    "Manhole T",
+    "Manhole A",
+    "Grease trap pit (3 chambers) · south-west corner",
+    "Grease trap pit (3 chambers) · south-east corner",
+    "Outlet to the public drain · south-west corner",
+    "Outlet to the public drain · south-east corner",
+    "KFC sump KFC-1 to W9",
+    "Sump KFC-1",
+    "KFC toilets to the BS-3000",
+    "BS-3000 tank to the KFC",
+    "KFC kitchen to the grease traps",
+    "KFC grease traps to the treatment tank",
+    "KFC treatment tank outlet",
+    "Men's toilets to their BO-6000",
+    "Women's toilets to their BO-6000",
+    "Building B to its grease trap",
+    "Building B grease trap to",
+    "Line from building B",
+    "Treated water from the",
+    "Building A to its grease trap",
+    "Building A grease trap to the east pit",
+    "Small pit",
+    "Lines from the small pits",
+    "Line from small pit 1",
+    "Manhole A1 to manhole A2"
+   ]
+  }
+ ],
+ "future": [
+  {
+   "x": 37.0,
+   "y": 56.2,
+   "note": {
+    "en": "The deck marks a new OWS or WWT after the KFC tanks, at the KFC outlet sump. Place to agree.",
+    "th": "ในเอกสารระบุ OWS หรือระบบบำบัดใหม่ต่อจากถังของ KFC ที่บ่อทางออก KFC ตำแหน่งต้องตกลงกัน"
+   }
+  },
+  {
+   "x": 96.0,
+   "y": 32.0,
+   "note": {
+    "en": "The deck marks a new OWS or WWT at the building A grease trap, for the shop water. Place to agree.",
+    "th": "ในเอกสารระบุ OWS หรือระบบบำบัดใหม่ที่ถังดักไขมันอาคาร A สำหรับน้ำจากร้านค้า ตำแหน่งต้องตกลงกัน"
+   }
   }
  ]
 }

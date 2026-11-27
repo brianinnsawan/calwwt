@@ -228,7 +228,11 @@ Brian: do not copy the PowerPoint's lines; use the model's own sumps and pipes, 
   (both feed it, Brian); red = north drain to the middle oil trap, north-east/east drain to oil trap 1, canopy drains,
   front road-edge drain, the drain behind the toilets (rain only, Brian). Flag: the four new toilet tanks' treated water
   joins the red east drain at the new sump (kept as built, flagged).
-- Other 7 sites (until each is done with Brian): only the sampled sumps from the deck are highlighted; no pipe colours,
+- 1622 Ram Intra (done with Brian, 27 Nov 2026): red = forecourt V-gutters, pipe B along the west lawn (it ends at B4 and
+  runs on into the red west V-gutter, Brian), canopy drains, front drains, entrance and exit pits; blue = rear line, west
+  side and KFC line (KFC-1 into W9) to the SW pit, east line with both toilet tanks to the SE pit, building A and B pipes.
+  Pink places for a new OWS / WWT at the KFC outlet sump and the building A grease trap (Brian: show both).
+- Other 6 sites (until each is done with Brian): only the sampled sumps from the deck are highlighted; no pipe colours,
   no PowerPoint lines, no deck-placed extras.
 - The PCD limits (Sampling Counts R2) are `SAMPLE_GROUPS` in style.mjs. Lab results: add `"result": { "date", "lab",
   "values": { "pH": 7.1, ... } }` to a point and rebuild; "Colour sampling points by test result" turns the sumps green / red / grey.
