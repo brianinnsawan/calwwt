@@ -92,7 +92,7 @@ export default {
     { id: 'kfc', en: 'KFC tanks', th: 'ถังของ KFC', from: [289, 117, 12], to: [297, 101.5, -0.5] },
     { id: 'front', en: 'Front drain and sumps', th: 'ท่อระบายและบ่อพักด้านหน้า', from: [344, 47, 22], to: [347, 70.5, 0.2] },
     { id: 'east', en: 'Mart front and east outlet', th: 'หน้าร้านสะดวกซื้อและทางออกตะวันออก', from: [377.5, 61.5, 13], to: [385.3, 75.4, -0.3] },
-    { id: 'kfcopt', en: 'Option: new KFC pipe and tank', th: 'ทางเลือก: ท่อและถังใหม่ของ KFC', from: [280, 52, 34], to: [302, 88, -0.4] },
+    { id: 'kfcopt', stage: 'final', en: 'Option: new KFC pipe and tank', th: 'ทางเลือก: ท่อและถังใหม่ของ KFC', from: [280, 52, 34], to: [302, 88, -0.4] },
     { id: 'fuel', from: [341, 66, 6], to: [328.35, 82.5, -1.8] },
     { id: 'under', en: 'From below ground', th: 'มองจากใต้ดิน', from: [352, 90, -7], to: [366, 103.5, 0.2] },
   ],
