@@ -3,11 +3,12 @@
 // No links leave this site.
 const starts = (...prefixes) => (p) => prefixes.some((x) => p === x || p.startsWith(x + '/') || p.startsWith(x + '.'));
 export const TABS = [
-  { id: 'sites', href: '/sites/', pages: ['drawings'], en: 'Sites', th: 'สถานี', match: starts('/sites', '/drawing-changes'),
+  { id: 'sites', href: '/sites/', pages: ['drawings'], en: 'Sites', th: 'สถานี', match: starts('/sites', '/drawing-changes', '/cad-workspace'),
     subs: [
       { href: '/sites/', pages: ['drawings'], en: 'All sites', th: 'สถานีทั้งหมด', match: (p) => p === '/sites/' || p === '/sites' || /^\/sites\/\d{4}(\/|$)/.test(p) },
       { href: '/sites/programme/', pages: ['drawings'], en: 'Programme', th: 'แผนงานรวม', match: starts('/sites/programme') },
       { href: '/drawing-changes/', pages: ['drawings'], en: 'Drawing changes', th: 'การเปลี่ยนแปลงแบบ', match: starts('/drawing-changes') },
+      { href: '/cad-workspace/', pages: ['drawings'], en: 'CAD workspace', th: 'พื้นที่ทำงาน CAD', match: starts('/cad-workspace') },
     ] },
   { id: 'schedule', href: '/milestones/', pages: ['timeline'], en: 'Milestones', th: 'เหตุการณ์สำคัญ', match: starts('/milestones') },
   { id: 'files', href: '/files/', pages: ['files'], en: 'Files', th: 'ไฟล์', match: starts('/files') },

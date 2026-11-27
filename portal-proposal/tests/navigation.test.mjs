@@ -25,9 +25,9 @@ test('sub-tabs show only the parts a person may open',async()=>{
  const {subsFor}=await import('../public/__nav/bar.mjs');
  const tab=(id)=>TABS.find(t=>t.id===id);
  const ks={pages:{drawings:'none',safety:'none',timeline:'view',scurve_station:'view',scurve_caltex:'none',tasks:'edit'}};
- assert.deepEqual(subsFor({pages:{drawings:'view'}},tab('sites')).map(s=>s.href),['/sites/','/sites/programme/','/drawing-changes/']);
+ assert.deepEqual(subsFor({pages:{drawings:'view'}},tab('sites')).map(s=>s.href),['/sites/','/sites/programme/','/drawing-changes/','/cad-workspace/']);
  assert.deepEqual(subsFor(ks,tab('sites')).map(s=>s.href),[],'no Sites sub-tabs without the Sites page');
- assert.ok(tab('sites').match('/sites/1703/')&&tab('sites').match('/drawing-changes/')&&tab('schedule').match('/milestones/')&&!tab('sites').match('/sitesx'));
+ assert.ok(tab('sites').match('/cad-workspace/full/')&&tab('sites').match('/sites/1703/')&&tab('sites').match('/drawing-changes/')&&tab('schedule').match('/milestones/')&&!tab('sites').match('/sitesx'));
  const all=tab('sites').subs[0],prog=tab('sites').subs[1];
  assert.ok(all.match('/sites/')&&all.match('/sites/1703/')&&!all.match('/sites/programme/')&&prog.match('/sites/programme/'));
 });

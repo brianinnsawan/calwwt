@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<meta name="robots" content="noindex">
+<title>พื้นที่ทำงาน CAD · CAD workspace · Caltex 2027 Wastewater</title>
+<link rel="stylesheet" href="/__nav/bar.css" data-cnb>
+<link rel="stylesheet" href="/cad-workspace/workspace.css">
+<script type="module" src="/__nav/bar.mjs"></script>
+<script type="module" src="/cad-workspace/workspace.mjs"></script>
+</head>
+<body class="ws">
+<div class="ac-app" id="app">
+  <!-- Ribbon: tabs (Home, Annotate, Measure, View, Output) and the panels of the chosen tab; built by workspace.mjs. -->
+  <div class="ac-ribbon-tabs" id="ribbonTabs" role="tablist"></div>
+  <div class="ac-ribbon" id="ribbon" role="toolbar"></div>
+  <!-- File tabs: Start (the drawing list) and one tab per opened drawing. -->
+  <div class="ac-filetabs" id="fileTabs" role="tablist"></div>
+  <div class="ac-msg" id="msg" role="status" hidden></div>
+  <main class="ac-main" id="main">
+    <section class="ac-startpage" id="startPage" hidden>
+      <div class="ac-starthead"><h1 data-t="drawings"></h1><a class="ac-startfull" href="/cad-workspace/full/" data-t="startFull"></a></div>
+      <nav class="ac-list" id="startList" aria-label="Drawings"></nav>
+    </section>
+    <div class="ac-model" id="model">
+      <div id="stage"></div>
+      <div class="ac-cmdline" id="cmdline">
+        <div class="ac-cmd-history" id="cmdHistory" aria-live="polite"></div>
+        <div class="ac-cmd-row">
+          <span class="ac-cmd-glyph" aria-hidden="true">&gt;_</span>
+          <span class="ac-cmd-prompt" id="cmdPrompt"></span>
+          <input id="cmdInput" type="text" autocomplete="off" spellcheck="false" autocapitalize="characters">
+        </div>
+      </div>
+      <div class="ac-help" id="help" hidden></div>
+    </div>
+    <aside class="ac-palette" id="side">
+      <div class="ac-palette-title">
+        <span id="paletteTitle"></span>
+        <button type="button" id="paletteClose" class="ac-palette-x" aria-label="Close">×</button>
+      </div>
+      <div class="ac-palette-tabs" role="tablist">
+        <button id="tabList" type="button" role="tab" aria-selected="true" data-t="drawings"></button>
+        <button id="tabHistory" type="button" role="tab" aria-selected="false" data-t="history"></button>
+      </div>
+      <nav id="list" class="ac-list" aria-label="Drawings"></nav>
+      <section id="history" hidden></section>
+    </aside>
+  </main>
+  <footer class="ac-status" id="statusBar">
+    <div class="ac-layouts" id="layouts" role="tablist"></div>
+    <span class="ac-coords" id="coords" aria-live="off"></span>
+    <span id="status" role="status"></span>
+    <span class="ac-badge" id="badge" hidden></span>
+    <span class="ac-aids">
+      <button type="button" class="ac-toggle" id="ortho" aria-pressed="false">ORTHO</button>
+      <span class="ac-split"><button type="button" class="ac-toggle" id="polar" aria-pressed="false">POLAR</button><button type="button" class="ac-toggle ac-more" id="polarMore" aria-haspopup="menu">▾</button></span>
+      <span class="ac-split"><button type="button" class="ac-toggle" id="osnap" aria-pressed="false">OSNAP</button><button type="button" class="ac-toggle ac-more" id="osnapMore" aria-haspopup="menu">▾</button></span>
+      <button type="button" class="ac-toggle" id="dyn" aria-pressed="false">DYN</button>
+    </span>
+    <button type="button" class="ac-toggle" id="paletteToggle" aria-pressed="true" data-t="palette"></button>
+  </footer>
+</div>
+<div class="ac-menu" id="aidMenu" role="menu" hidden></div>
+<dialog id="saveDialog" class="ac-dialog">
+  <form method="dialog" id="saveForm">
+    <h2 data-t="saveTitle"></h2>
+    <p id="saveSummary"></p>
+    <label><span data-t="noteLabel"></span><input id="saveNote" type="text" maxlength="200" autocomplete="off"></label>
+    <div class="ac-row"><button type="button" id="saveCancel" data-t="cancel"></button><button type="submit" class="primary" data-t="save"></button></div>
+  </form>
+</dialog>
+</body>
+</html>
