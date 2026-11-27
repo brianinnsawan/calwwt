@@ -153,4 +153,14 @@ Nothing is shared with calnkt: own logins, own databases, own file storage.
   name shows within REACH[prio] site-widths of the camera (sampling 0: always; tanks/drains/proposed 1: 2.4; other wastewater
   2: 1.25; buildings and site 3: 0.6; surroundings 4: 0.5) and overlapping names give way to the more important / nearer one.
   He does not want users to have to switch layers often: keep it automatic.
+- Phones (Brian, 27 Nov 2026): ONE site for desktop and phone; the layout changes by screen size and the desktop look must
+  not change (checked pixel-for-pixel against the old pages at 1440, 1280 and iPad 1024). Every phone rule sits in a
+  narrow-screen block: `@media (max-width: 760px)` (phone upright) or `(max-height: 500px) and (pointer: coarse)` (phone
+  sideways; mouse screens never match). Site page on a phone: no page scrolling; short header with the tabs; the rest of the
+  left panel is the fold-down "Site info" (`#drawer`, folded at first, remembered as `calwwt.rail.offPhone`, apart from
+  the desktop panel); 3D: Views / Layers at the top, stage switch full width at the foot, sampling card folded at first
+  (`calwwt.v3.cardPhone`) and opening when something is tapped, the ready-made views step back to fit a tall screen
+  (`fit()` in viewer.mjs); Drawings: a PDF shows as a card with the page picture and "Open PDF" (phone browsers do not show
+  a PDF inside a page); Timeline stays under the tabs. Sample first (site page); then Sites overview, Files, Tasks,
+  Meetings, CAD workspace.
 - Site notes and starting timelines in `data/sites.json` / `data/timelines/` were written from Brian's site-visit notes; dates to confirm.
