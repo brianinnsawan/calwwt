@@ -31,6 +31,7 @@ a { color: var(--accent); }
 .sx-card:hover, .sx-card:focus-visible { border-color: var(--accent); outline: none; box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 25%, transparent); }
 .sx-code { font: 600 13px var(--font-mono); color: var(--accent); }
 .sx-name { font: 600 20px/1.15 var(--font-display); }
+.sx-station { margin-top: -5px; font-size: 12px; line-height: 1.3; color: var(--muted); }
 .sx-meta { font-size: 12.5px; color: var(--muted); }
 .sx-tag { justify-self: start; font-size: 12px; font-weight: 600; padding: 2px 8px; border-radius: 999px; border: 1px solid currentColor; }
 .sx-tag.ok { color: var(--ok); } .sx-tag.warn { color: var(--warn); }
