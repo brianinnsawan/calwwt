@@ -1,17 +1,18 @@
 {
  "risk": "HIGH",
  "source": {
-  "en": "Caltex deck \"Caltex WWT Improvement - SPP Sites R1\" (Thada, 15 Oct 2026), the site slide and its FUTURE slide; point counts as in the Sampling Counts R2 sheet. Each marker is put on the outlet, trap or tank it sits on in the deck.",
-  "th": "เอกสารของ Caltex \"Caltex WWT Improvement - SPP Sites R1\" (คุณธาดา 15 ต.ค. 2026) หน้าสถานีและหน้า FUTURE จำนวนจุดตามตาราง Sampling Counts R2 แต่ละจุดวางบนบ่อทางออก บ่อดัก หรือถังที่จุดนั้นอยู่ในเอกสาร"
+  "en": "Sampling points from the Caltex deck \"Caltex WWT Improvement - SPP Sites R1\" (Thada, 15 Oct 2026), each put on the sump it marks. Red and blue pipe systems of the final design from the deck's concept, coloured on the model's own pipes with Brian (27 Nov 2026).",
+  "th": "จุดเก็บตัวอย่างจากเอกสารของ Caltex \"Caltex WWT Improvement - SPP Sites R1\" (คุณธาดา 15 ต.ค. 2026) วางบนบ่อที่แต่ละจุดระบุ ระบบท่อสีแดงและสีน้ำเงินของแบบสุดท้ายตามแนวคิดในเอกสาร แสดงบนท่อจริงของโมเดล ร่วมกับ Brian (27 พ.ย. 2026)"
  },
  "points": [
   {
    "id": "S1",
    "group": "G2.2",
    "status": "existing",
-   "samples": 1,
    "src": "deck",
-   "at": "Oil trap (west outfall)",
+   "at": [
+    "Oil trap (west outfall)"
+   ],
    "where": {
     "en": "at the outlet chamber of the trap, where the water leaves for the public drain",
     "th": "ที่ช่องทางออกของบ่อดัก ก่อนน้ำออกสู่ท่อสาธารณะ"
@@ -19,74 +20,94 @@
    "upstream": [
     "WTT-1",
     "WTT-2",
-    "KFC"
+    "KFC",
+    "Site drain: north-west and west side"
    ],
    "note": {
-    "en": "Entrance-side outlet: takes the KFC, laundry and massage-shop water (site visit 20 Nov 2026: smelly and discoloured).",
-    "th": "ทางออกฝั่งทางเข้า รับน้ำจาก KFC ร้านซักผ้า และร้านนวด (สำรวจ 20 พ.ย. 2026: มีกลิ่นและสีขุ่น)"
+    "en": "Entrance-side outlet: KFC, laundry and massage-shop water (20 Nov 2026: smelly and discoloured).",
+    "th": "ทางออกฝั่งทางเข้า: น้ำจาก KFC ร้านซักผ้า และร้านนวด (20 พ.ย. 2026: มีกลิ่นและสีขุ่น)"
    }
   },
   {
    "id": "S2",
    "group": "G2.1",
    "status": "existing",
-   "samples": 1,
    "src": "deck",
-   "at": "Oil trap (middle outfall)",
+   "at": [
+    "Oil trap (middle outfall)"
+   ],
    "where": {
     "en": "at the outlet chamber of the trap, where the water leaves for the public drain",
     "th": "ที่ช่องทางออกของบ่อดัก ก่อนน้ำออกสู่ท่อสาธารณะ"
    },
    "upstream": [
+    "Site drain: north side to the middle outlet",
     "Site drain: along the road edge",
-    "Pump canopy"
+    "Site drain: canopy, west columns"
    ]
   },
   {
    "id": "S3",
    "group": "G2.1",
    "status": "existing",
-   "samples": 1,
    "src": "deck",
-   "at": "Oil trap 1 (east outfall, along the road)",
+   "at": [
+    "Oil trap 1 (east outfall, along the road)"
+   ],
    "where": {
     "en": "at the outlet chamber of the trap, where the water leaves for the public drain",
     "th": "ที่ช่องทางออกของบ่อดัก ก่อนน้ำออกสู่ท่อสาธารณะ"
    },
    "upstream": [
-    "Pump canopy"
+    "Site drain: north-east and east side",
+    "Site drain: canopy, east columns",
+    "Site drain: behind the toilets"
    ],
    "note": {
-    "en": "Exit side: the pipe from the forecourt drains to this trap was found clogged on 20 Nov 2026.",
-    "th": "ฝั่งทางออก: ท่อจากรางลานจ่ายน้ำมันมาบ่อนี้อุดตัน (สำรวจ 20 พ.ย. 2026)"
-   }
+    "en": "The treated water from the four new toilet tanks joins this red drain at the new sump, so this G2.1 sample also carries toilet water. The pipe from the forecourt drains was found clogged on 20 Nov 2026.",
+    "th": "น้ำที่บำบัดแล้วจากถังห้องน้ำใหม่ 4 ใบไหลเข้ารางสีแดงนี้ที่บ่อพักใหม่ ตัวอย่าง G2.1 นี้จึงมีน้ำจากห้องน้ำปนด้วย ท่อจากรางลานจ่ายน้ำมันอุดตัน (สำรวจ 20 พ.ย. 2026)"
+   },
+   "label": [
+    -2.5,
+    -1.6
+   ]
   },
   {
    "id": "S4",
    "group": "G2.2",
    "status": "existing",
-   "samples": 1,
    "src": "deck",
-   "at": "Oil trap 2 (east outfall, along the east boundary)",
+   "at": [
+    "Oil trap 2 (east outfall, along the east boundary)"
+   ],
    "where": {
     "en": "at the outlet chamber of the trap, where the water leaves for the public drain",
     "th": "ที่ช่องทางออกของบ่อดัก ก่อนน้ำออกสู่ท่อสาธารณะ"
    },
    "upstream": [
     "WTT-4",
-    "Small grease trap",
-    "Shop sink",
-    "Mart"
+    "Pipe from WTT-4 to oil trap 2",
+    "Pipe from the north into oil trap 2",
+    "Shop sink"
+   ],
+   "note": {
+    "en": "Takes WTT-4 (the mart tank, with the shop sink) and a pipe from the north along the east side of the mart (Brian, 27 Nov 2026).",
+    "th": "รับน้ำจาก WTT-4 (ถังร้านสะดวกซื้อ รวมซิงก์ของร้าน) และท่อจากทางเหนือตามด้านตะวันออกของร้าน (Brian, 27 พ.ย. 2026)"
+   },
+   "label": [
+    1.5,
+    2.2
    ]
   },
   {
    "id": "S5",
    "group": "G2.2",
    "status": "new",
-   "samples": 1,
-   "src": "deck",
    "stage": "now",
-   "at": "WTT-1 · KFC treatment tank",
+   "src": "deck",
+   "at": [
+    "WTT-1 access"
+   ],
    "where": {
     "en": "at the outlet of the KFC treatment tank WTT-1, behind KFC",
     "th": "ที่ทางออกถังบำบัด KFC WTT-1 ด้านหลัง KFC"
@@ -94,17 +115,18 @@
    "upstream": [
     "KFC grease trap",
     "Grease trap to WTT-1",
-    "KFC"
+    "WTT-1"
    ]
   },
   {
    "id": "S6",
    "group": "G2.2",
    "status": "new",
-   "samples": 1,
-   "src": "deck",
    "stage": "now",
-   "at": "Manhole N1",
+   "src": "deck",
+   "at": [
+    "Manhole N1"
+   ],
    "where": {
     "en": "in manhole N1 on the back drain, below the two Biotech BO-2600 tanks of the middle building",
     "th": "ในบ่อพัก N1 ท่อระบายด้านหลัง ถัดจากถัง Biotech BO-2600 สองใบของอาคารกลาง"
@@ -115,142 +137,137 @@
    ]
   }
  ],
- "routes": [
+ "systems": [
   {
    "group": "G2.1",
-   "pts": [
-    [
-     331.02,
-     106.16
-    ],
-    [
-     371.13,
-     107.46
-    ]
-   ]
-  },
-  {
-   "group": "G2.1",
-   "pts": [
-    [
-     372.23,
-     68.48
-    ],
-    [
-     370.95,
-     107.97
-    ]
-   ]
-  },
-  {
-   "group": "G2.1",
-   "pts": [
-    [
-     317.28,
-     73.89
-    ],
-    [
-     319.41,
-     96.11
-    ]
-   ]
-  },
-  {
-   "group": "G2.1",
-   "pts": [
-    [
-     318.91,
-     95.5
-    ],
-    [
-     331.96,
-     95.97
-    ]
-   ]
-  },
-  {
-   "group": "G2.1",
-   "pts": [
-    [
-     331.17,
-     106.75
-    ],
-    [
-     331.63,
-     95.85
-    ]
-   ]
-  },
-  {
-   "group": "G2.1",
-   "pts": [
-    [
-     317.07,
-     72.78
-    ],
-    [
-     374.61,
-     68.63
-    ]
+   "names": [
+    "Site drain: north side to the middle outlet",
+    "Site drain: north-east and east side",
+    "Site drain: behind the toilets",
+    "Site drain: canopy",
+    "Site drain: along the road edge",
+    "Manhole C",
+    "Manhole E",
+    "Manhole R",
+    "Manhole A",
+    "Manhole B",
+    "Manhole F",
+    "New sump",
+    "Narrow-mouth gutter",
+    "Oil trap (middle outfall)",
+    "Oil trap 1",
+    "Outlet pipe from oil trap 1"
    ]
   },
   {
    "group": "G2.2",
-   "pts": [
-    [
-     382.98,
-     101.52
-    ],
-    [
-     384.02,
-     69.79
-    ]
+   "names": [
+    "Site drain: north-west and west side",
+    "Site drain: south of KFC",
+    "Manhole N",
+    "Manhole W",
+    "Manhole S1",
+    "Manhole S2",
+    "Oil trap (west outfall)",
+    "Oil trap 2",
+    "Outlet pipe from oil trap 2",
+    "Wastewater from the toilets",
+    "Branch from the toilets",
+    "Tank 1 to Tank 2",
+    "Tank 2 to Tank 3",
+    "Tank 3 to Tank 4",
+    "Treated water from Tank 4",
+    "Grease trap to WTT-1",
+    "Sump before WTT-4",
+    "Sump to WTT-4",
+    "Sink to grease trap",
+    "2\" PVC pipe from the shop sink"
    ]
-  },
+  }
+ ],
+ "pipes": [
   {
+   "en": "Pipe from WTT-4 to oil trap 2",
+   "th": "ท่อจาก WTT-4 ไปบ่อดักน้ำมัน 2",
    "group": "G2.2",
    "pts": [
     [
-     328.27,
-     107.27
+     383.62,
+     74.2,
+     -0.15
     ],
     [
-     287.8,
-     105.9
+     386.3,
+     75.9,
+     null
+    ],
+    [
+     388.28,
+     76.51,
+     -0.27
     ]
-   ]
+   ],
+   "note": {
+    "en": "WTT-4 (the mart tank) drains into oil trap 2 (Brian, 27 Nov 2026). Arrives at -0.27, the inlet level written on the drawing.",
+    "th": "WTT-4 (ถังร้านสะดวกซื้อ) ระบายลงบ่อดักน้ำมัน 2 (Brian, 27 พ.ย. 2026) เข้าที่ระดับ -0.27 ตามแบบ"
+   }
   },
   {
+   "en": "Pipe from the north into oil trap 2",
+   "th": "ท่อจากทางเหนือเข้าบ่อดักน้ำมัน 2",
    "group": "G2.2",
    "pts": [
     [
-     288.21,
-     106.35
+     386.4,
+     100.8,
+     -0.14
     ],
     [
-     294.4,
-     75.6
+     387.7,
+     80.0,
+     null
+    ],
+    [
+     388.28,
+     76.6,
+     -0.27
     ]
-   ]
+   ],
+   "note": {
+    "en": "A pipe comes down from behind the toilets along the east side of the mart into oil trap 2 (Brian, 27 Nov 2026). Where it starts is not known; shown at 1:200 to the -0.27 inlet.",
+    "th": "ท่อจากด้านหลังห้องน้ำ ลงมาตามด้านตะวันออกของร้านเข้าบ่อดักน้ำมัน 2 (Brian, 27 พ.ย. 2026) ไม่ทราบจุดเริ่ม แสดงความลาด 1:200 ถึงระดับเข้า -0.27"
+   }
+  }
+ ],
+ "flags": [
+  {
+   "x": 370.1,
+   "y": 102.05,
+   "en": "Treated toilet water (G2.2) joins the red G2.1 drain here",
+   "th": "น้ำบำบัดจากห้องน้ำ (G2.2) ไหลเข้ารางสีแดง G2.1 ที่นี่",
+   "tag": "⚠ G2.2 water joins the red drain",
+   "tagTh": "⚠ น้ำ G2.2 เข้ารางสีแดง",
+   "note": {
+    "en": "The four new toilet tanks (G2.2) send their treated water into this new sump on the east site drain (G2.1), so the G2.1 sample at oil trap 1 (S3) also carries toilet water. Kept as built and flagged (Brian, 27 Nov 2026).",
+    "th": "ถังห้องน้ำใหม่ 4 ใบ (G2.2) ส่งน้ำที่บำบัดแล้วเข้าบ่อพักใหม่บนรางระบายด้านตะวันออก (G2.1) ตัวอย่าง G2.1 ที่บ่อดักน้ำมัน 1 (S3) จึงมีน้ำจากห้องน้ำปน คงไว้ตามที่ก่อสร้างและทำเครื่องหมายไว้ (Brian, 27 พ.ย. 2026)"
+   }
   }
  ],
  "future": [
   {
-   "type": "ows",
-   "x": 292.2,
-   "y": 103.7,
+   "x": 289.8,
+   "y": 99.6,
    "note": {
-    "en": "Behind KFC, by the KFC tanks: new treatment for the KFC water (Brian's KFC option of 26 Nov 2026 is one way to do it).",
-    "th": "ด้านหลัง KFC ข้างถังของ KFC: ระบบบำบัดใหม่สำหรับน้ำจาก KFC (ทางเลือก KFC ของ Brian วันที่ 26 พ.ย. 2026 เป็นวิธีหนึ่ง)"
+    "en": "The deck marks a new OWS or WWT for the KFC water by the KFC tanks. Place to agree.",
+    "th": "ในเอกสารระบุ OWS หรือระบบบำบัดใหม่สำหรับน้ำจาก KFC ข้างถังของ KFC ตำแหน่งต้องตกลงกัน"
    }
   },
   {
-   "type": "ows",
-   "x": 382.7,
-   "y": 87.75,
+   "x": 385.2,
+   "y": 77.6,
    "note": {
-    "en": "East side, behind the shops: new treatment for the shop and toilet water.",
-    "th": "ด้านตะวันออก หลังร้านค้า: ระบบบำบัดใหม่สำหรับน้ำจากร้านค้าและห้องน้ำ"
+    "en": "The deck marks a new OWS or WWT on the east side for the shop and toilet water: shown before oil trap 2. Place to agree.",
+    "th": "ในเอกสารระบุ OWS หรือระบบบำบัดใหม่ด้านตะวันออกสำหรับน้ำจากร้านค้าและห้องน้ำ แสดงไว้ก่อนบ่อดักน้ำมัน 2 ตำแหน่งต้องตกลงกัน"
    }
   }
  ]

@@ -12,7 +12,9 @@
    "samples": 1,
    "src": "deck",
    "stage": "now",
-   "at": "Oil-water separator, 3 chambers (entrance side, by the coffee shop)",
+   "at": [
+    "Oil-water separator, 3 chambers (entrance side, by the coffee shop)"
+   ],
    "where": {
     "en": "at the outlet chamber of the trap, where the water leaves for the public drain",
     "th": "ที่ช่องทางออกของบ่อดัก ก่อนน้ำออกสู่ท่อสาธารณะ"
@@ -33,7 +35,9 @@
    "samples": 1,
    "src": "deck",
    "stage": "now",
-   "at": "Oil trap (exit side)",
+   "at": [
+    "Oil trap (exit side)"
+   ],
    "where": {
     "en": "at the outlet chamber of the trap, where the water leaves for the public drain",
     "th": "ที่ช่องทางออกของบ่อดัก ก่อนน้ำออกสู่ท่อสาธารณะ"
@@ -51,7 +55,9 @@
    "samples": 1,
    "src": "deck",
    "stage": "now",
-   "at": "KFC pump sump (electric pumps)",
+   "at": [
+    "KFC pump sump (electric pumps)"
+   ],
    "where": {
     "en": "in the KFC pump sump at the back-west corner, before the water is pumped to the U-drain",
     "th": "ในบ่อสูบ KFC มุมหลังด้านตะวันตก ก่อนสูบน้ำไปราง U"
@@ -68,7 +74,9 @@
    "samples": 1,
    "src": "deck",
    "stage": "future",
-   "at": "Oil-water separator, 3 chambers (entrance side, by the coffee shop)",
+   "at": [
+    "Oil-water separator, 3 chambers (entrance side, by the coffee shop)"
+   ],
    "where": {
     "en": "at the outlet chamber of the trap, where the water leaves for the public drain",
     "th": "ที่ช่องทางออกของบ่อดัก ก่อนน้ำออกสู่ท่อสาธารณะ"
@@ -88,7 +96,9 @@
    "samples": 1,
    "src": "deck",
    "stage": "future",
-   "at": "Oil trap (exit side)",
+   "at": [
+    "Oil trap (exit side)"
+   ],
    "where": {
     "en": "at the outlet chamber of the trap, where the water leaves for the public drain",
     "th": "ที่ช่องทางออกของบ่อดัก ก่อนน้ำออกสู่ท่อสาธารณะ"
@@ -99,188 +109,6 @@
    "note": {
     "en": "In the final design only forecourt water (G2.1) reaches this trap.",
     "th": "ในแบบสุดท้าย บ่อนี้รับเฉพาะน้ำจากลานจ่ายน้ำมัน (G2.1)"
-   }
-  },
-  {
-   "id": "F3",
-   "group": "G2.2",
-   "status": "new",
-   "samples": 1,
-   "src": "deck",
-   "stage": "future",
-   "x": -29.1,
-   "y": -15.4,
-   "where": {
-    "en": "in front of the coffee shop, on the coffee shop's own wastewater line",
-    "th": "หน้าร้านกาแฟ บนท่อน้ำเสียของร้านกาแฟ"
-   },
-   "upstream": [
-    "Coffee shop"
-   ]
-  },
-  {
-   "id": "F4",
-   "group": "G2.2",
-   "status": "new",
-   "samples": 1,
-   "src": "deck",
-   "stage": "future",
-   "x": -33.7,
-   "y": 24.4,
-   "where": {
-    "en": "on the KFC pumped line by the drive-through entry",
-    "th": "บนท่อส่งน้ำของ KFC ข้างทางเข้าไดรฟ์ทรู"
-   },
-   "upstream": [
-    "KFC pumped line",
-    "KFC treatment tank"
-   ]
-  },
-  {
-   "id": "F5",
-   "group": "G2.2",
-   "status": "new",
-   "samples": 1,
-   "src": "deck",
-   "stage": "future",
-   "x": 13.8,
-   "y": -16.1,
-   "where": {
-    "en": "on the Mini Big C wastewater line before its tank",
-    "th": "บนท่อน้ำเสียของมินิบิ๊กซี ก่อนเข้าถัง"
-   },
-   "upstream": [
-    "Mini Big C"
-   ]
-  }
- ],
- "routes": [
-  {
-   "group": "G2.2",
-   "pts": [
-    [
-     2.02,
-     34.65
-    ],
-    [
-     -34.25,
-     36.68
-    ]
-   ]
-  },
-  {
-   "group": "G2.2",
-   "pts": [
-    [
-     -33.7,
-     37.41
-    ],
-    [
-     -33.52,
-     25.22
-    ]
-   ]
-  },
-  {
-   "group": "G2.1",
-   "pts": [
-    [
-     -34.73,
-     21.55
-    ],
-    [
-     14.71,
-     21.19
-    ]
-   ]
-  },
-  {
-   "group": "G2.1",
-   "pts": [
-    [
-     6.91,
-     33.15
-    ],
-    [
-     14.87,
-     32.96
-    ]
-   ]
-  },
-  {
-   "group": "G2.1",
-   "pts": [
-    [
-     17.41,
-     -23.0
-    ],
-    [
-     13.88,
-     33.5
-    ]
-   ]
-  },
-  {
-   "group": "G2.1",
-   "pts": [
-    [
-     -32.73,
-     -17.22
-    ],
-    [
-     -35.23,
-     22.25
-    ]
-   ]
-  },
-  {
-   "group": "G2.1",
-   "pts": [
-    [
-     -30.94,
-     -20.02
-    ],
-    [
-     12.17,
-     -21.61
-    ]
-   ]
-  },
-  {
-   "group": "G2.2",
-   "pts": [
-    [
-     14.06,
-     -14.42
-    ],
-    [
-     13.45,
-     -5.78
-    ]
-   ]
-  },
-  {
-   "group": "G2.2",
-   "pts": [
-    [
-     -30.74,
-     -13.95
-    ],
-    [
-     -31.09,
-     -7.43
-    ]
-   ]
-  }
- ],
- "future": [
-  {
-   "type": "ows",
-   "x": -33.6,
-   "y": 31.1,
-   "note": {
-    "en": "Back-west corner by the KFC pump sump: new treatment for the KFC water.",
-    "th": "มุมหลังด้านตะวันตก ข้างบ่อสูบ KFC: ระบบบำบัดใหม่สำหรับน้ำจาก KFC"
    }
   }
  ]

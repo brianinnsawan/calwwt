@@ -11,7 +11,9 @@
    "status": "existing",
    "samples": 1,
    "src": "deck",
-   "at": "Oil trap (west outfall)",
+   "at": [
+    "Oil trap (west outfall)"
+   ],
    "where": {
     "en": "at the outlet chamber of the trap, where the water leaves for the public drain",
     "th": "ที่ช่องทางออกของบ่อดัก ก่อนน้ำออกสู่ท่อสาธารณะ"
@@ -27,7 +29,9 @@
    "status": "existing",
    "samples": 1,
    "src": "deck",
-   "at": "Oil trap (east outfall)",
+   "at": [
+    "Oil trap (east outfall)"
+   ],
    "where": {
     "en": "at the outlet chamber of the trap, where the water leaves for the public drain",
     "th": "ที่ช่องทางออกของบ่อดัก ก่อนน้ำออกสู่ท่อสาธารณะ"

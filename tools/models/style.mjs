@@ -47,15 +47,11 @@ export const MATERIALS = {
   planterTub: [0xeeeeea],        // small white concrete planter tub
   signPanel: [0xc8432f, 0.95],   // the head of a tall pole sign (plain panels, no logo)
   signDark: [0x2b3138],          // dark sign panels and round signs
-  // water sampling points (layer "sampling"), in the colours of the Caltex deck (SPP Sites R1) so the model reads like the slides:
-  sampleExisting: [0xe02020],    // red ball = existing sampling point
-  sampleNew: [0xffc000],         // yellow ball = new sampling point
-  sampleBuild: [0x00b0f0],       // blue cube = construction sampling point (final design)
-  sampleOWS: [0xff66cc, 0.9],    // pink triangle = new OWS or new wastewater treatment (final design)
-  sampleG21: [0xe71224],         // Group 2.1 (oil side): red, the deck's G2.1 route colour
-  sampleG22: [0x33ccff],         // Group 2.2 (wastewater side): cyan, the deck's G2.2 route colour
-  sampleRoute21: [0xe71224, 0.75], sampleRoute22: [0x33ccff, 0.75],   // water routes of the final design (deck FUTURE slides)
-  samplePole: [0x4b5563], sampleZone: [0xff66cc, 0.25],
+  // water sampling (layer "sampling"): red = G2.1 (oil side), blue = G2.2 (wastewater side), as in the Caltex deck (SPP Sites R1)
+  sampleG21: [0xd7263d],         // frame round a sampled sump, G2.1
+  sampleG22: [0x1f6fe0],         // frame round a sampled sump, G2.2
+  sampleOWS: [0xff66cc, 0.85],   // pink triangle = place for a new OWS or new WWT (final design)
+  sampleFlag: [0xf08c00],        // orange flag = something to fix in the final design (e.g. waters mixing)
 };
 
 /** Layers, in the order they are listed in the viewer. A site uses the ones it needs. */
