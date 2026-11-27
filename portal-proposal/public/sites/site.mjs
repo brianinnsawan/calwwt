@@ -9,12 +9,12 @@ const W = {
 model3d: '3D model', open3d: 'Open the 3D model', all: 'All sites', sampled: (d) => `Sampled ${d}`, notSampled: 'Sampling date to confirm', noModel: 'No 3D model yet',
     noModelSub: 'The 3D model of this site will be added here. The Timeline tab already works.', noLayout: 'No wastewater layout yet for this site.',
     prog: 'Programme · all 8 sites', progSub: 'One timeline for the whole programme. Each site also has its own timeline.',
-    foot: 'Caltex 2027 wastewater improvement · SPP', reset: 'Reset view', layoutOf: 'Layout' },
+    foot: 'Caltex 2027 wastewater improvement · SPP', hidePanel: 'Hide this panel', showPanel: 'Show the site panel', reset: 'Reset view', layoutOf: 'Layout' },
   th: { status: 'สถานะ', notes: 'บันทึกหน้างาน', links: 'เปิด', layouts: 'แบบระบบน้ำเสีย', files: 'ไฟล์', tasks: 'งาน', meetings: 'ประชุม',
 model3d: 'โมเดล 3D', open3d: 'เปิดโมเดล 3D', all: 'สถานีทั้งหมด', sampled: (d) => `เก็บตัวอย่าง ${d}`, notSampled: 'รอยืนยันวันที่เก็บตัวอย่าง', noModel: 'ยังไม่มีโมเดล 3D',
     noModelSub: 'โมเดล 3D ของสถานีนี้จะเพิ่มที่นี่ แท็บแผนงานใช้งานได้แล้ว', noLayout: 'ยังไม่มีแบบระบบน้ำเสียของสถานีนี้',
     prog: 'แผนงานรวม · 8 สถานี', progSub: 'แผนงานเดียวสำหรับทั้งโครงการ แต่ละสถานีมีแผนงานของตัวเองด้วย',
-    foot: 'ปรับปรุงระบบน้ำเสีย Caltex 2027 · SPP', reset: 'มุมมองเริ่มต้น', layoutOf: 'แบบ' },
+    foot: 'ปรับปรุงระบบน้ำเสีย Caltex 2027 · SPP', hidePanel: 'ซ่อนแถบนี้', showPanel: 'แสดงแถบข้อมูลสถานี', reset: 'มุมมองเริ่มต้น', layoutOf: 'แบบ' },
 };
 const MON = { en: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
   th: ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'] };
@@ -39,7 +39,7 @@ async function main() {
   if (code === 'all') {
     document.title = `${w.prog} · Caltex Wastewater 2027`;
     $('code').textContent = 'ALL'; $('name').textContent = w.prog; $('sub').textContent = w.progSub;
-    $('hStatus').parentElement.hidden = true; $('hNotes').parentElement.hidden = true;
+    $('hStatus').closest('details').hidden = true; $('hNotes').closest('details').hidden = true;
     for (const s of data.sites) link(`/sites/${s.code}/`, `${s.code} ${s.name[l]}`);
   } else {
     document.title = `${site.code} ${site.name[l]} · Caltex Wastewater 2027`;
@@ -58,17 +58,18 @@ async function main() {
   }
   link('/files/', w.files); link('/tasks.html', w.tasks); link('/meetings/', w.meetings);
 
+  railFolding(w);
   const view = $('view');
   let modelTab = null, views = null, onView = null;
   if (code !== 'all') {
     // Layouts listed in the panel, with their PDFs.
-    const sec = el('section'); sec.append(el('h2', {}, w.layouts));
+    const sec = el('details', { open: '', 'data-k': 'layouts' }); const sm = el('summary'); sm.append(el('h2', {}, w.layouts)); sec.append(sm);
     if (site.layouts?.length) {
       const ul = el('ul');
       for (const x of site.layouts) { const li = el('li'); li.append(el('a', { href: `/sites/layouts/${x.file}.pdf`, target: '_blank', rel: 'noopener' }, x[l] || x.en)); ul.append(li); }
       sec.append(ul);
     } else sec.append(el('p', {}, site.layoutNote?.[l] || w.noLayout));
-    $('hNotes').parentElement.after(sec);
+    $('hNotes').closest('details').after(sec);
     const pane = (id) => { const d = el('div', { class: 'pane', id: `pane-${id}` }); view.append(d); return d; };
     if (site.model) {
       let started = false;
@@ -78,7 +79,6 @@ async function main() {
         (await import('/sites/layouts.mjs')).showLayouts(pl, site, l, w);
         views = [{ id: 'model', en: W.en.model3d, th: W.th.model3d }, { id: 'layouts', en: 'Layouts', th: 'แบบ' }];
         onView = (id) => { pl.hidden = id !== 'layouts'; pm.hidden = id !== 'model'; if (id === 'model') start(pm); };
-        const s3 = el('section'); s3.append(el('h2', {}, w.model3d)); const p3 = el('p'); p3.append(el('a', { href: '#model' }, w.open3d)); s3.append(p3); sec.after(s3);
       } else start(view);
     } else if (site.layouts?.length) {
       (await import('/sites/layouts.mjs')).showLayouts(view, site, l, w);
@@ -94,5 +94,22 @@ async function main() {
   const { init } = await import('/sites/gantt.js');
   await init({ getLang: () => l, api: `/api/sites/${code}/timeline`, defaultUrl: `/sites/data/timelines/${code}.json`,
     canEdit: me?.pages?.timeline === 'edit' && !me?.viewAs, onlyTimeline: code === 'all', modelTab, views, onView });
+}
+// Every part of the left panel folds (Brian, 27 Nov 2026: "all menus should be collapsible"). The « button folds the whole
+// panel away so the model gets the full width. What is folded is remembered in this browser.
+function railFolding(w) {
+  const get = (k) => { try { return localStorage.getItem('calwwt.rail.' + k); } catch { return null; } };
+  const put = (k, v) => { try { localStorage.setItem('calwwt.rail.' + k, v); } catch { /* storage off: not remembered */ } };
+  const btn = $('railBtn');
+  const set = (off) => {
+    document.documentElement.classList.toggle('rail-off', off);
+    btn.textContent = off ? '»' : '«'; btn.title = off ? w.showPanel : w.hidePanel; btn.setAttribute('aria-label', btn.title); btn.setAttribute('aria-expanded', String(!off));
+    dispatchEvent(new Event('resize'));
+  };
+  set(get('off') === '1');
+  btn.onclick = () => { const off = !document.documentElement.classList.contains('rail-off'); put('off', off ? '1' : '0'); set(off); };
+  const fold = (d) => { const k = d.dataset.k; if (!k) return; if (get(k) === '0') d.open = false; d.addEventListener('toggle', () => put(k, d.open ? '1' : '0')); };
+  document.querySelectorAll('#scroll details').forEach(fold);
+  new MutationObserver((ms) => ms.forEach((m) => m.addedNodes.forEach((n) => { if (n.matches?.('details[data-k]')) fold(n); }))).observe($('scroll'), { childList: true });
 }
 main().catch((e) => { console.warn('site', e); });
