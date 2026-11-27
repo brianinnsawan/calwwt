@@ -38,9 +38,10 @@ Nothing is shared with calnkt: own logins, own databases, own file storage.
 - Server side of Sites: `portal-proposal/src/sites.mjs` (pages + `/api/sites/<code>/timeline`, saved in `site_timelines`).
 - `portal-proposal/public/cad-workspace/` + `src/cad-workspace.mjs`: Sites -> CAD workspace (copied from calnkt 27 Nov 2026; rules
   in tasks/ACCESS-RULES.md "CAD workspace"). Drawings = DWG / DXF files in Files (no project catalog: `src/cad-catalog.mjs` is
-  empty; never list calnkt's NTI sheets). Full CAD program = Open CAD Studio 2026.47 in `full/v2026.47/`, imported and checked by
-  `scripts/import-cad-program.mjs` (review: docs/cad-program-review-2026.47.md). 2026.47 cannot draw without WebGPU (fixed
-  upstream after the release): move to 2026.48 when it is out (re-review, new pinned zip SHA-256 and file checksums in the test).
+  empty; never list calnkt's NTI sheets). Full CAD program = Open CAD Studio 2026.41 in `full/v2026.41/` (the same files as calnkt). 2026.47 was
+  put live and taken back on 27 Nov 2026: the web build only has the WebGL2 path and 2026.47's circle / ellipse shaders
+  cannot run on it, so nothing draws (review: docs/cad-program-review-2026.47.md). For a newer release: check it draws in a
+  browser first, then `scripts/import-cad-program.mjs` (written for 2026.47: zip SHA-256, tagged-source checks, wasm in parts).
 - `tasks/`: the Tasks app (`src/policy.mjs`, `src/service.mjs`, `src/pages.mjs` = page list and default access, `public/` screens,
   `schema/` database changes). After changing `tasks/public/*`: `cd tasks && node scripts/build-ui-module.mjs`.
 - `portal-proposal/files-viewer/`: Office viewers (rebuild: `cd portal-proposal/files-viewer && npm ci && npm run build`).

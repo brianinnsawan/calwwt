@@ -300,33 +300,26 @@ test('full CAD program page: no inline scripts, no outside loads, no eval for an
   assert.doesNotMatch(html + js, /(src|href)=["']https?:|import\s*\(?\s*["']https?:|fetch\(\s*["']https?:/);
   const w = await world();
   const gift = await signIn(w, 'gift');
-  for (const p of ['/cad-workspace/full/', '/cad-workspace/full/v2026.47/ocs-parse-worker.js', '/cad-workspace/full/v2026.47/worker_pkg/ocs_web_worker.js']) {
+  for (const p of ['/cad-workspace/full/', '/cad-workspace/full/v2026.41/ocs-parse-worker.js', '/cad-workspace/full/v2026.41/worker_pkg/ocs_web_worker.js']) {
     const csp = (await get(w, p, gift)).headers.get('content-security-policy');
     assert.match(csp, /script-src 'self' 'wasm-unsafe-eval';/, p);
     assert.match(csp, /connect-src 'self';/, p);
   }
 });
 
-test('the full CAD program files are the reviewed official 2026.47 build (checksums, integrity, parts)', () => {
+test('the full CAD program files are the archived official 2026.41 build (the same as calnkt; checksums, integrity)', () => {
+  // 2026.47 was tried on 27 Nov 2026 and taken back: its web build cannot draw (docs/cad-program-review-2026.47.md).
   const meta = JSON.parse(readFileSync(new URL('../public/cad-workspace/full/program.json', import.meta.url), 'utf8'));
-  assert.equal(meta.version, '2026.47');
-  assert.equal(meta.commit, '8e5f39f6ee0468a7e29260d57b5390d7d01207e8', 'the commit tag v2026.47 points to');
-  assert.equal(meta.dir, 'v2026.47/');
-  const dir = new URL(`../public/cad-workspace/full/${meta.dir}`, import.meta.url);
-  const packed = Buffer.concat(meta.wasmParts.map((n) => readFileSync(new URL(n, dir))));
-  assert.equal(packed.length, meta.wasmGzipBytes);
-  for (const n of meta.wasmParts) assert.ok(statSync(new URL(n, dir)).size <= 25 * 1024 * 1024, `${n} fits one static file`);
-  const wasm = gunzipSync(packed);
+  assert.equal(meta.version, '2026.41');
+  assert.equal(meta.commit, 'cff240ef71b4d7d0e4832c8d260c5af7f2fe3b17');
+  assert.equal(meta.dir, 'v2026.41/');
+  const wasm = gunzipSync(readFileSync(new URL(`../public/cad-workspace/full/${meta.dir}${meta.wasm}`, import.meta.url)));
   assert.equal(wasm.length, meta.wasmBytes);
   assert.equal('sha384-' + createHash('sha384').update(wasm).digest('base64'), meta.wasmIntegrity);
-  const sha = (rel) => createHash('sha256').update(readFileSync(new URL(rel, dir))).digest('hex');
-  assert.equal(createHash('sha256').update(wasm).digest('hex'), 'b57c883d2f5e2de0daa265050f1b57a8e1db3e40d010f776701a983df3322dc4', 'the reviewed WebAssembly file');
-  assert.equal(sha(meta.glue), 'cb08f0db93656242afbd0865a1a65a7f389defdc3554c245eee05d845f6b4b00');
-  assert.equal(sha('worker_pkg/ocs_web_worker_bg.wasm'), 'e7743c528cfd059838940115d3de184037d5382bd75c8b50e99809e957ec97c7');
-  assert.equal(sha('worker_pkg/ocs_web_worker.js'), '9182a6b503b2dc77144ee076d60e4642a10790ce47be7db0932bf22d40849eeb');
-  assert.equal(sha('ocs-parse-worker.js'), '17a069aaac13cb01859b28c61e9b4e47cfb4b66f6eca2d4fd4d7d0bf1ead7938', 'same as web/ocs-parse-worker.js at the tag');
-  for (const f of readdirSync(new URL('../public/cad-workspace/full/', import.meta.url))) assert.ok(!/^v\d/.test(f) || f === 'v2026.47', `no older program folder left (${f})`);
-  for (const f of ['sw.js', 'ocs-control.js', 'index.html', 'videos.json', 'discussions.json']) assert.throws(() => statSync(new URL(f, dir)), `${f} (the program's own page, offline worker and outside links) is not copied`);
+  assert.equal(createHash('sha256').update(wasm).digest('hex'), '553a524728129dc840379367e656f809baef0a1986690b169fc37f04d5214467', 'WEB-SHA256SUMS.txt of the archive');
+  const glue = readFileSync(new URL(`../public/cad-workspace/full/${meta.dir}${meta.glue}`, import.meta.url));
+  assert.equal(createHash('sha256').update(glue).digest('hex'), 'c4f7a2230a8a279d42f1440bf9687dfe1cdd5191f6ee81c90898c8a205d6bfd2');
+  for (const f of readdirSync(new URL('../public/cad-workspace/full/', import.meta.url))) assert.ok(!/^v\d/.test(f) || f === 'v2026.41', `only one program folder (${f})`);
 });
 
 test('full CAD program page: keeps only its own ?dwg= / ?copy= and takes away the Save-as picker before the program starts', () => {
@@ -414,7 +407,7 @@ test('only drawings Caltex may open can be shared; Files sharing still decides; 
 test('full CAD program: only the versioned program files are cached (private, immutable); access is still checked', async () => {
   const w = await world();
   const gift = await signIn(w, 'gift'), tom = await signIn(w, 'tom');
-  const V = '/cad-workspace/full/v2026.47/';
+  const V = '/cad-workspace/full/v2026.41/';
   for (const p of [`${V}OpenCADStudio-456a1b1a39ae2ed2.js`, `${V}OpenCADStudio-456a1b1a39ae2ed2_bg.wasm.gz`, `${V}ocs-parse-worker.js`, `${V}worker_pkg/ocs_web_worker_bg.wasm`, `${V}fonts/thai.ttf`]) {
     const r = await get(w, p, gift);
     assert.equal(r.status, 200, p);
