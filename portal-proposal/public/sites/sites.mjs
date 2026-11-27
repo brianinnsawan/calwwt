@@ -28,8 +28,10 @@ async function main() {
   const grid = document.getElementById('grid');
   for (const s of data.sites) {
     const a = el('a', 'sx-card'); a.href = `/sites/${s.code}/`;
-    a.append(el('span', 'sx-code', s.code), el('span', 'sx-name', s.name[l]),
-      el('span', 'sx-meta', s.sampledLabel ? w.sampled(s.sampledLabel[l]) : s.sampled ? w.sampled(day(s.sampled, l)) : w.notSampled));
+    a.append(el('span', 'sx-code', s.code), el('span', 'sx-name', s.name[l]));
+    // Caltex's own station name (from the Caltex site list) in small letters under the short name.
+    if (s.company) a.append(el('span', 'sx-station', s.company));
+    a.append(el('span', 'sx-meta', s.sampledLabel ? w.sampled(s.sampledLabel[l]) : s.sampled ? w.sampled(day(s.sampled, l)) : w.notSampled));
     const improve = !/^No improvement/.test(s.improvement.en);
     a.append(el('span', `sx-tag ${improve ? 'warn' : 'ok'}`, improve ? w.improve : w.none));
     const ul = el('ul'); for (const n of s.notes[l]) ul.append(el('li', null, n)); a.append(ul);
