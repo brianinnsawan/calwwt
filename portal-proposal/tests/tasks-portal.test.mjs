@@ -105,8 +105,12 @@ test('admin creates a login for Gift; Gift sets a password and is limited to the
   for (const p of ['/api/drawings', '/api/storage', '/app/OpenCADStudio-84d8f89e0569038a_bg.wasm', '/source/x']) {
     assert.equal((await w.handler(get(p, gift), w.env)).status, 404, `project login blocked from ${p}`);
   }
-  // The old site's CAD pages are not part of calwwt.
-  for (const p of ['/workspace/', '/cad', '/app/']) assert.equal((await w.handler(get(p, gift), w.env)).status, 404, p);
+  // The old CAD addresses (calnkt's /workspace/, /cad, /app/) lead to Sites -> CAD workspace (Drawings at view;
+  // tests/cad-workspace.test.mjs).
+  for (const [p, to] of [['/workspace/', '/cad-workspace/'], ['/cad', '/cad-workspace/'], ['/app/', '/cad-workspace/full/']]) {
+    const r = await w.handler(get(p, gift), w.env);
+    assert.equal(r.status, 302, p); assert.equal(r.headers.get('location'), to);
+  }
   const upload = await w.handler(new Request(origin + '/api/drawings', { method: 'POST', headers: { cookie: gift, origin, 'x-cad-request': '1' }, body: 'AC1032' }), w.env);
   assert.equal(upload.status, 403);
   const created = await w.handler(taskPost('/api/tasks/tasks', { title: 'Cable tray delivery' }, gift), w.env);

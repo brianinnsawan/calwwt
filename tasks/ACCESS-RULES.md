@@ -215,6 +215,15 @@ Some tabs have a second row of links, shown only for the parts a person may open
 
 ## CAD workspace (`/cad-workspace/`, 2 Nov 2026)
 
+**calwwt (27 Nov 2026, Brian):** the CAD workspace is now live on calwwt too, under **Sites -> CAD workspace**, with the same
+rules as below (Drawings page level = the Sites page level here). Differences from calnkt: there are **no project DWG sheets**
+(calnkt's 31 NTI sheets are never listed or served here, even though site-release.mjs still carries their list); the drawings
+are the DWG / DXF files in **Files** that the person may see (Files rules, including Caltex sharing). The full CAD program is
+**Open CAD Studio 2026.47** (calnkt: 2026.41), reviewed before use (docs/cad-program-review-2026.47.md). Its page keeps only
+its own ?dwg= / ?copy= in the address (the program can otherwise open a drawing from any ?file= address) and takes away the
+browser's "Save as" picker, so saving always goes through the site's rules below. The old calnkt addresses /workspace/, /cad/
+and /app/ lead to the CAD workspace.
+
 Brian: bring over the CAD tool of the old site (brian-cad-version2) so people can draw and take measurements.
 - Drawings -> **CAD workspace**. Opens the 31 project DWG drawings (the verified copies already in private storage), the DWG / DXF
   files in Project files that the person may see (Files rules, including Caltex sharing), and, for Brian's owner login only, his

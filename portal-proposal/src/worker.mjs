@@ -6,6 +6,7 @@ import {releaseObject} from './release-object.mjs';
 import {routeTasks,stagingSetup} from './tasks-portal.mjs';
 import {siteAccess,landingPath,VIEW_AS_COOKIE,signViewAs} from './site-access.mjs';
 import {routeSites,SITES_CSP} from './sites.mjs';
+import {routeCadWorkspace,CAD_PARSER_WORKER,CAD_WORKER_CSP,cadCacheControl} from './cad-workspace.mjs';
 import {gate} from '../../schedule/gate-core.mjs';
 import {routeFiles} from './files.mjs';
 import {routeTrackers} from './trackers.mjs';
@@ -280,7 +281,7 @@ function secure(response,csp) {
 // Downloads ("attachment") stay "do not store". Signing out clears what the browser kept (Clear-Site-Data, below).
 // Site audit (10 Nov 2026): also the Tasks screens ("/__tasks/app-0123456789ab.js", tasks/scripts/build-ui-module.mjs),
 // the camp models ("-0123456789ab.glb.json") and the model viewer's ".mjs" files, which carry a fingerprint too.
-const KEEP_FOREVER=/(?:-[0-9a-f]{12}\.(?:glb|glb\.json|json|pdf|svg|png|webp|js|mjs|css|wasm)$)|(?:^\/(?:model|files\/cad)\/assets\/[^/]+-[A-Za-z0-9_-]{8}\.(?:js|mjs|css)$)/;
+const KEEP_FOREVER=/(?:-[0-9a-f]{12}\.(?:glb|glb\.json|json|pdf|svg|png|webp|js|mjs|css|wasm)$)|(?:^\/(?:model|files\/cad)\/assets\/[^/]+-[A-Za-z0-9_-]{8}\.(?:js|mjs|css)$)|(?:^\/cad-workspace\/full\/v\d+(?:\.\d+)*\/)/;
 const sameTag=(a,b)=>a.replace(/^W\//,'')===b.replace(/^W\//,'');
 export function cachePolicy(request,response){
   const path=new URL(request.url).pathname;
@@ -403,6 +404,11 @@ export function createHandler(authenticateOverride=authenticate) {
         const target=new URL(request.url);if(p0.endsWith('/'))target.pathname=p0+'index.html';
         return secure(await env.ASSETS.fetch(new Request(target,request)));
       }
+      // Sites -> CAD workspace (/cad-workspace/, /api/cad/*; copied from calnkt, 27 Nov 2026; old /workspace/, /cad/ and /app/
+      // addresses lead there). Page level 'drawings': view = open, measure, draw on screen; edit = also save notes and copies.
+      // See src/cad-workspace.mjs.
+      const cadResponse=await routeCadWorkspace(request,env,actor,access);
+      if(cadResponse){const out=secure(cadResponse,p0===CAD_PARSER_WORKER?CAD_WORKER_CSP:undefined),cache=cadCacheControl(p0,cadResponse.status);if(cache)out.headers.set('Cache-Control',cache);return out;}
       // Sites (calwwt): the 8 Caltex sites, each with its 3D model, timeline, photos and notes. See src/sites.mjs.
       {const sitesResponse=await routeSites(request,env,actor,access);if(sitesResponse)return secure(sitesResponse,p0.startsWith('/api/')?undefined:SITES_CSP);}
       // Project files: /files (screens) and /api/files (list, upload, download). Own checks inside; see src/files.mjs.

@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>โปรแกรม CAD เต็มรูปแบบ · Full CAD program · Caltex 2027 Wastewater</title>
+<link rel="stylesheet" href="/cad-workspace/full/program.css">
+<script type="module" src="/cad-workspace/full/program.mjs"></script>
+</head>
+<body class="fp">
+<header class="fp-strip">
+  <a id="back" href="/cad-workspace/" data-t="back"></a>
+  <strong id="name"></strong>
+  <span id="status" role="status"></span>
+  <select id="copies" hidden aria-label="Copies"></select>
+  <button id="about" type="button" data-t="about"></button>
+</header>
+<div id="loading" class="fp-loading">
+  <div class="fp-spinner" aria-hidden="true"></div>
+  <div class="fp-title">Open CAD Studio</div>
+  <div id="progress" class="fp-sub"></div>
+</div>
+<dialog id="saveDialog" class="fp-dialog">
+  <form method="dialog" id="saveForm">
+    <h2 data-t="saveTitle"></h2>
+    <p id="saveText"></p>
+    <label id="noteRow"><span data-t="noteLabel"></span><input id="saveNote" type="text" maxlength="200" autocomplete="off"></label>
+    <div class="fp-row">
+      <button type="button" id="saveCancel" data-t="cancel"></button>
+      <button type="button" id="saveDevice" data-t="toDevice"></button>
+      <button type="submit" id="saveSite" class="primary" data-t="toSite"></button>
+    </div>
+  </form>
+</dialog>
+<dialog id="aboutDialog" class="fp-dialog">
+  <form method="dialog">
+    <h2>Open CAD Studio</h2>
+    <p id="aboutText"></p>
+    <p><a href="/cad-workspace/full/v2026.47/LICENSE.txt" target="_blank" rel="noopener">GNU GPL v3 (LICENSE.txt)</a></p>
+    <div class="fp-row"><button type="submit" data-t="close"></button></div>
+  </form>
+</dialog>
+</body>
+</html>

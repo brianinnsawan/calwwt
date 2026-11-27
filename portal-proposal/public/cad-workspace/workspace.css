@@ -1,0 +1,207 @@
+/* Drawings -> CAD workspace, dressed like AutoCAD 2024/2025 (dark theme): ribbon, file tabs, model space, floating command
+   line, status bar, docked palette. The site's own top bar (/__nav/bar.css) stays as it is; this page fills the rest of the
+   window. Always dark, like AutoCAD, whatever the site's light / dark choice. */
+.ws{--ac-bg:#2B2F36;--ac-panel:#33383F;--ac-raise:#3B4048;--ac-hover:#454B54;--ac-edge:#1E2227;--ac-line:#454B54;--ac-ink:#E6E6E6;--ac-muted:#A3AAB3;--ac-dim:#6E7680;--ac-accent:#3C8DDE;--ac-model:#212830;--ac-warn:#E8A33D;--ac-bad:#F0776B;--ac-ok:#6CC28A}
+html,body.ws{height:100%;margin:0}
+body.ws{display:flex;flex-direction:column;height:100dvh;overflow:hidden;background:var(--ac-bg);color:var(--ac-ink);font:13px/1.35 'IBM Plex Sans','IBM Plex Sans Thai',system-ui,-apple-system,'Segoe UI',Roboto,'Leelawadee UI','Sukhumvit Set','Thonburi','Noto Sans Thai',Tahoma,sans-serif}
+.ws *{box-sizing:border-box}
+.ws [hidden]{display:none!important}
+.ac-app{flex:1;min-height:0;display:flex;flex-direction:column}
+/* Only this page's own buttons are reset; the site's top bar keeps its look. */
+.ac-app button,.ac-dialog button{font:inherit;color:inherit;background:none;border:1px solid transparent;border-radius:3px;cursor:pointer;padding:0}
+.ac-app button:focus-visible,.ac-app input:focus-visible,.ac-app select:focus-visible,.ac-dialog button:focus-visible{outline:2px solid var(--ac-accent);outline-offset:-1px}
+.ac-app button:disabled{cursor:default}
+
+/* Ribbon tabs */
+.ac-ribbon-tabs{display:flex;gap:2px;align-items:flex-end;height:30px;padding:0 8px;background:var(--ac-bg);overflow-x:auto;scrollbar-width:none;flex:none}
+.ac-ribbon-tabs::-webkit-scrollbar{display:none}
+.ac-ribbon-tabs button{height:26px;padding:0 14px;color:var(--ac-muted);border-radius:3px 3px 0 0;white-space:nowrap}
+.ac-ribbon-tabs button:hover{color:var(--ac-ink);background:var(--ac-raise)}
+.ac-ribbon-tabs button[aria-selected="true"]{color:var(--ac-ink);background:var(--ac-panel);box-shadow:inset 0 2px 0 var(--ac-accent)}
+
+/* Ribbon panels */
+.ac-ribbon{display:flex;align-items:stretch;background:var(--ac-panel);border-bottom:1px solid var(--ac-edge);min-height:94px;overflow-x:auto;scrollbar-width:thin;flex:none}
+.ac-panel{display:flex;flex-direction:column;border-right:1px solid var(--ac-edge);flex:none}
+.ac-panel-body{flex:1;display:flex;align-items:flex-start;gap:2px;padding:4px 6px 2px}
+.ac-panel-title{font-size:11px;color:var(--ac-muted);text-align:center;background:#2E3339;padding:2px 8px;border-top:1px solid #2A2E34;white-space:nowrap}
+.ac-big{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:2px;min-width:52px;max-width:76px;height:68px;padding:3px 4px}
+.ac-big span{font-size:11.5px;line-height:1.15;text-align:center;color:var(--ac-ink);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.ac-smallcol{display:flex;flex-direction:column;gap:1px}
+.ac-small{display:flex;align-items:center;gap:6px;height:22px;padding:0 6px 0 3px;white-space:nowrap;font-size:12px}
+.ws .ac-big:hover:not(:disabled),.ws .ac-small:hover:not(:disabled){background:var(--ac-hover);border-color:#5A616B}
+.ws .ac-big[aria-pressed="true"],.ws .ac-small[aria-pressed="true"]{background:#2F4A66;border-color:var(--ac-accent)}
+.ws .ac-big:disabled,.ws .ac-small:disabled{opacity:.38}
+.ac-icon{flex:none}
+.ac-icon .ac-i,.ac-icon .ac-i-a{fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.ac-icon .ac-i{stroke:#D9DDE2}
+.ac-icon .ac-i-a{stroke:var(--ac-accent)}
+.ac-icon .ac-i-f{fill:currentColor}
+.ac-icon .ac-i-a.ac-i-f{fill:var(--ac-accent)}
+.ac-icon .ac-i.ac-i-f{fill:#D9DDE2}
+.ac-small .ac-icon .ac-i,.ac-small .ac-icon .ac-i-a{stroke-width:2.2}
+.ac-layoutpick{display:flex;flex-direction:column;gap:2px;font-size:12px}
+.ac-layoutpick select{font:inherit;height:24px;min-width:120px;background:var(--ac-bg);color:var(--ac-ink);border:1px solid var(--ac-line);border-radius:3px}
+
+/* File tabs */
+.ac-filetabs{display:flex;align-items:flex-end;gap:1px;height:30px;padding:0 6px;background:var(--ac-bg);border-bottom:1px solid var(--ac-edge);overflow-x:auto;scrollbar-width:none;flex:none}
+.ac-filetabs::-webkit-scrollbar{display:none}
+.ac-filetab{display:flex;align-items:center;height:27px;background:#30353C;border:1px solid var(--ac-edge);border-bottom:0;border-radius:3px 3px 0 0;color:var(--ac-muted);max-width:240px;flex:none}
+.ac-filetab[aria-selected="true"]{background:var(--ac-model);color:var(--ac-ink);box-shadow:inset 0 2px 0 var(--ac-accent)}
+.ac-filetab .ac-tabname{display:flex;align-items:center;gap:6px;height:100%;padding:0 10px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;border:0}
+.ac-filetab .ac-tabname span{overflow:hidden;text-overflow:ellipsis}
+.ac-filetab .ac-tabx{width:20px;height:20px;margin-right:4px;color:var(--ac-muted);font-size:15px;line-height:1}
+.ac-filetab .ac-tabx:hover{color:var(--ac-ink);background:var(--ac-hover)}
+.ac-filetab.start .ac-tabname{font-weight:600}
+.ac-filetab.plus .ac-tabname{padding:0 8px}
+.ac-dot{width:7px;height:7px;border-radius:50%;background:var(--ac-warn);flex:none}
+
+/* Slim message strip (view only, rebuild sheet, older version, another company's notes) */
+.ac-msg{display:flex;flex-direction:column;gap:1px;background:#262A30;border-bottom:1px solid var(--ac-edge);padding:3px 10px 3px 8px;font-size:12px;color:#D2D6DB;flex:none}
+.ac-msg p{margin:0;padding-left:8px;border-left:3px solid var(--ac-accent)}
+.ac-msg p.warn{border-left-color:var(--ac-warn)}
+
+/* Model space, start page, palette */
+.ac-main{flex:1;min-height:0;display:flex;position:relative}
+.ac-model{flex:1;min-width:0;position:relative;background:var(--ac-model)}
+#stage{position:absolute;inset:0;background:var(--ac-model)}
+.ac-startpage{flex:1;min-width:0;overflow:auto;padding:22px 28px;background:#262B32}
+.ac-startpage h1{font-size:20px;font-weight:500;margin:0 0 14px}
+.ac-startpage .ac-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:6px;align-items:start}
+.ac-startpage .ac-list h2{grid-column:1/-1}
+.ac-list h2{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ac-muted);margin:14px 0 4px;font-weight:600}
+.ac-list h2:first-child{margin-top:0}
+.ac-list button{display:block;width:100%;text-align:left;padding:7px 10px;margin:0 0 4px;background:#30353C;border:1px solid #3A4048;border-radius:3px;white-space:normal}
+.ac-list button:hover{background:var(--ac-hover)}
+.ac-list button[aria-pressed="true"]{border-color:var(--ac-accent);background:#2F4A66}
+.ac-list button b{margin-right:6px;color:#9FC8F2}
+.ac-list button small{display:block;color:var(--ac-muted);font-size:11.5px;margin-top:2px}
+.ac-card{display:flex;flex-direction:column;background:#30353C;border:1px solid #3A4048;border-radius:3px;margin:0 0 4px}
+.ac-card:hover{background:var(--ac-hover)}
+.ac-list .ac-card>button{border:0;margin:0;background:transparent;border-radius:3px 3px 0 0}
+.ac-list .ac-card>button[aria-pressed="true"]{background:#2F4A66}
+.ac-fullcad{align-self:flex-end;padding:0 10px 7px;font-size:12px;color:#9FC8F2;text-decoration:none}
+.ac-fullcad:hover,.ac-fullcad:focus-visible{text-decoration:underline}
+.ac-starthead{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 18px;margin:0 0 14px}
+.ac-starthead h1{margin:0}
+.ac-startfull{padding:5px 12px;border:1px solid var(--ac-accent);border-radius:3px;color:#CFE4FA;background:#2F4A66;text-decoration:none;font-size:13px}
+.ac-startfull:hover{background:#365777}
+.ac-list .noted{color:var(--ac-ok);font-weight:600}
+.ac-list p{color:var(--ac-muted)}
+.ac-palette{width:300px;flex:none;display:flex;flex-direction:column;background:var(--ac-bg);border-left:1px solid var(--ac-edge);min-height:0}
+.ac-palette-title{display:flex;align-items:center;justify-content:space-between;height:24px;padding:0 4px 0 10px;background:var(--ac-raise);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ac-ink);flex:none}
+.ac-palette-x{width:22px;height:20px;font-size:15px;color:var(--ac-muted)}
+.ac-palette-x:hover{color:var(--ac-ink);background:var(--ac-hover)}
+.ac-palette-tabs{display:flex;border-bottom:1px solid var(--ac-edge);flex:none}
+.ac-palette-tabs button{flex:1;height:28px;color:var(--ac-muted);border-radius:0}
+.ac-palette-tabs button[aria-selected="true"]{color:var(--ac-ink);box-shadow:inset 0 -2px 0 var(--ac-accent);background:var(--ac-panel)}
+#list,#history{flex:1;overflow:auto;padding:8px 10px 14px;min-height:0}
+#history h2{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ac-muted);margin:0 0 6px}
+#history p{color:var(--ac-muted);margin:4px 0}
+#history ol{list-style:none;margin:0;padding:0}
+#history li{border:1px solid #3A4048;background:#30353C;border-radius:3px;padding:6px 8px;margin-bottom:4px;display:flex;gap:8px;align-items:center;justify-content:space-between}
+#history li[aria-current="true"]{border-color:var(--ac-accent);background:#2F4A66}
+#history li div{min-width:0}
+#history small{display:block;color:var(--ac-muted);font-size:11.5px}
+#history li button,#history .ac-share button{height:24px;padding:0 10px;background:var(--ac-raise);border-color:#4A515A;font-size:12px;flex:none}
+#history li button:hover,#history .ac-share button:hover:not(:disabled){background:var(--ac-hover)}
+#history .ac-share button:disabled{opacity:.4}
+#history label{display:flex;flex-direction:column;gap:3px;font-size:12px;margin-bottom:8px;color:var(--ac-muted)}
+#history select{font:inherit;height:26px;background:var(--ac-panel);color:var(--ac-ink);border:1px solid var(--ac-line);border-radius:3px}
+#history .ac-share{border:1px solid #3A4048;border-radius:3px;padding:7px 8px;margin:0 0 10px;display:flex;flex-direction:column;gap:5px;align-items:flex-start}
+#history .ac-share p{color:var(--ac-ink)}
+
+/* Command line: AutoCAD's floating, semi-transparent bar at the bottom of the drawing area */
+.ac-cmdline{position:absolute;z-index:30;left:50%;bottom:12px;transform:translateX(-50%);width:min(860px,calc(100% - 24px));font:12.5px/1.35 'IBM Plex Mono',ui-monospace,Menlo,Consolas,monospace;color:var(--ac-ink)}
+.ac-cmd-history{pointer-events:none;display:flex;flex-direction:column;justify-content:flex-end;max-height:4.2em;overflow:hidden;padding:2px 10px;background:rgba(33,38,45,.72);border-radius:4px 4px 0 0}
+.ac-cmd-history:empty{display:none}
+.ac-cmd-history div{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#C9CED4}
+.ac-cmd-history div.err{color:var(--ac-bad)}
+.ac-cmd-history div.cmd{color:#E6E6E6}
+.ac-cmd-row{display:flex;align-items:center;gap:6px;height:30px;padding:0 8px;background:rgba(48,53,60,.9);border:1px solid #4E555E;border-radius:4px;box-shadow:0 4px 14px #0007}
+.ac-cmd-history:not(:empty)+.ac-cmd-row{border-radius:0 0 4px 4px}
+.ac-cmd-glyph{color:var(--ac-accent);font-weight:700}
+.ac-cmd-prompt{color:#F0D58A;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:55%}
+.ac-cmd-prompt:empty{display:none}
+#cmdInput{flex:1;min-width:0;height:26px;background:transparent;border:0;color:var(--ac-ink);font:inherit;outline:none;text-transform:uppercase}
+#cmdInput::placeholder{color:var(--ac-dim);text-transform:none}
+.ac-help{position:absolute;z-index:31;left:50%;bottom:58px;transform:translateX(-50%);width:min(560px,calc(100% - 24px));max-height:60%;overflow:auto;background:rgba(43,47,54,.97);border:1px solid #4E555E;border-radius:4px;padding:10px 12px;box-shadow:0 6px 18px #0009}
+.ac-help h2{font-size:13px;margin:0 0 6px}
+.ac-help table{border-collapse:collapse;width:100%;font-size:12px}
+.ac-help td{padding:2px 6px;border-bottom:1px solid #3A4048;vertical-align:top}
+.ac-help td:first-child{font-family:'IBM Plex Mono',ui-monospace,Menlo,Consolas,monospace;color:#9FC8F2;white-space:nowrap}
+.ac-help p{color:var(--ac-muted);font-size:12px;margin:8px 0 0}
+
+/* The engine's own command line is replaced by ours; its prompts are shown in ours. */
+#stage .ml-cli-container{display:none!important}
+
+/* Status bar */
+.ac-status{display:flex;align-items:center;gap:8px;height:28px;padding:0 6px;background:var(--ac-bg);border-top:1px solid var(--ac-edge);font-size:12px;flex:none;min-width:0}
+.ac-layouts{display:flex;gap:1px;overflow-x:auto;scrollbar-width:none;flex:0 1 auto;min-width:0}
+.ac-layouts::-webkit-scrollbar{display:none}
+.ac-layouts button{height:22px;padding:0 10px;color:var(--ac-muted);border-radius:2px;white-space:nowrap}
+.ac-layouts button[aria-selected="true"]{background:var(--ac-raise);color:var(--ac-ink);box-shadow:inset 0 -2px 0 var(--ac-accent)}
+.ac-layouts button:hover{color:var(--ac-ink)}
+.ac-coords{font-family:'IBM Plex Mono',ui-monospace,Menlo,Consolas,monospace;color:var(--ac-muted);min-width:200px;padding-left:10px;border-left:1px solid var(--ac-line);white-space:nowrap}
+#status{flex:1;min-width:0;color:var(--ac-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#status[data-kind="bad"]{color:var(--ac-bad)}
+.ac-badge{background:#4A3A1C;color:#F3CF8A;border:1px solid #6B5427;border-radius:2px;padding:1px 6px;font-size:11px;font-weight:600;white-space:nowrap;letter-spacing:.03em}
+.ac-toggle{height:22px;padding:0 8px;font-size:11px;font-weight:600;letter-spacing:.04em;color:var(--ac-dim);border:1px solid #444A52!important;border-radius:2px;white-space:nowrap}
+.ac-toggle[aria-pressed="true"]{color:#CFE4FA;background:#2F4A66;border-color:var(--ac-accent)!important}
+.ac-toggle:hover{color:var(--ac-ink)}
+.ac-aids{display:flex;gap:4px;align-items:center;flex:none}
+.ac-split{display:flex}
+.ac-split .ac-toggle:first-child{border-top-right-radius:0;border-bottom-right-radius:0}
+.ac-more{padding:0 4px;border-left:0!important;border-top-left-radius:0;border-bottom-left-radius:0}
+.ac-menu{position:fixed;z-index:50;min-width:190px;background:var(--ac-panel);border:1px solid #4E555E;border-radius:3px;box-shadow:0 8px 24px #000a;padding:4px 0;font-size:12px}
+.ac-menu-title{padding:4px 10px 6px;color:var(--ac-muted);border-bottom:1px solid var(--ac-line);margin-bottom:2px}
+.ac-menu button{display:flex;align-items:center;gap:6px;width:100%;text-align:left;padding:5px 10px;color:var(--ac-ink);background:transparent;border:0;border-radius:0;font:inherit;cursor:pointer;min-height:0;box-shadow:none}
+.ac-menu button:hover{background:var(--ac-raise)}
+.ac-check{display:inline-block;width:14px;color:var(--ac-accent)}
+.ac-menu-row{display:flex;border-top:1px solid var(--ac-line);margin-top:2px}
+.ac-menu-row button{justify-content:center;color:var(--ac-muted)}
+
+/* Dialog */
+.ac-dialog{border:1px solid #4E555E;border-radius:4px;background:var(--ac-panel);color:var(--ac-ink);padding:0;width:min(92vw,440px);box-shadow:0 10px 30px #000a}
+.ac-dialog::backdrop{background:#0009}
+.ac-dialog form{padding:0 0 12px}
+.ac-dialog h2{margin:0 0 10px;font-size:13px;font-weight:600;background:var(--ac-raise);padding:6px 12px}
+.ac-dialog p{margin:0 12px 10px;color:var(--ac-muted);font-size:12.5px}
+.ac-dialog label{display:flex;flex-direction:column;gap:4px;font-size:12px;margin:0 12px}
+.ac-dialog input{font:inherit;height:28px;border:1px solid var(--ac-line);border-radius:3px;background:var(--ac-bg);color:var(--ac-ink);padding:0 8px}
+.ac-row{display:flex;justify-content:flex-end;gap:6px;margin:12px 12px 0}
+.ac-row button{height:28px;padding:0 14px;background:var(--ac-raise);border:1px solid #4A515A}
+.ac-row button.primary{background:var(--ac-accent);border-color:var(--ac-accent);color:#fff}
+
+/* Phones: one scrollable row of icons, palette as a drawer, command line and status bar in their own rows */
+@media (max-width:760px){
+  .ac-ribbon{min-height:0;flex-wrap:nowrap}
+  .ac-panel{flex-direction:row;border-right:1px solid var(--ac-edge)}
+  .ac-panel-title{display:none}
+  .ac-panel-body{padding:3px 4px;align-items:center}
+  .ac-big{min-width:40px;width:40px;height:40px;padding:3px;justify-content:center}
+  .ac-big span{display:none}
+  .ac-big .ac-icon{width:26px;height:26px}
+  .ac-smallcol{flex-direction:row}
+  .ac-small{width:40px;height:40px;justify-content:center;padding:0}
+  .ac-small span{display:none}
+  .ac-small .ac-icon{width:22px;height:22px}
+  .ac-layoutpick span{display:none}
+  .ac-layoutpick select{height:34px;min-width:90px}
+  .ac-ribbon-tabs button{padding:0 10px}
+  .ac-msg{max-height:3.4em;overflow:auto}
+  .ac-main{flex-direction:column}
+  .ac-model{flex:1}
+  .ac-palette{position:absolute;z-index:3000;right:0;top:0;bottom:0;width:min(88vw,330px);box-shadow:-6px 0 18px #000a;display:none}
+  body.side-open .ac-palette{display:flex}
+  .ac-cmdline{position:static;transform:none;width:auto;flex:none}
+  .ac-cmd-history{max-height:none;border-radius:0;background:#262A30}
+  .ac-cmd-history div:not(:last-child){display:none}
+  .ac-cmd-row{border-radius:0;border-left:0;border-right:0;box-shadow:none;background:#30353C;height:36px}
+  .ac-model{display:flex;flex-direction:column;min-height:0}
+  #stage{position:relative;inset:auto;flex:1;min-height:0;overflow:hidden}
+  .ac-help{bottom:80px}
+  .ac-coords{min-width:0;font-size:11px}
+  #status{display:none}
+  .ac-status{height:34px}
+  .ac-startpage{padding:14px}
+}
