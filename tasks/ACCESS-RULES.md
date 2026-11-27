@@ -213,6 +213,25 @@ Some tabs have a second row of links, shown only for the parts a person may open
   view = read, edit = change plan / actual / remarks (Brian's owner login by default).
 - Every tracker change is kept in an append-only log (milestone_log, drawing_change_log). Tables: schema 0006.
 
+## Files on calwwt: one home for every document (27 Nov 2026, Brian)
+
+- **Who sees what:** SPP people and **Caltex see every file and folder** in Files (the calnkt rule "partners only see
+  files shared with them" and the sharing dates are not used on calwwt). KS and the land owner: no Files page.
+- **No pricing or contract papers on the site.** BOQ, prices, quotations, contracts, invoices, costs, margins and INTERNAL
+  files are shared by email and other systems. The site refuses an upload or a new folder whose name says so (English or
+  Thai: BOQ, price, quotation, contract, invoice, cost, margin, internal, payment, ราคา, ใบเสนอราคา, สัญญา, ต้นทุน,
+  ใบแจ้งหนี้, ค่าใช้จ่าย). It checks the name only, not what is inside the file.
+- **Upload:** Files at **edit**: SPP people and **Caltex** (Caltex's default is now edit). **Remove** files: SPP people at
+  edit only. Delete folders, recycle bin: admins.
+- **Site folders:** Files › Sites › <code> has Drawings, Photos & video, Lab results, Reports & notes (built in, cannot be
+  deleted). The site page's **Drawings** tab lists that site's folder (with the person's own Files access) and opens each
+  file in the right viewer: PDF and pictures on the page (every page), DWG / DXF in the CAD workspace, other files in the
+  Files viewer. A drawing kept as PDF and DWG with the same name in the same folder gets a **PDF | CAD** switch. People
+  with Files edit can upload from the site page. Admins move the drawings that used to be built into the site pages into
+  the Drawings folders with **Move into Files** (once; already moved files are left alone).
+- **One CAD tool:** DWG / DXF from Files, the site pages and the CAD workspace all open in the CAD workspace, which groups
+  drawings by site (?site=<code> from a site page).
+
 ## CAD workspace (`/cad-workspace/`, 2 Nov 2026)
 
 **calwwt (27 Nov 2026, Brian):** the CAD workspace is now live on calwwt too, under **Sites -> CAD workspace**, with the same

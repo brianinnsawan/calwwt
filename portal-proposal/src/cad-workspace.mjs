@@ -240,10 +240,18 @@ export async function routeCadWorkspace(request, env, actor, access) {
     let files = [];
     const rows = await fileRows();
     if (rows.length) {
-      const folders = new Map((await env.TASKS_DB.prepare('SELECT id, name FROM file_folders').all()).results.map((f) => [f.id, f.name]));
+      const fl = (await env.TASKS_DB.prepare('SELECT id, parent_id, name FROM file_folders').all()).results;
+      const folders = new Map(fl.map((f) => [f.id, f.name])), parentOf = new Map(fl.map((f) => [f.id, f.parent_id]));
+      // calwwt (Brian, 27 Nov 2026): which site a drawing belongs to (its folder is inside Sites › <code>), so the workspace
+      // can show one site's drawings; and the PDF of the same drawing (same folder, same name), for the PDF | CAD switch.
+      const siteOf = (id) => { for (let f = id, n = 0; f && n < 20; f = parentOf.get(f), n++) { const m = /^site-(\d{4})$/.exec(f); if (m) return m[1]; } return ''; };
+      const pdfs = (await env.TASKS_DB.prepare("SELECT id, folder_id, name FROM files WHERE deleted=0 AND lower(name) LIKE '%.pdf'").all()).results;
+      const stem = (n) => String(n).replace(/\.[^.]+$/, '').toLowerCase();
       files = rows.filter((f) => SHA.test(f.sha256 || '')).map((f) => {
         const [th, en] = String(folders.get(f.folder_id) || '').split(' · ');
-        return { sha256: f.sha256, name: f.name, bytes: f.size, folder: en || th || '', folder_th: th || en || '', file: `/api/files/${f.id}/download/${encodeURIComponent(f.name)}` };
+        const pdf = pdfs.find((p) => p.folder_id === f.folder_id && stem(p.name) === stem(f.name));
+        return { sha256: f.sha256, name: f.name, bytes: f.size, folder: en || th || '', folder_th: th || en || '', site: siteOf(f.folder_id),
+          ...(pdf ? { pdf: `/files/view.html?id=${pdf.id}` } : {}), file: `/api/files/${f.id}/download/${encodeURIComponent(f.name)}` };
       });
     }
     const legacyDrawings = (await legacyRows()).filter((r) => SHA.test(r.sha256 || '')).map((r) => ({

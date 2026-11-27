@@ -32,35 +32,39 @@ test('weekly rule: a meeting deck is shared from the Monday of its week', () => 
   assert.equal(bangkokToday(new Date('2026-11-01T18:00:00Z')), '2026-11-02');
 });
 
-test('SPP sees every file; Caltex only shared files from their date; KS nothing', async () => {
-  const w = await world(), today = bangkokToday();
-  const past = await upload(w, 'brian', 'safety-weekly', 'Weekly 01 - 2026-01-07.pptx');
-  const future = await upload(w, 'brian', 'safety-weekly', 'Weekly 99 - 2099-06-10.pptx');
+test('calwwt: SPP and Caltex see every file and folder; KS nothing; no sharing dates shown (Brian, 27 Nov 2026)', async () => {
+  const w = await world();
+  const deck = await upload(w, 'brian', 'safety-weekly', 'Weekly 99 - 2099-06-10.pptx');
   const plain = await upload(w, 'brian', 'engineering', 'calc.pdf');
-  assert.equal(past.status, 201); assert.equal(past.body.caltexFrom, '2026-01-05');
-  assert.equal(future.body.caltexFrom, '2099-06-08'); assert.equal(plain.body.caltexFrom, null);
-
+  assert.equal(deck.status, 201); assert.equal(plain.status, 201);
   const gift = await call(w, 'gift', 'GET', '/api/files');
-  assert.equal(gift.body.files.length, 3); assert.equal(gift.body.canEdit, false); assert.equal(gift.body.team, true);
+  assert.equal(gift.body.files.length, 2); assert.equal(gift.body.canEdit, false); assert.equal(gift.body.team, true);
   const bas = await call(w, 'bas', 'GET', '/api/files');
-  assert.deepEqual(bas.body.files.map((f) => f.name), ['Weekly 01 - 2026-01-07.pptx']);
-  assert.ok(!('caltexFrom' in bas.body.files[0]) && bas.body.files[0].by === '', 'partners do not see sharing dates or uploaders');
-  assert.deepEqual(bas.body.folders.map((f) => f.id).sort(), ['safety', 'safety-weekly'], 'only folders holding shared files');
-  assert.equal((await call(w, 'bas', 'GET', `/api/files/${future.body.id}/download`)).status, 404, 'a future deck cannot be fetched by id');
-  assert.equal((await call(w, 'bas', 'GET', `/api/files/${plain.body.id}/download`)).status, 404);
+  assert.deepEqual(bas.body.files.map((f) => f.name).sort(), ['Weekly 99 - 2099-06-10.pptx', 'calc.pdf']);
+  assert.ok(bas.body.files.every((f) => !('caltexFrom' in f) && f.by === ''), 'no sharing dates; partners do not see uploaders');
+  assert.ok(['safety', 'engineering', 'sites', 'site-1156-drawings'].every((id) => bas.body.folders.some((f) => f.id === id)), 'every folder');
+  assert.equal(bas.body.canShare, false); assert.equal(gift.body.canShare, false);
+  const got = await routeFiles(new Request(`${ORIGIN}/api/files/${plain.body.id}/download`), w.env, {}, { pages: { files: 'view' }, person: 'bas' }, { id: 'bas', company: 'caltex' });
+  assert.equal(got.status, 200);
   assert.equal((await call(w, 'tom', 'GET', '/api/files')).status, 404);
+});
 
-  // An admin shares the calculation from today: Caltex now sees it.
-  assert.equal((await call(w, 'ming', 'POST', `/api/files/${plain.body.id}/share`, { body: JSON.stringify({ caltexFrom: today }) })).status, 200);
-  assert.equal((await call(w, 'bas', 'GET', '/api/files')).body.files.length, 2);
-  // A non-admin cannot share.
-  assert.equal((await call(w, 'gift', 'POST', `/api/files/${future.body.id}/share`, { body: JSON.stringify({ caltexFrom: today }) })).status, 403);
+test('pricing and contract papers are refused by name, in English and Thai; contractor / quotient pass', async () => {
+  const w = await world();
+  for (const n of ['0589 - Improvement BOQ - R1.xlsx', 'Aqua quotation SE691037.pdf', 'Price list.xlsx', 'Contract draft.docx', 'INTERNAL margin.xlsx', 'ใบเสนอราคา.pdf', 'สัญญาจ้าง.pdf', 'sampling cost.xlsx'])
+    assert.equal((await upload(w, 'brian', 'site-1156-reports', n)).status, 422, n);
+  for (const n of ['Contractor list.pdf', 'Quotient test.pdf', 'Site plan.pdf']) assert.equal((await upload(w, 'brian', 'site-1156-reports', n)).status, 201, n);
+  assert.equal((await call(w, 'brian', 'POST', '/api/files/folder', { body: JSON.stringify({ parent: 'site-1156', name: 'BOQ' }) })).status, 422);
+  assert.equal(w.env.DRAWINGS.store.size, 3, 'nothing refused was stored');
 });
 
 test('upload, download and delete need the right level, the request header, and no view-as', async () => {
   const w = await world();
   assert.equal((await upload(w, 'gift', 'safety', 'a.txt')).status, 403, 'view level cannot upload');
-  assert.equal((await upload(w, 'bas', 'safety', 'a.txt', 'x', { level: 'edit' })).status, 403, 'partners never upload');
+  assert.equal((await upload(w, 'bas', 'safety', 'a.txt', 'x')).status, 403, 'Caltex at view cannot upload');
+  const fromCaltex = await upload(w, 'bas', 'site-1156-reports', 'Caltex comments.pdf', 'x', { level: 'edit' });
+  assert.equal(fromCaltex.status, 201, 'Caltex at edit uploads (Brian, 27 Nov 2026)');
+  assert.equal((await call(w, 'bas', 'POST', `/api/files/${fromCaltex.body.id}/delete`, { body: '{}', level: 'edit' })).status, 403, 'but cannot remove files');
   assert.equal((await upload(w, 'brian', 'safety', 'a.txt', 'x', { viewAs: true })).status, 403, 'view-as is read-only');
   assert.equal((await upload(w, 'brian', 'safety', 'a.txt', 'x', { headers: { 'x-requested-with': 'other' } })).status, 403);
   assert.equal((await upload(w, 'brian', 'nope', 'a.txt')).status, 404);
@@ -78,13 +82,13 @@ test('upload, download and delete need the right level, the request header, and 
   assert.equal(v2.body.replaced, up.body.id);
   const names = (await call(w, 'gift', 'GET', '/api/files')).body.files.map((f) => f.name);
   assert.equal(names.filter((n) => n === 'plan.pdf').length, 1);
-  assert.equal(w.env.DRAWINGS.store.size, 3, 'old versions stay in storage');
+  assert.equal(w.env.DRAWINGS.store.size, 4, 'old versions stay in storage');
 
   assert.equal((await call(w, 'gift', 'POST', `/api/files/${v2.body.id}/delete`, { body: '{}' })).status, 403);
   assert.equal((await call(w, 'brian', 'POST', `/api/files/${v2.body.id}/delete`, { body: '{}' })).status, 200);
   assert.equal((await call(w, 'gift', 'GET', `/api/files/${v2.body.id}/download`)).status, 404);
   const log = w.db.sql.prepare('SELECT action FROM file_log ORDER BY id').all().map((x) => x.action);
-  assert.deepEqual(log, ['upload', 'upload', 'replace', 'upload', 'delete']);
+  assert.deepEqual(log, ['upload', 'upload', 'upload', 'replace', 'upload', 'delete']);
   assert.throws(() => w.db.sql.exec('DELETE FROM file_log'), /APPEND_ONLY/);
 
   const folder = await call(w, 'brian', 'POST', '/api/files/folder', { body: JSON.stringify({ parent: 'engineering', name: 'Calculations' }) });
@@ -117,7 +121,7 @@ test('CAD viewer list: only DWG/DXF files the person may see; download links end
   const gift = await sheets('gift');
   assert.deepEqual(gift.map((s) => s.title), ['Canopy CS-08.dwg', 'Private plan.dxf']);
   assert.equal(gift[0].file, `/api/files/${shared.body.id}/download/Canopy%20CS-08.dwg`);
-  assert.deepEqual((await sheets('bas')).map((s) => s.title), ['Canopy CS-08.dwg']);
+  assert.deepEqual((await sheets('bas')).map((s) => s.title), ['Canopy CS-08.dwg', 'Private plan.dxf'], 'Caltex sees every file');
   assert.equal(await sheets('tom'), 404);
   // The name suffix is accepted on downloads only.
   const r = await routeFiles(new Request(`${ORIGIN}${gift[0].file}`), w.env, {}, { pages: { files: 'view' }, person: 'gift' }, { id: 'gift', company: 'spp' });
@@ -149,13 +153,13 @@ test('admins delete folders with everything in them; built-in folders and non-ad
   await upload(w, 'brian', f1.body.id, 'a.pdf'); await upload(w, 'brian', f2.body.id, 'b.pdf'); const keep = await upload(w, 'brian', 'engineering', 'keep.pdf');
   assert.equal((await call(w, 'gift', 'POST', `/api/files/folder/${f1.body.id}/delete`, { body: '{}', level: 'edit' })).status, 403, 'editor, not admin');
   assert.equal((await call(w, 'brian', 'POST', `/api/files/folder/${f1.body.id}/delete`, { body: '{}', viewAs: true })).status, 403, 'viewing as someone else');
-  for (const id of ['safety', 'safety-weekly', 'engineering']) assert.equal((await call(w, 'brian', 'POST', `/api/files/folder/${id}/delete`, { body: '{}' })).status, 409, id);
+  for (const id of ['safety', 'safety-weekly', 'engineering', 'sites', 'site-1156', 'site-1156-drawings']) assert.equal((await call(w, 'brian', 'POST', `/api/files/folder/${id}/delete`, { body: '{}' })).status, 409, id);
   const r = await call(w, 'brian', 'POST', `/api/files/folder/${f1.body.id}/delete`, { body: '{}' });
   assert.equal(r.status, 200); assert.deepEqual([r.body.folders, r.body.files], [2, 2]);
   const list = (await call(w, 'brian', 'GET', '/api/files')).body;
   assert.ok(!list.folders.some((f) => [f1.body.id, f2.body.id].includes(f.id)));
   assert.deepEqual(list.files.map((f) => f.id), [keep.body.id]);
-  assert.equal(list.canDeleteFolders, true); assert.deepEqual(list.builtInFolders.sort(), ['engineering', 'safety', 'safety-weekly']);
+  assert.equal(list.canDeleteFolders, true); assert.ok(['engineering', 'safety', 'safety-weekly', 'sites', 'site-0589', 'site-1750-reports'].every((id) => list.builtInFolders.includes(id)));
   assert.equal((await call(w, 'gift', 'GET', '/api/files', { level: 'edit' })).body.canDeleteFolders, false);
   const logged = (await w.db.prepare("SELECT action, data_json FROM file_log WHERE action IN ('folder_delete','delete') ORDER BY id").all()).results;
   assert.equal(logged.filter((x) => x.action === 'delete').length, 2);
@@ -309,7 +313,7 @@ test('latest: an open page finds the newest version it may see; downloads carry 
   const v2 = await save(w, 'ming', 'engineering', 'Rebar.xlsx', v1.body.id, v1.body.at, 'v2');
   const l = await call(w, 'gift', 'GET', `/api/files/${v1.body.id}/latest`);
   assert.deepEqual(l.body, { id: v2.body.id, at: v2.body.at, size: 2, by: (await w.db.prepare("SELECT name FROM people WHERE id='ming'").first()).name, mine: false });
-  assert.equal((await call(w, 'bas', 'GET', `/api/files/${v1.body.id}/latest`)).status, 404, 'Caltex: not shared');
+  assert.equal((await call(w, 'bas', 'GET', `/api/files/${v1.body.id}/latest`)).status, 200, 'Caltex sees every file');
   await call(w, 'ming', 'POST', `/api/files/${v2.body.id}/share`, { body: JSON.stringify({ caltexFrom: '2026-01-01' }) });
   const cx = await call(w, 'bas', 'GET', `/api/files/${v1.body.id}/latest`);
   assert.equal(cx.body.id, v2.body.id); assert.equal(cx.body.by, '', 'partners never see who saved');

@@ -1,10 +1,11 @@
 // Project files: calnkt.sppwork.com/files (screens) and /api/files/* (this module).
 // - Folders and files in private storage (R2 bucket bound as DRAWINGS, keys under files/), list in TASKS_DB.
 // - Who sees what (Admin page level for 'files', plus):
-//     SPP people (staff and site team): every file.
-//     Partners: only files shared with their company (today: Caltex, from the file's caltex_from date, Thailand time).
-//     Weekly safety meetings folder: a deck is shared with Caltex from the Monday of its meeting week (date in the name).
-// - Upload / new folder / delete: 'edit' level, SPP people only; admins always (Brian, 4 Nov 2026). Sharing dates: admins.
+//     calwwt (Brian, 27 Nov 2026): SPP people and Caltex see EVERY file and folder. What is on the site is meant to be
+//     seen; pricing and contract papers are never put on the site (refused by name, pricingName below) but shared by
+//     email and other systems. The calnkt sharing dates (caltex_from, weekly safety rule) are no longer used for seeing.
+// - Upload / new folder: 'edit' level, SPP people and Caltex (Brian, 27 Nov 2026: Caltex can upload); admins always.
+//   Delete: SPP people at 'edit' only (Caltex can upload, not remove). Sharing dates: not used on calwwt.
 //   Deleting a folder (with everything in it): admins only; the built-in folders stay. Every change is logged.
 // - "Upload new version" of a file: the picked file replaces that file under the file's own name (same as uploading a
 //   file of the same name), so its history, sharing and links stay; the picked file's own name is kept in the log.
@@ -44,8 +45,14 @@ function cleanName(v, max) {
   return s;
 }
 
-/** Whether a person (people row: id, company) may see a file row today: SPP every file, Caltex only files shared with it. */
-export const fileVisibleTo = (f, viewer, today = bangkokToday()) => !!viewer && !f.deleted && (viewer.company === 'spp' || (viewer.company === 'caltex' && !!f.caltex_from && f.caltex_from <= today));
+/** Whether a person (people row: id, company) may see a file row: SPP and Caltex every file (calwwt, Brian 27 Nov 2026). */
+// eslint-disable-next-line no-unused-vars
+export const fileVisibleTo = (f, viewer, today = bangkokToday()) => !!viewer && !f.deleted && (viewer.company === 'spp' || viewer.company === 'caltex');
+/** Pricing and contract papers never go on the site (Brian, 27 Nov 2026): BOQ, prices, quotations, contracts, invoices,
+ *  costs, margins, INTERNAL files, in English or Thai. Words only, so "contractor" or "Quotient" are not caught. */
+const PRICING = /(?:^|[^a-z])(?:b\.?o\.?q|pric(?:e|es|ed|ing)|quot(?:e|es|ed|ation|ations)|contracts?|invoices?|margins?|costs?|costing|internal|payments?)(?:[^a-z]|$)|ราคา|สัญญา|ต้นทุน|ใบแจ้งหนี้|ค่าใช้จ่าย/i;
+export const pricingName = (name) => PRICING.test(String(name || ''));
+const PRICING_REFUSED = 'Pricing and contract papers (BOQ, prices, quotations, contracts, invoices, costs) are not kept on this site: share them by email. If this file is not one of those, rename it so the name does not say so.';
 /** The DWG / DXF files a person may see (Files CAD viewer list, Drawings -> CAD workspace). */
 export async function visibleCadFiles(db, viewer, today = bangkokToday()) {
   const rows = (await db.prepare("SELECT id, folder_id, name, size, sha256, caltex_from, deleted FROM files WHERE deleted=0 AND (lower(name) LIKE '%.dwg' OR lower(name) LIKE '%.dxf') ORDER BY name").all()).results;
@@ -125,7 +132,9 @@ async function routeBin(request, db, path, liveFolders, log, namesOf) {
 }
 
 /** Folders the site itself relies on (Safety, the weekly safety meetings with their Caltex sharing rule, Engineering). */
-const BUILT_IN_FOLDERS = new Set(['safety', 'safety-weekly', 'engineering']);
+const BUILT_IN_FOLDERS = new Set(['safety', 'safety-weekly', 'engineering', 'sites', ...['0589', '1156', '1588', '1622', '1642', '1687', '1703', '1750'].flatMap((c) => [`site-${c}`, ...['drawings', 'photos', 'lab', 'reports'].map((s) => `site-${c}-${s}`)])]);
+/** File name a built-in site layout gets in Files: its English title, made safe for a file name, + .pdf. */
+export const builtInName = (x) => `${String(x.en || x.file.split('/').pop()).normalize('NFC').replace(/[\x00-\x1f\x7f/\\:*?"<>|]/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 190)}.pdf`;
 export async function routeFiles(request, env, actor, access, viewer) {
   const url = new URL(request.url), path = url.pathname;
   const cadList = path === '/files/cad/sheets.json';
@@ -133,8 +142,9 @@ export async function routeFiles(request, env, actor, access, viewer) {
   const level = access.pages?.files || 'none';
   if (level === 'none' || !viewer) fail(404, 'Not found.');
   if (!env.TASKS_DB || !env.DRAWINGS) fail(503, 'File storage is not connected on this site.');
-  const db = env.TASKS_DB, spp = viewer.company === 'spp', today = bangkokToday();
-  const isAdmin = !!access.admin && !access.viewAs, canEdit = spp && (level === 'edit' || isAdmin) && !access.viewAs;
+  const db = env.TASKS_DB, spp = viewer.company === 'spp', caltex = viewer.company === 'caltex', today = bangkokToday();
+  const isAdmin = !!access.admin && !access.viewAs, canEdit = (spp || caltex) && (level === 'edit' || isAdmin) && !access.viewAs;
+  const canDelete = canEdit && spp;
   const visibleFile = (f) => fileVisibleTo(f, viewer, today);
   const log = (action, fileId, folderId, data = {}) => db.prepare('INSERT INTO file_log(at, by_id, action, file_id, folder_id, data_json) VALUES(?,?,?,?,?,?)').bind(now(), viewer.id, action, fileId, folderId, JSON.stringify(data));
   if (request.method !== 'GET' && request.method !== 'HEAD') {
@@ -208,9 +218,9 @@ export async function routeFiles(request, env, actor, access, viewer) {
   }
   // List everything the viewer may see (small project: one call).
   if (path === '/api/files' && request.method === 'GET') {
-    const rows = (await db.prepare('SELECT id, folder_id, name, size, type, caltex_from, uploaded_by, uploaded_at, deleted FROM files WHERE deleted=0 ORDER BY name').all()).results.filter(visibleFile);
+    const rows = (await db.prepare('SELECT id, folder_id, name, size, type, sha256, caltex_from, uploaded_by, uploaded_at, deleted FROM files WHERE deleted=0 ORDER BY name').all()).results.filter(visibleFile);
     let shownFolders = folders;
-    if (!spp) {
+    if (!spp && !caltex) {
       // Partners see only the folders that hold something shared with them (and those folders' parents).
       const keep = new Set();
       for (const f of rows) for (let id = f.folder_id; id && !keep.has(id); id = folderById.get(id)?.parent_id) keep.add(id);
@@ -218,9 +228,9 @@ export async function routeFiles(request, env, actor, access, viewer) {
     }
     const names = Object.fromEntries((await db.prepare('SELECT id, name FROM people').all()).results.map((p) => [p.id, p.name]));
     return json({
-      team: spp, canEdit, canShare: isAdmin && spp, canDeleteFolders: isAdmin && spp, builtInFolders: spp ? [...BUILT_IN_FOLDERS] : [], today,
+      team: spp, canEdit, canDelete, canShare: false, canDeleteFolders: isAdmin && spp, builtInFolders: spp ? [...BUILT_IN_FOLDERS] : [], today,
       folders: shownFolders.map((f) => ({ id: f.id, parent: f.parent_id, name: f.name, ...(spp ? { weekly: f.caltex_rule === 'weekly' } : {}) })),
-      files: rows.map((f) => ({ id: f.id, folder: f.folder_id, name: f.name, size: f.size, type: f.type, at: f.uploaded_at, by: spp ? names[f.uploaded_by] || f.uploaded_by : '', ...(spp ? { caltexFrom: f.caltex_from } : {}) })),
+      files: rows.map((f) => ({ id: f.id, folder: f.folder_id, name: f.name, size: f.size, type: f.type, sha256: f.sha256, at: f.uploaded_at, by: spp ? names[f.uploaded_by] || f.uploaded_by : '' })),
     });
   }
   if (path === '/api/files/folder' && request.method === 'POST') {
@@ -228,6 +238,7 @@ export async function routeFiles(request, env, actor, access, viewer) {
     const parent = body.parent ? String(body.parent) : null;
     if (parent && !folderById.has(parent)) fail(404, 'Folder not found.');
     const name = cleanName(body.name, 120);
+    if (pricingName(name)) fail(422, PRICING_REFUSED);
     if (folders.some((f) => f.parent_id === parent && f.name.toLowerCase() === name.toLowerCase())) fail(409, 'A folder with that name is already here.');
     const id = crypto.randomUUID();
     await db.batch([db.prepare('INSERT INTO file_folders(id, parent_id, name, caltex_rule, created_by, created_at) VALUES(?,?,?,?,?,?)').bind(id, parent, name, '', viewer.id, now()), log('folder', null, id, { name })]);
@@ -256,9 +267,37 @@ export async function routeFiles(request, env, actor, access, viewer) {
     if (!isAdmin || !spp) fail(404, 'Not found.');
     return routeBin(request, db, path, folders, log, names);
   }
+  // The wastewater layouts that were built into the site pages (public/sites/layouts, listed in sites.json) moved into each
+  // site's Files folder "Drawings" (Brian, 27 Nov 2026), so the site page, Files and the CAD workspace show one set and
+  // people can add drawings themselves. Admins press "Move into Files" on a site page; one site per call; files already
+  // there (same name) are left alone, so it can run again. GET says how many are still to move.
+  const importSite = /^\/api\/files\/import-site-layouts\/(\d{4})$/.exec(path);
+  if (importSite) {
+    if (!isAdmin) fail(403, 'Only admins can move the built-in drawings.');
+    const code = importSite[1], folder = folderById.get(`site-${code}-drawings`) || fail(404, 'The site has no Drawings folder yet.');
+    const sites = await (await env.ASSETS.fetch(new Request(new URL('/sites/data/sites.json', request.url)))).json();
+    const site = sites.sites.find((x) => x.code === code) || fail(404, 'Site not found.');
+    const have = new Set((await db.prepare('SELECT lower(name) AS n FROM files WHERE folder_id=? AND deleted=0').bind(folder.id).all()).results.map((r) => r.n));
+    const todo = (site.layouts || []).map((x) => ({ x, name: builtInName(x) })).filter((t) => !have.has(t.name.toLowerCase()) && !pricingName(t.name));
+    if (request.method === 'GET') return json({ code, pending: todo.map((t) => t.name) });
+    if (request.method !== 'POST') fail(405, 'Method not allowed.');
+    const moved = [];
+    for (const { x, name } of todo) {
+      const r = await env.ASSETS.fetch(new Request(new URL(`/sites/layouts/${x.file}.pdf`, request.url)));
+      if (!r.ok) continue;
+      const bytes = new Uint8Array(await r.arrayBuffer());
+      const id = crypto.randomUUID(), key = `files/${id}`, sha = hex(await crypto.subtle.digest('SHA-256', bytes)), at = now();
+      await env.DRAWINGS.put(key, bytes, { httpMetadata: { contentType: TYPES.pdf }, customMetadata: { name } });
+      const v = { id, folder: folder.id, name, size: bytes.length, type: TYPES.pdf, key, sha, caltexFrom: null, at };
+      if (await firstVersion(v, { name, size: bytes.length, caltexFrom: null, source: `built-in layout ${x.file}.pdf${x.source ? ` (${x.source})` : ''}` })) moved.push(name);
+      else await removeStored(key);
+    }
+    return json({ code, moved, left: todo.length - moved.length }, 201);
+  }
   if (path === '/api/files/upload' && request.method === 'POST') {
     const folder = folderById.get(url.searchParams.get('folder') || '') || fail(404, 'Folder not found.');
     const name = cleanName(url.searchParams.get('name'), 200);
+    if (pricingName(name)) fail(422, PRICING_REFUSED);
     // Checked before the file is stored (site audit, 10 Nov 2026: a bad value used to fail after storing, leaving a copy behind).
     const source = url.searchParams.get('source') ? cleanName(url.searchParams.get('source'), 200) : null;
     // Audit F09: an editor saving a file says which version it started from; if someone saved a newer one since, refuse
@@ -412,6 +451,7 @@ export async function routeFiles(request, env, actor, access, viewer) {
     return json({ id: file.id, caltexFrom: from, ...(older ? { olderVersionsUnshared: older } : {}) });
   }
   if (m[2] === 'delete' && request.method === 'POST') {
+    if (!canDelete) fail(403, 'Only SPP can remove files.');
     // Kept in storage and in the log; only hidden from the list.
     await db.batch([db.prepare('UPDATE files SET deleted=1, deleted_by=?, deleted_at=? WHERE id=?').bind(viewer.id, now(), file.id), log('delete', file.id, file.folder_id, { name: file.name })]);
     return json({ id: file.id, deleted: true });

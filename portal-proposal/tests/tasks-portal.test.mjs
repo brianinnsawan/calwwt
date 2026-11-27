@@ -32,7 +32,7 @@ async function world() {
   app.prepare('INSERT INTO users VALUES(?,?)').run('owner-id', 'owner@example.com');
   app.prepare('INSERT INTO users VALUES(?,?)').run('reader-id', 'reader@example.com');
   for (const m of ['0001_identity.sql', '0002_audit_lock.sql', '0003_two_step.sql']) auth.exec(readFileSync(new URL(`../../identity-proposal/migrations/${m}`, import.meta.url), 'utf8'));
-  for (const f of ['0001_tasks.sql', '0002_hidden_from.sql', '0003_language.sql', '0004_page_access.sql', '0005_files.sql', '0006_trackers.sql', '0007_meetings.sql', '0008_meeting_docs.sql', '0009_repeat_days.sql', '0010_agent_keys.sql', '0011_site_timelines.sql']) tasks.exec(readFileSync(new URL(`../../tasks/schema/${f}`, import.meta.url), 'utf8'));
+  for (const f of ['0001_tasks.sql', '0002_hidden_from.sql', '0003_language.sql', '0004_page_access.sql', '0005_files.sql', '0006_trackers.sql', '0007_meetings.sql', '0008_meeting_docs.sql', '0009_repeat_days.sql', '0010_agent_keys.sql', '0011_site_timelines.sql', '0012_site_subfolders.sql']) tasks.exec(readFileSync(new URL(`../../tasks/schema/${f}`, import.meta.url), 'utf8'));
   const TASKS_DB = d1(tasks);
   await TASKS_DB.batch(rosterStatements(TASKS_DB));
   const brianPw = 'synthetic owner phrase for tests 501!', mingPw = 'synthetic reader phrase for tests 502!';

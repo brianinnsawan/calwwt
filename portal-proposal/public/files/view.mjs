@@ -25,7 +25,7 @@ const WORDS = {
     fxNote: 'ช่องสูตร แก้ได้ใน Excel', staleNote: 'สูตรนี้ใช้คำสั่งที่เว็บคำนวณเองไม่ได้ ค่าจะคำนวณใหม่เมื่อเปิดไฟล์ใน Excel',
     editNote: 'คลิกเซลล์แล้วพิมพ์ · Enter, Tab และลูกศรใช้เลื่อนเซลล์เหมือน Excel · วางหลายเซลล์จาก Excel ได้ · บันทึกให้อัตโนมัติ · ผลรวมและสูตรอื่นคำนวณใหม่ทันทีที่คุณพิมพ์ (ตัวสูตรแก้ที่นี่ไม่ได้) · วันที่พิมพ์แบบ 2026-11-20', leaveAsk: 'ยังไม่ได้บันทึกการแก้ไข ออกจากหน้านี้?',
     hesShared: 'Caltex เห็นฉบับนี้ตั้งแต่ {d}', hesNotShared: 'Caltex ยังไม่เห็นฉบับนี้ (แชร์ได้ที่แท็บไฟล์ → แชร์กับ Caltex) และจะเห็นฉบับที่แชร์ล่าสุดแทน',
-    hesTitle: 'แผน HES Stewardship', hesMissing: 'ยังไม่มีไฟล์ — อัปโหลดไฟล์ "HES Stewardship Plan ... .xlsx" ที่แท็บไฟล์ (โฟลเดอร์ความปลอดภัย) แล้วไฟล์ล่าสุดจะแสดงที่นี่', slide: 'สไลด์ {i} / {n}', openCad: 'เปิดในโปรแกรมดูแบบ CAD',
+    hesTitle: 'แผน HES Stewardship', hesMissing: 'ยังไม่มีไฟล์ — อัปโหลดไฟล์ "HES Stewardship Plan ... .xlsx" ที่แท็บไฟล์ (โฟลเดอร์ความปลอดภัย) แล้วไฟล์ล่าสุดจะแสดงที่นี่', slide: 'สไลด์ {i} / {n}', openCad: 'เปิดในพื้นที่ทำงาน CAD',
   },
   en: {
     back: '← Back to folder', download: 'Download', present: 'Present', close: 'Close', loading: 'Opening the file…',
@@ -48,13 +48,14 @@ const WORDS = {
     fxNote: 'Formula: change it in Excel', staleNote: 'This formula uses something the site cannot work out itself. Its value is worked out again when the file is opened in Excel.',
     editNote: 'Click a cell and type. Enter, Tab and the arrow keys move between cells, as in Excel. You can paste several cells from Excel. Changes save by themselves. Totals and other formulas update as you type (the formulas themselves cannot be changed here). Type dates like 2026-11-20.', leaveAsk: 'You have unsaved changes. Leave this page?',
     hesShared: 'Caltex sees this version from {d}', hesNotShared: 'Caltex does not see this version yet (share it in Files → Share with Caltex); they see the last shared version instead',
-    hesTitle: 'HES Stewardship Plan', hesMissing: 'No file yet. Upload "HES Stewardship Plan ... .xlsx" in Files (Safety folder); the newest copy is shown here.', slide: 'Slide {i} / {n}', openCad: 'Open in the CAD viewer',
+    hesTitle: 'HES Stewardship Plan', hesMissing: 'No file yet. Upload "HES Stewardship Plan ... .xlsx" in Files (Safety folder); the newest copy is shown here.', slide: 'Slide {i} / {n}', openCad: 'Open in the CAD workspace',
   },
 };
 const ext = (n) => (/\.([a-z0-9]{1,8})$/i.exec(n)?.[1] || '').toLowerCase();
 const $ = (id) => document.getElementById(id);
 const MAX_ROWS = 3000, MAX_COLS = 200;
 let W = WORDS.th, lang = 'th', file = null, canEdit = false;
+let FILES = null;   // the /api/files list (for the DWG twin of a PDF)
 const t = (k, v = {}) => W[k].replace(/\{(\w+)\}/g, (_, x) => v[x] ?? '');
 function el(tag, attrs = {}, ...kids) {
   const n = document.createElement(tag);
@@ -95,6 +96,7 @@ async function start() {
   let list = null, canRestore = false;
   if (!PIN) {
     try { const r = await fetch('/api/files', { credentials: 'same-origin', cache: 'no-store' }); if (r.ok) list = await r.json(); } catch { /* ignore */ }
+    FILES = list;
     file = list?.files.find((f) => f.id === id) || null; canEdit = !!list?.canEdit;
     if (!file && /^[0-9a-f-]{36}$/.test(id)) {
       // An older link (the file has been saved again since): go to the newest version.
@@ -134,8 +136,8 @@ async function start() {
     else if (e === 'pptx' || e === 'pptm') await showPptx();
     else if (e === 'csv') showTable([parseCsv(new TextDecoder().decode(await bytes()))], ['CSV']);
     else if (e === 'txt') $('view').replaceChildren(el('pre', { class: 'fv-text' }, new TextDecoder().decode(await bytes())));
-    else if ((e === 'dwg' || e === 'dxf') && (OLD || wantHistory)) { if (!OLD) $('actions').prepend(el('a', { class: 'btn primary', href: `/files/cad/?dwg=${encodeURIComponent(file.id)}` }, t('openCad'))); status(OLD ? t('noPreview') : ''); return; }
-    else if (e === 'dwg' || e === 'dxf') { location.replace(`/files/cad/?dwg=${encodeURIComponent(file.id)}`); return; }
+    else if ((e === 'dwg' || e === 'dxf') && (OLD || wantHistory)) { if (!OLD) $('actions').prepend(el('a', { class: 'btn primary', href: cadHref(file) }, t('openCad'))); status(OLD ? t('noPreview') : ''); return; }
+    else if (e === 'dwg' || e === 'dxf') { location.replace(cadHref(file)); return; }
     else { status(['doc', 'ppt', 'xls'].includes(e) ? t('oldFormat') : t('noPreview')); return; }
     if (!['docx', 'xlsx', 'xlsm', 'pptx', 'pptm'].includes(e)) status('');
   } catch (err) {
@@ -195,10 +197,19 @@ async function openHistory() {
 function presentButton(onclick) { $('actions').prepend(el('button', { type: 'button', class: 'btn primary', onclick }, t('present'))); }
 function fullscreen(node) { node.requestFullscreen?.().catch(() => {}); }
 
+// DWG / DXF open in Sites -> CAD workspace, the one CAD tool of the site (Brian, 27 Nov 2026).
+const cadHref = (f) => (f.sha256 ? `/cad-workspace/?dwg=${encodeURIComponent(f.sha256)}` : `/files/cad/?dwg=${encodeURIComponent(f.id)}`);
+// The same drawing as DWG / DXF next to this PDF (same folder, same name before the extension): "Open in CAD".
+function cadTwin(f) {
+  const base = f.name.replace(/\.[^.]+$/, '').toLowerCase();
+  return (FILES?.files || []).find((x) => x.folder === f.folder && /\.(dwg|dxf)$/i.test(x.name) && x.name.replace(/\.[^.]+$/, '').toLowerCase() === base) || null;
+}
 function showPdf() {
   const frame = el('iframe', { src: `${src(true)}#view=FitH`, title: file.name, class: 'fv-frame' });
   $('view').replaceChildren(frame);
   presentButton(() => fullscreen(frame));
+  const twin = !OLD && cadTwin(file);
+  if (twin) $('actions').prepend(el('a', { class: 'btn primary', href: cadHref(twin) }, t('openCad')));
 }
 function showImage() {
   const img = el('img', { src: src(true), alt: file.name, class: 'fv-media' });

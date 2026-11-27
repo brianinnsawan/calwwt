@@ -216,8 +216,8 @@ test('a project login raised to Drawings edit saves for its company; partners se
   assert.equal((await get(w, `/api/cad/notes/${SHA}?company=spp`, bas)).status, 404);
   const basList = await (await get(w, '/api/cad/drawings', bas)).json();
   assert.deepEqual(basList.noted[SHA], ['caltex']);
-  assert.deepEqual(basList.files.map((f) => f.name), ['Site plan.dwg'], 'only the Files DWG shared with Caltex');
-  assert.equal((await get(w, `/api/cad/notes/${FILE_SHA}`, bas)).status, 404, 'notes of a drawing Caltex may not open');
+  assert.deepEqual(basList.files.map((f) => f.name).sort(), ['Gate detail.dwg', 'Site plan.dwg'], 'Caltex sees every Files drawing (calwwt, 27 Nov 2026)');
+  assert.deepEqual((await (await get(w, `/api/cad/notes/${FILE_SHA}`, bas)).json()).layers.map((l) => l.company), ['caltex'], 'still only its own notes');
   // SPP sees both companies' notes (read only for the other company).
   const giftNotes = await (await get(w, `/api/cad/notes/${SHA}?company=caltex`, gift)).json();
   assert.equal(giftNotes.current.note, 'Caltex note');
@@ -382,26 +382,32 @@ test('SPP shares its notes on a drawing with Caltex, read only and labelled; sto
     [`cad-workspace/shares/spp-caltex/${SHA}/000001.json`, `cad-workspace/shares/spp-caltex/${SHA}/000002.json`]);
 });
 
-test('only drawings Caltex may open can be shared; Files sharing still decides; hidden names stay hidden', async () => {
+test('SPP shares notes on a Files drawing with Caltex (every Files drawing is open to Caltex); hidden names stay hidden', async () => {
   const w = await world();
   w.grant('person:a', 'drawings', 'edit');
   const brian = await signIn(w, 'brian'), bas = await signIn(w, 'bas'), a = await signIn(w, 'site-a');
   assert.equal((await save(w, a, notesBody(0), { sha: FILE_SHA })).status, 201);
   let n = await (await get(w, `/api/cad/notes/${FILE_SHA}`, brian)).json();
-  assert.equal(n.sharing.caltexCanOpen, false);
-  assert.equal((await share(w, brian, FILE_SHA, true)).status, 409, 'the Files DWG is not shared with Caltex');
-  // Shared with Caltex in Files from yesterday: now its notes can be shared.
-  w.tasks.prepare("UPDATE files SET caltex_from='2026-01-01' WHERE sha256=?").run(FILE_SHA);
+  assert.equal(n.sharing.caltexCanOpen, true);
+  assert.equal((await get(w, `/api/cad/notes/${FILE_SHA}?company=spp`, bas)).status, 404, 'SPP notes only once shared');
   assert.equal((await share(w, brian, FILE_SHA, true)).status, 201);
   n = await (await get(w, `/api/cad/notes/${FILE_SHA}?company=spp`, bas)).json();
   assert.equal(n.current.by, 'SPP project staff', 'A is hidden from Caltex');
   assert.equal(n.history[0].by, 'SPP project staff');
-  // Files sharing removed again: Caltex can no longer open the drawing, so the notes are gone for Caltex too.
-  w.tasks.prepare('UPDATE files SET caltex_from=NULL WHERE sha256=?').run(FILE_SHA);
-  assert.equal((await get(w, `/api/cad/notes/${FILE_SHA}?company=spp`, bas)).status, 404);
-  assert.equal((await get(w, `/api/cad/notes/${FILE_SHA}`, bas)).status, 404);
   // Unknown drawings cannot be shared.
   assert.equal((await share(w, brian, 'a'.repeat(64), true)).status, 404);
+});
+
+test('drawings list says which site a drawing belongs to and links its PDF twin (27 Nov 2026)', async () => {
+  const w = await world();
+  w.tasks.exec(readFileSync(new URL('../../tasks/schema/0012_site_subfolders.sql', import.meta.url), 'utf8'));
+  w.tasks.prepare("UPDATE files SET folder_id='site-1156-drawings', name='A-101.dwg' WHERE sha256=?").run(SHA);
+  w.tasks.prepare("INSERT INTO files(id, folder_id, name, size, type, r2_key, sha256, caltex_from, uploaded_by, uploaded_at) VALUES('33333333-3333-4333-8333-333333333333','site-1156-drawings','A-101.pdf',5,'application/pdf','files/pdf',?,NULL,'brian','2026-11-27T00:00:00Z')").run('e'.repeat(64));
+  const brian = await signIn(w, 'brian');
+  const list = await (await get(w, '/api/cad/drawings', brian)).json();
+  const a101 = list.files.find((f) => f.sha256 === SHA), gate = list.files.find((f) => f.sha256 === FILE_SHA);
+  assert.equal(a101.site, '1156'); assert.equal(a101.pdf, '/files/view.html?id=33333333-3333-4333-8333-333333333333');
+  assert.equal(gate.site, ''); assert.ok(!('pdf' in gate));
 });
 
 test('full CAD program: only the versioned program files are cached (private, immutable); access is still checked', async () => {
