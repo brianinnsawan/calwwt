@@ -16,7 +16,7 @@ const T = {
     section: 'Long section', vert: 'Vertical ×', rows: ['Ground RL', 'Invert RL  in / out', 'Pipe top RL', 'Depth to invert (m)', 'Chainage (m)', 'Length · fall'], datum: 'Datum RL', key: 'Key plan',
     leg: ['Proposed pipe', 'Ground', 'Existing drain crossing', 'Clash with existing drain', 'Water level'], clash: 'clash', clear: 'clear', grating: 'Grating', in: 'In', out: 'Out', water: 'Water', top: 'Top', bottom: 'Bottom',
     stages: ['Existing', '2026 sampling', 'Final design (concept)'], stageTip: ['What is on site today', 'Where the water is sampled in 2026', 'The proposed new works and new sampling points (concept, not built)'],
-    fold: 'Fold this card', unfold: 'Open this card', walk: 'Walk the sampling points', of: 'of', prev: '‹ Back', next: 'Next ›', byResult: 'Colour sampling points by test result', risk: 'Risk', samples: (n) => `${n} sample${n > 1 ? 's' : ''}`, params: (n) => `${n} parameters tested`,
+    fold: 'Fold this card', unfold: 'Open this card', about: 'About this model', walk: 'Walk the sampling points', of: 'of', prev: '‹ Back', next: 'Next ›', byResult: 'Colour sampling points by test result', risk: 'Risk', samples: (n) => `${n} sample${n > 1 ? 's' : ''}`, params: (n) => `${n} parameters tested`,
     take: 'Where to take it', tested: 'Tested for', limit: 'Limit', result: 'Result', noResult: 'Lab results not in yet.', pass: 'Within limit', fail: 'Over limit', drains: 'What drains here (lit up)', sump: 'Sampled at', framed: 'The sampled sump is coloured', flag: 'To fix in the final design', red: 'Red pipes: G2.1 system', blue: 'Blue pipes: G2.2 system',
     level: (a, b, as) => `Water taken at about ${a} (${b} m below ground${as ? ', assumed' : ''}).`, sampleLeg: 'Sampling points', g21: 'G2.1 oil side (forecourt, fuel, oil change)', g22: 'G2.2 wastewater side (toilets, kitchens, shops)',
     st: { existing: 'Existing sampling point', new: 'New sampling point', construction: 'Construction sampling point (final design)', ows: 'New OWS or new WWT (final design)' }, mgl: 'mg/L', resultOn: (d, lab) => `Result ${d}${lab ? ` (${lab})` : ''}:` },
@@ -26,7 +26,7 @@ const T = {
     section: 'รูปตัดตามยาว', vert: 'แนวดิ่งขยาย ×', rows: ['ระดับพื้น RL', 'ระดับท้องท่อ เข้า / ออก', 'ระดับหลังท่อ RL', 'ความลึกถึงท้องท่อ (ม.)', 'ระยะ (ม.)', 'ความยาว · ความลาด'], datum: 'ระดับอ้างอิง RL', key: 'แปลนตำแหน่ง',
     leg: ['ท่อที่เสนอ', 'ผิวพื้น', 'ท่อระบายน้ำเดิมที่ตัดผ่าน', 'ชนท่อระบายน้ำเดิม', 'ระดับน้ำ'], clash: 'ชน', clear: 'ไม่ชน', grating: 'ตะแกรง', in: 'เข้า', out: 'ออก', water: 'น้ำ', top: 'หลังถัง', bottom: 'ก้นถัง',
     stages: ['สภาพปัจจุบัน', 'เก็บตัวอย่างปี 2026', 'แบบสุดท้าย (แนวคิด)'], stageTip: ['สิ่งที่มีอยู่หน้างานวันนี้', 'จุดที่เก็บตัวอย่างน้ำในปี 2026', 'งานใหม่ที่เสนอและจุดเก็บตัวอย่างใหม่ (แนวคิด ยังไม่ได้สร้าง)'],
-    fold: 'พับการ์ดนี้', unfold: 'เปิดการ์ดนี้', walk: 'ไล่ดูจุดเก็บตัวอย่าง', of: 'จาก', prev: '‹ ก่อนหน้า', next: 'ถัดไป ›', byResult: 'แสดงสีจุดเก็บตัวอย่างตามผลตรวจ', risk: 'ความเสี่ยง', samples: (n) => `${n} ตัวอย่าง`, params: (n) => `ตรวจ ${n} พารามิเตอร์`,
+    fold: 'พับการ์ดนี้', unfold: 'เปิดการ์ดนี้', about: 'เกี่ยวกับโมเดลนี้', walk: 'ไล่ดูจุดเก็บตัวอย่าง', of: 'จาก', prev: '‹ ก่อนหน้า', next: 'ถัดไป ›', byResult: 'แสดงสีจุดเก็บตัวอย่างตามผลตรวจ', risk: 'ความเสี่ยง', samples: (n) => `${n} ตัวอย่าง`, params: (n) => `ตรวจ ${n} พารามิเตอร์`,
     take: 'จุดตักน้ำ', tested: 'รายการตรวจ', limit: 'ค่ามาตรฐาน', result: 'ผล', noResult: 'ยังไม่ได้รับผลจากห้องแล็บ', pass: 'ผ่านเกณฑ์', fail: 'เกินเกณฑ์', drains: 'สิ่งที่ระบายมาที่จุดนี้ (ไฮไลต์)', sump: 'เก็บที่', framed: 'บ่อที่เก็บตัวอย่างแสดงเป็นสี', flag: 'ต้องแก้ไขในแบบสุดท้าย', red: 'ท่อสีแดง: ระบบ G2.1', blue: 'ท่อสีน้ำเงิน: ระบบ G2.2',
     level: (a, b, as) => `ตักน้ำที่ระดับประมาณ ${a} (ต่ำกว่าพื้น ${b} ม.${as ? ' ค่าสมมติ' : ''})`, sampleLeg: 'จุดเก็บตัวอย่าง', g21: 'G2.1 ฝั่งน้ำมัน (ลานจ่ายน้ำมัน เปลี่ยนน้ำมันเครื่อง)', g22: 'G2.2 ฝั่งน้ำเสีย (ห้องน้ำ ครัว ร้านค้า)',
     st: { existing: 'จุดเก็บตัวอย่างเดิม', new: 'จุดเก็บตัวอย่างใหม่', construction: 'จุดเก็บตัวอย่างที่จะก่อสร้าง (แบบสุดท้าย)', ows: 'OWS ใหม่ หรือระบบบำบัดใหม่ (แบบสุดท้าย)' }, mgl: 'มก./ล.', resultOn: (d, lab) => `ผลตรวจ ${d}${lab ? ` (${lab})` : ''}:` },
@@ -102,6 +102,9 @@ const CSS = `
 .v3-info .hd .fd { flex: none; border: 0; background: none; padding: 0 2px; color: var(--muted); font-size: 12px; line-height: 1; }
 .v3-info .hd .risk { margin-right: 0; }
 .v3-info .bd { margin-top: 5px; }
+.v3-info details.ab { margin-top: 6px; border-top: 1px solid var(--rule); padding-top: 5px; }
+.v3-info details.ab > summary { cursor: pointer; font-weight: 600; color: var(--muted); font-size: 12px; }
+.v3-info details.ab[open] > summary { margin-bottom: 4px; }
 .v3-info.folded { padding: 6px 10px; }
 .v3-info.folded .bd { display: none; }
 .v3-info .nav { display: flex; gap: 6px; align-items: center; margin-top: 6px; }
@@ -216,11 +219,21 @@ export async function show(view, url, w, lang = 'en') {
     hd.onclick = flip; hd.onkeydown = (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); flip(); } };
     hd.append(fd, ...title); const bd = el('div', { class: 'bd' }); card.append(hd, bd); return bd;
   };
-  // Brian, 27 Nov 2026: the how-to hint, datum and model notes at the bottom were too much and are left out for now (they
-  // are still in each .glb: meta.datum, meta.note). With nothing picked the card shows only the short sampling summary.
+  // Brian, 27 Nov 2026: the how-to hint, datum and model notes were too much in view, then he wanted them back folded away:
+  // they sit in "About this model" at the foot of the summary card, closed until opened (remembered in this browser).
+  const about = (body) => {
+    const d = el('details', { class: 'ab' }); d.append(el('summary', {}, t.about));
+    try { d.open = localStorage.getItem('calwwt.v3.about') === 'open'; } catch { /* storage off */ }
+    d.addEventListener('toggle', () => { try { localStorage.setItem('calwwt.v3.about', d.open ? 'open' : 'closed'); } catch { /* not remembered */ } });
+    d.append(el('p', {}, t.hint));
+    if (meta.datum) d.append(el('p', { class: 's' }, name(meta.datum)));
+    if (meta.note) d.append(el('p', { class: 's' }, name(meta.note) + (meta.built ? ` ${t.built} ${meta.built}.` : '')));
+    if (meta.sampling?.source) d.append(el('p', { class: 's' }, name(meta.sampling.source)));
+    body.append(d);
+  };
   const idle = () => {
     unpick(); card.replaceChildren(); card.hidden = true;
-    if (meta.sampling) sampleSummary();
+    if (meta.sampling) sampleSummary(); else about(frame(el('b', {}, t.about)));
   };
   const pick = (o) => {
     if (o.userData.sample) return pickSample(o);
@@ -333,6 +346,7 @@ export async function show(view, url, w, lang = 'en') {
       const body = frame(...(S.risk ? [el('span', { class: 'risk ' + S.risk }, `${S.risk}`)] : []), el('b', {}, t.sampleLeg));
       for (const c of (stageAt === 2 ? S.futureCounts : S.counts)) { const p = el('p'); p.append(el('span', { class: c.group === 'G2.1' ? 'g21' : 'g22' }, c.group.replace(/G/g, '')), ` – ${t.samples(c.samples)} – ${t.params(c.params)}`); body.append(p); }
       if (stageAt === 2 && S.systems?.length) { const p = el('p'); p.append(el('span', { class: 'g21' }, t.red), ' · ', el('span', { class: 'g22' }, t.blue)); body.append(p); }
+      about(body);
     };
     // ---- the card of one sampling point
     let walkAt = -1, order = [];
