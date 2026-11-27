@@ -10,7 +10,7 @@ import { OrbitControls } from '/sites/vendor/OrbitControls.js';
 import { GLTFLoader } from '/sites/vendor/GLTFLoader.js';
 
 const T = {
-  en: { layers: 'Layers', views: 'Views', labels: 'Names', levels: 'Pipe levels at manholes', see: 'See through the ground', tall: 'Stretch height ×3',
+  en: { layers: 'Layers', views: 'Views', more: 'More views…', labels: 'Names', levels: 'Pipe levels at manholes', see: 'See through the ground', tall: 'Stretch height ×3',
     hint: 'Click a tank, pipe or manhole to see its size and levels. Drag to turn, scroll or pinch to zoom, right-drag or two fingers to move.',
     close: 'Close', north: 'North', loading: 'Loading the 3D model…', failed: 'The 3D model could not be shown on this device.', built: 'Model updated',
     section: 'Long section', vert: 'Vertical ×', rows: ['Ground RL', 'Invert RL  in / out', 'Pipe top RL', 'Depth to invert (m)', 'Chainage (m)', 'Length · fall'], datum: 'Datum RL', key: 'Key plan',
@@ -20,7 +20,7 @@ const T = {
     take: 'Where to take it', tested: 'Tested for', limit: 'Limit', result: 'Result', noResult: 'Lab results not in yet.', pass: 'Within limit', fail: 'Over limit', drains: 'What drains here (lit up)', sump: 'Sampled at', framed: 'The sampled sump is coloured and framed', flag: 'To fix in the final design', red: 'Red pipes: G2.1 system', blue: 'Blue pipes: G2.2 system',
     level: (a, b, as) => `Water taken at about ${a} (${b} m below ground${as ? ', assumed' : ''}).`, sampleLeg: 'Sampling points', g21: 'G2.1 oil side (forecourt, fuel, oil change)', g22: 'G2.2 wastewater side (toilets, kitchens, shops)',
     st: { existing: 'Existing sampling point', new: 'New sampling point', construction: 'Construction sampling point (final design)', ows: 'New OWS or new WWT (final design)' }, mgl: 'mg/L', resultOn: (d, lab) => `Result ${d}${lab ? ` (${lab})` : ''}:` },
-  th: { layers: 'ชั้นข้อมูล', views: 'มุมมอง', labels: 'ชื่อ', levels: 'ระดับท่อที่บ่อพัก', see: 'มองทะลุพื้น', tall: 'ขยายความสูง ×3',
+  th: { layers: 'ชั้นข้อมูล', views: 'มุมมอง', more: 'มุมมองอื่น…', labels: 'ชื่อ', levels: 'ระดับท่อที่บ่อพัก', see: 'มองทะลุพื้น', tall: 'ขยายความสูง ×3',
     hint: 'คลิกที่ถัง ท่อ หรือบ่อพัก เพื่อดูขนาดและระดับ ลากเพื่อหมุน เลื่อนลูกกลิ้งหรือใช้สองนิ้วเพื่อซูม คลิกขวาลากหรือใช้สองนิ้วเพื่อเลื่อน',
     close: 'ปิด', north: 'ทิศเหนือ', loading: 'กำลังโหลดโมเดล 3D…', failed: 'ไม่สามารถแสดงโมเดล 3D บนอุปกรณ์นี้ได้', built: 'ปรับปรุงโมเดลเมื่อ',
     section: 'รูปตัดตามยาว', vert: 'แนวดิ่งขยาย ×', rows: ['ระดับพื้น RL', 'ระดับท้องท่อ เข้า / ออก', 'ระดับหลังท่อ RL', 'ความลึกถึงท้องท่อ (ม.)', 'ระยะ (ม.)', 'ความยาว · ความลาด'], datum: 'ระดับอ้างอิง RL', key: 'แปลนตำแหน่ง',
@@ -35,8 +35,13 @@ const CSS = `
 .v3 { position: absolute; inset: 0; overflow: hidden; touch-action: none; }
 .v3 canvas { display: block; width: 100%; height: 100%; }
 .v3-msg { position: absolute; inset: 0; display: grid; place-content: center; color: var(--muted); padding: 24px; text-align: center; }
-.v3-views { position: absolute; left: 10px; top: 10px; display: flex; flex-wrap: wrap; gap: 6px; z-index: 5; max-width: calc(100% - 270px); }
-.v3-views button, .v3-panel summary, .v3-info button { font-size: 12.5px; }
+.v3-views { position: absolute; left: 10px; top: 10px; z-index: 5; max-width: calc(100% - 270px); display: flex; align-items: flex-start; gap: 6px; }
+.v3-views > summary { flex: none; cursor: pointer; list-style: none; font-size: 12.5px; font-weight: 600; padding: 5px 10px; border: 1px solid var(--rule); border-radius: 6px; background: var(--panel); }
+.v3-views > summary::-webkit-details-marker { display: none; }
+.v3-views > summary::before { content: '▸ '; } .v3-views[open] > summary::before { content: '▾ '; }
+.v3-row { display: flex; flex-wrap: wrap; gap: 6px; }
+.v3-row select { flex: none; width: auto; max-width: 220px; padding: 5px 8px; }
+.v3-views button, .v3-views select, .v3-panel summary, .v3-info button { font-size: 12.5px; }
 .v3-views button.on { background: var(--accent); border-color: var(--accent); color: #fff; }
 .v3-panel { position: absolute; right: 10px; top: 10px; z-index: 6; width: 240px; max-height: calc(100% - 20px); overflow: auto; background: color-mix(in srgb, var(--panel) 94%, transparent); border: 1px solid var(--rule); border-radius: 8px; font-size: 12.5px; }
 .v3-panel summary { cursor: pointer; padding: 7px 10px; font-weight: 600; list-style-position: inside; }
@@ -44,8 +49,9 @@ const CSS = `
 .v3-panel label { display: flex; gap: 7px; align-items: center; cursor: pointer; line-height: 1.3; }
 .v3-panel label input { margin: 0; flex: none; padding: 0; }
 .v3-panel i { flex: none; width: 10px; height: 10px; border-radius: 2px; border: 1px solid color-mix(in srgb, var(--ink) 25%, transparent); }
+.v3-panel .rows summary { padding: 2px 0; font-weight: 600; }
 .v3-panel hr { width: 100%; border: 0; border-top: 1px solid var(--rule); margin: 4px 0; }
-.v3-info { position: absolute; left: 10px; bottom: 10px; z-index: 6; width: min(440px, calc(100% - 20px)); max-height: 46%; overflow: auto; background: color-mix(in srgb, var(--panel) 95%, transparent); border: 1px solid var(--rule); border-radius: 8px; padding: 9px 12px 10px; font-size: 12.5px; line-height: 1.45; }
+.v3-info { position: absolute; left: 10px; bottom: 10px; z-index: 6; width: max-content; max-width: min(440px, calc(100% - 20px)); max-height: 46%; overflow: auto; background: color-mix(in srgb, var(--panel) 95%, transparent); border: 1px solid var(--rule); border-radius: 8px; padding: 9px 12px 10px; font-size: 12.5px; line-height: 1.45; }
 .v3-info b { display: block; font: 600 16px/1.2 var(--font-display); margin: 0 26px 4px 0; }
 .v3-info p { margin: 0 0 3px; }
 .v3-info p.s { color: var(--muted); font-size: 12px; margin-top: 5px; }
@@ -91,6 +97,7 @@ const CSS = `
 .v3-info table { border-collapse: collapse; margin: 4px 0; font-size: 12px; }
 .v3-info td, .v3-info th { padding: 1px 8px 1px 0; text-align: left; }
 .v3-info td.bad { color: #dc2626; font-weight: 600; } .v3-info td.ok { color: #16a34a; }
+.v3-info .x0 { float: right; margin: -3px -6px 0 8px; padding: 0 7px; line-height: 1.3; }
 .v3-info .nav { display: flex; gap: 6px; align-items: center; margin-top: 6px; }
 .v3-panel .leg { display: grid; gap: 2px; padding: 0 0 4px; color: var(--muted); font-size: 11.5px; }
 .v3-panel .leg b { color: var(--ink); font-weight: 600; }
@@ -98,6 +105,9 @@ const CSS = `
 @media (max-width: 760px) { .v3-sect .sf { grid-template-columns: 1fr; } }
 @media (max-width: 760px) { .v3-views { max-width: calc(100% - 20px); top: 46px; } .v3-panel { width: 210px; } .v3-info { max-height: 40%; } .v3-n { bottom: auto; top: 132px; right: 10px; } }
 `;
+// light up a picked thing. A see-through sampled sump uses a basic material with no "emissive": setting one there broke
+// three.js's drawing (seen on the walk-through), so those are brightened instead.
+const glow = (m, hex, k) => { if ('emissive' in m && m.emissive) { m.emissive = new THREE.Color(hex); m.emissiveIntensity = k; } else m.color.lerp(new THREE.Color(hex), k * 0.6); return m; };
 const el = (tag, attrs = {}, text) => { const n = document.createElement(tag); for (const [k, v] of Object.entries(attrs)) if (v != null) n.setAttribute(k, v); if (text != null) n.textContent = text; return n; };
 
 export async function show(view, url, w, lang = 'en') {
@@ -134,9 +144,21 @@ export async function show(view, url, w, lang = 'en') {
   const views = meta.views?.length ? meta.views : [{ id: 'site', en: 'Whole site', th: 'ทั้งสถานี', pos: [mid.x, mid.y + Math.max(size.x, size.z) * 0.6, mid.z + Math.max(size.x, size.z) * 0.7], target: mid.toArray() }];
   const yScale = () => root.scale.y;
   const scaled = (p) => [p[0], p[1] < 0 ? p[1] * yScale() : p[1], p[2]];   // "stretch height" on: only points below ground move
-  const vbar = el('div', { class: 'v3-views' });
-  for (const v of views) { const b = el('button', { type: 'button' }, name(v)); b.onclick = () => go(scaled(v.pos), scaled(v.target)); vbar.append(b); }
-  box.append(vbar);
+  // Brian, 27 Nov 2026 ("the views buttons is too much"): only Whole site, Plan and Sampling points as buttons, every other
+  // ready-made view in one "More views" list, and the whole bar folds away.
+  const vwrap = el('details', { class: 'v3-views' }); vwrap.open = view.clientWidth > 760;
+  const vbar = el('div', { class: 'v3-row' }); vwrap.append(el('summary', {}, t.views), vbar);
+  const MAIN = ['site', 'plan', 'samples'], mainViews = views.filter((v) => MAIN.includes(v.id));
+  if (!mainViews.length) mainViews.push(views[0]);
+  for (const v of mainViews) { const b = el('button', { type: 'button' }, name(v)); b.onclick = () => go(scaled(v.pos), scaled(v.target)); vbar.append(b); }
+  const moreViews = views.filter((v) => !mainViews.includes(v));
+  if (moreViews.length) {
+    const sel = el('select', { 'aria-label': t.more }); sel.append(el('option', { value: '' }, t.more));
+    moreViews.forEach((v, i) => sel.append(el('option', { value: String(i) }, name(v))));
+    sel.onchange = () => { const v = moreViews[Number(sel.value)]; if (v) go(scaled(v.pos), scaled(v.target)); sel.value = ''; };
+    vbar.append(sel);
+  }
+  box.append(vwrap);
   camera.position.set(...views[0].pos); controls.target.set(...views[0].target); controls.update();
 
   // ---- layers, labels and other switches
@@ -175,19 +197,18 @@ export async function show(view, url, w, lang = 'en') {
   let picked = null, pickedMat = null;
   const lit = [];   // things lit up because they drain to the picked sampling point
   const unpick = () => { if (picked) { picked.material = pickedMat; picked = null; } for (const [m, mt] of lit.splice(0)) m.material = mt; };
-  let sampleSummary = () => {}, pickSample = () => {}, pickTarget = () => false, onlySampleLabels = false;
+  let sampleSummary = () => {}, pickSample = () => {}, pickTarget = () => false, onlySampleLabels = false, quiet = false;
+  // Brian, 27 Nov 2026: the how-to hint, datum and model notes at the bottom were too much and are left out for now (they
+  // are still in each .glb: meta.datum, meta.note). With nothing picked the card shows only the short sampling summary.
   const idle = () => {
-    unpick(); card.replaceChildren();
-    card.append(el('p', {}, t.hint));
-    if (meta.datum) card.append(el('p', { class: 's' }, name(meta.datum)));
-    if (meta.note) card.append(el('p', { class: 's' }, name(meta.note) + (meta.built ? ` ${t.built} ${meta.built}.` : '')));
-    if (meta.sampling) sampleSummary();
+    unpick(); card.replaceChildren(); card.hidden = true;
+    if (meta.sampling && !quiet) { sampleSummary(); card.hidden = !card.childElementCount; }
   };
   const pick = (o) => {
     if (o.userData.sample) return pickSample(o);
     if (pickTarget(o)) return;
-    unpick(); picked = o; pickedMat = o.material;
-    const m = o.material.clone(); m.emissive = new THREE.Color(0xff9d00); m.emissiveIntensity = 0.55; m.opacity = Math.max(m.opacity, 0.9); o.material = m;
+    unpick(); picked = o; pickedMat = o.material; card.hidden = false;
+    const m = glow(o.material.clone(), 0xff9d00, 0.55); m.opacity = Math.max(m.opacity, 0.9); o.material = m;
     const u = o.userData; card.replaceChildren();
     const x = el('button', { type: 'button', class: 'x', title: t.close, 'aria-label': t.close }, '×'); x.onclick = idle;
     card.append(x, el('b', {}, name(u)));
@@ -285,32 +306,32 @@ export async function show(view, url, w, lang = 'en') {
     box.append(bar);
     // ---- legend and the result switch
     const leg = el('div', { class: 'leg' });
-    leg.append(el('b', {}, t.sampleLeg));
     const key = (c, txt, shape) => { const r = el('span'), i = el('i'); i.style.cssText = `display:inline-block;width:10px;height:10px;margin-right:6px;vertical-align:-1px;background:${c};${shape}`; r.append(i, txt); leg.append(r); };
     key('#d7263d', t.g21, ''); key('#1f6fe0', t.g22, '');
     leg.append(el('span', {}, t.framed));
     if (S.hasFuture) { key('#ff66cc', t.st.ows, 'clip-path:polygon(50% 0,100% 100%,0 100%)'); key('#f08c00', t.flag, 'clip-path:polygon(0 0,100% 0,50% 100%)'); }
-    rows.append(el('hr'), leg);
+    const legBox = el('details'); legBox.append(el('summary', {}, t.sampleLeg), leg);
+    rows.append(el('hr'), legBox);
     check(t.byResult, false, (on) => { byResult = on; stage(stageAt); });
     // ---- summary on the idle card, in the deck's words ("2.1 – 2 samples – 4 parameters tested")
     sampleSummary = () => {
-      const p0 = el('p');
+      const p0 = el('p'), x0 = el('button', { type: 'button', class: 'x0', title: t.close, 'aria-label': t.close }, '×');
+      x0.onclick = () => { quiet = true; idle(); }; p0.append(x0);
       if (S.risk) p0.append(el('span', { class: 'risk ' + S.risk }, `${S.risk}`));
       card.insertBefore(p0, card.firstChild);
       let after = p0;
       for (const c of (stageAt === 2 ? S.futureCounts : S.counts)) { const p = el('p'); p.append(el('span', { class: c.group === 'G2.1' ? 'g21' : 'g22' }, c.group.replace(/G/g, '')), ` – ${t.samples(c.samples)} – ${t.params(c.params)}`); after.after(p); after = p; }
       if (stageAt === 2 && S.systems?.length) { const p = el('p'); p.append(el('span', { class: 'g21' }, t.red), ' · ', el('span', { class: 'g22' }, t.blue)); after.after(p); }
-      if (S.source) card.append(el('p', { class: 's' }, name(S.source)));
     };
     // ---- the card of one sampling point
     let walkAt = -1, order = [];
     pickSample = (o) => {
-      unpick(); const sm = o.userData.sample, fr = frameOf(sm.id) || o;
+      unpick(); card.hidden = false; const sm = o.userData.sample, fr = frameOf(sm.id) || o;
       picked = fr; pickedMat = fr.material;
-      const m = fr.material.clone(); m.emissive = new THREE.Color(0xffffff); m.emissiveIntensity = 0.35; fr.material = m;
+      const m = glow(fr.material.clone(), 0xffffff, 0.35); fr.material = m;
       for (const n of sm.upstream || []) root.traverse((q) => {
         const u = q.userData; if (!q.isMesh || u.sample || !u.en || !(u.en === n || u.en.startsWith(n) || u.tag === n)) return;
-        const mm = q.material.clone(); mm.emissive = new THREE.Color(0x00c2ff); mm.emissiveIntensity = 0.6; mm.opacity = Math.max(mm.opacity, 0.9); lit.push([q, q.material]); q.material = mm;
+        const mm = glow(q.material.clone(), 0x00c2ff, 0.6); mm.opacity = Math.max(mm.opacity, 0.9); lit.push([q, q.material]); q.material = mm;
       });
       card.replaceChildren();
       const x = el('button', { type: 'button', class: 'x', title: t.close, 'aria-label': t.close }, '×'); x.onclick = () => { walkAt = -1; idle(); };
