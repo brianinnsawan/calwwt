@@ -72,6 +72,8 @@ export default {
     { id: 'starpark', en: 'Star Park tank', th: 'ถังที่ Star Park', from: [2244, -376, 10], to: [2256, -362, -1] },
     { id: 'toilets', en: 'Toilet tank', th: 'ถังที่ห้องน้ำ', from: [2276, -447, 9], to: [2286, -434, -1] },
     { id: 'shops', en: 'Shop grease traps and tank', th: 'ถังดักไขมันและถังของร้านค้า', from: [2318, -520, 16], to: [2299, -488, -1] },
+    { id: 'office', en: 'Office and staff container', th: 'สำนักงานและตู้คอนเทนเนอร์พนักงาน', from: [2266, -388, 14], to: [2281, -405, 1] },
+    { id: 'front', en: 'MDB and PEA poles', th: 'ตู้ MDB และเสาไฟ กฟภ.', from: [2287, -524, 10], to: [2301, -508, 3] },
     { id: 'fuel', from: [2272, -461, 6], to: [2259.8, -447.6, -1.8] },
     { id: 'under', en: 'From below ground', th: 'มองจากใต้ดิน', from: [2262, -528, -9], to: [2296, -500, -0.5] },
   ],
@@ -196,6 +198,28 @@ export default {
     building([[2289.8, -431.3], [2292.2, -430.9], [2292.8, -434.6], [2290.4, -435.0]], 0.05, 2.6, { en: 'Garbage room', th: 'ห้องพักขยะ', tag: 'Garbage room', tagTh: 'ห้องพักขยะ' });
     building([[2282.0, -438.2], [2290.4, -436.9], [2295.1, -466.7], [2286.9, -468.0]], 0.085, 4.2, { en: 'Shop building 1 (6 units)', th: 'อาคารร้านค้า 1 (6 คูหา)', tag: 'Shops 1', tagTh: 'ร้านค้า 1' });
     building([[2287.9, -473.6], [2296.1, -471.3], [2304.4, -500.5], [2296.2, -502.8]], 0.085, 4.2, { en: 'Shop building 2 (6 units)', th: 'อาคารร้านค้า 2 (6 คูหา)', tag: 'Shops 2', tagTh: 'ร้านค้า 2' });
+    // ---------- 28 Nov 2026 (Brian): MDB and the PEA poles at the front, and the staff container next to the office.
+    // MDB and poles from the as-built electrical site plan (1.Layout\DWG\EE "ผังบิเวณแสดงระบบไฟฟ้าและระบบสื่อสารโครงการ", REVISE3
+    // 07.12.65, sheet LAY-EE-04): its plan copy sits on this model's drawing by a plain shift (x + 520.2, y + 2150.6, fitted on
+    // the DLFN-12Q tank; the other two treatment tanks then agree within about 1.3 m). The container is not on any drawing (satellite image; Brian).
+    const FROM_EE = { en: 'Position from the as-built electrical site plan LAY-EE-04 (Dec 2022), within about 1 m; sizes and heights assumed.', th: 'ตำแหน่งจากผังระบบไฟฟ้าตามแบบก่อสร้างจริง LAY-EE-04 (ธ.ค. 2022) คลาดเคลื่อนประมาณ 1 ม. ขนาดและความสูงเป็นค่าสมมติ' };
+    const ee = (en, th) => lines([...en, FROM_EE.en], [...th, FROM_EE.th], C);
+    // MDB pad: meter cabinet, "MDB NFR" and the office safety switch in a row on a concrete plinth at the front, east of the canopy
+    add('buildings', merge([boxGeo(6.4, 1.0, 0.15, 2299.3, -509.0, 0, 3), boxGeo(1.2, 0.6, 1.6, 2297.2, -509.1, 0.15, 3), boxGeo(1.8, 0.7, 2.0, 2299.2, -509.0, 0.15, 3), boxGeo(0.6, 0.35, 0.9, 2301.8, -508.9, 0.5, 3)]), 'mdb', { en: 'MDB (main distribution board)', th: 'ตู้ MDB (ตู้เมนไฟฟ้า)', tag: 'MDB', tagTh: 'ตู้ MDB', kind: 'building',
+      info: ee(['Main distribution board on a concrete plinth at the front of the site, east of the canopy, by the DLFN-12Q tank: the PEA meter cabinet, the "MDB NFR" board and the office safety switch in a row (as labelled on LAY-EE-04). Fed underground from the PEA transformers beside it. Keep clear when digging: power cables run from here under the forecourt.'],
+        ['ตู้เมนไฟฟ้าบนฐานคอนกรีตด้านหน้าสถานี ทางตะวันออกของหลังคาคลุมหัวจ่าย ข้างถัง DLFN-12Q ประกอบด้วยตู้มิเตอร์ กฟภ. ตู้ "MDB NFR" และสวิตช์ตัดตอนของสำนักงาน เรียงกัน (ตามที่ระบุใน LAY-EE-04) รับไฟใต้ดินจากหม้อแปลง กฟภ. ข้างกัน ระวังเมื่อขุด: สายไฟฟ้าเดินจากจุดนี้ใต้ลาน']) }, V(2299.2, -509.0, 2.8));
+    // PEA poles: two concrete poles at the south-east corner, each carrying a transformer platform (100 kVA and 250 kVA)
+    [[-506.57, '100'], [-509.85, '250']].forEach(([y, kva], i) => {
+      add('buildings', merge([cylGeo(0.16, 12.0, 2302.8, y, 0, 12), cylGeo(0.16, 12.0, 2304.2, y, 0, 12), boxGeo(2.0, 0.25, 0.15, 2303.5, y, 4.9, 0), boxGeo(1.6, 0.25, 0.15, 2303.5, y, 9.0, 0)]), 'pole', { en: `PEA pole pair ${i + 1}`, th: `เสาไฟฟ้า กฟภ. คู่ที่ ${i + 1}`, kind: 'building',
+        tag: i === 0 ? 'PEA poles + transformers' : undefined, tagTh: i === 0 ? 'เสาไฟ กฟภ. + หม้อแปลง' : undefined,
+        info: ee([`Two concrete electricity poles (about 12 m) of the PEA supply at the south-east corner of the front, carrying the ${kva} kVA transformer on a platform. 22 kV 3-phase supply comes in from the road ("3PH.3W.22KV. INCOMING, BY PEA" on LAY-EE-04). Overhead lines and poles: keep cranes and tall plant clear.`],
+          [`เสาไฟฟ้าคอนกรีต 2 ต้น (สูงประมาณ 12 ม.) ของ กฟภ. ที่มุมตะวันออกเฉียงใต้ด้านหน้า รับหม้อแปลง ${kva} kVA บนคานรับหม้อแปลง ไฟ 22 kV 3 เฟส เข้าจากถนน ("3PH.3W.22KV. INCOMING, BY PEA" ใน LAY-EE-04) มีสายไฟเหนือศีรษะ: ระวังรถเครนและเครื่องจักรสูง`]) }, i === 0 ? V(2303.5, -508.2, 12.8) : null);
+      add('buildings', boxGeo(1.3, 0.9, 1.4, 2303.5, y, 5.05, 0), 'transformer', { en: `Transformer ${kva} kVA`, th: `หม้อแปลง ${kva} kVA`, nopick: 1 });
+    });
+    // Staff container next to the office (Brian): shower and sleeping room for the station staff, a 20 ft container
+    add('buildings', boxGeo(6.06, 2.44, 2.6, 2279.7, -402.85, 0.1, 8.6), 'container', { en: 'Staff container (shower and sleeping room)', th: 'ตู้คอนเทนเนอร์พนักงาน (ห้องอาบน้ำและห้องนอน)', tag: 'Staff container', tagTh: 'ตู้คอนเทนเนอร์พนักงาน', kind: 'building',
+      info: lines(['Container placed next to the office after the station opened: shower and sleeping area for the staff on site (Brian, 28 Nov 2026). Not on any drawing; its place (against the north side of the office) is from the satellite image and its size is taken as a 20 ft container (6.06 × 2.44 m). Where its shower water drains to is not known: check on site.'],
+        ['ตู้คอนเทนเนอร์ที่วางข้างสำนักงานหลังสถานีเปิด เป็นห้องอาบน้ำและที่นอนของพนักงานประจำสถานี (Brian, 28 พ.ย. 2026) ไม่มีในแบบ ตำแหน่ง (ชิดด้านเหนือของสำนักงาน) มาจากภาพถ่ายดาวเทียม ขนาดถือเป็นตู้ 20 ฟุต (6.06 × 2.44 ม.) ไม่ทราบว่าน้ำจากห้องอาบน้ำระบายไปที่ใด ควรตรวจสอบที่หน้างาน'], C) }, V(2279.7, -402.85, 3.4));
     add('buildings', prismGeo([[2259.3, -464.3], [2269.5, -462.7], [2275.6, -503.6], [2265.4, -505.2]], 5.6, 0.9), 'roof', { en: 'Pump canopy', th: 'หลังคาคลุมหัวจ่าย', tag: 'Canopy', tagTh: 'หลังคาคลุมหัวจ่าย', kind: 'building', info: lines(['Canopy over the four pump islands.'], ['หลังคาคลุมแท่นหัวจ่าย 4 แท่น'], C) }, V(2267.5, -484, 7.2));
   },
 };

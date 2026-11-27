@@ -174,4 +174,8 @@ septic options, truck paths, levels) into viewer.mjs, then retire the calcr pass
   (`fit()` in viewer.mjs); Drawings: a PDF shows as a card with the page picture and "Open PDF" (phone browsers do not show
   a PDF inside a page); Timeline stays under the tabs. Sample first (site page); then Sites overview, Files, Tasks,
   Meetings, CAD workspace.
+- Buildings (Brian, 28 Nov 2026; sources and fits in tools/models/README.md): 1588 Porto Go and 1703 King Kaew have their
+  buildings, canopies, signs, kiosks, car wash and garbage rooms from the architect DWGs + 360 video; 1750 Saraburi has the MDB,
+  PEA poles / transformers (EE layout) and the staff container by the office (satellite). Videos: watch page at 2160p, turn the
+  360 view; new materials in style.mjs (kiosk, canopyRed, mdb, pole, container ...).
 - Site notes and starting timelines in `data/sites.json` / `data/timelines/` were written from Brian's site-visit notes; dates to confirm.

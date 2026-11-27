@@ -63,7 +63,11 @@ export const MATERIALS = {
   canopyTop: [0xb9c0c6],         // top of a pump canopy (metal deck)
   roofDark: [0x3b4249, 0.9],     // dark grey metal roof (sheds)
   wallDark: [0x3b4249, 0.85],    // dark grey cladding or knock-down panels
-  evCharger: [0x2f7fd1],         // EV charger posts       // white slatted screen wall (e.g. round water tanks)
+  evCharger: [0x2f7fd1],         // EV charger posts
+  mdb: [0x8d969e],               // electrical cabinets (MDB, meter cabinet)
+  pole: [0xa7a59f],              // concrete electricity poles and cross-arms
+  transformer: [0x6f7a6a],       // pole-mounted transformer
+  container: [0xd9dcd6, 0.9],    // shipping-container room       // white slatted screen wall (e.g. round water tanks)
   // water sampling (layer "sampling"): red = G2.1 (oil side), blue = G2.2 (wastewater side), as in the Caltex deck (SPP Sites R1)
   sampleG21: [0xd7263d],         // G2.1 (a new sampling sump that is not in the model yet)
   sampleG22: [0x1f6fe0],         // G2.2
