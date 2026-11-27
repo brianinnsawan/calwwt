@@ -57,7 +57,13 @@ export const MATERIALS = {
   clutter: [0x9a8f80],           // benches, tables, bins, crates (shown loosely)
   umbrellaBlue: [0x2f5fb3, 0.9], // market umbrella
   tentRed: [0xc8432f, 0.9],      // sun tent
-  waterTankGrey: [0x9a9ea3],     // grey plastic water tank       // white slatted screen wall (e.g. round water tanks)
+  waterTankGrey: [0x9a9ea3],     // grey plastic water tank
+  waterTankBeige: [0xd8c7a3],    // beige plastic water tank
+  canopyRed: [0xc8312f, 0.95],   // Caltex pump canopy fascia (red)
+  canopyTop: [0xb9c0c6],         // top of a pump canopy (metal deck)
+  roofDark: [0x3b4249, 0.9],     // dark grey metal roof (sheds)
+  wallDark: [0x3b4249, 0.85],    // dark grey cladding or knock-down panels
+  evCharger: [0x2f7fd1],         // EV charger posts       // white slatted screen wall (e.g. round water tanks)
   // water sampling (layer "sampling"): red = G2.1 (oil side), blue = G2.2 (wastewater side), as in the Caltex deck (SPP Sites R1)
   sampleG21: [0xd7263d],         // G2.1 (a new sampling sump that is not in the model yet)
   sampleG22: [0x1f6fe0],         // G2.2

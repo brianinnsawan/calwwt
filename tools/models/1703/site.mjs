@@ -95,13 +95,14 @@ export default {
     points: [[60, 27, G0], [128, 27, G0], [129, 136, G0], [61, 136, G0], [94, 81, G0]],
     names: { siteGround: { en: 'Forecourt and paving (taken as flat)', th: 'ลานและพื้นผิว (ถือว่าเรียบ)' }, road: { en: 'Highway 3256 side and entrances', th: 'ด้านทางหลวง 3256 และทางเข้าออก' } },
   },
-  layers: ['tanks', 'sewer', 'drains', 'fuel', 'buildings', 'plan', 'ground'],   // names, order and colours: ../style.mjs
+  layers: ['tanks', 'sewer', 'drains', 'water', 'fuel', 'buildings', 'plan', 'ground'],   // names, order and colours: ../style.mjs
   views: [
     { id: 'site', en: 'Whole site', th: 'ทั้งสถานี', from: [85, -52, 92], to: [85, 74, 0] },
     { id: 'plan', en: 'Plan', th: 'ผัง', from: [85, 80.9, 190], to: [85, 81, 0] },
     { id: 'toilets', en: 'Toilet tank (18,000 L)', th: 'ถังที่ห้องน้ำ (18,000 L)', from: [133, 150, 13], to: [120, 133, -1.5] },
     { id: 'shops', en: 'Shop tank (20,000 L) and grease traps', th: 'ถังร้านค้า (20,000 L) และถังดักไขมัน', from: [147, 88, 20], to: [126.5, 106, -1.5] },
     { id: 'kfc', en: 'KFC tanks', th: 'ถังของ KFC', from: [104, 74, 12], to: [118, 59.5, -1.5] },
+    { id: 'carwash', en: 'Car wash, office and garbage room', th: 'ล้างรถ สำนักงาน และห้องพักขยะ', from: [96, 96, 20], to: [66, 116, 0] },
     { id: 'fuel', from: [80, 67, 5], to: [67.3, 84, -2.6] },
     { id: 'under', en: 'From below ground', th: 'มองจากใต้ดิน', from: [148, 0, -12], to: [120, 56, -1.5] },
   ],
@@ -341,9 +342,60 @@ export default {
     building([[116.7, 80.9], [124.8, 80.8], [124.6, 65.7], [116.4, 65.8]], 4.2, { en: 'Large shop unit', th: 'ร้านค้าคูหาใหญ่', tag: 'Large shop', tagTh: 'ร้านค้าคูหาใหญ่' }, ['Its grease trap is the GT-T-2000 behind it. Not named on the layout.'], ['ถังดักไขมันของคูหานี้คือ GT-T-2000 ที่อยู่ด้านหลัง ผังไม่ได้ระบุชื่อ']);
     building([[123.0, 59.1], [126.45, 59.1], [126.45, 64.45], [123.0, 64.45]], 3.0, { en: 'Pump room and water tanks', th: 'ห้องปั๊มน้ำและถังเก็บน้ำ', tag: 'Pump room', tagTh: 'ห้องปั๊มน้ำ' }, ['Two 3,000 L water tanks and two pumps are drawn inside. The pipe out of the SP-T-15,000 L tank is drawn passing under this room.'], ['ภายในเขียนถังเก็บน้ำ 3,000 ลิตร 2 ใบ และปั๊ม 2 ตัว ท่อออกจากถัง SP-T-15,000 L เขียนผ่านใต้ห้องนี้']);
     building([[110.95, 35.1], [121.45, 35.1], [121.45, 53.35], [110.95, 53.35]], 5.0, { en: 'KFC', th: 'KFC', tag: 'KFC', tagTh: 'KFC' });
-    building([[62.9, 95.7], [71.05, 95.7], [71.05, 101.9], [62.9, 101.9]], 3.2, { en: 'Small building beside the car wash slab', th: 'อาคารเล็กข้างลานล้างรถ', tag: 'Small building', tagTh: 'อาคารเล็ก' }, ['Has a toilet in its north-west corner, drained to the SP-T-1600 tank. Not named on the layout.'], ['มีห้องน้ำที่มุมด้านซ้ายบน ระบายลงถัง SP-T-1600 ผังไม่ได้ระบุชื่อ']);
     add('buildings', merge([[117.96, 122.38], [117.96, 119.68], [117.91, 116.98]].map(([x, y]) => boxGeo(1.5, 1.5, 2.6, x, y, G0, 0))), 'building', { en: 'Kiosks (3)', th: 'คีออส (3 หลัง)', tag: 'Kiosk', tagTh: 'คีออส', kind: 'building', info: lines(['Three 1.5 m kiosks marked KIOSK on the layout.'], ['คีออสขนาด 1.5 ม. 3 หลัง ตามที่ผังระบุ KIOSK'], C) }, V(117.96, 119.68, G0 + 3.3));
-    add('buildings', prismGeo([[86.3, 83.6], [95.6, 82.4], [89.8, 34.4], [80.4, 35.6]], G0 + 5.6, 0.9), 'roof', { en: 'Pump canopy', th: 'หลังคาคลุมหัวจ่าย', tag: 'Canopy', tagTh: 'หลังคาคลุมหัวจ่าย', kind: 'building', info: lines(['Canopy over the five pump islands.'], ['หลังคาคลุมแท่นหัวจ่าย 5 แท่น'], C) }, V(88, 59, G0 + 7.2));
+    // ---------- 28 Nov 2026 (Brian: canopy, office, car wash building, garbage room, signs). Positions from the SPP as-built
+    // general site plan LAY-A-01 (DWG), which sits on this model by a plain shift (x - 1223.1, y - 878.8; the canopy corners agree
+    // exactly); heights from the as-built canopy sheets CANOPY-A-01/02 and the garbage-room sheet GN-GB-01. What the drawings do
+    // not show (the car wash shed, the drying room, the beige water tank) is from Brian's 360° video (19 Nov 2026) and the satellite.
+    const FROM_LAY = { en: 'Outline from the as-built site plan LAY-A-01 (SPP, 2021); height from the as-built building sheets or assumed.', th: 'แนวจากผังบริเวณตามแบบก่อสร้างจริง LAY-A-01 (SPP ปี 2021) ความสูงจากแบบอาคารหรือค่าสมมติ' };
+    const FROM_VID = { en: 'Not on the drawings: position and size judged from Brian\'s 360° site video (19 Nov 2026) and the satellite image. Check on site.', th: 'ไม่มีในแบบ: ตำแหน่งและขนาดประมาณจากวิดีโอ 360° ของ Brian (19 พ.ย. 2026) และภาพถ่ายดาวเทียม ควรตรวจสอบที่หน้างาน' };
+    const lay = (en, th) => lines([...en, FROM_LAY.en], [...th, FROM_LAY.th], C);
+    const vid = (en, th) => lines([...en, FROM_VID.en], [...th, FROM_VID.th], C);
+
+    // Pump canopy: 49 × 9.3 m on the site plan, turned with the islands; fascia 1.2 m (red, CALTEX lettering), ceiling about 5.2 m
+    // above the forecourt; one column in each of the five islands (sheet CANOPY-A-02).
+    const CAN = [[86.3, 83.6], [95.6, 82.4], [89.8, 34.4], [80.4, 35.6]];
+    add('buildings', prismGeo(CAN, G0 + 5.2, 1.2), 'canopyRed', { en: 'Pump canopy', th: 'หลังคาคลุมหัวจ่าย', tag: 'Canopy', tagTh: 'หลังคาคลุมหัวจ่าย', kind: 'building',
+      info: lay(['Pump canopy over the five islands, about 49 × 9.3 m, red fascia about 1.2 m deep with the CALTEX name, ceiling about 5.2 m above the forecourt. One steel column in each island.'],
+        ['หลังคาคลุมหัวจ่ายเหนือแท่นจ่าย 5 แท่น ขนาดประมาณ 49 × 9.3 ม. ขอบหลังคาสีแดงลึกประมาณ 1.2 ม. มีชื่อ CALTEX ฝ้าสูงประมาณ 5.2 ม. จากลาน เสาเหล็กแท่นละ 1 ต้น']) }, V(88.0, 59.0, G0 + 7.0));
+    add('buildings', prismGeo(CAN, G0 + 5.15, 0.05), 'roof', { en: 'Canopy ceiling', th: 'ฝ้าหลังคาคลุมหัวจ่าย', nopick: 1 });
+    add('buildings', prismGeo(CAN, G0 + 6.4, 0.06), 'canopyTop', { en: 'Canopy roof', th: 'หลังคาคลุมหัวจ่าย (ด้านบน)', nopick: 1 });
+    add('buildings', merge([0, 1, 2, 3, 4].map((i) => cylGeo(0.3, 5.2, 89.6 - 1.2175 * i, 78.93 - 9.925 * i, G0, 16))), 'column', { en: 'Canopy columns', th: 'เสาหลังคาคลุมหัวจ่าย', nopick: 1 });
+
+    // Office (knock-down, dark grey cladding): 8.15 × 6.2 m on the plan ("อาคารสำนักงาน"), with a small roof over its door
+    building([[62.9, 95.7], [71.05, 95.7], [71.05, 101.9], [62.9, 101.9]], 3.2, { en: 'Office (knock-down building)', th: 'อาคารสำนักงาน (อาคารน็อคดาวน์)', tag: 'Office', tagTh: 'สำนักงาน' },
+      ['Station office, a knock-down building with dark grey panels and a white door (site video). Labelled "อาคารสำนักงาน" on the as-built site plan.', FROM_LAY.en], ['สำนักงานสถานี อาคารน็อคดาวน์ผนังแผ่นสีเทาเข้ม ประตูสีขาว (วิดีโอหน้างาน) ผังบริเวณระบุว่า "อาคารสำนักงาน"', FROM_LAY.th]);
+
+    // Car wash: the 13.50 × 23.26 m wash slab on the plan ("พื้นที่ล้างรถ") is covered by a dark-grey steel shed (video 7:15;
+    // satellite), clad on the boundary side, with a beige water tank at its far end and a small drying room near the office.
+    add('buildings', merge([prismGeo([[60.9, 109.2], [73.5, 109.0], [73.6, 124.6], [61.0, 124.8]], G0 + 4.6, 0.25),
+      ...[[61.1, 109.4], [73.3, 109.2], [61.2, 117.0], [73.4, 116.9], [61.2, 124.6], [73.4, 124.4]].map(([x, y]) => cylGeo(0.12, 4.6, x, y, G0, 8))]), 'roofDark', { en: 'Car wash shed', th: 'โรงล้างรถ', tag: 'Car wash', tagTh: 'ล้างรถ', kind: 'building',
+      info: vid(['Steel shed over the car wash slab: dark grey metal roof about 4.6 m high on steel columns, open to the forecourt, clad in dark grey sheet on the boundary side. The wash slab itself (13.50 × 23.26 m = 314 m²) is on the as-built site plan; the shed was built later and covers about its southern two-thirds.'],
+        ['โรงเหล็กคลุมลานล้างรถ หลังคาเมทัลชีทสีเทาเข้มสูงประมาณ 4.6 ม. บนเสาเหล็ก เปิดโล่งด้านลาน กรุแผ่นสีเทาเข้มด้านแนวเขต ตัวลานล้างรถ (13.50 × 23.26 ม. = 314 ตร.ม.) อยู่ในผังบริเวณตามแบบก่อสร้างจริง โรงคลุมสร้างภายหลังและคลุมประมาณสองในสามด้านใต้ของลาน']) }, V(67.2, 117.0, G0 + 5.6));
+    add('buildings', prismGeo([[60.75, 109.2], [60.95, 109.2], [61.05, 124.8], [60.85, 124.8]], G0, 4.6), 'wallDark', { en: 'Car wash shed side cladding', th: 'ผนังกรุโรงล้างรถ', nopick: 1 });
+    add('buildings', prismGeo([[60.6, 108.5], [74.0, 108.3], [74.4, 132.4], [61.0, 132.6]], G0, 0.08), 'walkway', { en: 'Car wash slab (13.50 × 23.26 m)', th: 'ลานล้างรถ (13.50 × 23.26 ม.)', kind: 'building',
+      info: lay(['Concrete car wash slab, 13.50 × 23.26 m = 314 m², as written on the as-built site plan.'], ['พื้นคอนกรีตลานล้างรถ 13.50 × 23.26 ม. = 314 ตร.ม. ตามที่ระบุในผังบริเวณตามแบบก่อสร้างจริง']) });
+    add('water', cylGeo(1.1, 2.8, 66.6, 128.6, G0, 24), 'waterTankBeige', { en: 'Car wash water tank (beige)', th: 'ถังน้ำล้างรถ (สีเบจ)', kind: 'tank',
+      info: vid(['Large beige plastic water tank (about 2,500 L) at the far end of the car wash shed.'], ['ถังน้ำพลาสติกสีเบจขนาดใหญ่ (ประมาณ 2,500 ลิตร) ที่ปลายโรงล้างรถ']) });
+    add('buildings', merge([boxGeo(3.6, 2.6, 2.7, 63.4, 105.8, G0, 0), boxGeo(4.6, 3.6, 0.12, 63.6, 105.8, G0 + 2.8, 0)]), 'wallDark', { en: 'Car wash drying room', th: 'ห้องเช็ดรถ (ล้างรถ)', tag: 'Drying room', tagTh: 'ห้องเช็ดรถ', kind: 'building',
+      info: vid(['Small dark grey room with a roof overhang and a large yellow car wash sign ("เช็ดแห้ง" with an arrow), between the office and the car wash shed. Built after the station. As placed here it stands over or beside the small SP-T-1600 tank of the office toilet: check on site.'],
+        ['ห้องเล็กสีเทาเข้มมีหลังคายื่นและป้ายล้างรถสีเหลืองขนาดใหญ่ ("เช็ดแห้ง" มีลูกศร) อยู่ระหว่างสำนักงานกับโรงล้างรถ สร้างภายหลังสถานี ตำแหน่งที่แสดงอยู่บนหรือข้างถัง SP-T-1600 ของห้องน้ำสำนักงาน ควรตรวจสอบที่หน้างาน']) }, V(63.4, 105.8, G0 + 3.6));
+
+    // Garbage room (GN-GB-01, 3.50 × 2.50 m; "พักขยะ" on the plan at the far corner): dark steel frame with mesh doors, metal roof
+    add('buildings', merge([boxGeo(3.6, 2.8, 2.5, 64.8, 134.4, G0, 0), boxGeo(4.2, 3.3, 0.1, 64.8, 134.4, G0 + 2.6, 0)]), 'wallDark', { en: 'Garbage room', th: 'ห้องพักขยะ', tag: 'Garbage room', tagTh: 'ห้องพักขยะ', kind: 'building',
+      info: lay(['Garbage room, 3.50 × 2.50 m inside (standard sheet GN-GB-01), concrete floor with a floor drain, light steel frame, mesh doors and a metal roof (dark grey on site).'],
+        ['ห้องพักขยะ ขนาดภายใน 3.50 × 2.50 ม. (แบบมาตรฐาน GN-GB-01) พื้นคอนกรีตมีท่อระบายน้ำพื้น โครงเหล็กเบา ประตูตะแกรง หลังคาเมทัลชีท (หน้างานเป็นสีเทาเข้ม)']) }, V(64.8, 134.4, G0 + 3.4));
+
+    // Signs at the highway front (labels on the site plan): 12 m monopole sign, CX-45 vertical price sign and CX-45 brand sign
+    add('buildings', cylGeo(0.35, 8.0, 91.0, 29.4, G0, 16), 'column', { en: 'Monopole sign (12 m)', th: 'ป้ายเสาเดี่ยว (12 ม.)', tag: 'Monopole sign 12 m', tagTh: 'ป้ายเสาเดี่ยว 12 ม.', kind: 'building',
+      info: lay(['Caltex monopole sign, 12 m high with a 2.2 × 2.2 m sign head ("MONOPOLE SIGN 12m H, 2.2x2.2m" on the site plan; highway sign sheets HS-A-01, HS_S-01 to 03).'], ['ป้ายเสาเดี่ยวคาลเท็กซ์ สูง 12 ม. หัวป้าย 2.2 × 2.2 ม. (ผังบริเวณระบุ "MONOPOLE SIGN 12m H, 2.2x2.2m" แบบป้าย HS-A-01, HS_S-01 ถึง 03)']) }, V(91.0, 29.4, G0 + 12.6));
+    add('buildings', boxGeo(2.2, 2.2, 3.8, 91.0, 29.4, G0 + 8.2, 0), 'signPanel', { en: 'Monopole sign head', th: 'หัวป้ายเสาเดี่ยว', nopick: 1 });
+    add('buildings', merge([boxGeo(1.4, 0.5, 4.5, 69.7, 28.3, G0, 0), boxGeo(1.4, 0.5, 4.5, 85.2, 25.0, G0, 0)]), 'signPanel', { en: 'CX-45 vertical signs (price sign and brand sign)', th: 'ป้ายตั้ง CX-45 (ป้ายราคาและป้ายแบรนด์)', kind: 'building',
+      info: lay(['Two CX-45 vertical signs at the highway front: the price sign by the entrance and a brand sign further along ("VERTICAL PRICE SIGN CX-45" and "VERTICAL ALONE SIGN CX-45" on the plan). Height about 4.5 m assumed.'], ['ป้ายตั้ง CX-45 สองป้ายด้านหน้าทางหลวง ป้ายราคาข้างทางเข้า และป้ายแบรนด์ถัดไป (ผังระบุ "VERTICAL PRICE SIGN CX-45" และ "VERTICAL ALONE SIGN CX-45") ความสูงประมาณ 4.5 ม. เป็นค่าสมมติ']) }, V(69.7, 28.3, G0 + 5.2));
+
+    // EV chargers ("EVC" on the plan) along the entrance-side boundary wall, with blue bays (video 1:10)
+    add('buildings', merge([[60.6, 41.5], [60.6, 44.5], [60.6, 47.5]].map(([x, y]) => boxGeo(0.5, 0.7, 1.8, x, y, G0, 0))), 'evCharger', { en: 'EV chargers', th: 'เครื่องชาร์จรถยนต์ไฟฟ้า', tag: 'EV chargers', tagTh: 'ที่ชาร์จ EV', kind: 'building',
+      info: lay(['EV chargers along the entrance-side boundary wall with blue painted bays ("EVC" on the plan; site video). Number shown is approximate.'], ['เครื่องชาร์จรถยนต์ไฟฟ้าตามแนวกำแพงเขตด้านทางเข้า มีช่องจอดทาสีฟ้า ("EVC" ในผัง วิดีโอหน้างาน) จำนวนที่แสดงเป็นค่าประมาณ']) }, V(60.6, 44.5, G0 + 2.6));
     add('buildings', merge([0, 1, 2, 3, 4].map((i) => boxGeo(6.9, 1.1, 0.2, 89.6 - 1.2175 * i, 78.93 - 9.925 * i, G0, -6.9))), 'building', { en: 'Pump islands (5)', th: 'แท่นหัวจ่าย (5 แท่น)', kind: 'building', info: lines(['The five pump islands under the canopy.'], ['แท่นหัวจ่าย 5 แท่นใต้หลังคา'], C) });
   },
 };
