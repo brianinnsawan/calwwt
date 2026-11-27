@@ -52,7 +52,7 @@ Nothing is shared with calnkt: own logins, own databases, own file storage.
   the 3 reports sent to Caltex (Reports to Caltex) and Caltex's CORO scope deck (Reference) were copied from SharePoint.
   CAD program saves become new Files next to the original ("<name> – copy <n> (<person>).dwg"); SPP and Caltex see each
   other's CAD notes. Site videos (Brian's 360° YouTube walkthroughs) are sites.json "videos", shown with Photos & video;
-  1703 King Kaew and 1750 Saraburi have none yet.
+  1703 King Kaew added 27 Nov 2026; 1750 Saraburi has none and does not need one (Brian).
 - `tasks/`: the Tasks app (`src/policy.mjs`, `src/service.mjs`, `src/pages.mjs` = page list and default access, `public/` screens,
   `schema/` database changes). After changing `tasks/public/*`: `cd tasks && node scripts/build-ui-module.mjs`.
 - `portal-proposal/files-viewer/`: Office viewers (rebuild: `cd portal-proposal/files-viewer && npm ci && npm run build`).

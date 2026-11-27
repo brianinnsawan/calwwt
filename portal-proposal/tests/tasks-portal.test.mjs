@@ -552,7 +552,7 @@ test('Sites data: site videos are YouTube ids with a date and both languages; on
   const { SITES_CSP } = await import('../src/sites.mjs');
   const data = JSON.parse(readFileSync(new URL('../public/sites/data/sites.json', import.meta.url), 'utf8'));
   const videos = data.sites.flatMap((s) => (s.videos || []).map((v) => ({ code: s.code, ...v })));
-  assert.deepEqual(videos.map((v) => v.code), ['0589', '1156', '1588', '1622', '1642', '1687']);
+  assert.deepEqual(videos.map((v) => v.code), ['0589', '1156', '1588', '1622', '1642', '1687', '1703'], 'every site but 1750 Saraburi (not needed, Brian 27 Nov 2026)');
   for (const v of videos) {
     assert.match(v.youtube, /^[A-Za-z0-9_-]{11}$/, v.code);
     assert.match(v.date, /^2026-\d\d-\d\d$/, v.code);
