@@ -17,7 +17,7 @@ const T = {
     leg: ['Proposed pipe', 'Ground', 'Existing drain crossing', 'Clash with existing drain', 'Water level'], clash: 'clash', clear: 'clear', grating: 'Grating', in: 'In', out: 'Out', water: 'Water', top: 'Top', bottom: 'Bottom',
     stages: ['Existing', '2026 sampling', 'Final design (concept)'], stageTip: ['What is on site today', 'Where the water is sampled in 2026', 'The proposed new works and new sampling points (concept, not built)'],
     walk: 'Walk the sampling points', of: 'of', prev: '‹ Back', next: 'Next ›', byResult: 'Colour sampling points by test result', risk: 'Risk', samples: (n) => `${n} sample${n > 1 ? 's' : ''}`, params: (n) => `${n} parameters tested`,
-    take: 'Where to take it', tested: 'Tested for', limit: 'Limit', result: 'Result', noResult: 'Lab results not in yet.', pass: 'Within limit', fail: 'Over limit', drains: 'What drains here (lit up)', sump: 'Sampled at', framed: 'The sampled sump is coloured and framed', flag: 'To fix in the final design', red: 'Red pipes: G2.1 system', blue: 'Blue pipes: G2.2 system',
+    take: 'Where to take it', tested: 'Tested for', limit: 'Limit', result: 'Result', noResult: 'Lab results not in yet.', pass: 'Within limit', fail: 'Over limit', drains: 'What drains here (lit up)', sump: 'Sampled at', framed: 'The sampled sump is coloured', flag: 'To fix in the final design', red: 'Red pipes: G2.1 system', blue: 'Blue pipes: G2.2 system',
     level: (a, b, as) => `Water taken at about ${a} (${b} m below ground${as ? ', assumed' : ''}).`, sampleLeg: 'Sampling points', g21: 'G2.1 oil side (forecourt, fuel, oil change)', g22: 'G2.2 wastewater side (toilets, kitchens, shops)',
     st: { existing: 'Existing sampling point', new: 'New sampling point', construction: 'Construction sampling point (final design)', ows: 'New OWS or new WWT (final design)' }, mgl: 'mg/L', resultOn: (d, lab) => `Result ${d}${lab ? ` (${lab})` : ''}:` },
   th: { layers: 'ชั้นข้อมูล', views: 'มุมมอง', labels: 'ชื่อ', levels: 'ระดับท่อที่บ่อพัก', see: 'มองทะลุพื้น', tall: 'ขยายความสูง ×3',
@@ -27,7 +27,7 @@ const T = {
     leg: ['ท่อที่เสนอ', 'ผิวพื้น', 'ท่อระบายน้ำเดิมที่ตัดผ่าน', 'ชนท่อระบายน้ำเดิม', 'ระดับน้ำ'], clash: 'ชน', clear: 'ไม่ชน', grating: 'ตะแกรง', in: 'เข้า', out: 'ออก', water: 'น้ำ', top: 'หลังถัง', bottom: 'ก้นถัง',
     stages: ['สภาพปัจจุบัน', 'เก็บตัวอย่างปี 2026', 'แบบสุดท้าย (แนวคิด)'], stageTip: ['สิ่งที่มีอยู่หน้างานวันนี้', 'จุดที่เก็บตัวอย่างน้ำในปี 2026', 'งานใหม่ที่เสนอและจุดเก็บตัวอย่างใหม่ (แนวคิด ยังไม่ได้สร้าง)'],
     walk: 'ไล่ดูจุดเก็บตัวอย่าง', of: 'จาก', prev: '‹ ก่อนหน้า', next: 'ถัดไป ›', byResult: 'แสดงสีจุดเก็บตัวอย่างตามผลตรวจ', risk: 'ความเสี่ยง', samples: (n) => `${n} ตัวอย่าง`, params: (n) => `ตรวจ ${n} พารามิเตอร์`,
-    take: 'จุดตักน้ำ', tested: 'รายการตรวจ', limit: 'ค่ามาตรฐาน', result: 'ผล', noResult: 'ยังไม่ได้รับผลจากห้องแล็บ', pass: 'ผ่านเกณฑ์', fail: 'เกินเกณฑ์', drains: 'สิ่งที่ระบายมาที่จุดนี้ (ไฮไลต์)', sump: 'เก็บที่', framed: 'บ่อที่เก็บตัวอย่างแสดงสีและมีกรอบ', flag: 'ต้องแก้ไขในแบบสุดท้าย', red: 'ท่อสีแดง: ระบบ G2.1', blue: 'ท่อสีน้ำเงิน: ระบบ G2.2',
+    take: 'จุดตักน้ำ', tested: 'รายการตรวจ', limit: 'ค่ามาตรฐาน', result: 'ผล', noResult: 'ยังไม่ได้รับผลจากห้องแล็บ', pass: 'ผ่านเกณฑ์', fail: 'เกินเกณฑ์', drains: 'สิ่งที่ระบายมาที่จุดนี้ (ไฮไลต์)', sump: 'เก็บที่', framed: 'บ่อที่เก็บตัวอย่างแสดงเป็นสี', flag: 'ต้องแก้ไขในแบบสุดท้าย', red: 'ท่อสีแดง: ระบบ G2.1', blue: 'ท่อสีน้ำเงิน: ระบบ G2.2',
     level: (a, b, as) => `ตักน้ำที่ระดับประมาณ ${a} (ต่ำกว่าพื้น ${b} ม.${as ? ' ค่าสมมติ' : ''})`, sampleLeg: 'จุดเก็บตัวอย่าง', g21: 'G2.1 ฝั่งน้ำมัน (ลานจ่ายน้ำมัน เปลี่ยนน้ำมันเครื่อง)', g22: 'G2.2 ฝั่งน้ำเสีย (ห้องน้ำ ครัว ร้านค้า)',
     st: { existing: 'จุดเก็บตัวอย่างเดิม', new: 'จุดเก็บตัวอย่างใหม่', construction: 'จุดเก็บตัวอย่างที่จะก่อสร้าง (แบบสุดท้าย)', ows: 'OWS ใหม่ หรือระบบบำบัดใหม่ (แบบสุดท้าย)' }, mgl: 'มก./ล.', resultOn: (d, lab) => `ผลตรวจ ${d}${lab ? ` (${lab})` : ''}:` },
 };
@@ -187,7 +187,7 @@ export async function show(view, url, w, lang = 'en') {
     if (o.userData.sample) return pickSample(o);
     if (pickTarget(o)) return;
     unpick(); picked = o; pickedMat = o.material;
-    const m = o.material.clone(); m.emissive = new THREE.Color(0xff9d00); m.emissiveIntensity = 0.55; m.opacity = Math.max(m.opacity, 0.9); o.material = m;
+    const m = o.material.clone(); if (m.isMeshStandardMaterial) { m.emissive = new THREE.Color(0xff9d00); m.emissiveIntensity = 0.55; } m.opacity = Math.max(m.opacity, 0.9); o.material = m;
     const u = o.userData; card.replaceChildren();
     const x = el('button', { type: 'button', class: 'x', title: t.close, 'aria-label': t.close }, '×'); x.onclick = idle;
     card.append(x, el('b', {}, name(u)));
@@ -277,7 +277,6 @@ export async function show(view, url, w, lang = 'en') {
         const sm = l[0].userData.sample; if (!shownAt(sm.stage, k)) continue;
         const key = byResult ? verdict(sm) : sm.group.split('+')[0];
         for (const n of sm.targets) for (const o of byName.get(n) || []) { paint(o, key); o.material = throughMat(key); }
-        if (byResult) for (const o of l) paint(o, key);
       }
       idle();
     };
@@ -307,9 +306,10 @@ export async function show(view, url, w, lang = 'en') {
     pickSample = (o) => {
       unpick(); const sm = o.userData.sample, fr = frameOf(sm.id) || o;
       picked = fr; pickedMat = fr.material;
-      const m = fr.material.clone(); m.emissive = new THREE.Color(0xffffff); m.emissiveIntensity = 0.35; fr.material = m;
+      if (fr.material.isMeshStandardMaterial) { const m = fr.material.clone(); m.emissive = new THREE.Color(0xffffff); m.emissiveIntensity = 0.35; fr.material = m; }
       for (const n of sm.upstream || []) root.traverse((q) => {
         const u = q.userData; if (!q.isMesh || u.sample || !u.en || !(u.en === n || u.en.startsWith(n) || u.tag === n)) return;
+        if (!q.material.isMeshStandardMaterial) return;   // already coloured as a sampled sump
         const mm = q.material.clone(); mm.emissive = new THREE.Color(0x00c2ff); mm.emissiveIntensity = 0.6; mm.opacity = Math.max(mm.opacity, 0.9); lit.push([q, q.material]); q.material = mm;
       });
       card.replaceChildren();

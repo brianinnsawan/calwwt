@@ -217,7 +217,7 @@ Brian asked for more information on the tanks at every site from email and Share
 Brian: do not copy the PowerPoint's lines; use the model's own sumps and pipes, and agree each site with him (Kathu first).
 - Each site has `<code>/sampling.json` (format at the top of `sampling.mjs`); build.mjs draws it, the viewer colours it.
 - "2026 sampling": the sump / trap each sample is taken from (`"at"`, names of things in the model) is coloured red (G2.1) or
-  blue (G2.2), framed and labelled; all other labels are hidden; the ground drawing and the proposed option are hidden.
+  blue (G2.2) and labelled (no frame round it: Brian, 27 Nov 2026); all other labels are hidden; the ground drawing and the proposed option are hidden.
 - "Final design": `"systems"` lists, by name, which existing pipes and sumps are G2.1 (red) or G2.2 (blue); the viewer
   colours them and draws a bold line along each pipe that shows through the ground (pipes carry their centreline in
   userData.line, written by build.mjs). Only what is needed is added: `"pipes"` = existing pipes not on the drawing (route

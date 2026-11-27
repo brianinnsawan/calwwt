@@ -1,6 +1,6 @@
 // Water sampling points and the final design on the site model (Brian, 27 Nov 2026).
 // The model's OWN sumps, traps and pipes carry the story; nothing is copied from the PowerPoint's lines:
-//   - 2026 sampling: the sump / trap / tank each sample is taken from is coloured (red G2.1, blue G2.2), framed and labelled,
+//   - 2026 sampling: the sump / trap / tank each sample is taken from is coloured (red G2.1, blue G2.2) and labelled,
 //     and the other labels are hidden.
 //   - Final design: every existing pipe system is coloured red or blue as in the Caltex deck's concept; only what is really
 //     needed is added (an assumed existing pipe, a flag where waters mix, a place for a new OWS / WWT).
@@ -41,12 +41,6 @@ export function buildSampling(data, api, scene) {
   const need = (n, what) => { const f = find(n); if (!f.length) throw new Error(`${what}: nothing called "${n}" in the model`); return f; };
   const toXY = (v) => [v.x + OX, OY - v.z];
   const groupMat = (g) => (g === 'G2.1' ? 'sampleG21' : 'sampleG22');
-  /** A frame on the ground round a plan rectangle: 4 bars `w` wide, `h` high. */
-  const frame = (x0, y0, x1, y1, w, h) => {
-    const g = (x, y) => ground(x, y), cx = (x0 + x1) / 2, cy = (y0 + y1) / 2, L = x1 - x0 + 2 * w, D = y1 - y0;
-    return api.merge([boxGeo(L, w, h, cx, y0 - w / 2, g(cx, y0) + 0.01), boxGeo(L, w, h, cx, y1 + w / 2, g(cx, y1) + 0.01),
-      boxGeo(w, D, h, x0 - w / 2, cy, g(x0, cy) + 0.01), boxGeo(w, D, h, x1 + w / 2, cy, g(x1, cy) + 0.01)]);
-  };
 
   const extra = [];
   // existing pipes that are not on the drawing (from Brian): drawn like the site drains, route marked as assumed
@@ -56,7 +50,7 @@ export function buildSampling(data, api, scene) {
       info: { en: [...(q.note ? [q.note.en] : []), 'Not on the drawing: the route is assumed, to confirm on site.'], th: [...(q.note ? [q.note.th] : []), 'ไม่มีในแบบ แนวท่อเป็นค่าสมมติ ต้องยืนยันหน้างาน'] } });
     extra.push([q.group, q.en]);
   }
-  // ---------- sampling points: the sump itself is the marker (the viewer colours it); a frame and a label mark it
+  // ---------- sampling points: the sump itself is the marker (the viewer colours it), with a label above it
   const order = [], spots = [];
   for (const [i, p] of data.points.entries()) {
     if (!SAMPLE_GROUPS[p.group.split('+')[0]] || !SAMPLE_STATUS[p.status]) throw new Error(`Sampling point ${p.id}: bad group or status`);
@@ -86,11 +80,9 @@ export function buildSampling(data, api, scene) {
         ...(p.note ? [p.note.th] : []), SRC_LINE[sample.src].th],
     };
     const o = { en: `${label} · ${st.en}`, th: `${labelTh} · ${st.th}`, kind: 'sample', info };
-    // frame round the sump (a combined point gets a red frame and a blue one round it); the label sits above
-    const parts = groups.map((g, k) => {
-      const d = 0.45 + k * 0.45;
-      return add('sampling', frame(x0 - d, y0 - d, x1 + d, y1 + d, 0.32, 0.25), groupMat(g), k === 0 ? { ...o, tag: label, tagTh: labelTh } : o, k === 0 ? V(x + (p.label?.[0] || 0), y + (p.label?.[1] || 0), g0 + 1.4) : undefined);
-    });
+    // nothing is drawn round the sump (Brian, 27 Nov 2026: no frames, only the colour): the viewer colours the sump itself.
+    // A small invisible marker in the middle carries the label and the point's data.
+    const parts = [add('sampling', boxGeo(0.3, 0.3, 0.3, x, y, g0), 'sampleAnchor', { ...o, tag: label, tagTh: labelTh }, V(x + (p.label?.[0] || 0), y + (p.label?.[1] || 0), g0 + 1.4))];
     if (!p.at) parts.push(add('sampling', boxGeo(0.8, 0.8, g0 - (take - 0.3), x, y, take - 0.3), groupMat(groups[0]), o));   // nothing there yet: a small new sump
     for (const m of parts) { m.userData.sample = sample; m.userData.status = p.status; if (stage) m.userData.stage = stage; }
     order.push(p.id); spots.push([x, y]);
