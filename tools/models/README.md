@@ -118,7 +118,7 @@ the Sites page as layouts; the DWGs were plotted here with `dwg/dwg-to-json.mjs`
   on the pad seen on site); keep the KFC tanks where Brian marked them (the 2019 KFC sheet puts its design tanks along the
   same back wall).
 - Combined layout (27 Nov 2026): `Sites\1156 Samut Prakan\03 Drawings\_Working\1156 Combined Layout.dwg` (+ DXF) and
-  `Issued PDF\1156 Combined Layout A3 R3.pdf`, on the site page as the first layout. Model coordinates (metres, x along
+  `Issued PDF\1156 Combined Layout A3 R3.pdf`; it goes on the site page by uploading to Files (1156 Drawings). Model coordinates (metres, x along
   the road); Caltex plan in grey turned -7.4°; KFC sheet 3 (the PDF's vectors; its base fits the Caltex plan to 1 cm) in
   orange, KFC part only; KFC as-built tanks in red; SPP observation in cyan; fuel tanks green; sampling points magenta.
   Built with ezdxf from a DXF copy of the site plan and the model objects (a build.mjs run with the shape helpers wrapped
