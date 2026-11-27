@@ -19,7 +19,9 @@ const origin = 'https://calwwt.test';
 const PW = 'synthetic cad workspace phrase 4242!';
 
 function d1(sqlite) {
-  const stmt = (sql, args = []) => ({
+  // Like Cloudflare D1: a LIKE / GLOB pattern longer than 50 characters is refused ("pattern too complex").
+  const checkLike = (sql, args) => { if (/\b(LIKE|GLOB)\b/i.test(sql) && args.some((a) => typeof a === 'string' && a.length > 50)) throw new Error('LIKE or GLOB pattern too complex: SQLITE_ERROR'); };
+  const stmt = (sql, args = []) => (checkLike(sql, args), {
     bind: (...a) => stmt(sql, a.map((v) => (v === undefined ? null : typeof v === 'boolean' ? Number(v) : v))),
     first: async () => sqlite.prepare(sql).get(...args) ?? null,
     all: async () => ({ results: sqlite.prepare(sql).all(...args) }),
@@ -387,3 +389,17 @@ test('full CAD program: only the versioned program files are cached (private, im
   }
 });
 
+
+test('copies of a drawing with a long name (D1 limits LIKE patterns to 50 characters; 27 Nov 2026 fix)', async () => {
+  const w = await world();
+  const long = 'KFC tank as-built A-102 Biotech BO-5000-UR treatment tank (Oct 2020)';
+  w.tasks.prepare('UPDATE files SET name=? WHERE sha256=?').run(`${long}.dwg`, SHA);
+  const brian = await signIn(w, 'brian');
+  const before = await get(w, `/api/cad/copies/${SHA}`, brian);
+  assert.equal(before.status, 200);
+  assert.equal((await before.json()).nextName, `${long} – copy 1 (Brian).dwg`);
+  assert.equal((await (await saveCopy(w, brian)).json()).name, `${long} – copy 1 (Brian).dwg`);
+  const after = await (await get(w, `/api/cad/copies/${SHA}`, brian)).json();
+  assert.deepEqual(after.copies.map((c) => c.seq), [1]);
+  assert.equal(after.nextName, `${long} – copy 2 (Brian).dwg`);
+});

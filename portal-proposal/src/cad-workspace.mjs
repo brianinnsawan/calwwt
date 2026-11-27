@@ -277,10 +277,11 @@ export async function routeCadWorkspace(request, env, actor, access) {
       const me = rows.find((f) => /\.(dwg|dxf)$/i.test(f.name) && fileVisibleTo(f, viewer));
       if (!me) return null;
       const stem = copyStem(me.name);
-      const like = stem.toLowerCase().replace(/[\\%_]/g, (c) => '\\' + c) + '%';
+      // D1 refuses LIKE patterns over 50 characters, and drawing names are often longer: compare the start of the name.
+      const low = stem.toLowerCase();
       const fam = (await env.TASKS_DB.prepare(`SELECT f.id, f.name, f.sha256, f.size, f.uploaded_by, f.uploaded_at, f.deleted,
           (SELECT data_json FROM file_log l WHERE l.file_id=f.id AND l.action='upload' ORDER BY l.id LIMIT 1) AS log
-        FROM files f WHERE f.folder_id=? AND lower(f.name) LIKE ? ESCAPE '\\'`).bind(me.folder_id, like).all()).results;
+        FROM files f WHERE f.folder_id=? AND substr(lower(f.name), 1, ?)=?`).bind(me.folder_id, [...low].length, low).all()).results;
       const numbered = fam.map((f) => {
         const own = f.name.replace(/\.(dwg|dxf)$/i, ''), m = COPY_SUFFIX.exec(own);
         return m && /\.(dwg|dxf)$/i.test(f.name) && own.slice(0, m.index).toLowerCase() === stem.toLowerCase() ? { ...f, seq: Number(m[1]) } : null;
