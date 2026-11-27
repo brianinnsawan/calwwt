@@ -20,8 +20,9 @@
 //       "result": { "date", "lab", "values": { "pH": 7.1 } } } ],
 //   "systems": [ { "group": "G2.1", "names": ["Site drain: canopy", "Manhole A"] } ],      // final design: existing pipes and sumps by colour
 //   "pipes": [ { "en", "th", "group", "pts": [[x, y, invert or null]], "note": { "en", "th" } } ],   // existing pipes not on the drawing
-//   "flags": [ { "x", "y", "en", "th", "note": { "en", "th" } } ],                                // final design: where something needs fixing
-//   "future": [ { "x", "y", "en", "th", "note": { "en", "th" } } ]                                // final design: place for a new OWS / WWT
+//   "flags": [ { "x", "y", "en", "th", "note": { "en", "th" } } ],                                // where something needs fixing (both stages unless "stage")
+//   "future": [ { "x", "y", "en", "th", "note": { "en", "th" } } ],                               // final design: place for a new OWS / WWT
+//   "changes": [ { "id": "C1", "kind": "new" | "removed" | "rerouted", "group": "G2.2", "en", "th", "names": [...], "note", "at": [x, y] } ]   // final design changes
 // }
 import { SAMPLE_GROUPS, SAMPLE_STATUS, PARAM_NAMES, limitsFor } from './style.mjs';
 
@@ -97,15 +98,31 @@ export function buildSampling(data, api, scene) {
     const g0 = ground(f.x, f.y), cone = new THREE.ConeGeometry(0.4, 0.8, 4), c = V(f.x, f.y, g0 + 0.45); cone.rotateX(Math.PI); cone.translate(c.x, c.y, c.z);
     const m = add('sampling', cone, 'sampleFlag', { en: f.en, th: f.th, tag: f.tag || f.en, tagTh: f.tagTh || f.th, kind: 'flag',
       info: { en: [...(f.note ? [f.note.en] : [])], th: [...(f.note ? [f.note.th] : [])] } }, V(f.x, f.y, g0 + 1.3));
-    m.userData.stage = 'future';
+    if (f.stage) m.userData.stage = f.stage;   // default: in both stages (the problem is there today)
   }
   // places for a new OWS / WWT (final design): a pink triangle on the ground, no size (not designed yet)
   for (const f of data.future || []) {
     const g0 = ground(f.x, f.y), r = f.r || 1.3, en = f.en || 'New OWS or new WWT (concept)', th = f.th || 'OWS ใหม่ หรือระบบบำบัดใหม่ (แนวคิด)';
     const pad = new THREE.CylinderGeometry(r, r, 0.1, 3); const c = V(f.x, f.y, g0 + 0.06); pad.translate(c.x, c.y, c.z);
-    const m = add('proposed', pad, 'sampleOWS', { en, th, tag: f.tag || 'New OWS / WWT', tagTh: f.tagTh || 'OWS / ระบบบำบัดใหม่', kind: 'future',
+    const m = add('proposed', pad, 'sampleOWS', { en, th, tag: 'tag' in f ? f.tag : 'New OWS / WWT', tagTh: 'tagTh' in f ? f.tagTh : 'OWS / ระบบบำบัดใหม่', kind: 'future',
       info: { en: [...(f.note ? [f.note.en] : []), FUT.en], th: [...(f.note ? [f.note.th] : []), FUT.th] } }, V(f.x, f.y, g0 + 1.1));
     m.userData.stage = 'future';
+  }
+
+  // ---------- final design changes (Brian, 27 Nov 2026): what is new, removed or re-routed, numbered C1, C2 ... The viewer draws
+  // new works dashed in their system's colour, removed ones grey and see-through, and can show the changes only.
+  const changes = [];
+  for (const c of data.changes || []) {
+    const names = [...new Set(c.names.flatMap((n) => need(n, `Change ${c.id}`).map((m) => m.userData.en)))];
+    const b = new THREE.Box3(); names.forEach((n) => find(n).forEach((m) => b.expandByObject(m)));
+    const ctr = b.getCenter(new THREE.Vector3()), [cx0, cy0] = toXY(ctr), at = c.at || [cx0, cy0], g0 = ground(...at);
+    const word = { new: ['New', 'ใหม่'], removed: ['Removed', 'รื้อออก'], rerouted: ['Re-routed', 'เปลี่ยนแนว'] }[c.kind || 'new'];
+    const info = { en: [`${word[0]} in the final design (${c.group}).`, ...(c.note ? [c.note.en] : [])], th: [`${word[1]}ในแบบสุดท้าย (${c.group})`, ...(c.note ? [c.note.th] : [])] };
+    const m = add('sampling', boxGeo(0.3, 0.3, 0.3, at[0], at[1], g0), 'sampleAnchor', { en: `${c.id} · ${c.en}`, th: `${c.id} · ${c.th}`, kind: 'change', tag: `${c.id} · ${c.en}`, tagTh: `${c.id} · ${c.th}`, info },
+      V(at[0] + (c.label?.[0] || 0), at[1] + (c.label?.[1] || 0), g0 + 2.2));
+    const ch = { id: c.id, kind: c.kind || 'new', group: c.group, en: c.en, th: c.th, note: c.note || null, names, centre: [+ctr.x.toFixed(2), +ctr.y.toFixed(2), +ctr.z.toFixed(2)], size: +Math.max(b.max.x - b.min.x, b.max.z - b.min.z, 4).toFixed(1) };
+    m.userData.change = ch; m.userData.stage = 'future';
+    changes.push(ch);
   }
 
   // the "Sampling points" view: almost from above, shifted so no point hides behind the info card (bottom left)
@@ -118,7 +135,7 @@ export function buildSampling(data, api, scene) {
   const count = (g, st) => data.points.filter((p) => p.group === g && stageOf(p) !== st).reduce((s, p) => s + (p.samples || 1), 0);
   const counts = (st) => ['G2.1', 'G2.2', 'G2.1+G2.2'].map((g) => ({ group: g, samples: count(g, st), params: Object.keys(limitsFor(g)).length })).filter((c) => c.samples);
   const meta = { risk: data.risk || null, source: data.source || null, order, counts: counts('future'), futureCounts: counts('now'),
-    groups: SAMPLE_GROUPS, params: PARAM_NAMES, status: SAMPLE_STATUS, systems,
-    hasFuture: systems.length > 0 || (data.future || []).length > 0 || (data.flags || []).length > 0 || data.points.some((p) => stageOf(p)) };
+    groups: SAMPLE_GROUPS, params: PARAM_NAMES, status: SAMPLE_STATUS, systems, changes,
+    hasFuture: systems.length > 0 || changes.length > 0 || (data.future || []).length > 0 || (data.flags || []).length > 0 || data.points.some((p) => stageOf(p)) };
   return { meta, view };
 }

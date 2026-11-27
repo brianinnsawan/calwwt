@@ -138,6 +138,8 @@ Nothing is shared with calnkt: own logins, own databases, own file storage.
   red (G2.1) / blue (G2.2), add only what is needed, and agree each site with him (ask, with a plan picture). 0589 Kathu and
   1622 Ram Intra are done; the other 6 only highlight their sampled sumps so far. Details in tools/models/README.md.
   Proposed works (pink, e.g. the Kathu KFC option) show only in "Final design", never under Existing (Brian, 27 Nov 2026).
+  "2026 sampling" = as built, all systems coloured; "Final design" = the same plus numbered changes (C1, C2 ...: new = dashed,
+  removed = grey see-through), a change list and "Show the changes only" on the bottom card (Brian, 27 Nov 2026).
 - Calmer site page (Brian, 27 Nov 2026): every left-panel section folds and the « button hides the whole panel (remembered per
   browser); the 3D view bar shows only Whole site / Plan / Sampling points + a "More views" list, and folds; the bottom card no
   longer shows the how-to hint, datum, model notes or deck source (still in each .glb) — only the short sampling summary.
