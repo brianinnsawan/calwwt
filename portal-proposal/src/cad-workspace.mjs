@@ -12,24 +12,24 @@
 //   edit -> also save notes. "View the site as" is always view only (refused here and earlier in the worker).
 // Notes: one shared set per drawing per company (SPP, Caltex, ...). Each save is a new numbered version in private storage
 // (R2 DRAWINGS, cad-workspace/notes/<company>/<drawing SHA-256>/<000001>.json), created only if that number is still free,
-// never replaced or deleted, so the versions are the change history. SPP people see every company's notes; a partner company
-// sees only its own, plus SPP's notes on a drawing SPP shared with Caltex (below). A drawing's notes are only shown to people
-// who may open that drawing.
-// Sharing with Caltex (Brian, 2 Nov 2026): an SPP person with Drawings edit can share SPP's notes on one drawing with Caltex
-// (the newest version and every later one, until unshared), and stop sharing again. Only drawings Caltex may open count:
-// project DWGs, and Project files DWG / DXF shared with Caltex. Caltex sees them read only, labelled as SPP's.
-// Every share / stop is kept: cad-workspace/shares/spp-caltex/<drawing SHA-256>/<000001>.json (who, when; never replaced).
+// never replaced or deleted, so the versions are the change history. calwwt (Brian, 27 Nov 2026): SPP and Caltex see every
+// company's notes with their history; each company saves only its own. Others see their own. A drawing's notes are only
+// shown to people who may open that drawing. (calnkt's "share SPP notes with Caltex" step is not used here.)
 // Saves need Origin = APP_ORIGIN, X-Requested-With: cad, and (when the browser sends it) Sec-Fetch-Site: same-origin.
 // The engine (mlightcad + LibreDWG) is the Files CAD viewer's; scripts/build-cad-workspace.mjs builds the page's copy.
 // Full CAD program (/cad-workspace/full/, Open CAD Studio, scripts/import-cad-program.mjs): same page levels. With edit, a
-// drawing changed in the program can be saved to the site as a separate "copy" of that drawing (DWG / DXF only, never over
-// the original): cad-workspace/copies/<company>/<drawing SHA-256>/<000001>.<dwg|dxf>, numbered, created only if the number is
-// free, never replaced or deleted. Copies follow the notes' company rule (SPP sees all; a partner company only its own).
+// drawing changed in the program can be saved to the site as a separate copy (DWG / DXF only, never over the original).
+// calwwt (Brian, 27 Nov 2026): the copy is a new file in Files, in the original's folder, named
+// "<original name> – copy <n> (<person>).<dwg|dxf>"; the original and earlier copies are never changed, and everyone who
+// sees Files sees it (SPP and Caltex). Copies of a copy are numbered in the same series. Copies saved before that date are
+// kept in private storage (cad-workspace/copies/<company>/<drawing SHA-256>/<000001>.<dwg|dxf>) and still listed.
+// Notes on calwwt: SPP and Caltex see every company's notes (Brian, 27 Nov 2026: Caltex sees everything); each company
+// still saves its own set. The old "share SPP notes with Caltex" step is not used here.
 import { HttpError } from './auth.mjs';
 import { readJson, readBytes } from './body.mjs';
 import { releaseObject } from './release-object.mjs';
 import { CATALOG } from './cad-catalog.mjs';
-import { visibleCadFiles, fileVisibleTo } from './files.mjs';
+import { visibleCadFiles, fileVisibleTo, COPY_SUFFIX, copyStem, copyName } from './files.mjs';
 
 export const CAD_PAGE = '/cad-workspace';
 // The DWG reader worker builds its WebAssembly bindings at run time ('unsafe-eval'); only that worker script gets it.
@@ -46,8 +46,6 @@ const LEGACY_PAGES = new Set(['/workspace', '/workspace/', '/workspace/index.htm
 const LEGACY_PROGRAM = new Set(['/app', '/app/', '/app/index.html']);
 export const COMPANIES = ['spp', 'caltex', 'ks', 'owner'];
 const NOTES = 'cad-workspace/notes/';
-const SHARES = 'cad-workspace/shares/spp-caltex/';
-const CALTEX = { id: null, company: 'caltex' };
 const SHA = /^[0-9a-f]{64}$/;
 export const MAX_NOTES_BYTES = 1024 * 1024;
 const COPIES = 'cad-workspace/copies/';
@@ -63,7 +61,7 @@ export function drawingFormat(bytes) {
 const MAX_ITEMS = 5000;
 const NOTE_CHARS = 200;
 // Night audit (2 Nov 2026): storage per drawing and company is limited, so the lists stay quick and storage cannot grow without end.
-const MAX_VERSIONS = 2000, MAX_COPIES = 300, MAX_SHARE_EVENTS = 400;
+const MAX_VERSIONS = 2000, MAX_COPIES = 300;
 
 const fail = (status, message, details) => { throw new HttpError(status, message, details); };
 const json = (body, status = 200) => new Response(JSON.stringify(body), { status, headers: { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'private, no-store' } });
@@ -99,25 +97,6 @@ function versionOf(o) {
 async function versions(env, company, sha) {
   const { objects } = await listAll(env.DRAWINGS, { prefix: `${NOTES}${company}/${sha}/`, include: ['customMetadata'] });
   return objects.map(versionOf).filter(Boolean).sort((a, b) => a.seq - b.seq);
-}
-
-// Share / stop-sharing events for one drawing, oldest first. The newest one is the current state.
-async function shareEvents(env, sha) {
-  const { objects } = await listAll(env.DRAWINGS, { prefix: `${SHARES}${sha}/`, include: ['customMetadata'] });
-  return objects.map((o) => { const m = SAVE_KEY.exec(o.key || ''); const c = o.customMetadata || {}; return m && { seq: Number(m[1]), action: c.action === 'share' ? 'share' : 'unshare', by: c.by || '', at: c.at || '' }; })
-    .filter(Boolean).sort((a, b) => a.seq - b.seq);
-}
-/** Drawings whose SPP notes are shared with Caltex now (newest event per drawing is "share"). */
-async function sharedDrawings(env) {
-  const { objects } = await listAll(env.DRAWINGS, { prefix: SHARES, include: ['customMetadata'] });
-  const last = new Map();
-  for (const o of objects) {
-    const [, , , sha, file] = String(o.key).split('/'), m = SAVE_KEY.exec('/' + (file || ''));
-    if (!SHA.test(sha || '') || !m) continue;
-    const seq = Number(m[1]);
-    if (!last.has(sha) || last.get(sha).seq < seq) last.set(sha, { seq, action: o.customMetadata?.action });
-  }
-  return new Set([...last].filter(([, v]) => v.action === 'share').map(([k]) => k));
 }
 
 function cleanNote(v) {
@@ -187,7 +166,8 @@ export async function routeCadWorkspace(request, env, actor, access) {
   const company = viewer?.company || (owner ? 'spp' : null);
   const by = viewer?.id || (owner ? 'owner' : null);
   const canSave = level === 'edit' && !access.viewAs && !!company && !!by;
-  const visibleCompanies = company === 'spp' ? COMPANIES : company ? [company] : [];
+  // calwwt: SPP and Caltex see every company's notes and copies (Brian, 27 Nov 2026).
+  const visibleCompanies = company === 'spp' || company === 'caltex' ? COMPANIES : company ? [company] : [];
   const filesOn = (access.pages?.files || 'none') !== 'none' && !!viewer && !!env.TASKS_DB;
   if (!read) {
     if (request.headers.get('origin') !== env.APP_ORIGIN || request.headers.get('x-requested-with') !== 'cad') fail(403, 'Request blocked.');
@@ -209,15 +189,6 @@ export async function routeCadWorkspace(request, env, actor, access) {
         WHERE d.owner_id=? ORDER BY r.created_at DESC LIMIT 200`).bind(actor.id).all()).results;
     } catch { return []; } // the old drawing tables are not present on every copy of the site
   };
-  // Whether Caltex people may open a drawing: project DWGs, and Files DWG / DXF shared with Caltex (from its sharing date).
-  async function caltexMayOpen(sha) {
-    if (PROJECT.has(sha) && env.SITE_READY === 'true') return true;
-    if (!env.TASKS_DB) return false;
-    try {
-      const rows = (await env.TASKS_DB.prepare('SELECT id, name, caltex_from, deleted FROM files WHERE sha256=? AND deleted=0').bind(sha).all()).results;
-      return rows.some((f) => /\.(dwg|dxf)$/i.test(f.name) && fileVisibleTo(f, CALTEX));
-    } catch (e) { if (/no such table/i.test(String(e?.message))) return false; throw e; }
-  }
   async function mayOpen(sha) {
     if (PROJECT.has(sha) && env.SITE_READY === 'true') return true;
     if (filesOn) {
@@ -266,15 +237,7 @@ export async function routeCadWorkspace(request, env, actor, access) {
       for (const o of objects) shas.add(String(o.key).split('/')[3]);
       for (const s of shas) if (SHA.test(s || '')) (noted[s] ||= []).push(c);
     }
-    let shared = [];
-    if (company === 'spp' || company === 'caltex') shared = [...await sharedDrawings(env)];
-    if (company === 'caltex') {
-      // SPP's notes Caltex can see: shared drawings that have SPP notes.
-      const { prefixes } = await listAll(env.DRAWINGS, { prefix: `${NOTES}spp/`, delimiter: '/' });
-      const spp = new Set(prefixes.map((p) => p.split('/')[3]));
-      for (const s of shared) if (spp.has(s)) (noted[s] ||= []).push('spp');
-    }
-    return json({ level, canSave, company, groups, files, legacy: legacyDrawings, noted, sharedWithCaltex: shared });
+    return json({ level, canSave, company, groups, files, legacy: legacyDrawings, noted, sharedWithCaltex: [] });
   }
 
   const file = /^\/api\/cad\/file\/([0-9a-f]{64})(?:\/[^/]+)?$/.exec(path);
@@ -288,34 +251,58 @@ export async function routeCadWorkspace(request, env, actor, access) {
       'Content-Disposition': `attachment; filename*=UTF-8''${encodeURIComponent(entry.asset.downloadName)}`, 'X-Content-SHA256': entry.asset.sha256 } });
   }
 
-  // Copies saved from the full CAD program.
+  // Copies saved from the full CAD program. calwwt (Brian, 27 Nov 2026): a copy is a new file in Files next to the original,
+  // "<original> – copy <n> (<person>).<dwg|dxf>". The list for a drawing (the original or any of its copies) is that series,
+  // plus copies kept in private storage from before (cad-workspace/copies/...).
   const copies = /^\/api\/cad\/copies\/([0-9a-f]{64})(?:\/([a-z]+)\/(\d{6})(?:\/[^/]+)?)?$/.exec(path);
   if (copies) {
     const [, src, copyCompany, copySeq] = copies;
     if (!(await mayOpen(src))) fail(404, 'Drawing not found.');
-    const listCopies = async (c) => (await listAll(env.DRAWINGS, { prefix: `${COPIES}${c}/${src}/`, include: ['customMetadata'] })).objects.map((o) => {
+    const listOld = async (c) => (await listAll(env.DRAWINGS, { prefix: `${COPIES}${c}/${src}/`, include: ['customMetadata'] })).objects.map((o) => {
       const m = COPY_KEY.exec(o.key || ''), meta = o.customMetadata || {};
       return m && { key: o.key, company: c, seq: Number(m[1]), format: m[2], bytes: o.size, by: meta.by || '', at: meta.at || '', name: meta.name ? unb64(meta.name) : `copy.${m[2]}`, note: meta.note ? unb64(meta.note) : '' };
     }).filter(Boolean).sort((a, b) => a.seq - b.seq);
-    // Same rule as the notes: SPP sees every company's copies; a partner company its own, and Caltex also SPP's NEWEST copy
-    // of this drawing while SPP shares the drawing's notes with Caltex (read only; stopping the share hides it again).
-    const sppShared = company === 'caltex' && (await shareEvents(env, src)).at(-1)?.action === 'share';
-    const copyCompanies = sppShared ? ['caltex', 'spp'] : visibleCompanies;
-    const visibleCopies = async (c) => { const l = await listCopies(c); return company !== 'spp' && c !== company ? l.slice(-1) : l; };
     if (read && copySeq) {
-      if (!copyCompanies.includes(copyCompany)) fail(404, 'Not found.');
-      const item = (await visibleCopies(copyCompany)).find((x) => x.seq === Number(copySeq));
+      if (!visibleCompanies.includes(copyCompany)) fail(404, 'Not found.');
+      const item = (await listOld(copyCompany)).find((x) => x.seq === Number(copySeq));
       const obj = item && await env.DRAWINGS.get(item.key);
       if (!obj) fail(404, 'Copy not found.');
       return new Response(method === 'HEAD' ? null : obj.body, { headers: { 'Content-Type': item.format === 'dwg' ? 'application/acad' : 'application/dxf',
         'Content-Length': String(obj.size), 'Cache-Control': 'private, no-store', 'Content-Disposition': `attachment; filename*=UTF-8''${encodeURIComponent(item.name)}` } });
     }
+    // The Files drawing this is (the first file with this content the person may see) and its series of copies.
+    const series = async () => {
+      if (!filesOn) return null;
+      const rows = (await env.TASKS_DB.prepare('SELECT id, folder_id, name, caltex_from, deleted FROM files WHERE sha256=? AND deleted=0').bind(src).all()).results;
+      const me = rows.find((f) => /\.(dwg|dxf)$/i.test(f.name) && fileVisibleTo(f, viewer));
+      if (!me) return null;
+      const stem = copyStem(me.name);
+      const like = stem.toLowerCase().replace(/[\\%_]/g, (c) => '\\' + c) + '%';
+      const fam = (await env.TASKS_DB.prepare(`SELECT f.id, f.name, f.sha256, f.size, f.uploaded_by, f.uploaded_at, f.deleted,
+          (SELECT data_json FROM file_log l WHERE l.file_id=f.id AND l.action='upload' ORDER BY l.id LIMIT 1) AS log
+        FROM files f WHERE f.folder_id=? AND lower(f.name) LIKE ? ESCAPE '\\'`).bind(me.folder_id, like).all()).results;
+      const numbered = fam.map((f) => {
+        const own = f.name.replace(/\.(dwg|dxf)$/i, ''), m = COPY_SUFFIX.exec(own);
+        return m && /\.(dwg|dxf)$/i.test(f.name) && own.slice(0, m.index).toLowerCase() === stem.toLowerCase() ? { ...f, seq: Number(m[1]) } : null;
+      }).filter(Boolean);
+      const original = fam.find((f) => !f.deleted && /\.(dwg|dxf)$/i.test(f.name) && f.name.replace(/\.(dwg|dxf)$/i, '').toLowerCase() === stem.toLowerCase());
+      return { me, stem, original, numbered, next: Math.max(0, ...numbered.map((f) => f.seq)) + 1 };
+    };
+    const personName = async () => (viewer ? (await env.TASKS_DB.prepare('SELECT name FROM people WHERE id=?').bind(viewer.id).first())?.name || viewer.id : 'Brian');
     if (read) {
       const nameOf = await namesFor(env, company);
-      const all = [];
-      for (const c of copyCompanies) all.push(...await visibleCopies(c));
-      all.sort((a, b) => (a.at < b.at ? 1 : -1));
-      return json({ canSave, company, copies: all.slice(0, 200).map(({ key, ...x }) => ({ ...x, by: nameOf(x.by), ...(company === 'caltex' && x.company === 'spp' ? { sharedWithYou: true } : {}), file: `/api/cad/copies/${src}/${x.company}/${String(x.seq).padStart(6, '0')}/${encodeURIComponent(x.name)}` })) });
+      const s = await series();
+      const fromFiles = (s?.numbered || []).filter((f) => !f.deleted).map((f) => {
+        let note = ''; try { note = JSON.parse(f.log || '{}').note || ''; } catch { note = ''; }
+        return { kind: 'file', id: f.id, sha256: f.sha256, seq: f.seq, name: f.name, bytes: f.size, by: nameOf(f.uploaded_by), at: f.uploaded_at, note,
+          format: /\.dxf$/i.test(f.name) ? 'dxf' : 'dwg', file: `/api/files/${f.id}/download/${encodeURIComponent(f.name)}` };
+      }).sort((a, b) => b.seq - a.seq);
+      const old = [];
+      for (const c of visibleCompanies) old.push(...await listOld(c));
+      old.sort((a, b) => (a.at < b.at ? 1 : -1));
+      return json({ canSave, company,
+        ...(s ? { original: s.original ? { sha256: s.original.sha256 || null, name: s.original.name } : null, nextName: copyName(s.stem, s.next, await personName(), s.me.name) } : {}),
+        copies: [...fromFiles, ...old.slice(0, 200).map(({ key, ...x }) => ({ ...x, kind: 'old', by: nameOf(x.by), file: `/api/cad/copies/${src}/${x.company}/${String(x.seq).padStart(6, '0')}/${encodeURIComponent(x.name)}` }))] });
     }
     if (method !== 'POST' || copySeq) fail(405, 'Method not allowed.');
     let name;
@@ -329,51 +316,48 @@ export async function routeCadWorkspace(request, env, actor, access) {
     if (!format) fail(415, 'This is not a DWG or DXF drawing.');
     if (!name.toLowerCase().endsWith('.' + format)) name = name.replace(/\.(dwg|dxf)$/i, '.' + format);
     const digest = [...new Uint8Array(await crypto.subtle.digest('SHA-256', bytes))].map((b) => b.toString(16).padStart(2, '0')).join('');
+    const s = await series();
+    if (s) {
+      // A new file in Files, in the original's folder. A number is used only if no listed file has that name yet (checked
+      // and written in one transaction), so two people saving at the same moment get the next numbers.
+      const who = await personName(), type = format === 'dwg' ? 'application/acad' : 'application/dxf';
+      const key = `files/${crypto.randomUUID()}`;
+      await env.DRAWINGS.put(key, bytes, { httpMetadata: { contentType: type } });
+      for (let attempt = 0, seq = s.next; attempt < 5; attempt++, seq++) {
+        const id = crypto.randomUUID(), at = now(), fileName = copyName(s.stem, seq, who, '.' + format);
+        const [ins] = await env.TASKS_DB.batch([
+          env.TASKS_DB.prepare('INSERT INTO files(id, folder_id, name, size, type, r2_key, sha256, caltex_from, uploaded_by, uploaded_at) SELECT ?,?,?,?,?,?,?,?,?,? WHERE NOT EXISTS (SELECT 1 FROM files WHERE folder_id=? AND lower(name)=lower(?) AND deleted=0)')
+            .bind(id, s.me.folder_id, fileName, bytes.length, type, key, digest, null, by, at, s.me.folder_id, fileName),
+          env.TASKS_DB.prepare('INSERT INTO file_log(at, by_id, action, file_id, folder_id, data_json) SELECT ?,?,?,?,?,? WHERE EXISTS (SELECT 1 FROM files WHERE id=?)')
+            .bind(at, by, 'upload', id, s.me.folder_id, JSON.stringify({ name: fileName, size: bytes.length, caltexFrom: null, source: `CAD program, copy of ${s.me.name}`, copyOf: s.me.id, savedAs: name, note }), id),
+        ]);
+        if (Number(ins?.meta?.changes ?? ins?.changes ?? 0) > 0) return json({ kind: 'file', id, seq, at, name: fileName, format, bytes: bytes.length, sha256: digest }, 201);
+      }
+      try { await env.DRAWINGS.delete(key); } catch { /* the list is what counts */ }
+      fail(409, 'Someone saved a copy at the same moment. Try again.');
+    }
+    // Not a Files drawing (none on calwwt today): the copy stays in private storage, as before.
     for (let attempt = 0; attempt < 3; attempt++) {
-      const seq = ((await listCopies(company)).at(-1)?.seq || 0) + 1, at = now();
+      const seq = ((await listOld(company)).at(-1)?.seq || 0) + 1, at = now();
       if (seq > MAX_COPIES) fail(507, 'This drawing has too many saved copies (limit reached). Ask Brian to tidy them up.');
       const put = await env.DRAWINGS.put(`${COPIES}${company}/${src}/${String(seq).padStart(6, '0')}.${format}`, bytes, {
         onlyIf: { etagDoesNotMatch: '*' }, httpMetadata: { contentType: format === 'dwg' ? 'application/acad' : 'application/dxf' },
         customMetadata: { by, at, name: b64(name), note: b64(note), sha256: digest, from: src },
       });
-      if (put) return json({ company, seq, at, name, format, bytes: bytes.length }, 201);
+      if (put) return json({ kind: 'old', company, seq, at, name, format, bytes: bytes.length }, 201);
     }
     fail(409, 'Someone saved a copy at the same moment. Try again.');
   }
 
-  const share = /^\/api\/cad\/share\/([0-9a-f]{64})$/.exec(path);
-  if (share) {
-    if (method !== 'POST') fail(405, 'Method not allowed.');
-    if (company !== 'spp') fail(403, 'Only SPP can share SPP notes.');
-    const shaS = share[1];
-    if (!(await mayOpen(shaS))) fail(404, 'Drawing not found.');
-    const body = await readJson(request, 1024);
-    if (typeof body.shared !== 'boolean') fail(400, 'Say whether to share (true) or stop sharing (false).');
-    if (body.shared && !(await caltexMayOpen(shaS))) fail(409, 'Caltex cannot open this drawing (it is not shared with Caltex in Files), so its notes cannot be shared.');
-    const action = body.shared ? 'share' : 'unshare';
-    // Created only if the number is free; a second person sharing at the same moment just takes the next number.
-    for (let attempt = 0; attempt < 3; attempt++) {
-      const events = await shareEvents(env, shaS), lastEvent = events.at(-1);
-      if ((lastEvent?.action || 'unshare') === action) return json({ shared: body.shared, changed: false });
-      const seq = (lastEvent?.seq || 0) + 1, at = now();
-      if (seq > MAX_SHARE_EVENTS) fail(507, 'This drawing has been shared and unshared too many times.');
-      const put = await env.DRAWINGS.put(`${SHARES}${shaS}/${String(seq).padStart(6, '0')}.json`,
-        JSON.stringify({ format: 'calnkt-cad-share/1', drawing: shaS, from: 'spp', to: 'caltex', action, by, at }),
-        { onlyIf: { etagDoesNotMatch: '*' }, httpMetadata: { contentType: 'application/json' }, customMetadata: { action, by, at } });
-      if (put) return json({ shared: body.shared, changed: true, at }, 201);
-    }
-    fail(409, 'Someone changed the sharing at the same moment. Reload and try again.');
-  }
+  // Sharing SPP notes with Caltex is not used on calwwt: SPP and Caltex see each other's notes (Brian, 27 Nov 2026).
+  if (/^\/api\/cad\/share\/[0-9a-f]{64}$/.test(path)) fail(410, "Not used on this site: SPP and Caltex already see each other's notes.");
 
   const notes = /^\/api\/cad\/notes\/([0-9a-f]{64})$/.exec(path);
   if (!notes) fail(404, 'Not found.');
   const sha = notes[1];
   if (!(await mayOpen(sha))) fail(404, 'Drawing not found.');
-  // Companies whose notes on THIS drawing the person may see: SPP everything; a partner its own, and Caltex also SPP's
-  // when SPP shared this drawing's notes with Caltex.
-  const events = company === 'spp' || company === 'caltex' ? await shareEvents(env, sha) : [];
-  const sharedNow = events.at(-1)?.action === 'share';
-  const visibleHere = company === 'caltex' && sharedNow ? ['caltex', 'spp'] : visibleCompanies;
+  // Companies whose notes on THIS drawing the person may see: SPP and Caltex every company's; others their own.
+  const visibleHere = visibleCompanies;
 
   if (read) {
     const want = url.searchParams.get('company') || company || visibleHere[0] || null;
@@ -384,8 +368,6 @@ export async function routeCadWorkspace(request, env, actor, access) {
       if (list.length || c === company) layers.push({ company: c, list });
     }
     const layer = layers.find((l) => l.company === want);
-    // Shared SPP notes: Caltex sees only SPP's newest version (now and as it changes), never SPP's older versions.
-    if (layer && company !== 'spp' && want !== company) layer.list = layer.list.slice(-1);
     const seqWanted = url.searchParams.has('seq') ? Number(url.searchParams.get('seq')) : null;
     if (seqWanted !== null && !Number.isSafeInteger(seqWanted)) fail(400, 'Ask for a saved version by its number.');
     const nameOf = await namesFor(env, company);
@@ -401,12 +383,8 @@ export async function routeCadWorkspace(request, env, actor, access) {
     return json({
       drawing: sha, company: want, own: company, canSave: canSave && want === company,
       latest: layer?.list.at(-1)?.seq || 0,
-      layers: layers.map((l) => ({ company: l.company, latest: l.list.at(-1)?.seq || 0, at: l.list.at(-1)?.at || null, ...(company === 'caltex' && l.company === 'spp' ? { sharedWithYou: true } : {}) })),
-      // SPP: the Caltex sharing of this drawing's SPP notes, with its history. Caltex: only whether it is shared.
-      sharing: company === 'spp' ? {
-        shared: sharedNow, canChange: canSave, caltexCanOpen: await caltexMayOpen(sha),
-        log: events.slice(-20).reverse().map((e) => ({ action: e.action, by: nameOf(e.by), at: e.at })),
-      } : company === 'caltex' ? { shared: sharedNow } : null,
+      layers: layers.map((l) => ({ company: l.company, latest: l.list.at(-1)?.seq || 0, at: l.list.at(-1)?.at || null })),
+      sharing: null,
       current,
       history: (layer?.list || []).slice(-200).reverse().map((v) => ({ seq: v.seq, at: v.at, by: nameOf(v.by), note: v.note, markups: v.markups, measurements: v.measurements })),
     });

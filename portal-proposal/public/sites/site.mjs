@@ -75,7 +75,7 @@ async function main() {
       const ul = el('ul');
       for (const it of state.items) {
         const li = el('li'), e = (/\.([a-z0-9]{1,8})$/i.exec(it.name)?.[1] || '').toLowerCase();
-        const here = it.kind === 'builtIn' || ['pdf', 'png', 'jpg', 'jpeg', 'webp', 'gif'].includes(e);
+        const here = it.kind === 'builtIn' || it.kind === 'video' || ['pdf', 'png', 'jpg', 'jpeg', 'webp', 'gif'].includes(e);
         const a = el('a', { href: here ? '#layouts' : sf.itemHref(it) }, sf.itemLabel(it, l));
         if (here) a.onclick = () => { setTimeout(() => pager?.select(it.id), 0); };
         li.append(a); ul.append(li);

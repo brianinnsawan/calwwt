@@ -199,11 +199,11 @@ test('"View the site as" is read only, even for the owner', async () => {
   assert.deepEqual(list.legacy, []);
 });
 
-test('a project login raised to Drawings edit saves for its company; partners see only their own company', async () => {
+test('a project login raised to Drawings edit saves for its company; SPP and Caltex see each other\'s notes (calwwt)', async () => {
   const w = await world();
   w.grant('person:gift', 'drawings', 'edit');
   w.grant('person:bas', 'drawings', 'edit');
-  const gift = await signIn(w, 'gift'), bas = await signIn(w, 'bas');
+  const gift = await signIn(w, 'gift'), bas = await signIn(w, 'bas'), tom = await signIn(w, 'tom');
   assert.equal((await save(w, gift, notesBody(0))).status, 201);
   // Caltex has its own notes on the same drawing, numbered separately.
   const r = await save(w, bas, notesBody(0, { note: 'Caltex note' }));
@@ -211,20 +211,31 @@ test('a project login raised to Drawings edit saves for its company; partners se
   assert.equal((await r.json()).seq, 1);
   const basNotes = await (await get(w, `/api/cad/notes/${SHA}`, bas)).json();
   assert.equal(basNotes.company, 'caltex');
-  assert.deepEqual(basNotes.layers.map((l) => l.company), ['caltex'], 'Caltex never sees SPP notes');
   assert.equal(basNotes.current.note, 'Caltex note');
-  assert.equal((await get(w, `/api/cad/notes/${SHA}?company=spp`, bas)).status, 404);
+  assert.equal(basNotes.sharing, null, 'no sharing step on calwwt');
+  assert.deepEqual(basNotes.layers.map((l) => l.company), ['spp', 'caltex'], 'Caltex sees SPP notes too (Brian, 27 Nov 2026)');
+  // Caltex reads SPP's notes with their whole history, read only.
+  const sppForBas = await (await get(w, `/api/cad/notes/${SHA}?company=spp`, bas)).json();
+  assert.equal(sppForBas.current.note, 'กันสาด check');
+  assert.equal(sppForBas.canSave, false);
+  assert.equal(sppForBas.history.length, 1);
   const basList = await (await get(w, '/api/cad/drawings', bas)).json();
-  assert.deepEqual(basList.noted[SHA], ['caltex']);
+  assert.deepEqual(basList.noted[SHA], ['spp', 'caltex']);
+  assert.deepEqual(basList.sharedWithCaltex, []);
   assert.deepEqual(basList.files.map((f) => f.name).sort(), ['Gate detail.dwg', 'Site plan.dwg'], 'Caltex sees every Files drawing (calwwt, 27 Nov 2026)');
-  assert.deepEqual((await (await get(w, `/api/cad/notes/${FILE_SHA}`, bas)).json()).layers.map((l) => l.company), ['caltex'], 'still only its own notes');
   // SPP sees both companies' notes (read only for the other company).
   const giftNotes = await (await get(w, `/api/cad/notes/${SHA}?company=caltex`, gift)).json();
   assert.equal(giftNotes.current.note, 'Caltex note');
   assert.equal(giftNotes.canSave, false);
   assert.deepEqual(giftNotes.layers.map((l) => l.company), ['spp', 'caltex']);
+  // A Caltex save always goes to Caltex's own notes.
+  const sppAfter = await (await get(w, `/api/cad/notes/${SHA}?company=spp`, gift)).json();
+  assert.equal(sppAfter.latest, 1);
+  // The old share step answers "not used".
+  assert.equal((await w.handler(new Request(origin + '/api/cad/share/' + SHA, { method: 'POST', headers: { cookie: gift, origin, 'x-requested-with': 'cad', 'content-type': 'application/json' }, body: '{"shared":true}' }), w.env)).status, 410);
   // SPP can keep notes on a Files drawing it may open.
   assert.equal((await save(w, gift, notesBody(0), { sha: FILE_SHA })).status, 201);
+  void tom;
 });
 
 test('the DWG reader worker alone gets unsafe-eval; engine files come from the Files CAD viewer copy', async () => {
@@ -261,7 +272,7 @@ const DWG_BYTES = new TextEncoder().encode('AC1032' + '\0'.repeat(200));
 const saveCopy = (w, cookie, bytes = DWG_BYTES, { sha = SHA, name = 'CS-08 marked up.dwg', headers = {} } = {}) => w.handler(new Request(origin + '/api/cad/copies/' + sha, {
   method: 'POST', headers: { cookie, origin, 'x-requested-with': 'cad', 'content-type': 'application/octet-stream', 'x-filename': encodeURIComponent(name), 'x-copy-note': encodeURIComponent('งานแก้ไข'), ...headers }, body: bytes }), w.env);
 
-test('full CAD program: KS 404, view can open but not save, edit saves separate numbered copies, view-as cannot', async () => {
+test('full CAD program: KS 404, view can open but not save, edit saves each copy as a new file in Files next to the original, view-as cannot', async () => {
   const w = await world();
   const tom = await signIn(w, 'tom'), gift = await signIn(w, 'gift'), brian = await signIn(w, 'brian'), bas = await signIn(w, 'bas');
   for (const p of ['/cad-workspace/full/', '/cad-workspace/full/program.mjs', '/app/', `/api/cad/copies/${SHA}`]) assert.equal((await get(w, p, tom)).status, 404, p);
@@ -273,24 +284,39 @@ test('full CAD program: KS 404, view can open but not save, edit saves separate 
   assert.equal((await saveCopy(w, brian, DWG_BYTES, { headers: { origin: 'https://evil.example' } })).status, 403);
   assert.equal((await saveCopy(w, brian, new TextEncoder().encode('<html>not a drawing'))).status, 415);
   assert.equal((await saveCopy(w, brian, DWG_BYTES, { name: 'x.exe' })).status, 400);
+  // Before the first save, the dialog can say what the copy will be called.
+  assert.equal((await (await get(w, `/api/cad/copies/${SHA}`, brian)).json()).nextName, 'Site plan – copy 1 (Brian).dwg');
   let r = await saveCopy(w, brian);
   assert.equal(r.status, 201);
-  assert.deepEqual(await r.json().then((x) => [x.seq, x.format, x.company]), [1, 'dwg', 'spp']);
+  const first = await r.json();
+  assert.deepEqual([first.kind, first.seq, first.format, first.name], ['file', 1, 'dwg', 'Site plan – copy 1 (Brian).dwg']);
   r = await saveCopy(w, brian, new TextEncoder().encode('  0\r\nSECTION\r\n  2\r\nHEADER\r\n  0\r\nENDSEC\r\n  0\r\nEOF\r\n'), { name: 'second.dxf' });
-  assert.equal((await r.json()).seq, 2);
-  // The original drawing is untouched; copies live apart, numbered, never replaced.
+  assert.equal((await r.json()).name, 'Site plan – copy 2 (Brian).dxf');
+  // The original drawing is untouched (same file, same content); the copies are new files in its folder.
   assert.equal(w.env.DRAWINGS.m.get(sheetAsset.key).length, sheetAsset.size);
-  assert.deepEqual([...w.env.DRAWINGS.m.keys()].filter((k) => k.startsWith('cad-workspace/copies/')),
-    [`cad-workspace/copies/spp/${SHA}/000001.dwg`, `cad-workspace/copies/spp/${SHA}/000002.dxf`]);
+  const rows = w.tasks.prepare("SELECT name, folder_id, uploaded_by, deleted FROM files WHERE folder_id='engineering' ORDER BY name").all().map((x) => ({ ...x }));
+  assert.deepEqual(rows.map((x) => x.name), ['Gate detail.dwg', 'Site plan – copy 1 (Brian).dwg', 'Site plan – copy 2 (Brian).dxf', 'Site plan.dwg']);
+  assert.ok(rows.every((x) => !x.deleted));
+  assert.deepEqual([...w.env.DRAWINGS.m.keys()].filter((k) => k.startsWith('cad-workspace/copies/')), [], 'nothing in the old private copy store');
+  const log = JSON.parse(w.tasks.prepare("SELECT data_json FROM file_log WHERE action='upload' ORDER BY id DESC LIMIT 1").get().data_json);
+  assert.deepEqual([log.source, log.note, log.savedAs], ['CAD program, copy of Site plan.dwg', 'งานแก้ไข', 'second.dxf']);
+  // Everyone who sees Files sees the copies: SPP (view level too) and Caltex.
   const list = await (await get(w, `/api/cad/copies/${SHA}`, gift)).json();
   assert.equal(list.canSave, false);
-  assert.deepEqual(list.copies.map((c) => [c.seq, c.name, c.by, c.note]), [[2, 'second.dxf', 'Brian', 'งานแก้ไข'], [1, 'CS-08 marked up.dwg', 'Brian', 'งานแก้ไข']]);
+  assert.deepEqual(list.copies.map((c) => [c.kind, c.seq, c.name, c.by, c.note]), [['file', 2, 'Site plan – copy 2 (Brian).dxf', 'Brian', 'งานแก้ไข'], ['file', 1, 'Site plan – copy 1 (Brian).dwg', 'Brian', 'งานแก้ไข']]);
+  assert.equal(list.nextName, 'Site plan – copy 3 (Gift).dwg');
   const file = await get(w, list.copies[1].file, gift);
   assert.equal(file.status, 200);
   assert.equal(new TextDecoder().decode((await file.arrayBuffer()).slice(0, 6)), 'AC1032');
-  // A partner company never sees SPP's copies.
-  assert.deepEqual((await (await get(w, `/api/cad/copies/${SHA}`, bas)).json()).copies, []);
-  assert.equal((await get(w, `/api/cad/copies/${SHA}/spp/000001`, bas)).status, 404);
+  const forBas = await (await get(w, `/api/cad/copies/${SHA}`, bas)).json();
+  assert.deepEqual(forBas.copies.map((c) => c.name), ['Site plan – copy 2 (Brian).dxf', 'Site plan – copy 1 (Brian).dwg'], 'Caltex sees SPP copies (Brian, 27 Nov 2026)');
+  // A copy opened and saved again joins the same series, under the saver's name; nobody's file is replaced.
+  w.grant('person:bas', 'drawings', 'edit');
+  const copySha = list.copies[1].sha256;
+  assert.equal((await (await get(w, `/api/cad/copies/${copySha}`, bas)).json()).original.name, 'Site plan.dwg');
+  const third = await (await saveCopy(w, bas, DWG_BYTES, { sha: copySha })).json();
+  assert.equal(third.name, 'Site plan – copy 3 (Bas).dwg');
+  assert.equal(w.tasks.prepare("SELECT COUNT(*) AS n FROM files WHERE folder_id='engineering' AND deleted=0").get().n, 5);
 });
 
 test('full CAD program page: no inline scripts, no outside loads, no eval for anything on the page', async () => {
@@ -331,72 +357,6 @@ test('full CAD program page: keeps only its own ?dwg= / ?copy= and takes away th
   }
 });
 
-const share = (w, cookie, sha, shared, headers = {}) => w.handler(new Request(origin + '/api/cad/share/' + sha, {
-  method: 'POST', headers: { cookie, origin, 'x-requested-with': 'cad', 'content-type': 'application/json', ...headers }, body: JSON.stringify({ shared }) }), w.env);
-
-test('SPP shares its notes on a drawing with Caltex, read only and labelled; stopping works; both are logged', async () => {
-  const w = await world();
-  const brian = await signIn(w, 'brian'), bas = await signIn(w, 'bas'), gift = await signIn(w, 'gift');
-  assert.equal((await save(w, brian, notesBody(0, { note: 'SPP v1' }))).status, 201);
-  assert.equal((await get(w, `/api/cad/notes/${SHA}?company=spp`, bas)).status, 404, 'not shared yet');
-  let n = await (await get(w, `/api/cad/notes/${SHA}`, brian)).json();
-  assert.deepEqual([n.sharing.shared, n.sharing.canChange, n.sharing.caltexCanOpen], [false, true, true]);
-  // Only SPP with Drawings edit may share; never through view-as; the request checks apply.
-  assert.equal((await share(w, gift, SHA, true)).status, 403, 'site team at view');
-  assert.equal((await share(w, bas, SHA, true)).status, 403, 'Caltex cannot share SPP notes');
-  w.grant('person:bas', 'drawings', 'edit');
-  assert.equal((await share(w, bas, SHA, true)).status, 403, 'not even with Drawings edit');
-  w.grant('person:keng', 'drawings', 'edit');
-  assert.equal((await share(w, `${brian}; __Host-calwwt_view_as=${signViewAs(w.env, 'brian', 'keng')}`, SHA, true)).status, 403, 'view-as is read only');
-  assert.equal((await share(w, brian, SHA, true, { origin: 'https://evil.example' })).status, 403);
-  assert.equal((await share(w, brian, SHA, true)).status, 201);
-  assert.equal((await (await share(w, brian, SHA, true)).json()).changed, false, 'sharing twice adds nothing');
-  // Caltex now sees SPP's notes next to its own, read only.
-  n = await (await get(w, `/api/cad/notes/${SHA}`, bas)).json();
-  assert.equal(n.company, 'caltex', 'Caltex still opens its own notes first');
-  assert.deepEqual(n.layers.map((l) => [l.company, !!l.sharedWithYou]), [['caltex', false], ['spp', true]]);
-  assert.deepEqual(n.sharing, { shared: true });
-  const sppForCaltex = await (await get(w, `/api/cad/notes/${SHA}?company=spp`, bas)).json();
-  assert.equal(sppForCaltex.current.note, 'SPP v1');
-  assert.equal(sppForCaltex.canSave, false);
-  const list = await (await get(w, '/api/cad/drawings', bas)).json();
-  assert.deepEqual(list.noted[SHA], ['spp']);
-  assert.deepEqual(list.sharedWithCaltex, [SHA]);
-  // Later SPP versions are shared too; Caltex saving still writes only Caltex notes.
-  assert.equal((await save(w, brian, notesBody(1, { note: 'SPP v2' }))).status, 201);
-  const v2 = await (await get(w, `/api/cad/notes/${SHA}?company=spp`, bas)).json();
-  assert.equal(v2.current.note, 'SPP v2');
-  assert.deepEqual(v2.history.map((v) => v.seq), [2], "Caltex sees only SPP's newest version");
-  assert.equal((await get(w, `/api/cad/notes/${SHA}?company=spp&seq=1`, bas)).status, 404, 'not older SPP versions');
-  assert.equal((await save(w, bas, notesBody(0, { note: 'Caltex v1' }))).status, 201);
-  assert.equal((await (await get(w, `/api/cad/notes/${SHA}?company=spp`, bas)).json()).latest, 2, 'SPP notes untouched');
-  // Stop sharing: Caltex loses them at once.
-  assert.equal((await share(w, brian, SHA, false)).status, 201);
-  assert.equal((await get(w, `/api/cad/notes/${SHA}?company=spp`, bas)).status, 404);
-  n = await (await get(w, `/api/cad/notes/${SHA}`, bas)).json();
-  assert.deepEqual(n.layers.map((l) => l.company), ['caltex']);
-  // The log (who / when), newest first, kept in storage and never replaced.
-  n = await (await get(w, `/api/cad/notes/${SHA}`, brian)).json();
-  assert.deepEqual(n.sharing.log.map((e) => [e.action, e.by]), [['unshare', 'Brian'], ['share', 'Brian']]);
-  assert.deepEqual([...w.env.DRAWINGS.m.keys()].filter((k) => k.startsWith('cad-workspace/shares/')),
-    [`cad-workspace/shares/spp-caltex/${SHA}/000001.json`, `cad-workspace/shares/spp-caltex/${SHA}/000002.json`]);
-});
-
-test('SPP shares notes on a Files drawing with Caltex (every Files drawing is open to Caltex); hidden names stay hidden', async () => {
-  const w = await world();
-  w.grant('person:a', 'drawings', 'edit');
-  const brian = await signIn(w, 'brian'), bas = await signIn(w, 'bas'), a = await signIn(w, 'site-a');
-  assert.equal((await save(w, a, notesBody(0), { sha: FILE_SHA })).status, 201);
-  let n = await (await get(w, `/api/cad/notes/${FILE_SHA}`, brian)).json();
-  assert.equal(n.sharing.caltexCanOpen, true);
-  assert.equal((await get(w, `/api/cad/notes/${FILE_SHA}?company=spp`, bas)).status, 404, 'SPP notes only once shared');
-  assert.equal((await share(w, brian, FILE_SHA, true)).status, 201);
-  n = await (await get(w, `/api/cad/notes/${FILE_SHA}?company=spp`, bas)).json();
-  assert.equal(n.current.by, 'SPP project staff', 'A is hidden from Caltex');
-  assert.equal(n.history[0].by, 'SPP project staff');
-  // Unknown drawings cannot be shared.
-  assert.equal((await share(w, brian, 'a'.repeat(64), true)).status, 404);
-});
 
 test('drawings list says which site a drawing belongs to and links its PDF twin (27 Nov 2026)', async () => {
   const w = await world();
@@ -427,26 +387,3 @@ test('full CAD program: only the versioned program files are cached (private, im
   }
 });
 
-test("program copies follow the notes rule: Caltex sees SPP's newest copy only while SPP shares the drawing", async () => {
-  const w = await world();
-  const brian = await signIn(w, 'brian'), bas = await signIn(w, 'bas');
-  w.grant('person:bas', 'drawings', 'edit');
-  assert.equal((await saveCopy(w, brian, DWG_BYTES, { name: 'spp-1.dwg' })).status, 201);
-  assert.equal((await saveCopy(w, brian, DWG_BYTES, { name: 'spp-2.dwg' })).status, 201);
-  assert.equal((await saveCopy(w, bas, DWG_BYTES, { name: 'caltex-1.dwg' })).status, 201);
-  const names = async () => (await (await get(w, `/api/cad/copies/${SHA}`, bas)).json()).copies.map((c) => [c.company, c.name, !!c.sharedWithYou]);
-  assert.deepEqual(await names(), [['caltex', 'caltex-1.dwg', false]], 'not shared: only its own');
-  assert.equal((await share(w, brian, SHA, true)).status, 201);
-  assert.deepEqual((await names()).sort(), [['caltex', 'caltex-1.dwg', false], ['spp', 'spp-2.dwg', true]], "shared: plus SPP's newest copy, marked");
-  assert.equal((await get(w, `/api/cad/copies/${SHA}/spp/000002`, bas)).status, 200);
-  assert.equal((await get(w, `/api/cad/copies/${SHA}/spp/000001`, bas)).status, 404, 'older SPP copies stay SPP-only');
-  // Read only: a Caltex save always goes to Caltex's own copies.
-  const r = await (await saveCopy(w, bas, DWG_BYTES, { name: 'caltex-2.dwg' })).json();
-  assert.equal(r.company, 'caltex');
-  assert.equal([...w.env.DRAWINGS.m.keys()].filter((k) => k.startsWith(`cad-workspace/copies/spp/`)).length, 2);
-  // SPP sees every company's copies.
-  assert.equal((await (await get(w, `/api/cad/copies/${SHA}`, brian)).json()).copies.length, 4);
-  assert.equal((await share(w, brian, SHA, false)).status, 201);
-  assert.deepEqual((await names()).map((x) => x[0]), ['caltex', 'caltex'], 'stopping the share hides them again');
-  assert.equal((await get(w, `/api/cad/copies/${SHA}/spp/000002`, bas)).status, 404);
-});

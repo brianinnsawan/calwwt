@@ -52,6 +52,15 @@ export const fileVisibleTo = (f, viewer, today = bangkokToday()) => !!viewer && 
  *  costs, margins, INTERNAL files, in English or Thai. Words only, so "contractor" or "Quotient" are not caught. */
 const PRICING = /(?:^|[^a-z])(?:b\.?o\.?q|pric(?:e|es|ed|ing)|quot(?:e|es|ed|ation|ations)|contracts?|invoices?|margins?|costs?|costing|internal|payments?)(?:[^a-z]|$)|ราคา|สัญญา|ต้นทุน|ใบแจ้งหนี้|ค่าใช้จ่าย/i;
 export const pricingName = (name) => PRICING.test(String(name || ''));
+// Copies saved from the full CAD program (src/cad-workspace.mjs; Brian, 27 Nov 2026): a new file next to the original,
+// "<original name> – copy <n> (<person>).<ext>". A copy of a copy joins the same series (its stem is the original's).
+export const COPY_SUFFIX = / – copy (\d+) \([^()]*\)$/;
+export const copyStem = (name) => String(name).replace(/\.(dwg|dxf)$/i, '').replace(COPY_SUFFIX, '');
+export const copyName = (stem, n, person, ext) => {
+  const who = String(person || '').normalize('NFC').replace(/[\x00-\x1f\x7f/\\()]/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 40) || '?';
+  const e = /\.(dwg|dxf)$/i.exec(String(ext))?.[0].toLowerCase() || '.dwg';
+  return `${String(stem).slice(0, 200 - 30 - who.length)} – copy ${n} (${who})${e}`;
+};
 const PRICING_REFUSED = 'Pricing and contract papers (BOQ, prices, quotations, contracts, invoices, costs) are not kept on this site: share them by email. If this file is not one of those, rename it so the name does not say so.';
 /** The DWG / DXF files a person may see (Files CAD viewer list, Drawings -> CAD workspace). */
 export async function visibleCadFiles(db, viewer, today = bangkokToday()) {

@@ -22,9 +22,10 @@ const W = {
     viewOnly: 'View only: you can open, look and measure here; your Drawings access does not include saving.',
     viewAs: 'You are viewing the site as someone else: nothing can be saved.',
     blocked: 'View only: saving and downloading from the program are not available with your Drawings access.',
-    saveTitle: 'Save from the CAD program', saveText: '"{file}" will be stored on the site as a new, separate copy of {name} (copy {seq}). The original drawing is never changed.',
+    saveTitle: 'Save from the CAD program', saveText: 'Your drawing will be saved in Files, next to the original, as a new file: "{copy}". The original drawing and earlier copies are never changed.',
+    saveOld: '"{file}" will be stored on the site as a new, separate copy of {name}. The original drawing is never changed.',
     saveNoSource: '"{file}" can only be downloaded: it is not linked to a drawing on the site.', saveOther: '"{file}" is not a drawing (DWG / DXF): it can only be downloaded.',
-    noteLabel: 'Note for this copy (optional)', toSite: 'Save to the site', toDevice: 'Download to this device', saving: 'Saving the copy…', saved: 'Saved as copy {seq} of {name}.',
+    noteLabel: 'Note for this copy (optional)', toSite: 'Save to the site', toDevice: 'Download to this device', saving: 'Saving the copy…', saved: 'Saved in Files as "{name}".',
     leave: 'Changes in the CAD program that are not saved will be lost. Continue?',
     outside: 'Links to outside sites are not opened from the project site.',
     aboutText: 'Open CAD Studio {version} (source commit {commit}), free software under the GNU General Public License v3. Source: github.com/HakanSeven12/OpenCADStudio, tag v{version}. The program\'s own menus are in English.',
@@ -37,9 +38,10 @@ const W = {
     viewOnly: 'ดูอย่างเดียว: เปิด ดู และวัดได้ แต่สิทธิ์หน้าแบบก่อสร้างของคุณไม่รวมการบันทึก',
     viewAs: 'คุณกำลังดูเว็บไซต์ในมุมมองของผู้อื่น: บันทึกอะไรไม่ได้',
     blocked: 'ดูอย่างเดียว: บันทึกหรือดาวน์โหลดจากโปรแกรมไม่ได้ด้วยสิทธิ์หน้าแบบก่อสร้างของคุณ',
-    saveTitle: 'บันทึกจากโปรแกรม CAD', saveText: '"{file}" จะถูกเก็บในเว็บไซต์เป็นสำเนาใหม่แยกต่างหากของ {name} (สำเนาที่ {seq}) แบบต้นฉบับจะไม่ถูกแก้ไข',
+    saveTitle: 'บันทึกจากโปรแกรม CAD', saveText: 'แบบของคุณจะถูกบันทึกในหน้าไฟล์ ข้างแบบต้นฉบับ เป็นไฟล์ใหม่ชื่อ "{copy}" แบบต้นฉบับและสำเนาก่อนหน้าจะไม่ถูกแก้ไข',
+    saveOld: '"{file}" จะถูกเก็บในเว็บไซต์เป็นสำเนาใหม่แยกต่างหากของ {name} แบบต้นฉบับจะไม่ถูกแก้ไข',
     saveNoSource: '"{file}" ดาวน์โหลดได้อย่างเดียว เพราะไม่ได้เชื่อมกับแบบในเว็บไซต์', saveOther: '"{file}" ไม่ใช่ไฟล์แบบ (DWG / DXF) จึงดาวน์โหลดได้อย่างเดียว',
-    noteLabel: 'หมายเหตุของสำเนานี้ (ไม่บังคับ)', toSite: 'บันทึกลงเว็บไซต์', toDevice: 'ดาวน์โหลดลงเครื่องนี้', saving: 'กำลังบันทึกสำเนา…', saved: 'บันทึกเป็นสำเนาที่ {seq} ของ {name} แล้ว',
+    noteLabel: 'หมายเหตุของสำเนานี้ (ไม่บังคับ)', toSite: 'บันทึกลงเว็บไซต์', toDevice: 'ดาวน์โหลดลงเครื่องนี้', saving: 'กำลังบันทึกสำเนา…', saved: 'บันทึกในหน้าไฟล์แล้ว ชื่อ "{name}"',
     leave: 'การแก้ไขในโปรแกรม CAD ที่ยังไม่ได้บันทึกจะหายไป ต้องการทำต่อหรือไม่',
     outside: 'เว็บไซต์โครงการไม่เปิดลิงก์ไปยังเว็บไซต์ภายนอก',
     aboutText: 'Open CAD Studio {version} (source commit {commit}) ซอฟต์แวร์เสรีภายใต้สัญญาอนุญาต GNU GPL v3 ซอร์สโค้ด: github.com/HakanSeven12/OpenCADStudio แท็ก v{version} เมนูของโปรแกรมเป็นภาษาอังกฤษ',
@@ -141,9 +143,9 @@ function handleDownload(blob, name) {
   const drawing = /\.(dwg|dxf)$/i.test(name);
   const dialog = $('saveDialog');
   const toSite = drawing && !!item;
-  $('saveText').textContent = !drawing ? t('saveOther', { file: name }) : !item ? t('saveNoSource', { file: name }) : t('saveText', { file: name, name: label(item), seq: '…' });
+  $('saveText').textContent = !drawing ? t('saveOther', { file: name }) : !item ? t('saveNoSource', { file: name }) : t('saveText', { copy: '…' });
   $('saveSite').hidden = !toSite; $('noteRow').hidden = !toSite; $('saveNote').value = '';
-  if (toSite) getJSON(`/api/cad/copies/${item.sha256}`).then((r) => { const mine = r.copies.filter((c) => c.company === r.company); $('saveText').textContent = t('saveText', { file: name, name: label(item), seq: (mine.length ? Math.max(...mine.map((c) => c.seq)) : 0) + 1 }); }).catch(() => {});
+  if (toSite) getJSON(`/api/cad/copies/${item.sha256}`).then((r) => { $('saveText').textContent = r.nextName ? t('saveText', { copy: r.nextName }) : t('saveOld', { file: name, name: label(item) }); }).catch(() => {});
   $('saveDevice').onclick = () => { dialog.close(); downloadToDevice(blob, name); };
   $('saveCancel').onclick = () => dialog.close();
   $('saveForm').onsubmit = async (e) => {
@@ -152,7 +154,7 @@ function handleDownload(blob, name) {
     try {
       const r = await getJSON(`/api/cad/copies/${item.sha256}`, { method: 'POST', body: blob, headers: {
         'Content-Type': 'application/octet-stream', 'X-Requested-With': 'cad', 'X-Filename': encodeURIComponent(name), 'X-Copy-Note': encodeURIComponent($('saveNote').value) } });
-      savedSeq = r.seq; setStatus(t('saved', { seq: r.seq, name: label(item) })); loadCopies();
+      savedSeq = r.seq; setStatus(t('saved', { name: r.name })); loadCopies();
     } catch (err) { setStatus(err.message, 'bad'); }
   };
   dialog.showModal();
@@ -164,12 +166,23 @@ async function loadCopies() {
   if (!item) return;
   let r;
   try { r = await getJSON(`/api/cad/copies/${item.sha256}`); } catch { return; }
-  select.replaceChildren(new Option(t('original'), ''), ...r.copies.map((c) => new Option(`${t('copyItem', { seq: c.seq, by: c.by, at: when(c.at) })}${c.sharedWithYou ? ` (${t('sharedSpp')})` : c.company !== r.company ? ` (${c.company.toUpperCase()})` : ''}${c.note ? ' · ' + c.note : ''}`, `${c.company}/${String(c.seq).padStart(6, '0')}`)));
-  select.value = copyInfo ? `${copyInfo.company}/${copyInfo.seq}` : '';
+  // calwwt (Brian, 27 Nov 2026): copies are files in Files next to the original ("… – copy 2 (Ming).dwg"); choosing one
+  // opens that file. Copies kept from before (private storage) open as before.
+  const files = r.copies.filter((c) => c.kind === 'file'), old = r.copies.filter((c) => c.kind !== 'file');
+  const origValue = r.original?.sha256 && r.original.sha256 !== item.sha256 ? `f:${r.original.sha256}` : '';
+  select.replaceChildren(new Option(t('original'), origValue),
+    ...files.map((c) => new Option(`${c.name} · ${when(c.at)}${c.note ? ' · ' + c.note : ''}`, `f:${c.sha256}`)),
+    ...old.map((c) => new Option(`${t('copyItem', { seq: c.seq, by: c.by, at: when(c.at) })}${c.company !== r.company ? ` (${c.company.toUpperCase()})` : ''}${c.note ? ' · ' + c.note : ''}`, `${c.company}/${String(c.seq).padStart(6, '0')}`)));
+  const here = copyInfo ? `${copyInfo.company}/${copyInfo.seq}` : files.some((c) => c.sha256 === item.sha256) ? `f:${item.sha256}` : origValue;
+  select.value = here;
   select.hidden = !r.copies.length;
   select.onchange = () => {
-    if (!confirm(t('leave'))) { select.value = copyInfo ? `${copyInfo.company}/${copyInfo.seq}` : ''; return; }
-    const u = new URL(location.href); if (select.value) u.searchParams.set('copy', select.value); else u.searchParams.delete('copy'); location.href = u;
+    if (!confirm(t('leave'))) { select.value = here; return; }
+    const u = new URL(location.href);
+    if (select.value.startsWith('f:')) { u.searchParams.set('dwg', select.value.slice(2)); u.searchParams.delete('copy'); }
+    else if (select.value) u.searchParams.set('copy', select.value);
+    else u.searchParams.delete('copy');
+    location.href = u;
   };
 }
 
