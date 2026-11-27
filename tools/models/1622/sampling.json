@@ -200,7 +200,11 @@
    "note": {
     "en": "The deck marks a new OWS or WWT after the KFC tanks, at the KFC outlet sump. Place to agree.",
     "th": "ในเอกสารระบุ OWS หรือระบบบำบัดใหม่ต่อจากถังของ KFC ที่บ่อทางออก KFC ตำแหน่งต้องตกลงกัน"
-   }
+   },
+   "en": "New OWS / WWT after the KFC tanks",
+   "th": "OWS / ระบบบำบัดใหม่ต่อจากถังของ KFC",
+   "tag": "",
+   "tagTh": ""
   },
   {
    "x": 96.0,
@@ -208,6 +212,40 @@
    "note": {
     "en": "The deck marks a new OWS or WWT at the building A grease trap, for the shop water. Place to agree.",
     "th": "ในเอกสารระบุ OWS หรือระบบบำบัดใหม่ที่ถังดักไขมันอาคาร A สำหรับน้ำจากร้านค้า ตำแหน่งต้องตกลงกัน"
+   },
+   "en": "New OWS / WWT at the building A grease trap",
+   "th": "OWS / ระบบบำบัดใหม่ที่ถังดักไขมันอาคาร A",
+   "tag": "",
+   "tagTh": ""
+  }
+ ],
+ "changes": [
+  {
+   "id": "C1",
+   "kind": "new",
+   "group": "G2.2",
+   "en": "New OWS / WWT after the KFC tanks",
+   "th": "OWS / ระบบบำบัดใหม่ต่อจากถังของ KFC",
+   "names": [
+    "New OWS / WWT after the KFC tanks"
+   ],
+   "note": {
+    "en": "Place from the Caltex deck, at the KFC outlet sump KFC-1 before the KFC water joins the blue line at W9; size and type to design.",
+    "th": "ตำแหน่งจากเอกสารของ Caltex ที่บ่อทางออก KFC-1 ก่อนน้ำจาก KFC เข้าแนวท่อสีน้ำเงินที่ W9 ขนาดและชนิดต้องออกแบบ"
+   }
+  },
+  {
+   "id": "C2",
+   "kind": "new",
+   "group": "G2.2",
+   "en": "New OWS / WWT at the building A grease trap",
+   "th": "OWS / ระบบบำบัดใหม่ที่ถังดักไขมันอาคาร A",
+   "names": [
+    "New OWS / WWT at the building A grease trap"
+   ],
+   "note": {
+    "en": "Place from the Caltex deck, at the building A grease trap before the south-east pit (S4); size and type to design.",
+    "th": "ตำแหน่งจากเอกสารของ Caltex ที่ถังดักไขมันอาคาร A ก่อนบ่อมุมตะวันออกเฉียงใต้ (S4) ขนาดและชนิดต้องออกแบบ"
    }
   }
  ]

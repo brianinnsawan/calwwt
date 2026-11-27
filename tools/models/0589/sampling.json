@@ -255,19 +255,59 @@
  ],
  "future": [
   {
-   "x": 289.8,
-   "y": 99.6,
+   "x": 385.2,
+   "y": 77.6,
+   "en": "New OWS / WWT for the shop and toilet water (east)",
+   "th": "OWS / ระบบบำบัดใหม่สำหรับน้ำจากร้านค้าและห้องน้ำ (ด้านตะวันออก)",
    "note": {
-    "en": "The deck marks a new OWS or WWT for the KFC water by the KFC tanks. Place to agree.",
-    "th": "ในเอกสารระบุ OWS หรือระบบบำบัดใหม่สำหรับน้ำจาก KFC ข้างถังของ KFC ตำแหน่งต้องตกลงกัน"
+    "en": "The deck marks a new OWS or WWT on the east side for the shop and toilet water: shown before oil trap 2. Place to agree, size to design.",
+    "th": "ในเอกสารระบุ OWS หรือระบบบำบัดใหม่ด้านตะวันออกสำหรับน้ำจากร้านค้าและห้องน้ำ แสดงไว้ก่อนบ่อดักน้ำมัน 2 ตำแหน่งต้องตกลงกัน ขนาดต้องออกแบบ"
+   },
+   "tag": "",
+   "tagTh": ""
+  }
+ ],
+ "changes": [
+  {
+   "id": "C1",
+   "kind": "new",
+   "group": "G2.2",
+   "en": "New KFC pipe and 20,000 L tank (Brian's option)",
+   "th": "ท่อและถัง 20,000 ลิตรใหม่ของ KFC (ทางเลือกของ Brian)",
+   "names": [
+    "Proposed 6\" PVC: middle building to KFC to the new tank (option)",
+    "Proposed 6\" PVC: new tank to the west oil trap (option)",
+    "BO-2600 tank 1 into the new pipe (option)",
+    "KFC tank outlet (WTT-1) into the new pipe (option)",
+    "WTT-2 outlet into the new pipe (option)",
+    "Proposed new tank, 20,000 L (option)",
+    "New tank access"
+   ],
+   "at": [
+    304.6,
+    76.5
+   ],
+   "note": {
+    "en": "New 6\" PVC by gravity from the two BO-2600 tanks behind the middle building, picking up the KFC tank outlets, down the west side of KFC to a new 20,000 L tank in the parking, then to the west oil trap (S1). As drawn at 1:200 it ends 0.19 m below the oil trap's outlet and crosses two existing drains at about the same level: see the Long section.",
+    "th": "ท่อ PVC 6 นิ้วใหม่ไหลด้วยแรงโน้มถ่วงจากถัง BO-2600 สองใบหลังอาคารกลาง รับน้ำออกจากถังของ KFC ลงด้านตะวันตกของ KFC ไปถังใหม่ 20,000 ลิตรในลานจอดรถ แล้วไปบ่อดักน้ำมันตะวันตก (S1) ตามที่วาดที่ความลาด 1:200 ท่อไปถึงต่ำกว่าทางออกบ่อดักน้ำมัน 0.19 ม. และตัดท่อระบายเดิม 2 แนวที่ระดับใกล้กัน ดูรูปตัดตามยาว"
    }
   },
   {
-   "x": 385.2,
-   "y": 77.6,
+   "id": "C2",
+   "kind": "new",
+   "group": "G2.2",
+   "en": "New OWS / WWT for the shop and toilet water (east)",
+   "th": "OWS / ระบบบำบัดใหม่สำหรับน้ำจากร้านค้าและห้องน้ำ (ด้านตะวันออก)",
+   "names": [
+    "New OWS / WWT for the shop and toilet water (east)"
+   ],
+   "label": [
+    -3,
+    2
+   ],
    "note": {
-    "en": "The deck marks a new OWS or WWT on the east side for the shop and toilet water: shown before oil trap 2. Place to agree.",
-    "th": "ในเอกสารระบุ OWS หรือระบบบำบัดใหม่ด้านตะวันออกสำหรับน้ำจากร้านค้าและห้องน้ำ แสดงไว้ก่อนบ่อดักน้ำมัน 2 ตำแหน่งต้องตกลงกัน"
+    "en": "Place from the Caltex deck, before oil trap 2 (S4); size and type to design.",
+    "th": "ตำแหน่งจากเอกสารของ Caltex ก่อนบ่อดักน้ำมัน 2 (S4) ขนาดและชนิดต้องออกแบบ"
    }
   }
  ]

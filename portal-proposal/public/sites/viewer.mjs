@@ -17,7 +17,7 @@ const T = {
     leg: ['Proposed pipe', 'Ground', 'Existing drain crossing', 'Clash with existing drain', 'Water level'], clash: 'clash', clear: 'clear', grating: 'Grating', in: 'In', out: 'Out', water: 'Water', top: 'Top', bottom: 'Bottom',
     stages: ['Existing', '2026 sampling', 'Final design (concept)'], stageTip: ['What is on site today', 'Where the water is sampled in 2026', 'The proposed new works and new sampling points (concept, not built)'],
     fold: 'Fold this card', unfold: 'Open this card', about: 'About this model', walk: 'Walk the sampling points', of: 'of', prev: '‹ Back', next: 'Next ›', byResult: 'Colour sampling points by test result', risk: 'Risk', samples: (n) => `${n} sample${n > 1 ? 's' : ''}`, params: (n) => `${n} parameters tested`,
-    take: 'Where to take it', tested: 'Tested for', limit: 'Limit', result: 'Result', noResult: 'Lab results not in yet.', pass: 'Within limit', fail: 'Over limit', drains: 'What drains here (lit up)', sump: 'Sampled at', framed: 'The sampled sump is coloured', flag: 'To fix in the final design', red: 'Red pipes: G2.1 system', blue: 'Blue pipes: G2.2 system',
+    take: 'Where to take it', tested: 'Tested for', limit: 'Limit', result: 'Result', noResult: 'Lab results not in yet.', pass: 'Within limit', fail: 'Over limit', drains: 'What drains here (lit up)', sump: 'Sampled at', framed: 'The sampled sump is coloured', flag: 'To fix in the final design', red: 'Red pipes: G2.1 system', blue: 'Blue pipes: G2.2 system', dashed: 'Dashed = new in the final design', removed: 'Grey, see-through = removed', changesOnly: 'Show the changes only', showAll: 'Show everything again', changes: 'Changes in the final design', kNew: 'New', kRemoved: 'Removed', kRerouted: 'Re-routed', allChanges: '‹ All changes',
     level: (a, b, as) => `Water taken at about ${a} (${b} m below ground${as ? ', assumed' : ''}).`, sampleLeg: 'Sampling points', g21: 'G2.1 oil side (forecourt, fuel, oil change)', g22: 'G2.2 wastewater side (toilets, kitchens, shops)',
     st: { existing: 'Existing sampling point', new: 'New sampling point', construction: 'Construction sampling point (final design)', ows: 'New OWS or new WWT (final design)' }, mgl: 'mg/L', resultOn: (d, lab) => `Result ${d}${lab ? ` (${lab})` : ''}:` },
   th: { layers: 'ชั้นข้อมูล', views: 'มุมมอง', more: 'มุมมองอื่น…', grpWW: 'ระบบน้ำเสียและการบำบัด', grpSite: 'อาคารและพื้นที่สถานี', display: 'การแสดงผล', tidy: 'จัดชื่อให้อ่านง่าย (ซูมเข้าเพื่อดูเพิ่ม)', labels: 'ชื่อ', levels: 'ระดับท่อที่บ่อพัก', see: 'มองทะลุพื้น', tall: 'ขยายความสูง ×3',
@@ -27,7 +27,7 @@ const T = {
     leg: ['ท่อที่เสนอ', 'ผิวพื้น', 'ท่อระบายน้ำเดิมที่ตัดผ่าน', 'ชนท่อระบายน้ำเดิม', 'ระดับน้ำ'], clash: 'ชน', clear: 'ไม่ชน', grating: 'ตะแกรง', in: 'เข้า', out: 'ออก', water: 'น้ำ', top: 'หลังถัง', bottom: 'ก้นถัง',
     stages: ['สภาพปัจจุบัน', 'เก็บตัวอย่างปี 2026', 'แบบสุดท้าย (แนวคิด)'], stageTip: ['สิ่งที่มีอยู่หน้างานวันนี้', 'จุดที่เก็บตัวอย่างน้ำในปี 2026', 'งานใหม่ที่เสนอและจุดเก็บตัวอย่างใหม่ (แนวคิด ยังไม่ได้สร้าง)'],
     fold: 'พับการ์ดนี้', unfold: 'เปิดการ์ดนี้', about: 'เกี่ยวกับโมเดลนี้', walk: 'ไล่ดูจุดเก็บตัวอย่าง', of: 'จาก', prev: '‹ ก่อนหน้า', next: 'ถัดไป ›', byResult: 'แสดงสีจุดเก็บตัวอย่างตามผลตรวจ', risk: 'ความเสี่ยง', samples: (n) => `${n} ตัวอย่าง`, params: (n) => `ตรวจ ${n} พารามิเตอร์`,
-    take: 'จุดตักน้ำ', tested: 'รายการตรวจ', limit: 'ค่ามาตรฐาน', result: 'ผล', noResult: 'ยังไม่ได้รับผลจากห้องแล็บ', pass: 'ผ่านเกณฑ์', fail: 'เกินเกณฑ์', drains: 'สิ่งที่ระบายมาที่จุดนี้ (ไฮไลต์)', sump: 'เก็บที่', framed: 'บ่อที่เก็บตัวอย่างแสดงเป็นสี', flag: 'ต้องแก้ไขในแบบสุดท้าย', red: 'ท่อสีแดง: ระบบ G2.1', blue: 'ท่อสีน้ำเงิน: ระบบ G2.2',
+    take: 'จุดตักน้ำ', tested: 'รายการตรวจ', limit: 'ค่ามาตรฐาน', result: 'ผล', noResult: 'ยังไม่ได้รับผลจากห้องแล็บ', pass: 'ผ่านเกณฑ์', fail: 'เกินเกณฑ์', drains: 'สิ่งที่ระบายมาที่จุดนี้ (ไฮไลต์)', sump: 'เก็บที่', framed: 'บ่อที่เก็บตัวอย่างแสดงเป็นสี', flag: 'ต้องแก้ไขในแบบสุดท้าย', red: 'ท่อสีแดง: ระบบ G2.1', blue: 'ท่อสีน้ำเงิน: ระบบ G2.2', dashed: 'เส้นประ = ของใหม่ในแบบสุดท้าย', removed: 'สีเทาโปร่ง = รื้อออก', changesOnly: 'แสดงเฉพาะส่วนที่เปลี่ยน', showAll: 'แสดงทั้งหมด', changes: 'ส่วนที่เปลี่ยนในแบบสุดท้าย', kNew: 'ใหม่', kRemoved: 'รื้อออก', kRerouted: 'เปลี่ยนแนว', allChanges: '‹ ทุกรายการ',
     level: (a, b, as) => `ตักน้ำที่ระดับประมาณ ${a} (ต่ำกว่าพื้น ${b} ม.${as ? ' ค่าสมมติ' : ''})`, sampleLeg: 'จุดเก็บตัวอย่าง', g21: 'G2.1 ฝั่งน้ำมัน (ลานจ่ายน้ำมัน เปลี่ยนน้ำมันเครื่อง)', g22: 'G2.2 ฝั่งน้ำเสีย (ห้องน้ำ ครัว ร้านค้า)',
     st: { existing: 'จุดเก็บตัวอย่างเดิม', new: 'จุดเก็บตัวอย่างใหม่', construction: 'จุดเก็บตัวอย่างที่จะก่อสร้าง (แบบสุดท้าย)', ows: 'OWS ใหม่ หรือระบบบำบัดใหม่ (แบบสุดท้าย)' }, mgl: 'มก./ล.', resultOn: (d, lab) => `ผลตรวจ ${d}${lab ? ` (${lab})` : ''}:` },
 };
@@ -110,6 +110,9 @@ const CSS = `
 .v3-info details.ab[open] > summary { margin-bottom: 4px; }
 .v3-info.folded { padding: 6px 10px; }
 .v3-info.folded .bd { display: none; }
+.v3-info .v3-chg-only { margin: 2px 0 4px; font-size: 12.5px; font-weight: 600; }
+.v3-info .v3-chg-only.on { background: var(--accent); border-color: var(--accent); color: #fff; }
+.v3-info .v3-chg { display: block; width: 100%; text-align: left; margin: 3px 0; font-size: 12.5px; }
 .v3-info .nav { display: flex; gap: 6px; align-items: center; margin-top: 6px; }
 .v3-panel .leg { display: grid; gap: 2px; padding: 0 0 4px; color: var(--muted); font-size: 11.5px; }
 .v3-panel .leg b { color: var(--ink); font-weight: 600; }
@@ -273,6 +276,7 @@ export async function show(view, url, w, lang = 'en', title = '') {
   };
   const pick = (o) => {
     if (o.userData.sample) return pickSample(o);
+    if (o.userData.change) { pickTarget(o); return; }
     if (pickTarget(o)) return;
     unpick(); picked = o; pickedMat = o.material;
     const m = glow(o.material.clone(), 0xff9d00, 0.55); m.opacity = Math.max(m.opacity, 0.9); o.material = m;
@@ -325,23 +329,36 @@ export async function show(view, url, w, lang = 'en', title = '') {
       return all ? 'pass' : 'pending';
     };
     // ---- colouring (undone when the stage changes)
-    const COL = { 'G2.1': 0xd7263d, 'G2.2': 0x1f6fe0, pass: 0x16a34a, fail: 0xdc2626, pending: 0x9ca3af }, mats = {}, kept = new Map();
+    const COL = { 'G2.1': 0xd7263d, 'G2.2': 0x1f6fe0, pass: 0x16a34a, fail: 0xdc2626, pending: 0x9ca3af, grey: 0xa3a9b0, white: 0xffffff }, mats = {}, kept = new Map();
     const matFor = (k) => (mats[k] ||= new THREE.MeshStandardMaterial({ color: COL[k], roughness: 0.6, transparent: true, opacity: 0.95, side: THREE.DoubleSide }));
+    const ghostMat = new THREE.MeshStandardMaterial({ color: COL.grey, transparent: true, opacity: 0.22, depthWrite: false, side: THREE.DoubleSide });
     const tmats = {}, throughMat = (k) => (tmats[k] ||= new THREE.MeshBasicMaterial({ color: COL[k], transparent: true, opacity: 0.85, depthTest: false, side: THREE.DoubleSide }));
     const paint = (o, k) => { if (!kept.has(o)) kept.set(o, o.material); o.material = matFor(k); };
     // a coloured pipe also gets a bold line along it that shows through the ground and the buildings
     const bold = new THREE.Group(); bold.renderOrder = 10; root.add(bold);
-    const boldMats = {}, boldMat = (k) => (boldMats[k] ||= new THREE.MeshBasicMaterial({ color: COL[k], transparent: true, opacity: 0.9, depthTest: false }));
-    const boldLine = (o, k) => {
+    const boldMats = {}, boldMat = (k, op = 0.9) => (boldMats[k + op] ||= new THREE.MeshBasicMaterial({ color: COL[k], transparent: true, opacity: op, depthTest: false }));
+    const up = new THREE.Vector3(0, 1, 0);
+    const rod = (a, b, r, mat, order) => {
+      const len = a.distanceTo(b); if (len < 0.01) return;
+      const m = new THREE.Mesh(new THREE.CylinderGeometry(r, r, len, 8, 1, true), mat); m.position.copy(a).add(b).multiplyScalar(0.5);
+      m.quaternion.setFromUnitVectors(up, b.clone().sub(a).normalize()); m.renderOrder = order; m.userData = { nopick: 1 }; bold.add(m);
+    };
+    // dashed = new in the final design: dashes in the system colour on a white outline, so they read as "new" on any background
+    const boldLine = (o, k, dashed = false, r = 0.22) => {
       const L = o.userData.line; if (!L || L.length < 2) return;
-      const up = new THREE.Vector3(0, 1, 0);
       for (let i = 0; i < L.length - 1; i++) {
         const a = new THREE.Vector3(...L[i]), b = new THREE.Vector3(...L[i + 1]), len = a.distanceTo(b); if (len < 0.01) continue;
-        const g = new THREE.CylinderGeometry(0.22, 0.22, len, 8, 1, true);
-        const m = new THREE.Mesh(g, boldMat(k)); m.position.copy(a).add(b).multiplyScalar(0.5); m.quaternion.setFromUnitVectors(up, b.clone().sub(a).normalize()); m.renderOrder = 10; m.userData = { nopick: 1 };
-        bold.add(m);
+        if (!dashed) { rod(a, b, r, boldMat(k), 10); continue; }
+        const d = b.clone().sub(a).normalize();
+        for (let s0 = 0; s0 < len; s0 += 1.4) {
+          const p0 = a.clone().addScaledVector(d, s0), p1 = a.clone().addScaledVector(d, Math.min(s0 + 0.85, len));
+          rod(p0.clone().addScaledVector(d, -0.08), p1.clone().addScaledVector(d, 0.08), r + 0.09, boldMat('white', 0.95), 10);
+          rod(p0, p1, r + 0.02, boldMat(k, 1), 11);
+        }
       }
     };
+    // a new tank or pit: its colour plus white edges
+    const outline = (o) => { const e = new THREE.LineSegments(new THREE.EdgesGeometry(o.geometry, 30), new THREE.LineBasicMaterial({ color: 0xffffff, depthTest: false })); e.renderOrder = 12; e.userData = { nopick: 1 }; bold.add(e); };
     const unpaint = () => { for (const [o, m] of kept) o.material = m; kept.clear(); for (const c of [...bold.children]) { c.geometry.dispose(); bold.remove(c); } };
     let byResult = false;
     const lay = (id) => layers.find((g) => g.name === id);
@@ -350,6 +367,7 @@ export async function show(view, url, w, lang = 'en', title = '') {
     const shownAt = (st, k) => (st === 'future' ? k === 2 : st === 'now' ? k === 1 : k >= 1);
     let stageAt = 1;
     const planOn = lay('plan')?.visible !== false;
+    let changesOnly = false;
     const bar = el('div', { class: 'v3-stage' }), sbtn = [];
     const stage = (k) => {
       stageAt = k; walkAt = -1; unpick(); unpaint();
@@ -358,7 +376,19 @@ export async function show(view, url, w, lang = 'en', title = '') {
       if (lay('proposed')) setLayer('proposed', k === 2);   // proposed works (e.g. the Kathu KFC option) are not built: only in "Final design" (Brian, 27 Nov 2026)
       for (const o of staged) o.visible = o.userData.sample ? shownAt(o.userData.sample.stage, k) : o.userData.stage === 'future' ? k === 2 : true;
       onlySampleLabels = k >= 1;
-      if (k === 2) for (const s of S.systems || []) for (const n of s.names) for (const o of byName.get(n) || []) { paint(o, s.group); boldLine(o, s.group); }
+      // as built: every existing pipe and sump in its system colour (2026 sampling and final design); in the final design the
+      // changes are drawn on top, and "changes only" greys out what stays as it is
+      const changed = new Map(); if (k === 2) for (const c of S.changes || []) for (const n of c.names) changed.set(n, c);
+      if (k >= 1) for (const s of S.systems || []) for (const n of s.names) {
+        if (changed.has(n)) continue;
+        const key = k === 2 && changesOnly ? 'grey' : s.group;
+        for (const o of byName.get(n) || []) { paint(o, key); if (!(k === 2 && changesOnly)) boldLine(o, key); }
+      }
+      if (k === 2) for (const [n, c] of changed) for (const o of byName.get(n) || []) {
+        if (c.kind === 'removed') { if (!kept.has(o)) kept.set(o, o.material); o.material = ghostMat; continue; }
+        paint(o, c.group);
+        if (o.userData.line) boldLine(o, c.group, true); else outline(o);
+      }
       if (k >= 1) for (const [id, l] of byId) {
         const sm = l[0].userData.sample; if (!shownAt(sm.stage, k)) continue;
         const key = byResult ? verdict(sm) : sm.group.split('+')[0];
@@ -373,14 +403,21 @@ export async function show(view, url, w, lang = 'en', title = '') {
     const key = (c, txt, shape) => { const r = el('span'), i = el('i'); i.style.cssText = `display:inline-block;width:10px;height:10px;margin-right:6px;vertical-align:-1px;background:${c};${shape}`; r.append(i, txt); leg.append(r); };
     key('#d7263d', t.g21, ''); key('#1f6fe0', t.g22, '');
     leg.append(el('span', {}, t.framed));
-    if (S.hasFuture) { key('#ff66cc', t.st.ows, 'clip-path:polygon(50% 0,100% 100%,0 100%)'); key('#f08c00', t.flag, 'clip-path:polygon(0 0,100% 0,50% 100%)'); }
+    key('#f08c00', t.flag, 'clip-path:polygon(0 0,100% 0,50% 100%)');
+    if (S.changes?.length) { key('repeating-linear-gradient(90deg,#1f6fe0 0 6px,#fff 6px 9px)', t.dashed, 'height:5px;vertical-align:2px'); key('#a3a9b0', t.removed, 'opacity:.5'); }
     const gS = fold(t.sampleLeg, false, 'samplekey'); gS.append(leg);
     check(t.byResult, false, (on) => { byResult = on; stage(stageAt); }, null, gS);
     // ---- summary on the idle card, in the deck's words ("2.1 – 2 samples – 4 parameters tested")
     sampleSummary = () => {
       const body = frame(...(S.risk ? [el('span', { class: 'risk ' + S.risk }, `${S.risk}`)] : []), el('b', {}, t.sampleLeg));
       for (const c of (stageAt === 2 ? S.futureCounts : S.counts)) { const p = el('p'); p.append(el('span', { class: c.group === 'G2.1' ? 'g21' : 'g22' }, c.group.replace(/G/g, '')), ` – ${t.samples(c.samples)} – ${t.params(c.params)}`); body.append(p); }
-      if (stageAt === 2 && S.systems?.length) { const p = el('p'); p.append(el('span', { class: 'g21' }, t.red), ' · ', el('span', { class: 'g22' }, t.blue)); body.append(p); }
+      if (stageAt >= 1 && S.systems?.length) { const p = el('p'); p.append(el('span', { class: 'g21' }, t.red), ' · ', el('span', { class: 'g22' }, t.blue)); body.append(p); }
+      if (stageAt === 2 && S.changes?.length) {
+        { const h = el('p'); h.append(el('b', {}, t.changes)); body.append(h); }
+        const only = el('button', { type: 'button', class: 'v3-chg-only' + (changesOnly ? ' on' : '') }, changesOnly ? t.showAll : t.changesOnly);
+        only.onclick = () => { changesOnly = !changesOnly; stage(2); }; body.append(only);
+        for (const c of S.changes) { const b = el('button', { type: 'button', class: 'v3-chg' }); b.append(el('span', { class: c.group === 'G2.1' ? 'g21' : 'g22' }, c.id), ` ${name(c)}`); b.onclick = () => showChange(c, true); body.append(b); }
+      }
       about(body);
     };
     // ---- the card of one sampling point
@@ -420,8 +457,20 @@ export async function show(view, url, w, lang = 'en', title = '') {
         nav.append(a, el('span', {}, `${walkAt + 1} ${t.of} ${order.length}`), b); card.append(nav);
       }
     };
-    // clicking the sampled sump itself opens its sampling point
-    pickTarget = (o) => (stageAt >= 1 && targetOf.has(o.userData.en) && frameOf(targetOf.get(o.userData.en))?.visible ? (pickSample(frameOf(targetOf.get(o.userData.en))), true) : false);
+    // ---- one change of the final design: fly to it and say what it is
+    const anchorOf = new Map(); root.traverse((o) => { if (o.userData?.change) anchorOf.set(o.userData.change.id, o); });
+    const changeOf = new Map(); for (const c of S.changes || []) for (const n of c.names) changeOf.set(n, c);
+    const showChange = (c, fly) => {
+      unpick();
+      if (fly) { const [x, y, z] = c.centre, d = Math.max(c.size, 8); go(scaled([x + d * 0.5, y + d * 0.9, z + d * 1.1]), scaled([x, y, z]), 700); }
+      const word = { new: t.kNew, removed: t.kRemoved, rerouted: t.kRerouted }[c.kind] || t.kNew;
+      const body = frame(el('b', {}, `${c.id} · ${name(c)}`));
+      const p = el('p'); p.append(el('span', { class: c.group === 'G2.1' ? 'g21' : 'g22' }, `${word} · ${name(S.groups[c.group])}`)); body.append(p);
+      if (c.note) body.append(el('p', {}, name(c.note)));
+      const back = el('button', { type: 'button' }, t.allChanges); back.onclick = () => idle(); body.append(el('div', { class: 'nav' }, null)); body.lastChild.append(back);
+    };
+    // clicking the sampled sump itself opens its sampling point; in the final design, clicking a changed thing opens its change
+    pickTarget = (o) => (stageAt === 2 && (o.userData.change || changeOf.has(o.userData.en)) ? (showChange(o.userData.change || changeOf.get(o.userData.en), false), true) : false) || (stageAt >= 1 && targetOf.has(o.userData.en) && frameOf(targetOf.get(o.userData.en))?.visible ? (pickSample(frameOf(targetOf.get(o.userData.en))), true) : false);
     // ---- walk-through: fly to each point in turn, in the order of sampling.json
     const walk = (i) => {
       if (stageAt === 0) stage(1);
@@ -459,7 +508,7 @@ export async function show(view, url, w, lang = 'en', title = '') {
     // far: the camera is more than 2.4 site-widths from where it looks; then only the site's name shows
     const far = tidy && camera.position.distanceTo(controls.target) > 2.4 * D, cand = [];
     for (const m of marks) {
-      let on = !far && showKind[m.grp] && (!m.layer || m.layer.visible) && (!m.o || m.o.visible) && (!onlySampleLabels || ['sample', 'flag', 'future'].includes(m.o?.userData.kind));
+      let on = !far && showKind[m.grp] && (!m.layer || m.layer.visible) && (!m.o || m.o.visible) && (!onlySampleLabels || ['sample', 'flag', 'future', 'change'].includes(m.o?.userData.kind));
       if (on) {
         v.set(m.p.x, m.p.y * ky, m.p.z); m.dl = camera.position.distanceTo(v);
         if (tidy && m.dl > REACH[m.prio] * D) on = false;

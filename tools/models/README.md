@@ -232,6 +232,13 @@ Brian: do not copy the PowerPoint's lines; use the model's own sumps and pipes, 
   runs on into the red west V-gutter, Brian), canopy drains, front drains, entrance and exit pits; blue = rear line, west
   side and KFC line (KFC-1 into W9) to the SW pit, east line with both toilet tanks to the SE pit, building A and B pipes.
   Pink places for a new OWS / WWT at the KFC outlet sump and the building A grease trap (Brian: show both).
+- 2026 sampling vs final design (Brian, 27 Nov 2026): "2026 sampling" shows the site AS BUILT: every existing pipe and
+  sump in its system colour (`systems`), the sampled sumps, and orange flags where one group's water runs into the other's
+  line (`flags`, both stages unless `"stage"`). "Final design" is the same picture plus `"changes"` (C1, C2 ...): new works
+  dashed in their system colour on a white outline (tanks get white edges), removed ones grey and see-through, re-routed
+  ones tagged. The bottom card lists the changes (click = fly there and explain) and has "Show the changes only", which
+  greys out everything that stays as it is. A change names the model objects it covers (proposed-layer pipes and tanks,
+  `future` places). Not light red / light blue: light blue already means clean water and above-ground PVC.
 - Proposed works (layer "proposed", e.g. Brian's Kathu KFC option) show ONLY in "Final design": they are not built (Brian,
   27 Nov 2026). A view of a proposed option carries `stage: 'final'` in the site file, and the Long section button does the
   same: both switch the model to "Final design" first.
