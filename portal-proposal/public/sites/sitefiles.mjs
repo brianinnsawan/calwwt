@@ -39,7 +39,10 @@ const CSS = `
 .sf-msg[data-kind="bad"] { color: var(--bad); }
 .sf-msg:empty { display: none; }
 .sf-msg button { margin-left: 8px; }
-.sf-stage { position: relative; overflow: auto; background: #fff; }
+/* The viewer always sits in the third row: the message row above it is hidden when empty, and without a fixed row the
+   viewer moved up into the short row and had no height (27 Nov 2026: PDFs and videos showed nothing). */
+.sf-msg { grid-row: 2; }
+.sf-stage { grid-row: 3; min-height: 0; position: relative; overflow: auto; background: #fff; }
 .sf-stage iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
 .sf-stage img { display: block; max-width: 100%; margin: 0 auto; }
 .sf-stage.video { background: #000; }
