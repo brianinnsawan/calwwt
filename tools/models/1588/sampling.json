@@ -11,7 +11,9 @@
    "status": "existing",
    "samples": 1,
    "src": "deck",
-   "at": "Grated trap pit at the north-west outfall",
+   "at": [
+    "Grated trap pit at the north-west outfall"
+   ],
    "where": {
     "en": "at the outlet chamber of the trap, where the water leaves for the public drain",
     "th": "ที่ช่องทางออกของบ่อดัก ก่อนน้ำออกสู่ท่อสาธารณะ"
@@ -26,7 +28,9 @@
    "status": "existing",
    "samples": 1,
    "src": "deck",
-   "at": "Grated trap pit at the west outfall",
+   "at": [
+    "Grated trap pit at the west outfall"
+   ],
    "where": {
     "en": "at the outlet chamber of the trap, where the water leaves for the public drain",
     "th": "ที่ช่องทางออกของบ่อดัก ก่อนน้ำออกสู่ท่อสาธารณะ"
@@ -42,7 +46,9 @@
    "status": "existing",
    "samples": 1,
    "src": "deck",
-   "at": "Grated trap pit at the south-west outfall",
+   "at": [
+    "Grated trap pit at the south-west outfall"
+   ],
    "where": {
     "en": "at the outlet chamber of the trap, where the water leaves for the public drain",
     "th": "ที่ช่องทางออกของบ่อดัก ก่อนน้ำออกสู่ท่อสาธารณะ"
@@ -54,106 +60,6 @@
    "note": {
     "en": "Takes the front strip drain along buildings A and B. 20 Nov 2026: shower, laundry and Chao Doi water seem to reach the forecourt OWS instead of the NFR OWS.",
     "th": "รับรางแถบด้านหน้าตามอาคาร A และ B สำรวจ 20 พ.ย. 2026: น้ำจากห้องอาบน้ำ ซักผ้า และเจ้าดอยดูเหมือนไหลไป OWS ลานจ่ายน้ำมันแทน OWS ของ NFR"
-   }
-  }
- ],
- "routes": [
-  {
-   "group": "G2.2",
-   "pts": [
-    [
-     68.85,
-     37.54
-    ],
-    [
-     11.61,
-     43.3
-    ]
-   ]
-  },
-  {
-   "group": "G2.1",
-   "pts": [
-    [
-     117.07,
-     41.41
-    ],
-    [
-     120.82,
-     65.71
-    ]
-   ]
-  },
-  {
-   "group": "G2.1",
-   "pts": [
-    [
-     121.49,
-     63.83
-    ],
-    [
-     105.9,
-     86.7
-    ]
-   ]
-  },
-  {
-   "group": "G2.1",
-   "pts": [
-    [
-     107.66,
-     85.92
-    ],
-    [
-     18.68,
-     95.04
-    ]
-   ]
-  },
-  {
-   "group": "G2.1",
-   "pts": [
-    [
-     103.84,
-     43.24
-    ],
-    [
-     12.79,
-     55.69
-    ]
-   ]
-  },
-  {
-   "group": "G2.1",
-   "pts": [
-    [
-     16.67,
-     88.45
-    ],
-    [
-     12.2,
-     59.35
-    ]
-   ]
-  }
- ],
- "future": [
-  {
-   "type": "ows",
-   "x": 22.3,
-   "y": 40.8,
-   "note": {
-    "en": "West end of the building row: new OWS or treatment for the shop and toilet water.",
-    "th": "ปลายด้านตะวันตกของแถวอาคาร: OWS หรือระบบบำบัดใหม่สำหรับน้ำจากร้านค้าและห้องน้ำ"
-   }
-  },
-  {
-   "type": "ows",
-   "x": 104.5,
-   "y": 41.7,
-   "note": {
-    "en": "East end, by the small room and the car wash side.",
-    "th": "ปลายด้านตะวันออก ข้างห้องเล็กและฝั่งล้างรถ"
    }
   }
  ]

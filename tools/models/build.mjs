@@ -102,6 +102,7 @@ const info = (o) => {
 const add = (layer, geometry, material, o, at) => {
   const m = new THREE.Mesh(geometry, mat(material)); m.name = o.en || o.name || material; m.userData = info(o);
   if (at) m.userData.at = [+at.x.toFixed(2), +at.y.toFixed(2), +at.z.toFixed(2)];
+  if (geometry.userData?.line) m.userData.line = geometry.userData.line;   // pipe centreline: the viewer draws the final-design colours along it
   layers.get(layer).add(m); return m;
 };
 const boxGeo = (w, d, h, x, y, base, rot = 0) => {
@@ -142,7 +143,9 @@ const pipeGeo = (pts, r) => {
     const mid = v[i].clone().add(v[i + 1]).multiplyScalar(0.5); g.translate(mid.x, mid.y, mid.z); parts.push(g);
   }
   for (const q of v) { const s = new THREE.SphereGeometry(r, 10, 6); s.translate(q.x, q.y, q.z); parts.push(s); }
-  return { geometry: mergeGeometries(parts), mid: v[Math.floor(v.length / 2)], levels: p, length: ch[ch.length - 1] };
+  const geometry = mergeGeometries(parts);
+  geometry.userData.line = v.map((q) => [+q.x.toFixed(2), +q.y.toFixed(2), +q.z.toFixed(2)]);   // pipe centreline, kept on the mesh for the viewer
+  return { geometry, mid: v[Math.floor(v.length / 2)], levels: p, length: ch[ch.length - 1] };
 };
 const lv = (n) => (Math.abs(n) < 0.0005 ? '±0.00' : (n > 0 ? '+' : '-') + Math.abs(n).toFixed(Math.abs(n * 100 - Math.round(n * 100)) > 0.01 ? 3 : 2));
 

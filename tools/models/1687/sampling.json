@@ -12,7 +12,9 @@
    "samples": 1,
    "src": "deck",
    "stage": "now",
-   "at": "Existing 3-compartment grease trap (grating covers)",
+   "at": [
+    "Existing 3-compartment grease trap (grating covers)"
+   ],
    "where": {
     "en": "at the outlet chamber of the trap, where the water leaves for the public drain",
     "th": "ที่ช่องทางออกของบ่อดัก ก่อนน้ำออกสู่ท่อสาธารณะ"
@@ -33,7 +35,9 @@
    "samples": 1,
    "src": "deck",
    "stage": "future",
-   "at": "Existing 3-compartment grease trap (grating covers)",
+   "at": [
+    "Existing 3-compartment grease trap (grating covers)"
+   ],
    "where": {
     "en": "at the outlet chamber of the trap, where the water leaves for the public drain",
     "th": "ที่ช่องทางออกของบ่อดัก ก่อนน้ำออกสู่ท่อสาธารณะ"
@@ -46,76 +50,6 @@
     "en": "In the final design this outlet takes only the building wastewater (G2.2).",
     "th": "ในแบบสุดท้าย ทางออกนี้รับเฉพาะน้ำเสียจากอาคาร (G2.2)"
    }
-  },
-  {
-   "id": "F2",
-   "group": "G2.1",
-   "status": "construction",
-   "samples": 1,
-   "src": "deck",
-   "x": 14.6,
-   "y": 13.0,
-   "where": {
-    "en": "new sampling chamber for the forecourt water, at the front by manhole MH-7",
-    "th": "บ่อเก็บตัวอย่างใหม่สำหรับน้ำจากลานจ่ายน้ำมัน ด้านหน้าข้างบ่อพัก MH-7"
-   },
-   "upstream": [
-    "Canopy"
-   ]
-  }
- ],
- "routes": [
-  {
-   "group": "G2.1",
-   "pts": [
-    [
-     -13.44,
-     63.91
-    ],
-    [
-     27.25,
-     45.4
-    ]
-   ]
-  },
-  {
-   "group": "G2.1",
-   "pts": [
-    [
-     -16.5,
-     10.61
-    ],
-    [
-     -13.22,
-     63.88
-    ]
-   ]
-  },
-  {
-   "group": "G2.1",
-   "pts": [
-    [
-     -17.06,
-     11.81
-    ],
-    [
-     12.1,
-     10.04
-    ]
-   ]
-  },
-  {
-   "group": "G2.2",
-   "pts": [
-    [
-     26.64,
-     11.33
-    ],
-    [
-     28.48,
-     41.75
-    ]
-   ]
   }
  ]
 }

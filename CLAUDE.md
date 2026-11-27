@@ -121,8 +121,8 @@ Nothing is shared with calnkt: own logins, own databases, own file storage.
   KFC sidewalk 1.2 m + 15 cm kerb, lane 4.0 m, toilet walkway 2.4 m + 15 cm kerb (40 cm tiles); pick-up window with roof on the KFC side.
 - Kerbs, walkways and parking go in the shared layer "paving" (materials walkway, kerbYellow, kerbRed, kerbPlain, bayLine,
   bayEV, grass in style.mjs); first used at 1156 (estimated from the video, 26 Nov 2026).
-- Water sampling points and the final-design concept (27 Nov 2026) are on all 8 models, from the Caltex deck SPP Sites R1:
-  `tools/models/<code>/sampling.json` + `tools/models/sampling.mjs`; viewer stages Existing / 2026 sampling / Final design,
-  walk-through, PCD limits table, colour by test result. Add Aqua's lab results to sampling.json and rebuild. Details in
-  tools/models/README.md.
+- Water sampling and final design (27 Nov 2026): `tools/models/<code>/sampling.json` + `tools/models/sampling.mjs`; viewer stages
+  Existing / 2026 sampling / Final design. Brian: never copy the PowerPoint's lines; colour the model's OWN sumps and pipes
+  red (G2.1) / blue (G2.2), add only what is needed, and agree each site with him (ask, with a plan picture). 0589 Kathu is
+  done; the other 7 only highlight their sampled sumps so far. Details in tools/models/README.md.
 - Site notes and starting timelines in `data/sites.json` / `data/timelines/` were written from Brian's site-visit notes; dates to confirm.

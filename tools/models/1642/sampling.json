@@ -12,7 +12,9 @@
    "samples": 1,
    "src": "deck",
    "stage": "now",
-   "at": "Oil trap (entrance side) · front-left corner, west of the entrance",
+   "at": [
+    "Oil trap (entrance side) · front-left corner, west of the entrance"
+   ],
    "where": {
     "en": "at the outlet chamber of the trap, where the water leaves for the public drain",
     "th": "ที่ช่องทางออกของบ่อดัก ก่อนน้ำออกสู่ท่อสาธารณะ"
@@ -27,7 +29,9 @@
    "status": "existing",
    "samples": 1,
    "src": "deck",
-   "at": "Oil trap (exit side) · in front of the sales building, east of the exit",
+   "at": [
+    "Oil trap (exit side) · in front of the sales building, east of the exit"
+   ],
    "where": {
     "en": "at the outlet chamber of the trap, where the water leaves for the public drain",
     "th": "ที่ช่องทางออกของบ่อดัก ก่อนน้ำออกสู่ท่อสาธารณะ"
@@ -47,7 +51,9 @@
    "status": "existing",
    "samples": 1,
    "src": "deck",
-   "at": "Outlet pit (east corner) · front-right corner of the site",
+   "at": [
+    "Outlet pit (east corner) · front-right corner of the site"
+   ],
    "where": {
     "en": "at the outlet chamber of the trap, where the water leaves for the public drain",
     "th": "ที่ช่องทางออกของบ่อดัก ก่อนน้ำออกสู่ท่อสาธารณะ"
@@ -62,30 +68,15 @@
    }
   },
   {
-   "id": "S4",
-   "group": "G2.1",
-   "status": "new",
-   "samples": 1,
-   "src": "deck",
-   "stage": "now",
-   "x": 1197.4,
-   "y": 5.8,
-   "where": {
-    "en": "at the back-east corner, by the firewall",
-    "th": "มุมหลังด้านตะวันออก ข้างกำแพงกันไฟ"
-   },
-   "upstream": [
-    "Manhole B9"
-   ]
-  },
-  {
    "id": "F1",
    "group": "G2.1",
    "status": "existing",
    "samples": 1,
    "src": "deck",
    "stage": "future",
-   "at": "Oil trap (entrance side) · front-left corner, west of the entrance",
+   "at": [
+    "Oil trap (entrance side) · front-left corner, west of the entrance"
+   ],
    "where": {
     "en": "at the outlet chamber of the trap, where the water leaves for the public drain",
     "th": "ที่ช่องทางออกของบ่อดัก ก่อนน้ำออกสู่ท่อสาธารณะ"
@@ -93,132 +84,6 @@
    "upstream": [
     "Canopy"
    ]
-  },
-  {
-   "id": "F2",
-   "group": "G2.1",
-   "status": "construction",
-   "samples": 1,
-   "src": "deck",
-   "x": 1196.8,
-   "y": 5.8,
-   "where": {
-    "en": "new sampling chamber at the back-east corner",
-    "th": "บ่อเก็บตัวอย่างใหม่ที่มุมหลังด้านตะวันออก"
-   }
-  }
- ],
- "routes": [
-  {
-   "group": "G2.1",
-   "pts": [
-    [
-     1183.38,
-     10.18
-    ],
-    [
-     1131.24,
-     9.01
-    ]
-   ]
-  },
-  {
-   "group": "G2.1",
-   "pts": [
-    [
-     1132.6,
-     -28.54
-    ],
-    [
-     1131.71,
-     9.46
-    ]
-   ]
-  },
-  {
-   "group": "G2.1",
-   "pts": [
-    [
-     1134.96,
-     -31.67
-    ],
-    [
-     1184.99,
-     -30.55
-    ]
-   ]
-  },
-  {
-   "group": "G2.1",
-   "pts": [
-    [
-     1182.79,
-     10.0
-    ],
-    [
-     1187.01,
-     -29.29
-    ]
-   ]
-  },
-  {
-   "group": "G2.2",
-   "pts": [
-    [
-     1200.69,
-     -28.47
-    ],
-    [
-     1197.15,
-     5.82
-    ]
-   ]
-  },
-  {
-   "group": "G2.2",
-   "pts": [
-    [
-     1191.34,
-     7.96
-    ],
-    [
-     1197.78,
-     5.42
-    ]
-   ]
-  },
-  {
-   "group": "G2.1",
-   "pts": [
-    [
-     1195.28,
-     10.11
-    ],
-    [
-     1182.92,
-     10.26
-    ]
-   ]
-  }
- ],
- "future": [
-  {
-   "type": "ows",
-   "x": 1191.1,
-   "y": 5.6,
-   "note": {
-    "en": "Behind the toilets, at the septic tank outlet: new treatment for the toilet water.",
-    "th": "หลังห้องน้ำ ที่ทางออกถังบำบัด: ระบบบำบัดใหม่สำหรับน้ำจากห้องน้ำ"
-   }
-  },
-  {
-   "type": "ows",
-   "x": 1200.3,
-   "y": -25.6,
-   "note": {
-    "en": "East side, before the east-corner outlet.",
-    "th": "ด้านตะวันออก ก่อนบ่อทางออกมุมตะวันออก"
-   }
   }
  ]
 }

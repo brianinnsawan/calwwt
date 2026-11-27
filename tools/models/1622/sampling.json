@@ -11,7 +11,9 @@
    "status": "existing",
    "samples": 1,
    "src": "deck",
-   "at": "Grease trap pit (3 chambers) · south-west corner",
+   "at": [
+    "Grease trap pit (3 chambers) · south-west corner"
+   ],
    "where": {
     "en": "at the outlet chamber of the trap, where the water leaves for the public drain",
     "th": "ที่ช่องทางออกของบ่อดัก ก่อนน้ำออกสู่ท่อสาธารณะ"
@@ -26,7 +28,9 @@
    "status": "existing",
    "samples": 1,
    "src": "deck",
-   "at": "Grease trap pit (3 chambers) · west of the entrance",
+   "at": [
+    "Grease trap pit (3 chambers) · west of the entrance"
+   ],
    "where": {
     "en": "at the outlet chamber of the trap, where the water leaves for the public drain",
     "th": "ที่ช่องทางออกของบ่อดัก ก่อนน้ำออกสู่ท่อสาธารณะ"
@@ -38,7 +42,9 @@
    "status": "existing",
    "samples": 1,
    "src": "deck",
-   "at": "Grease trap pit (3 chambers) · east of the exit",
+   "at": [
+    "Grease trap pit (3 chambers) · east of the exit"
+   ],
    "where": {
     "en": "at the outlet chamber of the trap, where the water leaves for the public drain",
     "th": "ที่ช่องทางออกของบ่อดัก ก่อนน้ำออกสู่ท่อสาธารณะ"
@@ -50,7 +56,9 @@
    "status": "existing",
    "samples": 1,
    "src": "deck",
-   "at": "Grease trap pit (3 chambers) · south-east corner",
+   "at": [
+    "Grease trap pit (3 chambers) · south-east corner"
+   ],
    "where": {
     "en": "at the outlet chamber of the trap, where the water leaves for the public drain",
     "th": "ที่ช่องทางออกของบ่อดัก ก่อนน้ำออกสู่ท่อสาธารณะ"
@@ -67,7 +75,9 @@
    "samples": 1,
    "src": "deck",
    "stage": "now",
-   "at": "Sump KFC-1 (KFC outlet)",
+   "at": [
+    "Sump KFC-1 (KFC outlet)"
+   ],
    "where": {
     "en": "in sump KFC-1, where the KFC treatment tank water leaves",
     "th": "ในบ่อ KFC-1 ที่น้ำออกจากถังบำบัด KFC"
@@ -85,7 +95,9 @@
    "samples": 1,
    "src": "deck",
    "stage": "now",
-   "at": "Grease trap DGLFN-2.0Q · building A",
+   "at": [
+    "Grease trap DGLFN-2.0Q · building A"
+   ],
    "where": {
     "en": "at the outlet of the building A grease trap DGLFN-2.0Q",
     "th": "ที่ทางออกถังดักไขมัน DGLFN-2.0Q ของอาคาร A"
@@ -93,171 +105,6 @@
    "upstream": [
     "Commercial building A"
    ]
-  }
- ],
- "routes": [
-  {
-   "group": "G2.2",
-   "pts": [
-    [
-     39.8,
-     28.37
-    ],
-    [
-     39.22,
-     58.03
-    ]
-   ]
-  },
-  {
-   "group": "G2.2",
-   "pts": [
-    [
-     40.24,
-     28.83
-    ],
-    [
-     22.87,
-     17.08
-    ]
-   ]
-  },
-  {
-   "group": "G2.2",
-   "pts": [
-    [
-     55.06,
-     99.13
-    ],
-    [
-     16.55,
-     98.52
-    ]
-   ]
-  },
-  {
-   "group": "G2.2",
-   "pts": [
-    [
-     18.59,
-     19.39
-    ],
-    [
-     17.42,
-     99.06
-    ]
-   ]
-  },
-  {
-   "group": "G2.2",
-   "pts": [
-    [
-     54.57,
-     98.93
-    ],
-    [
-     91.33,
-     100.0
-    ]
-   ]
-  },
-  {
-   "group": "G2.2",
-   "pts": [
-    [
-     98.21,
-     21.67
-    ],
-    [
-     90.46,
-     100.6
-    ]
-   ]
-  },
-  {
-   "group": "G2.1",
-   "pts": [
-    [
-     40.93,
-     77.88
-    ],
-    [
-     75.84,
-     79.13
-    ]
-   ]
-  },
-  {
-   "group": "G2.1",
-   "pts": [
-    [
-     42.53,
-     28.19
-    ],
-    [
-     41.76,
-     77.96
-    ]
-   ]
-  },
-  {
-   "group": "G2.1",
-   "pts": [
-    [
-     42.59,
-     29.09
-    ],
-    [
-     37.34,
-     18.03
-    ]
-   ]
-  },
-  {
-   "group": "G2.1",
-   "pts": [
-    [
-     75.45,
-     79.54
-    ],
-    [
-     86.65,
-     19.07
-    ]
-   ]
-  },
-  {
-   "group": "G2.1",
-   "pts": [
-    [
-     38.57,
-     16.78
-    ],
-    [
-     85.33,
-     17.51
-    ]
-   ]
-  }
- ],
- "future": [
-  {
-   "type": "ows",
-   "x": 94.5,
-   "y": 27.8,
-   "note": {
-    "en": "At the building A grease trap: new treatment for the shop water.",
-    "th": "ที่ถังดักไขมันอาคาร A: ระบบบำบัดใหม่สำหรับน้ำจากร้านค้า"
-   }
-  },
-  {
-   "type": "ows",
-   "x": 37.7,
-   "y": 59.0,
-   "note": {
-    "en": "At the KFC outlet sump: new treatment after the KFC tanks.",
-    "th": "ที่บ่อทางออก KFC: ระบบบำบัดใหม่ต่อจากถังของ KFC"
-   }
   }
  ]
 }
