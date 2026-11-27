@@ -232,6 +232,9 @@ Brian: do not copy the PowerPoint's lines; use the model's own sumps and pipes, 
   runs on into the red west V-gutter, Brian), canopy drains, front drains, entrance and exit pits; blue = rear line, west
   side and KFC line (KFC-1 into W9) to the SW pit, east line with both toilet tanks to the SE pit, building A and B pipes.
   Pink places for a new OWS / WWT at the KFC outlet sump and the building A grease trap (Brian: show both).
+  Building B is the Chao Doi coffee shop: its grease trap drains along the east boundary to the building A grease trap
+  DGLFN-2.0Q beside the minimart (Brian, 27 Nov 2026, from site). The 2020 layout's lines from it into the men's toilet tank
+  and to manhole T1 do not exist and were taken out of the model.
 - 2026 sampling vs final design (Brian, 27 Nov 2026): "2026 sampling" shows the site AS BUILT: every existing pipe and
   sump in its system colour (`systems`), the sampled sumps, and orange flags where one group's water runs into the other's
   line (`flags`, both stages unless `"stage"`). "Final design" is the same picture plus `"changes"` (C1, C2 ...): new works

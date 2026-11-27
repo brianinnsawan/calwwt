@@ -194,10 +194,10 @@ export default {
       const x = 90.45, y = 88.10, top = LAWN - 0.15;
       add('tanks', cylGeo(0.78, 1.0, x, y, top - 1.0), 'grease', { en: 'Grease trap DOS HRGT-1000L · building B', th: 'ถังดักไขมัน DOS HRGT-1000L · อาคาร B', tag: 'Grease trap HRGT-1000L', tagTh: 'ถังดักไขมัน HRGT-1000L', kind: 'tank',
         info: lines(['Grease trap for commercial building B, labelled "DOS HRGT-1000L" on the layout (1,000 L). Drawn round, about 1.55 m across.',
-          'Waste comes in from the building through a 2" PVC pipe and a U-trap; it leaves through a U-trap and a 4" PVC pipe that runs south and joins the inlet of the men\'s toilet tank.',
+          'Waste comes in from the building (the Chao Doi coffee shop) through a 2" PVC pipe and a U-trap. It leaves along the east boundary to the building A grease trap DGLFN-2.0Q beside the minimart (Brian, 27 Nov 2026); the 2020 layout wrongly draws it into the men\'s toilet tank.',
           'Its height and depth are not on the drawings: shown 1.0 m high with the top 0.15 m below ground (assumed).'],
         ['ถังดักไขมันของอาคารพาณิชย์ B ในผังระบุ "DOS HRGT-1000L" (1,000 ลิตร) เขียนเป็นถังกลม กว้างประมาณ 1.55 ม.',
-          'น้ำทิ้งจากอาคารเข้าทางท่อ PVC 2 นิ้ว ผ่าน U-trap แล้วออกทาง U-trap และท่อ PVC 4 นิ้ว เดินลงใต้ไปต่อเข้าทางเข้าถังบำบัดห้องน้ำชาย',
+          'น้ำทิ้งจากอาคาร (ร้านกาแฟเจ้าดอย) เข้าทางท่อ PVC 2 นิ้ว ผ่าน U-trap แล้วออกไปตามแนวเขตด้านตะวันออก ไปถังดักไขมัน DGLFN-2.0Q ของอาคาร A ข้างมินิมาร์ท (Brian, 27 พ.ย. 2026) ผังปี 2020 เขียนผิดว่าเข้าถังบำบัดห้องน้ำชาย',
           'ในแบบไม่มีความสูงและความลึก แสดงสูง 1.0 ม. หลังถังต่ำกว่าพื้น 0.15 ม. (ค่าสมมติ)'], P) }, V(x, y, LAWN + 0.7));
       add('tanks', cylGeo(0.3, 0.15, x, y, top), 'grease', { en: 'Grease trap access', th: 'ช่องเปิดถังดักไขมัน', nopick: 1 });
       add('tanks', cylGeo(0.33, 0.03, x, y, LAWN), 'cover', { en: 'Grease trap cover', th: 'ฝาถังดักไขมัน', nopick: 1 });
@@ -226,12 +226,13 @@ export default {
         `เข้าถังที่ประมาณ ${lv(inC)} (ต่ำกว่าพื้น 0.425 ม. ตาม A-17) ระดับที่ปลายด้านห้องน้ำเป็นค่าสมมติ (ลาด 1:100)`], P) });
     pipe('sewer', [[88.6, 91.60, r2(tIn + 0.19)], [90.0, 90.40], [90.38, 89.75], [90.40, 88.90, r2(tIn + 0.15)]], 0.025, 'sewerRaw', { en: 'Building B to its grease trap', th: 'ท่อจากอาคาร B เข้าถังดักไขมัน', kind: 'pipe',
       info: lines(['2" PVC waste pipe (class 8.5) from building B, through a U-trap, into the grease trap. Levels are assumed.'], ['ท่อน้ำทิ้ง PVC 2 นิ้ว (ชั้น 8.5) จากอาคาร B ผ่าน U-trap เข้าถังดักไขมัน ระดับเป็นค่าสมมติ'], P) });
-    pipe('sewer', [[90.55, 87.30, r2(tIn + 0.08)], [90.72, 86.65], [91.20, 81.60], [91.15, 81.33], [89.66, 81.30, r2(tIn + 0.01)]], 0.05, 'sewerRaw', { en: 'Building B grease trap to the men\'s toilet tank inlet', th: 'ท่อจากถังดักไขมันอาคาร B ไปทางเข้าถังบำบัดห้องน้ำชาย', kind: 'pipe',
-      info: (m) => lines([`4" PVC waste pipe (class 8.5): out of the grease trap through a U-trap, south past the east side of the tank, then west to join the pipe going into the tank. About ${m} m.`, 'Levels are assumed (fall about 1:100 down to the tank inlet level from A-17).'],
-        [`ท่อน้ำทิ้ง PVC 4 นิ้ว (ชั้น 8.5): ออกจากถังดักไขมันผ่าน U-trap ลงใต้ผ่านด้านตะวันออกของถังบำบัด แล้วไปทางตะวันตกต่อเข้าท่อที่เข้าถัง ยาวประมาณ ${m} ม.`, 'ระดับเป็นค่าสมมติ (ลาดประมาณ 1:100 ลงสู่ระดับท่อเข้าถังตาม A-17)'], P) });
-    pipe('sewer', [[87.6, 91.20, r2(tOut + 0.07)], [89.40, 89.80], [89.20, 86.30, tOut]], 0.05, 'sewerRaw', { en: 'Line from building B to manhole T1 (not labelled)', th: 'แนวท่อจากอาคาร B ไปบ่อพัก T1 (ไม่ได้ระบุในผัง)', kind: 'pipe',
-      info: (m) => lines([`A dashed line on the layout from a small box at the corner of building B to manhole T1, about ${m} m. It has no label: what it carries, its size and its level are not known. Shown as a 4" pipe at an assumed level. Check on site.`],
-        [`เส้นประในผังจากกล่องเล็กที่มุมอาคาร B ไปบ่อพัก T1 ยาวประมาณ ${m} ม. ไม่มีป้ายกำกับ ไม่ทราบว่าเป็นท่ออะไร ขนาดและระดับเท่าใด แสดงเป็นท่อ 4 นิ้วที่ระดับสมมติ ต้องตรวจสอบหน้างาน`], P) });
+    // Building B (the Chao Doi coffee shop): its grease trap drains along the east boundary to the building A grease trap
+    // beside the minimart, not into the men's toilet tank or manhole T1 as the 2020 layout draws (Brian, 27 Nov 2026, from site)
+    pipe('sewer', [[90.95, 87.75, r2(tIn + 0.08)], [96.70, 87.05], [97.55, 40.00], [97.25, 33.75, 0.27]], 0.05, 'sewerRaw', { en: 'Building B grease trap to the building A grease trap', th: 'ท่อจากถังดักไขมันอาคาร B ไปถังดักไขมันอาคาร A', kind: 'pipe',
+      info: (m) => lines([`Waste pipe from the coffee shop's grease trap (building B), east to the boundary, then south along the east boundary to the line of building A just before its grease trap DGLFN-2.0Q beside the minimart; from there into the grease trap and on to the south-east pit. About ${m} m.`,
+          'From Brian (27 Nov 2026): this is how it runs on site. The 2020 layout instead draws it into the men\'s toilet tank, with a second line to manhole T1; neither exists. Size and levels are assumed (shown 4").'],
+        [`ท่อน้ำทิ้งจากถังดักไขมันของร้านกาแฟ (อาคาร B) ไปทางตะวันออกถึงแนวเขต แล้วลงใต้เลียบแนวเขตด้านตะวันออก ไปต่อแนวท่อของอาคาร A ก่อนถังดักไขมัน DGLFN-2.0Q ข้างมินิมาร์ท จากนั้นเข้าถังดักไขมันและไปบ่อมุมตะวันออกเฉียงใต้ ยาวประมาณ ${m} ม.`,
+          'จาก Brian (27 พ.ย. 2026): หน้างานเดินท่อแบบนี้ ผังปี 2020 เขียนท่อเข้าถังบำบัดห้องน้ำชาย และมีอีกแนวไปบ่อพัก T1 ซึ่งไม่มีจริงทั้งสองแนว ขนาดและระดับเป็นค่าสมมติ (แสดง 4 นิ้ว)'], P) });
     pipe('sewer', [[88.55, 75.30, r2(tIn + 0.05)], [88.90, 71.90], [87.08, 71.75, tIn]], 0.05, 'sewerRaw', { en: 'Women\'s toilets to their BO-6000 tank', th: 'ท่อจากห้องน้ำหญิงเข้าถัง BO-6000', kind: 'pipe',
       info: (m) => lines([`Wastewater pipe out of the south-east corner of the women's toilets, then west into the east side of the tank. About ${m} m. Drawn as 4" PVC (tank inlet size on A-17). The layout marks an inspection point where it turns.`,
         `Enters the tank about ${lv(inC)} (0.425 m below ground, A-17). The level at the toilet end is assumed (fall 1:100).`],
