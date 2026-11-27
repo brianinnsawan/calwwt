@@ -82,6 +82,12 @@ Known gaps: air pumps (LAY-EE-09) not placed; tank depth is worked out from the 
 drain pipe size per run (drawn 0.40 m); the round tank at the office is not named on the layout; interior plumbing of
 Star Park, toilets and shops is only in the plan linework; the layout shows the Star Park drain line along the west
 edge of the DLFN-15Q tank (kept as drawn, flagged in the tank's notes); no site photos used.
+28 Nov 2026 (Brian): added the MDB pad (meter cabinet, "MDB NFR", office safety switch) and the two PEA pole pairs with
+the 100 kVA and 250 kVA transformers at the front south-east corner, from the as-built electrical site plan
+`1.Layout\DWG\EE` (LAY-EE-04, REVISE3 07.12.65). Its plan copy at x 1680-1830 sits on this model by a plain shift
+(x + 520.2, y + 2150.6, fitted on DLFN-12Q; the other two tanks agree within 1.3 m). Sizes and heights assumed. Also the
+staff container (shower and sleeping room) on the north side of the office: on no drawing, placed from the Google satellite
+image, size taken as a 20 ft container; its drainage is unknown. View "MDB and PEA poles" and "Office and staff container".
 
 ## 1588 Samut Sakhon (first version, 25 Nov 2026, from PDFs)
 Sources: `LAY-SN-101` (SPP as-built, 13/09/2019: drains, manholes, pipe sizes, 1:200 slopes, buildings, four fuel tank
@@ -90,6 +96,12 @@ wastewater pipes). `SN-101` (design) only for flow direction.
 The two sheets do not agree: the as-built shows one lying tank in front of building A where the design has two upright
 tanks. Both are in the model, the as-built outlines in their own layer. No sheet has any level: the ground is flat at
 ±0.00 and every depth is assumed. No north arrow.
+28 Nov 2026 (Brian): buildings from the 2021 Porto Go architect plan (DWG in `03 Drawings\_Working\calwwt\`, model =
+DWG / 1000 + (-359.08, 21.93), boundary corners within 0.15 m) and the 360 video (2160p stills; coffee shop at 7:20 to
+8:06): toilet block A with gables and porches, office B, walkway roof, red kiosks, coffee shop with deck and awning,
+stall roof with two sinks and under-sink grease traps, lean-tos and lockers behind the office, benches and clutter,
+garbage room, two fenced 10,000 L clean-water tanks, pump canopy (moved about 2.4 m south), highway and price signs, car
+wash. The second canopy is only an outline (not built).
 
 ## 1156 Samut Prakan (rough first version, 26 Nov 2026, NO DRAWINGS)
 There are no drawings of this site. Outlines come from the Esri World Imagery satellite image (zoom 19, 0.29 m a pixel),
@@ -183,6 +195,11 @@ Assumed: the ground. The layout has no ground levels; from the trap detail the w
 tank depths, round tank sizes, manhole floors, drain size. Nine manholes have no written level (interpolated and flagged).
 To check on site: at SP-T-20,000 the inlet (-1.75) is lower than the outlet (-1.65); the north-east corner manhole says
 -1.40 where the written falls give about -1.66. No north arrow.
+28 Nov 2026 (Brian): buildings from the architect layout LAY-A-01 (DWG copied to `03 Drawings\_Working\calwwt\`;
+model = DWG + (-1223.1, -878.8), the canopy corners agree exactly), the 360 video and the Google satellite image: the pump
+canopy (red fascia, columns at the island centres), office, car wash shed with slab, tank and drying room (the drying room
+may stand over the SP-T-1600 tank: check), garbage room, monopole and CX-45 signs, EV chargers. Still to confirm with Brian
+which building was built after the station.
 
 ## 1642 Phun Phon (first version, 26 Nov 2026, from DWG saved as DXF)
 Sources: `A-104` (site plan with the treatment tank and clean-water tank positions, 1:200, drawn in metres) and `A-103`

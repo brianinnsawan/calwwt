@@ -125,7 +125,7 @@ export default {
   },
   // names, order and colours: ../style.mjs. 'asbuilt' is this site's own layer: tank outlines that the as-built sheet shows
   // but does not name, kept apart from the named tanks of the 2019 design so that each set can be switched off.
-  layers: ['tanks', 'sewer', 'drains', 'fuel', 'buildings',
+  layers: ['tanks', 'sewer', 'drains', 'water', 'fuel', 'buildings', 'paving',
     { id: 'asbuilt', en: 'Tank outlines on the as-built sheet (not named there)', th: 'แนวถังตามแบบก่อสร้างจริง (ในแบบไม่ระบุชื่อ)' }, 'plan', 'ground'],
   views: [
     { id: 'site', from: [66, -62, 85], to: [66, 44, 0] },
@@ -133,11 +133,13 @@ export default {
     { id: 'a', en: 'Building A tanks', th: 'ถังที่อาคาร A', from: [52, 20.5, 13], to: [53, 38, -1] },
     { id: 'b', en: 'Building B tanks', th: 'ถังที่อาคาร B', from: [80.5, 26.5, 10], to: [76.3, 38.6, -1] },
     { id: 'garbage', en: 'Garbage room tank (design)', th: 'ถังที่ห้องพักขยะ (ตามแบบออกแบบ)', from: [103.5, 31.5, 6.5], to: [99.3, 39.8, -0.6] },
+    { id: 'bld', en: 'Buildings, kiosks and water tanks', th: 'อาคาร ซุ้มร้านค้า และถังน้ำ', from: [30, 58, 14], to: [52, 40, 1] },
+    { id: 'carwash', en: 'Car wash (south-east plot)', th: 'ล้างรถ (แปลงตะวันออกเฉียงใต้)', from: [92, 2, 18], to: [113, 22, 1] },
     { id: 'fuel', from: [85, 49, 6], to: [72.7, 65.8, -1.8] },
     { id: 'under', from: [58, 20, -8], to: [60, 38, -0.8] },
   ],
 
-  build({ notes, fuelTank, capsuleGeo, V, ground, lv, add, boxGeo, cylGeo, hcylGeo, prismGeo, pipeGeo, merge }) {
+  build({ notes, fuelTank, capsuleGeo, V, ground, lv, add, boxGeo, cylGeo, hcylGeo, latheGeo, prismGeo, pipeGeo, merge, THREE }) {
     const r2 = (n) => Math.round(n * 100) / 100;
     const as = (n) => '~' + lv(r2(n));   // every level in this model is assumed: always shown with "~"
     // notes(en, th, kind) adds the shared source line; ab() / des() first add which sheet the thing comes from
@@ -296,15 +298,182 @@ export default {
         th: [`ถังที่ ${i + 1} จาก 4 นับจากด้านเหนือ แบบก่อสร้างจริงแสดงแนวถัง 4 ใบและไม่ระบุชื่อ`, 'แบบออกแบบปี 2019 แสดงถัง 5 ใบในตำแหน่งที่ต่างกัน แสดงว่ากลุ่มถังน้ำมันถูกเปลี่ยน'] });
     });
 
-    // ---------- buildings and canopies (context)
+    // ---------- buildings, canopy, signs and site furniture (27-28 Nov 2026, Brian: "properly model out the buildings")
+    // Plan positions from the 2021 "check actual" site plan `2021 Dec Check actual ARC-LAYOUT_R.01.dwg` (Brian's
+    // Tah Chin (Porto Go) folder, New Toilet 2022 Project). It sits on this model by a plain shift (x - 359.08, y + 21.93,
+    // drawing in mm): every boundary corner agrees within about 0.15 m. Heights from the SPP as-built set (As Built Porto Go:
+    // TOILET (A) A-201/A-102, OFFICE (B) B-A-201/B-A-103, CANOPY (C) C-A-201, GARBAGE ROOM, water-tank screen, HIGHWAY SIGN
+    // HS-ST-002, PRICE SIGN). Drawing levels are from the site road (+0.30); this model's ±0.00 is the road, so 0.30 is taken off.
+    // What the drawings do not show (car wash, kiosks, the stall and sink area, the walkway roof) is from Brian's 360° video of
+    // 20 Nov 2026 and the satellite image, and says so.
+    const FROM_ARC = { en: 'Outline from the 2021 "check actual" site plan; heights from the SPP as-built building drawings (2019).', th: 'แนวจากผังตรวจสอบตามจริงปี 2021 ความสูงจากแบบก่อสร้างจริงของอาคารโดย SPP (ปี 2019)' };
+    const FROM_VID = { en: 'Not on any drawing: position and size judged from Brian\'s 360° site video (20 Nov 2026) and the satellite image. Check on site.', th: 'ไม่มีในแบบ: ตำแหน่งและขนาดประมาณจากวิดีโอ 360° ของ Brian (20 พ.ย. 2026) และภาพถ่ายดาวเทียม ควรตรวจสอบที่หน้างาน' };
+    const arc = (en, th) => notes([...en, FROM_ARC.en], [...th, FROM_ARC.th], 'context');
+    const vid = (en, th) => notes([...en, FROM_VID.en], [...th, FROM_VID.th], 'context');
     const centre = (poly) => [poly.reduce((a, p) => a + p[0], 0) / poly.length, poly.reduce((a, p) => a + p[1], 0) / poly.length];
-    const building = (poly, h, o) => add('buildings', prismGeo(poly, 0, h), 'building', { ...o, kind: 'building', info: ab(o.lines || [], o.linesTh || [], C) }, V(...centre(poly), h + 0.7));
-    building([[44.07, 38.20], [62.25, 38.35], [62.22, 43.75], [44.04, 43.62]], 3.5, { en: 'Building A (toilets)', th: 'อาคาร A (ห้องน้ำ)', tag: 'Building A', tagTh: 'อาคาร A' });
-    building([[65.33, 38.52], [72.78, 38.58], [72.74, 44.00], [65.30, 43.95]], 3.5, { en: 'Building B', th: 'อาคาร B', tag: 'Building B', tagTh: 'อาคาร B' });
-    building([[100.81, 38.52], [103.30, 38.54], [103.28, 40.69], [100.81, 40.67]], 2.6, { en: 'Small room (not named on the as-built sheet)', th: 'ห้องขนาดเล็ก (แบบก่อสร้างจริงไม่ระบุชื่อ)', tag: 'Small room', tagTh: 'ห้องขนาดเล็ก',
-      lines: ['A room of 2.50 × 1.95 m with double doors. The garbage room of the 2019 design stood about 3 to 8 m west of here and is not on the as-built sheet, so this may be the garbage room as built.'], linesTh: ['ห้องขนาด 2.50 × 1.95 ม. มีประตูบานคู่ ห้องพักขยะตามแบบออกแบบปี 2019 อยู่ห่างไปทางตะวันตกประมาณ 3 ถึง 8 ม. และไม่มีในแบบก่อสร้างจริง ห้องนี้จึงอาจเป็นห้องพักขยะที่สร้างจริง'] });
-    const roof = (poly, level, o) => add('buildings', prismGeo(poly, level, 0.9), 'roof', { ...o, kind: 'building', info: ab(o.lines, o.linesTh, C) }, V(...centre(poly), level + 1.6));
-    roof([[24.66, 63.26], [63.26, 63.26], [63.26, 71.86], [24.66, 71.86]], 5.6, { en: 'Pump canopy (building C)', th: 'หลังคาคลุมหัวจ่าย (อาคาร C)', tag: 'Building C (canopy)', tagTh: 'อาคาร C (หลังคาคลุมหัวจ่าย)', lines: ['Canopy over the four pump islands.'], linesTh: ['หลังคาคลุมแท่นหัวจ่าย 4 แท่น'] });
-    roof([[95.02, 55.23], [104.65, 54.80], [105.45, 72.40], [95.85, 72.80]], 5.6, { en: 'Second canopy (dashed outline on the as-built sheet)', th: 'หลังคาคลุมหลังที่สอง (เส้นประในแบบก่อสร้างจริง)', tag: 'Second canopy', tagTh: 'หลังคาคลุมหลังที่สอง', lines: ['Dashed outline over two diesel pump islands on the east side. Not on the 2019 design sheets.'], linesTh: ['แนวเส้นประคลุมแท่นหัวจ่ายดีเซล 2 แท่นด้านตะวันออก ไม่มีในแบบออกแบบปี 2019'] });
+    // a turned box: w along the building's x, d across it, rot in degrees (anticlockwise on plan)
+    const tbox = (w, d, h, x, y, base, rot) => boxGeo(w, d, h, x, y, base, rot);
+    // gable roof over a w × d footprint centred at (x, y): eaves level e, ridge level r, ridge along 'x' or 'y', overhang o
+    const rad = (d) => d * Math.PI / 180;
+    const gable = (w, d, x, y, e, r, along, rot = 0, o = 0.4) => {
+      const span = (along === 'x' ? d : w) + 2 * o, len = (along === 'x' ? w : d) + 2 * o;
+      const sh = new THREE.Shape([new THREE.Vector2(-span / 2, 0), new THREE.Vector2(span / 2, 0), new THREE.Vector2(0, r - e)]);
+      const g = new THREE.ExtrudeGeometry(sh, { depth: len, bevelEnabled: false });
+      g.translate(0, 0, -len / 2);                       // shape in x-y (across, up), extruded along z
+      if (along === 'x') g.rotateY(Math.PI / 2);          // ridge along model x
+      g.rotateY(rad(rot)); const c = V(x, y, e); g.translate(c.x, c.y, c.z); return g;
+    };
+    const ROT_A = 0.5, ROT_B = 0.5;                       // the building row runs about 0.5° off the drawing's x axis
+
+    // Building A (toilets): columns at x 44.1 / 52.1 / 55.1 / 62.1 (grid A1-A4) and y 38.3 (back) to 41.9; two front porches
+    // to y 43.6. Two gables with the ridge running front to back (8 m wing west, 7 m wing east) and a flat 3 m link between.
+    // Eaves +4.35, ridges +7.42 and +7.13, floor +0.45 on the drawings.
+    const A = { wings: [[44.1, 52.1, 6.83 + 0.29], [55.1, 62.1, 6.83]], y0: 38.33, y1: 41.95, eave: 4.05 };
+    const aInfo = arc(['Building A, the public toilets (men, women, disabled, plant room). Two gable roofs, metal sheet (Suntec KL-690 posh grey), ridge running front to back: 8 m wing on the highway side (ridge about +7.12), 7 m wing on the far side (ridge about +6.83), a flat 3 m link between them, and two entrance porches on the parking side. Walls light-weight block, rendered.',
+      'Size about 18.0 × 3.6 m plus the porches (1.65 m deep). Floor 0.15 m above the road.'],
+      ['อาคาร A ห้องน้ำสาธารณะ (ชาย หญิง คนพิการ ห้องเครื่อง) หลังคาจั่ว 2 หลัง เมทัลชีท (Suntec KL-690 สีเทา) สันหลังคาวิ่งหน้า-หลัง ปีกกว้าง 8 ม. ด้านทางหลวง (สันประมาณ +7.12) ปีกกว้าง 7 ม. ด้านใน (สันประมาณ +6.83) มีส่วนเชื่อมหลังคาแบนกว้าง 3 ม. ตรงกลาง และมุขทางเข้า 2 มุขด้านที่จอดรถ ผนังก่ออิฐมวลเบาฉาบปูน',
+      'ขนาดประมาณ 18.0 × 3.6 ม. รวมมุข (ลึก 1.65 ม.) พื้นสูงกว่าถนน 0.15 ม.']);
+    const aWalls = [tbox(62.1 - 44.1, A.y1 - A.y0, A.eave, 53.1, (A.y0 + A.y1) / 2, 0, ROT_A)];
+    [[45.77, 50.37], [56.77, 61.17]].forEach(([x0, x1]) => aWalls.push(tbox(x1 - x0, 43.6 - A.y1, 4.05, (x0 + x1) / 2, (A.y1 + 43.6) / 2 + 0.05, 0, ROT_A)));
+    add('buildings', merge(aWalls), 'building', { en: 'Building A (toilets)', th: 'อาคาร A (ห้องน้ำ)', tag: 'Building A (toilets)', tagTh: 'อาคาร A (ห้องน้ำ)', kind: 'building', info: aInfo }, V(53.1, 40.1, 7.9));
+    add('buildings', merge([
+      ...A.wings.map(([x0, x1, r]) => gable(x1 - x0, A.y1 - A.y0, (x0 + x1) / 2, (A.y0 + A.y1) / 2 + (x0 - 53.1) * 0.0087, A.eave, r, 'y', ROT_A, 0.2)),
+      tbox(3.0, A.y1 - A.y0, 0.3, 53.6, (A.y0 + A.y1) / 2, A.eave, ROT_A),
+      ...[[45.77, 50.37], [56.77, 61.17]].map(([x0, x1]) => tbox(x1 - x0 + 0.4, 1.85, 0.2, (x0 + x1) / 2, 42.8, 4.05, ROT_A)),
+    ]), 'roof', { en: 'Building A roofs', th: 'หลังคาอาคาร A', nopick: 1 });
+
+    // Building B (office, staff room, electrical room): columns x 66.6 / 70.6 / 73.6, y 38.6 to 43.6. One gable, ridge running
+    // along the building (gable ends face the highway and the far side), eaves +4.35, ridge +7.11. Dark grey metal cladding.
+    add('buildings', tbox(7.0, 5.0, 4.05, 70.1, 41.12, 0, ROT_B), 'building', { en: 'Building B (office)', th: 'อาคาร B (สำนักงาน)', tag: 'Building B (office)', tagTh: 'อาคาร B (สำนักงาน)', kind: 'building',
+      info: arc(['Building B: station office, staff room with lockers, electrical room and two staff toilets. One gable roof, ridge along the building (the gable ends face the highway and the far side, as in the site video), eaves about +4.05, ridge about +6.81 above the road. Dark grey metal cladding on the gables.', 'Size 7.0 × 5.0 m.'],
+        ['อาคาร B สำนักงานสถานี ห้องพักพนักงาน (ล็อกเกอร์) ห้องไฟฟ้า และห้องน้ำพนักงาน 2 ห้อง หลังคาจั่ว 1 หลัง สันหลังคาวิ่งตามแนวยาวอาคาร (หน้าจั่วหันไปทางทางหลวงและด้านใน ตรงกับวิดีโอหน้างาน) ชายคาประมาณ +4.05 สันประมาณ +6.81 จากระดับถนน หน้าจั่วกรุเมทัลชีทสีเทาเข้ม', 'ขนาด 7.0 × 5.0 ม.']) }, V(70.1, 41.1, 7.6));
+    add('buildings', gable(7.0, 5.0, 70.1, 41.12, 4.05, 6.81, 'x', ROT_B, 0.25), 'roof', { en: 'Building B roof', th: 'หลังคาอาคาร B', nopick: 1 });
+
+    // Walkway roof along the parking side of buildings A and B, with the kiosks under it (video 2:00, 8:25, 8:50)
+    const walkPosts = []; for (let x = 37.5; x <= 75.5; x += 4.75) walkPosts.push(cylGeo(0.06, 3.0, x, 45.85, 0, 8));
+    add('buildings', merge([tbox(38.6, 2.4, 0.12, 56.5, 44.85, 3.0, ROT_A), ...walkPosts]), 'roof', { en: 'Walkway roof in front of the buildings', th: 'หลังคาทางเดินหน้าอาคาร', kind: 'building',
+      info: vid(['Light steel roof (translucent sheet) over the walkway between the buildings and the parking, from the highway end of the kiosks to past building B. Underside taken as about 3.0 m. Its exact length is not known.'],
+        ['หลังคาโครงเหล็กเบา (แผ่นโปร่งแสง) คลุมทางเดินระหว่างอาคารกับที่จอดรถ ตั้งแต่ซุ้มร้านค้าด้านทางหลวงจนเลยอาคาร B ใต้หลังคาประมาณ 3.0 ม. ไม่ทราบความยาวที่แน่นอน']) }, V(56.5, 44.9, 3.6));
+
+    // Kiosks: red container shops between the coffee shop and building A (video 2:00, 7:20, 8:50; Brian's still)
+    const kiosk = (x, y, w, d, n, en, th) => add('buildings', tbox(w, d, 2.6, x, y, 0, ROT_A), 'kiosk', { en, th, kind: 'building',
+      tag: n === 1 ? 'Kiosks (container shops)' : undefined, tagTh: n === 1 ? 'ซุ้มร้านค้า (ตู้คอนเทนเนอร์)' : undefined,
+      info: vid([`${en}: a red steel container shop with a roll-up front facing the walkway. About ${w.toFixed(1)} × ${d.toFixed(1)} m, 2.6 m high (estimated).`],
+        [`${th}: ร้านค้าตู้คอนเทนเนอร์เหล็กสีแดง หน้าร้านเปิดหันออกทางเดิน ขนาดประมาณ ${w.toFixed(1)} × ${d.toFixed(1)} ม. สูง 2.6 ม. (ประมาณ)`]) }, n === 1 ? V(x, y, 3.4) : null);
+    kiosk(43.35, 43.15, 2.4, 2.2, 1, 'Kiosk 1', 'ซุ้มร้านค้า 1');
+    kiosk(43.35, 40.55, 1.4, 2.6, 2, 'Kiosk 2', 'ซุ้มร้านค้า 2');
+
+    // Coffee shop (new, after 2021; not on any drawing): white flat-roofed box with a green glass shopfront to the parking,
+    // at the highway end of the building row (Brian, 28 Nov 2026: video 7:20, looking towards the toilets; his still).
+    add('buildings', tbox(6.8, 4.2, 3.6, 39.2, 40.6, 0, ROT_A), 'kioskWhite', { en: 'Coffee shop', th: 'ร้านกาแฟ', tag: 'Coffee shop', tagTh: 'ร้านกาแฟ', kind: 'building',
+      info: vid(['Coffee shop built after the station (not on the 2021 plan): single storey, white flat-roofed box with a deep white fascia and a green glass shopfront facing the parking, a low step along its front. At the highway end of the building row, west of the kiosks and the toilets (Brian, 28 Nov 2026). About 6.8 × 4.2 m and 3.6 m high, judged from the video.'],
+        ['ร้านกาแฟที่สร้างภายหลังสถานี (ไม่มีในผังปี 2021): ชั้นเดียว กล่องสีขาวหลังคาแบน ขอบหลังคาสีขาวลึก หน้าร้านกระจกสีเขียวหันออกที่จอดรถ มีขั้นบันไดเตี้ยตลอดหน้าร้าน อยู่ปลายแถวอาคารด้านทางหลวง ทางตะวันตกของซุ้มร้านค้าและห้องน้ำ (Brian, 28 พ.ย. 2026) ขนาดประมาณ 6.8 × 4.2 ม. สูง 3.6 ม. ประมาณจากวิดีโอ']) }, V(39.2, 40.6, 4.4));
+    add('buildings', tbox(6.6, 0.08, 2.2, 39.2, 42.72, 0.2, ROT_A), 'glassGreen', { en: 'Coffee shop front', th: 'หน้าร้านกาแฟ', nopick: 1 });
+    add('paving', tbox(6.8, 0.6, 0.15, 39.2, 43.0, 0, ROT_A), 'walkway', { en: 'Coffee shop step', th: 'ขั้นหน้าร้านกาแฟ', nopick: 1 });
+
+    // Coffee shop front and side (Brian's stills, video 7:55 and 8:02): dark-green awning over a timber deck with a low
+    // bench step, artificial-grass strips in the paving; on its highway side a grey water tank and a food cart under a tent.
+    add('buildings', merge([tbox(6.8, 1.6, 0.08, 39.2, 43.5, 2.9, ROT_A), ...[36.0, 42.4].map((x) => cylGeo(0.04, 2.9, x, 44.25, 0, 6))]), 'awningGreen', { en: 'Coffee shop awning', th: 'กันสาดร้านกาแฟ', kind: 'building',
+      info: vid(['Dark-green awning on thin steel arms over the coffee shop front and its timber deck.'], ['กันสาดสีเขียวเข้มบนแขนเหล็กเหนือหน้าร้านกาแฟและพื้นไม้']) });
+    add('paving', tbox(6.4, 1.2, 0.35, 39.2, 43.1, 0, ROT_A), 'deck', { en: 'Coffee shop timber deck', th: 'พื้นไม้หน้าร้านกาแฟ', nopick: 1 });
+    add('water', cylGeo(0.6, 2.0, 35.1, 41.6, 0, 20), 'waterTankGrey', { en: 'Grey water tank (coffee shop)', th: 'ถังน้ำสีเทา (ร้านกาแฟ)', kind: 'tank',
+      info: vid(['Grey plastic water tank (about 1,000 to 1,500 L) on the highway side of the coffee shop, with a pump and blue pipes at its foot.'], ['ถังน้ำพลาสติกสีเทา (ประมาณ 1,000 ถึง 1,500 ลิตร) ด้านทางหลวงของร้านกาแฟ มีปั๊มและท่อสีฟ้าที่ฐาน']) });
+    add('buildings', merge([tbox(1.6, 0.9, 0.9, 34.6, 39.2, 0, ROT_A), cylGeo(0.03, 2.4, 34.6, 39.2, 0, 6), tbox(2.4, 2.4, 0.06, 34.6, 39.2, 2.3, ROT_A + 10)]), 'clutter', { en: 'Food cart under a tent', th: 'รถเข็นขายอาหารใต้เต็นท์', kind: 'building',
+      info: vid(['Food cart with blue tubs and boxes under a brown sun tent, on the highway side of the coffee shop.'], ['รถเข็นขายอาหารพร้อมถังและกล่องสีฟ้า ใต้เต็นท์กันแดดสีน้ำตาล ด้านทางหลวงของร้านกาแฟ']) });
+
+    // Lean-to sheds and storage behind the buildings (video 1:00 to 2:00, Brian's still at 8:06 and the lean-to beside the
+    // red stall): metal-sheet roofs on light posts against the back walls and the boundary wall, used as stores and stall kitchens.
+    const leanTo = (x0, x1, y0, y1, hi, lo, en, th, lines, linesTh) => add('buildings', merge([
+      (() => { const g = tbox(x1 - x0, y1 - y0, 0.06, (x0 + x1) / 2, (y0 + y1) / 2, (hi + lo) / 2, ROT_A); g.rotateX(0); return g; })(),
+      ...[[x0 + 0.1, y0 + 0.1], [x1 - 0.1, y0 + 0.1]].map(([x, y]) => cylGeo(0.04, lo, x, y, 0, 6))]), 'roofSheet', { en, th, kind: 'building', info: vid(lines, linesTh) }, V((x0 + x1) / 2, (y0 + y1) / 2, hi + 0.6));
+    leanTo(42.65, 44.05, 37.0, 41.9, 2.7, 2.5, 'Lean-to store between the coffee shop and building A', 'เพิงเก็บของระหว่างร้านกาแฟกับอาคาร A',
+      ['Narrow metal-sheet lean-to over the alley between the coffee shop and the toilets, used as a store (crates, gas bottles, tables).'], ['เพิงหลังคาเมทัลชีทแคบ ๆ คลุมช่องทางระหว่างร้านกาแฟกับห้องน้ำ ใช้เก็บของ (ลัง ถังแก๊ส โต๊ะ)']);
+    leanTo(44.4, 52.0, 36.55, 38.15, 2.6, 2.3, 'Tarp-roofed stall area behind building A', 'พื้นที่ร้านหลังคาผ้าใบหลังอาคาร A',
+      ['Stall and kitchen space behind the 8 m wing of the toilets: tarp and sheet roof on posts, red sheet walls, cupboards, cool boxes and tables.'], ['พื้นที่ร้านและครัวหลังปีก 8 ม. ของห้องน้ำ หลังคาผ้าใบและเมทัลชีทบนเสา ผนังเมทัลชีทสีแดง ตู้ ถังน้ำแข็ง และโต๊ะ']);
+    leanTo(66.2, 74.2, 36.55, 38.45, 2.8, 2.4, 'Lean-to stores behind the office (building B)', 'เพิงเก็บของหลังสำนักงาน (อาคาร B)',
+      ['Metal-sheet lean-to along the back of the office, out to the boundary wall: small lockers and storage for the station staff and the stalls.'], ['เพิงหลังคาเมทัลชีทตามแนวหลังสำนักงานถึงกำแพงเขต เป็นตู้ล็อกเกอร์เล็กและที่เก็บของของพนักงานสถานีและร้านค้า']);
+    add('buildings', merge([[67.2, 37.15], [68.2, 37.15], [69.2, 37.15], [72.4, 37.2]].map(([x, y]) => tbox(0.9, 0.55, 1.8, x, y, 0, ROT_A))), 'locker', { en: 'Lockers and storage cabinets behind the office', th: 'ตู้ล็อกเกอร์และตู้เก็บของหลังสำนักงาน', kind: 'building',
+      info: vid(['Steel lockers and storage cabinets under the lean-to behind the office (number and sizes estimated).'], ['ตู้ล็อกเกอร์เหล็กและตู้เก็บของใต้เพิงหลังสำนักงาน (จำนวนและขนาดประมาณ)']) });
+
+    // Benches, tables, bins, crates and umbrellas along the walkway and in the stall areas (video): clutter shown loosely
+    const clutter = [];
+    [47.2, 51.4, 58.6, 64.6, 69.0, 72.8].forEach((x) => clutter.push(tbox(1.6, 0.45, 0.45, x, 45.35, 0, ROT_A)));           // benches on the walkway
+    [[64.3, 40.6], [64.3, 42.3], [46.5, 37.4]].forEach(([x, y]) => clutter.push(tbox(1.5, 0.75, 0.75, x, y, 0, ROT_A)));     // stall tables
+    [[44.8, 44.7], [45.4, 44.7], [62.9, 44.8], [74.6, 44.9], [75.2, 44.9]].forEach(([x, y]) => clutter.push(cylGeo(0.3, 0.95, x, y, 0, 12)));   // wheelie bins
+    [[43.4, 38.0], [43.4, 38.6], [49.5, 37.1], [50.2, 37.1], [70.6, 37.15], [71.3, 37.15]].forEach(([x, y]) => clutter.push(tbox(0.6, 0.45, 0.5, x, y, 0, 0)));   // crates and cool boxes
+    add('buildings', merge(clutter), 'clutter', { en: 'Benches, tables, bins and crates', th: 'ม้านั่ง โต๊ะ ถังขยะ และลัง', kind: 'building',
+      info: vid(['Benches along the walkway, tables in the stall areas, wheelie bins, crates and cool boxes, shown loosely to give an idea of how busy the area is. Not surveyed.'],
+        ['ม้านั่งตามทางเดิน โต๊ะในพื้นที่ร้าน ถังขยะล้อเลื่อน ลังและถังน้ำแข็ง แสดงคร่าว ๆ ให้เห็นว่าพื้นที่มีของวางอยู่มาก ไม่ได้สำรวจ']) });
+    add('buildings', merge([[54.2, 37.3], [56.4, 37.3]].map(([x, y]) => merge([cylGeo(0.03, 2.2, x, y, 0, 6), latheGeo([[0.02, 0], [1.2, -0.45], [0.01, -0.46]], x, y, 2.4, 16)]))), 'umbrellaBlue', { en: 'Market umbrellas behind building A', th: 'ร่มร้านค้าหลังอาคาร A', kind: 'building',
+      info: vid(['Large blue market umbrellas over the stall area behind the toilets.'], ['ร่มร้านค้าสีน้ำเงินขนาดใหญ่เหนือพื้นที่ร้านหลังห้องน้ำ']) });
+    add('buildings', merge([cylGeo(0.03, 2.4, 44.1, 42.2, 0, 6), latheGeo([[0.02, 0], [1.4, -0.6], [0.01, -0.61]], 44.1, 42.2, 2.9, 4)]), 'tentRed', { en: 'Red sun tent in the alley', th: 'เต็นท์สีแดงในช่องทาง', kind: 'building',
+      info: vid(['Red pyramid sun tent over the alley between kiosk 1 and the toilets (Brian\'s still at 8:06).'], ['เต็นท์ทรงพีระมิดสีแดงคลุมช่องทางระหว่างซุ้มร้านค้า 1 กับห้องน้ำ (ภาพนิ่งของ Brian ที่ 8:06)']) });
+
+    // Stall and kitchen area with sinks behind the buildings (video 1:00 to 1:50): a sheet-roofed area against the boundary
+    // wall in the gap between buildings A and B, with two stainless sinks, each with a small under-sink grease trap.
+    add('buildings', merge([tbox(4.0, 6.6, 0.1, 64.35, 39.9, 2.7, ROT_A), ...[[62.6, 36.8], [66.1, 36.8], [62.6, 43.0], [66.1, 43.0]].map(([x, y]) => cylGeo(0.05, 2.7, x, y, 0, 8))]), 'roof',
+      { en: 'Sheet roof over the stall and kitchen area', th: 'หลังคาเมทัลชีทคลุมพื้นที่ร้านและครัว', kind: 'building',
+        info: vid(['Metal-sheet roof on light posts over the stall and kitchen area behind the buildings (red sheet walls, tables, two sinks). Taken here as the 4 m gap between buildings A and B, out to the boundary wall; it may also run along the back of building A.'],
+          ['หลังคาเมทัลชีทบนเสาเหล็กเบาคลุมพื้นที่ร้านและครัวหลังอาคาร (ผนังเมทัลชีทสีแดง โต๊ะ อ่างล้าง 2 อ่าง) ในที่นี้ถือว่าอยู่ในช่องกว้าง 4 ม. ระหว่างอาคาร A กับ B จนถึงกำแพงเขต อาจต่อยาวไปตามด้านหลังอาคาร A ด้วย']) }, V(64.35, 39.9, 3.4));
+    [[63.3, 37.05], [65.0, 37.05]].forEach(([x, y], i) => {
+      add('tanks', merge([tbox(1.2, 0.6, 0.12, x, y, 0.8, ROT_A), ...[[-0.55, -0.25], [0.55, -0.25], [-0.55, 0.25], [0.55, 0.25]].map(([dx, dy]) => cylGeo(0.02, 0.8, x + dx, y + dy, 0, 6))]), 'fixture',
+        { en: `Stall sink ${i + 1}`, th: `อ่างล้างร้านค้า ${i + 1}`, kind: 'tank', tag: i === 0 ? 'Stall sinks + small grease traps' : undefined, tagTh: i === 0 ? 'อ่างล้าง + ถังดักไขมันเล็ก' : undefined,
+          info: vid(['Stainless single-bowl sink on legs against the boundary wall, used by the food stalls. Where its water goes is not known: probably to the site drain along the wall.'],
+            ['อ่างล้างสแตนเลสหลุมเดียวมีขา ชิดกำแพงเขต ใช้โดยร้านอาหาร ไม่ทราบว่าน้ำทิ้งไปที่ใด น่าจะลงรางระบายน้ำตามแนวกำแพง']) }, i === 0 ? V(x, y, 1.6) : null);
+      add('tanks', cylGeo(0.18, 0.35, x, y, 0.05, 16), 'grease', { en: `Under-sink grease trap ${i + 1}`, th: `ถังดักไขมันใต้อ่าง ${i + 1}`, kind: 'tank',
+        info: vid(['Small plastic grease trap (about 20 to 30 L) standing under the sink. Size estimated.'], ['ถังดักไขมันพลาสติกขนาดเล็ก (ประมาณ 20 ถึง 30 ลิตร) วางใต้อ่าง ขนาดประมาณ']) });
+    });
+
+    // Garbage room (drawing GB-A-101, hidden-roof outline on the 2021 plan): open steel shelter with mesh doors and a sheet roof
+    add('buildings', tbox(3.72, 2.19, 2.4, 102.85, 39.66, 0, 0.2), 'building', { en: 'Garbage room', th: 'ห้องพักขยะ', tag: 'Garbage room', tagTh: 'ห้องพักขยะ', kind: 'building',
+      info: arc(['Garbage room: concrete floor, light steel frame with mesh doors on the parking side and a metal-sheet roof (as in the site video). 3.7 × 2.2 m on the 2021 plan; about 2.4 m to the eaves.'],
+        ['ห้องพักขยะ: พื้นคอนกรีต โครงเหล็กเบา ประตูตะแกรงด้านที่จอดรถ หลังคาเมทัลชีท (ตามวิดีโอหน้างาน) ขนาด 3.7 × 2.2 ม. ตามผังปี 2021 สูงถึงชายคาประมาณ 2.4 ม.']) }, V(102.85, 39.66, 3.4));
+    add('buildings', tbox(4.4, 2.8, 0.12, 102.85, 39.66, 2.5, 0.2), 'roof', { en: 'Garbage room roof', th: 'หลังคาห้องพักขยะ', nopick: 1 });
+
+    // Clean-water tanks (2 × 10,000 L, circles of Ø2.0 m on the 2021 plan) inside a white slatted screen with a 1.2 m door
+    [[89.67, 39.12], [92.32, 39.17]].forEach(([x, y], i) => add('water', cylGeo(1.0, 3.2, x, y, 0.15, 32), 'waterTank', { en: `Clean-water tank ${i + 1} (10,000 L)`, th: `ถังน้ำดี ${i + 1} (10,000 ลิตร)`, kind: 'tank',
+      tag: i === 0 ? 'Clean-water tanks 2 × 10,000 L' : undefined, tagTh: i === 0 ? 'ถังน้ำดี 2 × 10,000 ลิตร' : undefined,
+      info: arc(['Above-ground clean-water tank, 10,000 L, Ø2.0 m on the 2021 plan (written "Water Tank 10000L"); height about 3.2 m is assumed. Not wastewater: shown because it stands where digging might go.'],
+        ['ถังน้ำดีบนดิน 10,000 ลิตร Ø2.0 ม. ตามผังปี 2021 (เขียนว่า "Water Tank 10000L") ความสูงประมาณ 3.2 ม. เป็นค่าสมมติ ไม่ใช่น้ำเสีย แสดงไว้เพราะตั้งอยู่ในแนวที่อาจต้องขุด']) }, i === 0 ? V(91, 39.15, 4.2) : null));
+    {
+      const x0 = 88.2, x1 = 93.8, y0 = 37.75, y1 = 40.55, h = 2.4, t = 0.08;
+      add('buildings', merge([tbox(x1 - x0, t, h, (x0 + x1) / 2, y1, 0, 0), tbox(t, y1 - y0, h, x0, (y0 + y1) / 2, 0, 0), tbox(t, y1 - y0, h, x1, (y0 + y1) / 2, 0, 0), tbox(x1 - x0 - 1.4, t, h, (x0 + x1) / 2 + 0.7, y0, 0, 0)]), 'screen',
+        { en: 'Screen wall round the clean-water tanks', th: 'ผนังบังถังน้ำดี', kind: 'building',
+          info: arc(['Screen round the water tanks (drawing "ผนังบังถังน้ำดี"): steel posts with white composite-timber slats, a 1.2 × 2.0 m door. Taken as 2.4 m high round the two tanks; its exact outline is not on the 2021 plan.'],
+            ['ผนังบังถังน้ำดี (แบบ "ผนังบังถังน้ำดี"): เสาเหล็กกรุไม้เทียมสีขาวเว้นร่อง ประตู 1.2 × 2.0 ม. ในที่นี้ถือว่าสูง 2.4 ม. ล้อมถังทั้งสองใบ แนวที่แน่นอนไม่มีในผังปี 2021']) });
+    }
+
+    // Pump canopy (building C): 39 × 9 m roof on the 2021 plan (the first model had it about 2.4 m too far north; the fuel
+    // tanks were already right). Ceiling +5.50, top +6.50 (1 m fascia), four islands 1.2 × 8.0 m at 10 m centres.
+    add('buildings', tbox(39.0, 9.0, 1.0, 43.92, 65.15, 5.2, 0), 'roof', { en: 'Pump canopy (building C)', th: 'หลังคาคลุมหัวจ่าย (อาคาร C)', tag: 'Building C (canopy)', tagTh: 'อาคาร C (หลังคาคลุมหัวจ่าย)', kind: 'building',
+      info: arc(['Pump canopy, 39.0 × 9.0 m, 1.0 m deep fascia, ceiling about +5.20 and top about +6.20 above the road (+5.50 / +6.50 on drawing C-A-201). Four columns, one in each island, at 10 m centres.'],
+        ['หลังคาคลุมหัวจ่าย 39.0 × 9.0 ม. ขอบหลังคาลึก 1.0 ม. ฝ้าประมาณ +5.20 และหลังคาสูงสุดประมาณ +6.20 จากระดับถนน (+5.50 / +6.50 ในแบบ C-A-201) เสา 4 ต้น อยู่กลางเกาะจ่ายแต่ละเกาะ ห่างกัน 10 ม.']) }, V(43.92, 65.15, 7.0));
+    add('buildings', merge([28.92, 38.92, 48.92, 58.92].map((x) => cylGeo(0.25, 5.2, x, 65.15, 0, 16))), 'column', { en: 'Canopy columns', th: 'เสาหลังคาคลุมหัวจ่าย', nopick: 1 });
+    add('buildings', merge([28.92, 38.92, 48.92, 58.92].map((x) => tbox(1.2, 8.0, 0.2, x, 65.15, 0, 0))), 'islands', { en: 'Pump islands', th: 'เกาะจ่ายน้ำมัน', kind: 'building',
+      info: arc(['Four pump islands, 1.2 × 8.0 m, at 10 m centres under the canopy.'], ['เกาะจ่ายน้ำมัน 4 เกาะ ขนาด 1.2 × 8.0 ม. ห่างกัน 10 ม. ใต้หลังคา']) });
+    add('buildings', prismGeo([[95.02, 55.23], [104.65, 54.80], [105.45, 72.40], [95.85, 72.80]], 0, 0.03), 'bayLine', { en: 'Second canopy area (dashed outline on the drawings, not built)', th: 'พื้นที่หลังคาคลุมหลังที่สอง (เส้นประในแบบ ยังไม่ก่อสร้าง)', kind: 'building',
+      info: arc(['The 2019 and 2021 plans show a second canopy with two islands here in dashed lines. The site video shows open paving here, so it is drawn as a flat outline only.'], ['ผังปี 2019 และ 2021 แสดงหลังคาคลุมหลังที่สองพร้อมเกาะจ่าย 2 เกาะเป็นเส้นประ วิดีโอหน้างานเห็นเป็นลานเปิดโล่ง จึงแสดงเป็นเส้นขอบบนพื้นเท่านั้น']) });
+
+    // Highway sign (HS-ST-002): 20.0 m, panel 4.60 m wide × 7.21 m on a single steel pipe; base outline on the 2021 plan
+    add('buildings', cylGeo(0.4, 12.8, 15.0, 42.47, 0, 20), 'column', { en: 'Highway sign (20 m)', th: 'ป้ายเสาสูงริมทางหลวง (20 ม.)', tag: 'Highway sign (20 m)', tagTh: 'ป้ายริมทางหลวง (20 ม.)', kind: 'building',
+      info: arc(['Caltex highway sign, 20.0 m high, panel 4.60 m wide and 7.21 m high on a single steel pipe column, piled footing (drawing HS-ST-002). Plain panel, no logo.'], ['ป้ายคาลเท็กซ์ริมทางหลวง สูง 20.0 ม. แผ่นป้ายกว้าง 4.60 ม. สูง 7.21 ม. บนเสาท่อเหล็กต้นเดียว ฐานรากเสาเข็ม (แบบ HS-ST-002) แสดงเป็นแผ่นเรียบไม่มีโลโก้']) }, V(15.0, 42.47, 20.6));
+    add('buildings', tbox(4.6, 0.6, 7.21, 15.0, 42.47, 12.79, 0), 'signPanel', { en: 'Highway sign panel', th: 'แผ่นป้ายริมทางหลวง', nopick: 1 });
+    // Price sign (PRICE SIGN sheet): 2.0 m wide, 8.0 m high, on the island by the entrance
+    add('buildings', merge([tbox(2.0, 0.55, 5.3, 14.42, 65.03, 2.7, 0)]), 'signPanel', { en: 'Price sign (8 m)', th: 'ป้ายราคา (8 ม.)', tag: 'Price sign', tagTh: 'ป้ายราคา', kind: 'building',
+      info: arc(['Price and product sign, 2.0 m wide and 8.0 m high, steel frame on a piled footing, by the entrance (drawing PRICE SIGN, 2019).'], ['ป้ายราคาและผลิตภัณฑ์ กว้าง 2.0 ม. สูง 8.0 ม. โครงเหล็กบนฐานรากเสาเข็ม ข้างทางเข้า (แบบ PRICE SIGN ปี 2019)']) }, V(14.42, 65.03, 8.6));
+    add('buildings', merge([tbox(0.2, 0.2, 2.7, 13.62, 65.03, 0, 0), tbox(0.2, 0.2, 2.7, 15.22, 65.03, 0, 0)]), 'column', { en: 'Price sign posts', th: 'เสาป้ายราคา', nopick: 1 });
+
+    // Car wash in the south-east plot (video 3:00 to 4:30): self-service bays against the plot's west wall near its north end
+    // (red booth with coin units, a blue water tank and two coin vacuums) and a white self-service wash kiosk at the south end.
+    add('buildings', merge([tbox(3.4, 1.4, 2.6, 107.2, 31.0, 0, 92), tbox(3.8, 2.6, 0.12, 107.9, 31.0, 2.7, 92)]), 'kiosk', { en: 'Car wash booth (red, coin)', th: 'ตู้ล้างรถหยอดเหรียญ (สีแดง)', tag: 'Car wash', tagTh: 'ล้างรถ', kind: 'building',
+      info: vid(['Self-service coin car wash: red booth with coin units for water, foam and air on its front, a roof over the washing bay and a sign board on top. It stands against the west wall of the south-east plot near its north end, beside a blue plastic water tank.'],
+        ['ล้างรถหยอดเหรียญแบบบริการตัวเอง: ตู้สีแดงมีเครื่องหยอดเหรียญน้ำ โฟม และลมด้านหน้า มีหลังคาคลุมช่องล้างและป้ายด้านบน ตั้งชิดกำแพงด้านตะวันตกของแปลงตะวันออกเฉียงใต้ใกล้ปลายด้านเหนือ ข้างถังน้ำพลาสติกสีน้ำเงิน']) }, V(107.2, 31.0, 3.6));
+    add('water', cylGeo(0.6, 1.6, 106.7, 33.4, 0, 20), 'waterTank', { en: 'Car wash water tank', th: 'ถังน้ำล้างรถ', kind: 'tank',
+      info: vid(['Blue plastic water tank (about 1,000 L) for the car wash.'], ['ถังน้ำพลาสติกสีน้ำเงิน (ประมาณ 1,000 ลิตร) สำหรับล้างรถ']) });
+    add('buildings', merge([tbox(0.6, 0.5, 1.2, 106.4, 26.2, 0, 0), tbox(0.6, 0.5, 1.2, 106.4, 25.2, 0, 0)]), 'kiosk', { en: 'Coin vacuums', th: 'เครื่องดูดฝุ่นหยอดเหรียญ', kind: 'building',
+      info: vid(['Two coin-operated vacuum cleaners against the west wall.'], ['เครื่องดูดฝุ่นหยอดเหรียญ 2 เครื่องชิดกำแพงด้านตะวันตก']) });
+    add('buildings', merge([tbox(3.6, 2.4, 2.6, 116.0, 10.5, 0.15, 2), tbox(4.4, 3.2, 0.15, 116.0, 10.5, 2.8, 2), tbox(4.6, 3.4, 0.15, 116.0, 10.5, 0, 2)]), 'kioskWhite', { en: 'Wash kiosk (white, self-service)', th: 'ตู้ล้างรถบริการตัวเอง (สีขาว)', kind: 'building',
+      info: vid(['White self-service car wash kiosk on a raised base with a roof overhang and coin units on its front, near the south end of the south-east plot.'],
+        ['ตู้ล้างรถบริการตัวเองสีขาว ตั้งบนฐานยก มีหลังคายื่นและเครื่องหยอดเหรียญด้านหน้า ใกล้ปลายด้านใต้ของแปลงตะวันออกเฉียงใต้']) }, V(116.0, 10.5, 3.6));
   },
 };
