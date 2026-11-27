@@ -49,7 +49,8 @@ export const MATERIALS = {
   signDark: [0x2b3138],          // dark sign panels and round signs
   kiosk: [0xc0392b, 0.85],       // red steel container shop / car-wash booth
   kioskWhite: [0xf2f2ee, 0.9],   // white kiosk or booth
-  screen: [0xf4f4f0, 0.6],       // white slatted screen wall (e.g. round water tanks)
+  screen: [0xf4f4f0, 0.6],
+  glassGreen: [0x2e8b57, 0.6],   // green-tinted shop glazing (coffee shop front)       // white slatted screen wall (e.g. round water tanks)
   // water sampling (layer "sampling"): red = G2.1 (oil side), blue = G2.2 (wastewater side), as in the Caltex deck (SPP Sites R1)
   sampleG21: [0xd7263d],         // G2.1 (a new sampling sump that is not in the model yet)
   sampleG22: [0x1f6fe0],         // G2.2

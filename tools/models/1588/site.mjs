@@ -125,7 +125,7 @@ export default {
   },
   // names, order and colours: ../style.mjs. 'asbuilt' is this site's own layer: tank outlines that the as-built sheet shows
   // but does not name, kept apart from the named tanks of the 2019 design so that each set can be switched off.
-  layers: ['tanks', 'sewer', 'drains', 'water', 'fuel', 'buildings',
+  layers: ['tanks', 'sewer', 'drains', 'water', 'fuel', 'buildings', 'paving',
     { id: 'asbuilt', en: 'Tank outlines on the as-built sheet (not named there)', th: 'แนวถังตามแบบก่อสร้างจริง (ในแบบไม่ระบุชื่อ)' }, 'plan', 'ground'],
   views: [
     { id: 'site', from: [66, -62, 85], to: [66, 44, 0] },
@@ -133,7 +133,7 @@ export default {
     { id: 'a', en: 'Building A tanks', th: 'ถังที่อาคาร A', from: [52, 20.5, 13], to: [53, 38, -1] },
     { id: 'b', en: 'Building B tanks', th: 'ถังที่อาคาร B', from: [80.5, 26.5, 10], to: [76.3, 38.6, -1] },
     { id: 'garbage', en: 'Garbage room tank (design)', th: 'ถังที่ห้องพักขยะ (ตามแบบออกแบบ)', from: [103.5, 31.5, 6.5], to: [99.3, 39.8, -0.6] },
-    { id: 'bld', en: 'Buildings, kiosks and water tanks', th: 'อาคาร ซุ้มร้านค้า และถังน้ำ', from: [44, 78, 26], to: [64, 41, 2] },
+    { id: 'bld', en: 'Buildings, kiosks and water tanks', th: 'อาคาร ซุ้มร้านค้า และถังน้ำ', from: [30, 60, 16], to: [50, 41, 2] },
     { id: 'carwash', en: 'Car wash (south-east plot)', th: 'ล้างรถ (แปลงตะวันออกเฉียงใต้)', from: [92, 2, 18], to: [113, 22, 1] },
     { id: 'fuel', from: [85, 49, 6], to: [72.7, 65.8, -1.8] },
     { id: 'under', from: [58, 20, -8], to: [60, 38, -0.8] },
@@ -355,14 +355,21 @@ export default {
       info: vid(['Light steel roof (translucent sheet) over the walkway between the buildings and the parking, from the highway end of the kiosks to past building B. Underside taken as about 3.0 m. Its exact length is not known.'],
         ['หลังคาโครงเหล็กเบา (แผ่นโปร่งแสง) คลุมทางเดินระหว่างอาคารกับที่จอดรถ ตั้งแต่ซุ้มร้านค้าด้านทางหลวงจนเลยอาคาร B ใต้หลังคาประมาณ 3.0 ม. ไม่ทราบความยาวที่แน่นอน']) }, V(56.5, 44.9, 3.6));
 
-    // Kiosks: red container shops at the highway end of the building row, west of building A (video 2:00, 8:50; satellite)
+    // Kiosks: red container shops between the coffee shop and building A (video 2:00, 7:20, 8:50; Brian's still)
     const kiosk = (x, y, w, d, n, en, th) => add('buildings', tbox(w, d, 2.6, x, y, 0, ROT_A), 'kiosk', { en, th, kind: 'building',
       tag: n === 1 ? 'Kiosks (container shops)' : undefined, tagTh: n === 1 ? 'ซุ้มร้านค้า (ตู้คอนเทนเนอร์)' : undefined,
       info: vid([`${en}: a red steel container shop with a roll-up front facing the walkway. About ${w.toFixed(1)} × ${d.toFixed(1)} m, 2.6 m high (estimated).`],
         [`${th}: ร้านค้าตู้คอนเทนเนอร์เหล็กสีแดง หน้าร้านเปิดหันออกทางเดิน ขนาดประมาณ ${w.toFixed(1)} × ${d.toFixed(1)} ม. สูง 2.6 ม. (ประมาณ)`]) }, n === 1 ? V(x, y, 3.4) : null);
-    kiosk(38.3, 42.2, 2.4, 2.4, 1, 'Kiosk 1', 'ซุ้มร้านค้า 1');
-    kiosk(40.9, 42.2, 2.4, 2.4, 2, 'Kiosk 2', 'ซุ้มร้านค้า 2');
-    kiosk(42.6, 39.6, 2.4, 2.4, 3, 'Kiosk 3 (numbered 3 on site)', 'ซุ้มร้านค้า 3 (มีเลข 3 ที่หน้างาน)');
+    kiosk(43.35, 43.15, 2.4, 2.2, 1, 'Kiosk 1', 'ซุ้มร้านค้า 1');
+    kiosk(43.35, 40.55, 1.4, 2.6, 2, 'Kiosk 2', 'ซุ้มร้านค้า 2');
+
+    // Coffee shop (new, after 2021; not on any drawing): white flat-roofed box with a green glass shopfront to the parking,
+    // at the highway end of the building row (Brian, 28 Nov 2026: video 7:20, looking towards the toilets; his still).
+    add('buildings', tbox(6.8, 4.2, 3.6, 39.2, 40.6, 0, ROT_A), 'kioskWhite', { en: 'Coffee shop', th: 'ร้านกาแฟ', tag: 'Coffee shop', tagTh: 'ร้านกาแฟ', kind: 'building',
+      info: vid(['Coffee shop built after the station (not on the 2021 plan): single storey, white flat-roofed box with a deep white fascia and a green glass shopfront facing the parking, a low step along its front. At the highway end of the building row, west of the kiosks and the toilets (Brian, 28 Nov 2026). About 6.8 × 4.2 m and 3.6 m high, judged from the video.'],
+        ['ร้านกาแฟที่สร้างภายหลังสถานี (ไม่มีในผังปี 2021): ชั้นเดียว กล่องสีขาวหลังคาแบน ขอบหลังคาสีขาวลึก หน้าร้านกระจกสีเขียวหันออกที่จอดรถ มีขั้นบันไดเตี้ยตลอดหน้าร้าน อยู่ปลายแถวอาคารด้านทางหลวง ทางตะวันตกของซุ้มร้านค้าและห้องน้ำ (Brian, 28 พ.ย. 2026) ขนาดประมาณ 6.8 × 4.2 ม. สูง 3.6 ม. ประมาณจากวิดีโอ']) }, V(39.2, 40.6, 4.4));
+    add('buildings', tbox(6.6, 0.08, 2.2, 39.2, 42.72, 0.2, ROT_A), 'glassGreen', { en: 'Coffee shop front', th: 'หน้าร้านกาแฟ', nopick: 1 });
+    add('paving', tbox(6.8, 0.6, 0.15, 39.2, 43.0, 0, ROT_A), 'walkway', { en: 'Coffee shop step', th: 'ขั้นหน้าร้านกาแฟ', nopick: 1 });
 
     // Stall and kitchen area with sinks behind the buildings (video 1:00 to 1:50): a sheet-roofed area against the boundary
     // wall in the gap between buildings A and B, with two stainless sinks, each with a small under-sink grease trap.
