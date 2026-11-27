@@ -3,7 +3,10 @@
 //
 // NO AS-BUILT LAYOUT OF THE STATION. On 27 Nov 2026 Brian added (Sites\1156 Samut Prakan\03 Drawings\CAD and \CAD\KFC):
 //   D  "1156 # Hitex Theppratarn Branch 1.dwg": Caltex site plan "PROPOSED 1" (Star Fuels, 21.02.19), 1:200: lot 3,049 m²,
-//      KFC drive-through 24 × 10 m (260 m²) at the back. A proposal, not as-built; not yet fitted to the model.
+//      KFC drive-through 24 × 10 m (260 m²) at the back. A proposal, not as-built. Fitted 27 Nov 2026: its buildings sit
+//      on the satellite roofs when the plan is turned -7.4° (plan x - 502.105, y - 174.86, +(10, 26), turn, -(10, 26));
+//      its lot line does NOT match the walls (Brian: keep the satellite walls). Used: fuel tank size and spacing only.
+//      KFC is 24.0 m long here as on the plan. See Sites\1156...\03 Drawings\_Working\1156 Combined Layout.dwg.
 //   T  KFC tank as-builts (TRI Architects / Astive, "For As Built Dwg" 30/10/63): A-101 = two Biotech BG-R-3000 grease traps
 //      in one 5.80 × 2.45 m pit + BC-K-10-D2.2 treatment tank (Ø2.20, slab 7.50 × 3.20 m), levels under the road; A-102 =
 //      Biotech BO-5000-UR (place not given, not modelled). Title blocks say Phuket in the location box: Brian to confirm.
@@ -291,14 +294,14 @@ export default {
     // ---------- fuel tank farm between the toilets and the office / Mini Big C building, exit side (Brian; video 2:53: a pad
     // with round covers; 3:07-3:13: four or five vent pipes against the east wall by the office)
     // Brian (26 Nov 2026): three tanks lying parallel to the road, four products: one tank has two compartments.
-    [['T1 · 2 compartments', 6.8, 1], ['T2', 9.8, 0], ['T3', 12.8, 0]].forEach(([label, y, two]) => fuelTank(label, 7.5, y, 0, { src: A,
+    [['T1 · 2 compartments', 6.42, 1], ['T2', 9.8, 0], ['T3', 13.18, 0]].forEach(([label, y, two]) => fuelTank(label, 7.5, y, 0, { src: A,
       en: [two ? 'This tank has two compartments, so it holds two products (Brian, 26 Nov 2026): the split of the 30,000 L between them is not known.' : 'One compartment, one product (Brian, 26 Nov 2026).',
-        'No drawings: three tanks, four products in all, lying parallel to the road (Brian). Which tank is which, which product is in each and the spacing are not known: shown side by side under the pad with the round covers (video 2:53).'],
+        'Three tanks, four products in all, lying parallel to the road (Brian). Size and spacing from the Caltex 2019 site plan "PROPOSED 1": 7.5 × 2.38 m tanks, 3.38 m apart centre to centre; their place is still the pad with the round covers seen on site (video 2:53), because the proposal\'s positions are about 2 m off what was built. Which tank is which and which product is in each are not known.'],
       th: [two ? 'ถังนี้มี 2 ช่อง เก็บน้ำมัน 2 ชนิด (ตาม Brian 26 พ.ย. 2026) ไม่ทราบว่าแบ่ง 30,000 ลิตรอย่างไร' : 'ช่องเดียว น้ำมัน 1 ชนิด (ตาม Brian 26 พ.ย. 2026)',
-        'ไม่มีแบบ: มี 3 ถัง น้ำมันรวม 4 ชนิด วางขนานกับถนน (ตาม Brian) ไม่ทราบว่าถังใดเป็นถังใด น้ำมันชนิดใดอยู่ถังใด และระยะห่าง แสดงวางเรียงกันใต้ลานที่มีฝากลม (วิดีโอ 2:53)'] }));
+        'มี 3 ถัง น้ำมันรวม 4 ชนิด วางขนานกับถนน (ตาม Brian) ขนาดและระยะห่างจากผังบริเวณ Caltex ปี 2019 "PROPOSED 1": ถัง 7.5 × 2.38 ม. ห่างกันศูนย์กลางถึงศูนย์กลาง 3.38 ม. ตำแหน่งยังคงอยู่ใต้ลานที่มีฝากลมตามที่เห็นหน้างาน (วิดีโอ 2:53) เพราะตำแหน่งในแบบเสนอคลาดจากที่ก่อสร้างจริงประมาณ 2 ม. ไม่ทราบว่าถังใดเป็นถังใด และน้ำมันชนิดใดอยู่ถังใด'] }));
     // fibreglass tank sumps with 1 m lids on top of each fuel tank (Brian, 26 Nov 2026: lids usually 1 m across; places
     // approximate): one per compartment, so two on T1. Sump from the top of the tank (1.0 m under the ground) up to the pad.
-    { const PAD = 0.15, top = -1.0, sumps = [[5.6, 6.8, 'T1 (compartment 1)', 'T1 (ช่องที่ 1)'], [9.4, 6.8, 'T1 (compartment 2)', 'T1 (ช่องที่ 2)'], [7.5, 9.8, 'T2', 'T2'], [7.5, 12.8, 'T3', 'T3']];
+    { const PAD = 0.15, top = -1.0, sumps = [[5.6, 6.42, 'T1 (compartment 1)', 'T1 (ช่องที่ 1)'], [9.4, 6.42, 'T1 (compartment 2)', 'T1 (ช่องที่ 2)'], [7.5, 9.8, 'T2', 'T2'], [7.5, 13.18, 'T3', 'T3']];
       sumps.forEach(([x, y, en, th], i) => {
         add('fuel', cylGeo(0.6, PAD - top, x, y, top), 'fuelSump', { en: `Tank sump · ${en}`, th: `บ่อครอบหัวถัง · ${th}`, kind: 'fuel', ...(i === 3 ? { tag: 'Tank sumps and lids', tagTh: 'บ่อครอบหัวถังและฝา' } : {}),
           info: lines([`Fibreglass tank sump on top of fuel tank ${en}, about 1.2 m across, from the top of the tank up to the raised tank-farm pad, under a round lid about 1.0 m across (Brian, 26 Nov 2026; video 2:53 shows the round lids on the pad). It holds the pump and pipe connections of the tank. Place approximate.`],
