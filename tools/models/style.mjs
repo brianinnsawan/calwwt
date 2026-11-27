@@ -47,6 +47,15 @@ export const MATERIALS = {
   planterTub: [0xeeeeea],        // small white concrete planter tub
   signPanel: [0xc8432f, 0.95],   // the head of a tall pole sign (plain panels, no logo)
   signDark: [0x2b3138],          // dark sign panels and round signs
+  // water sampling points (layer "sampling"), in the colours of the Caltex deck (SPP Sites R1) so the model reads like the slides:
+  sampleExisting: [0xe02020],    // red ball = existing sampling point
+  sampleNew: [0xffc000],         // yellow ball = new sampling point
+  sampleBuild: [0x00b0f0],       // blue cube = construction sampling point (final design)
+  sampleOWS: [0xff66cc, 0.9],    // pink triangle = new OWS or new wastewater treatment (final design)
+  sampleG21: [0xe71224],         // Group 2.1 (oil side): red, the deck's G2.1 route colour
+  sampleG22: [0x33ccff],         // Group 2.2 (wastewater side): cyan, the deck's G2.2 route colour
+  sampleRoute21: [0xe71224, 0.75], sampleRoute22: [0x33ccff, 0.75],   // water routes of the final design (deck FUTURE slides)
+  samplePole: [0x4b5563], sampleZone: [0xff66cc, 0.25],
 };
 
 /** Layers, in the order they are listed in the viewer. A site uses the ones it needs. */
@@ -57,6 +66,7 @@ export const LAYERS = [
   { id: 'air', en: 'Air pumps and air lines', th: 'ปั๊มลมและท่อลม' },
   { id: 'base', en: 'Tank base slabs and piles', th: 'ฐานถังและเสาเข็ม' },
   { id: 'water', en: 'Clean-water tank and pumps', th: 'ถังเก็บน้ำดีและปั๊มน้ำ' },
+  { id: 'sampling', en: 'Water sampling points', th: 'จุดเก็บตัวอย่างน้ำ' },
   { id: 'proposed', en: 'Proposed works (option, not built)', th: 'งานที่เสนอ (ทางเลือก ยังไม่ได้ก่อสร้าง)' },
   { id: 'old', en: 'Tanks and pipes out of use', th: 'ถังและท่อที่เลิกใช้' },
   { id: 'fuel', en: 'Fuel tanks', th: 'ถังน้ำมันใต้ดิน' },
@@ -67,10 +77,11 @@ export const LAYERS = [
   { id: 'ground', en: 'Ground surface', th: 'ผิวพื้น' },
 ];
 
-/** Standard views. Every site has site, plan and under, and fuel when it has fuel tanks, and area when it shows its surroundings, in this order: site, plan, close-ups..., fuel, area, under. */
+/** Standard views. Every site has site, plan and under (and samples, added by build.mjs when the site has sampling.json, after plan), and fuel when it has fuel tanks, and area when it shows its surroundings, in this order: site, plan, close-ups..., fuel, area, under. */
 export const VIEWS = {
   site: { en: 'Whole site', th: 'ทั้งสถานี' },
   plan: { en: 'Plan', th: 'ผัง' },
+  samples: { en: 'Sampling points', th: 'จุดเก็บตัวอย่าง' },
   fuel: { en: 'Fuel tanks', th: 'ถังน้ำมัน' },
   area: { en: 'Station and surroundings', th: 'สถานีและพื้นที่รอบ' },
   under: { en: 'From below ground', th: 'มองจากใต้ดิน' },
@@ -104,3 +115,34 @@ export const notes = (en, th, kind) => ({ en: [...en, SRC[kind].en], th: [...th,
 //   long lying tanks:    capsuleGeo(...) (slightly rounded ends), never a box or a flat-ended cylinder
 //   buildings:           tag = the name on the drawing ("KFC", "Toilets", "Shops 1", "Canopy")
 //   notes:               first what it is and its size, then levels, then anything to check on site, then the source line
+
+// ---- water sampling (tools/models/<code>/sampling.json; build.mjs draws the points, viewer.mjs shows the card and the stages)
+/** The PCD effluent standard for service stations (mandatory from Sept 2026), as in Brian's "Sampling Counts R2" sheet.
+ *  [min, max] in mg/L (pH has no unit); null = no limit on that side. A combined G2.1+G2.2 point is tested for both lists;
+ *  where both groups list a parameter (pH, TSS) the stricter limit applies. */
+export const SAMPLE_GROUPS = {
+  'G2.1': { en: 'Group 2.1: fuel dispensing, oil change or maintenance', th: 'กลุ่ม 2.1: จ่ายน้ำมัน เปลี่ยนน้ำมันเครื่อง หรือซ่อมบำรุง',
+    limits: { pH: [5.5, 9.0], COD: [null, 140], TSS: [null, 60], TPH: [null, 5.0] } },
+  'G2.2': { en: 'Group 2.2: other services that make wastewater (toilets, kitchens, shops)', th: 'กลุ่ม 2.2: บริการอื่นที่ก่อให้เกิดน้ำเสีย (ห้องน้ำ ครัว ร้านค้า)',
+    limits: { pH: [5.5, 9.0], BOD: [null, 40], TSS: [null, 50], TDS: [null, 3000], Sulfide: [null, 1.0], TKN: [null, 40], 'O&G': [null, 15] } },
+};
+export const PARAM_NAMES = {
+  pH: { en: 'pH', th: 'pH' }, COD: { en: 'COD', th: 'COD' }, BOD: { en: 'BOD', th: 'BOD' }, TSS: { en: 'TSS (suspended solids)', th: 'TSS (ของแข็งแขวนลอย)' },
+  TDS: { en: 'TDS (dissolved solids)', th: 'TDS (ของแข็งละลายน้ำ)' }, Sulfide: { en: 'Sulfide', th: 'ซัลไฟด์' }, TKN: { en: 'TKN (nitrogen)', th: 'TKN (ไนโตรเจน)' },
+  'O&G': { en: 'Oil and grease', th: 'น้ำมันและไขมัน' }, TPH: { en: 'TPH (petroleum hydrocarbons)', th: 'TPH (ปิโตรเลียมไฮโดรคาร์บอน)' },
+};
+/** The limits a point is checked against: one group, or both for "G2.1+G2.2" (stricter limit where both list it). */
+export const limitsFor = (group) => {
+  const out = {};
+  for (const g of group.split('+')) for (const [k, [lo, hi]] of Object.entries(SAMPLE_GROUPS[g].limits)) {
+    const o = out[k];
+    out[k] = o ? [lo == null ? o[0] : o[0] == null ? lo : Math.max(o[0], lo), hi == null ? o[1] : o[1] == null ? hi : Math.min(o[1], hi)] : [lo, hi];
+  }
+  return out;
+};
+/** The three kinds of marker, with the deck's own words (Caltex WWT Improvement - SPP Sites R1). */
+export const SAMPLE_STATUS = {
+  existing: { en: 'Existing sampling point', th: 'จุดเก็บตัวอย่างเดิม' },
+  new: { en: 'New sampling point', th: 'จุดเก็บตัวอย่างใหม่' },
+  construction: { en: 'Construction sampling point (future)', th: 'จุดเก็บตัวอย่างที่จะก่อสร้าง (อนาคต)' },
+};

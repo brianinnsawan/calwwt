@@ -14,12 +14,22 @@ const T = {
     hint: 'Click a tank, pipe or manhole to see its size and levels. Drag to turn, scroll or pinch to zoom, right-drag or two fingers to move.',
     close: 'Close', north: 'North', loading: 'Loading the 3D model…', failed: 'The 3D model could not be shown on this device.', built: 'Model updated',
     section: 'Long section', vert: 'Vertical ×', rows: ['Ground RL', 'Invert RL  in / out', 'Pipe top RL', 'Depth to invert (m)', 'Chainage (m)', 'Length · fall'], datum: 'Datum RL', key: 'Key plan',
-    leg: ['Proposed pipe', 'Ground', 'Existing drain crossing', 'Clash with existing drain', 'Water level'], clash: 'clash', clear: 'clear', grating: 'Grating', in: 'In', out: 'Out', water: 'Water', top: 'Top', bottom: 'Bottom' },
+    leg: ['Proposed pipe', 'Ground', 'Existing drain crossing', 'Clash with existing drain', 'Water level'], clash: 'clash', clear: 'clear', grating: 'Grating', in: 'In', out: 'Out', water: 'Water', top: 'Top', bottom: 'Bottom',
+    stages: ['Existing', '2026 sampling', 'Final design (concept)'], stageTip: ['What is on site today', 'Where the water is sampled in 2026', 'The proposed new works and new sampling points (concept, not built)'],
+    walk: 'Walk the sampling points', of: 'of', prev: '‹ Back', next: 'Next ›', byResult: 'Colour sampling points by test result', risk: 'Risk', samples: (n) => `${n} sample${n > 1 ? 's' : ''}`, params: (n) => `${n} parameters tested`,
+    take: 'Where to take it', tested: 'Tested for', limit: 'Limit', result: 'Result', noResult: 'Lab results not in yet.', pass: 'Within limit', fail: 'Over limit', drains: 'What drains here (lit up)',
+    level: (a, b, as) => `Water taken at about ${a} (${b} m below ground${as ? ', assumed' : ''}).`, sampleLeg: 'Sampling points', g21: 'G2.1 oil side (fuel, oil change, workshop): band, ring and route', g22: 'G2.2 wastewater side (toilets, kitchens, shops): band, ring and route',
+    st: { existing: 'Existing sampling point', new: 'New sampling point', construction: 'Construction sampling point (final design)', ows: 'New OWS or new WWT (final design)' }, mgl: 'mg/L', resultOn: (d, lab) => `Result ${d}${lab ? ` (${lab})` : ''}:` },
   th: { layers: 'ชั้นข้อมูล', views: 'มุมมอง', labels: 'ชื่อ', levels: 'ระดับท่อที่บ่อพัก', see: 'มองทะลุพื้น', tall: 'ขยายความสูง ×3',
     hint: 'คลิกที่ถัง ท่อ หรือบ่อพัก เพื่อดูขนาดและระดับ ลากเพื่อหมุน เลื่อนลูกกลิ้งหรือใช้สองนิ้วเพื่อซูม คลิกขวาลากหรือใช้สองนิ้วเพื่อเลื่อน',
     close: 'ปิด', north: 'ทิศเหนือ', loading: 'กำลังโหลดโมเดล 3D…', failed: 'ไม่สามารถแสดงโมเดล 3D บนอุปกรณ์นี้ได้', built: 'ปรับปรุงโมเดลเมื่อ',
     section: 'รูปตัดตามยาว', vert: 'แนวดิ่งขยาย ×', rows: ['ระดับพื้น RL', 'ระดับท้องท่อ เข้า / ออก', 'ระดับหลังท่อ RL', 'ความลึกถึงท้องท่อ (ม.)', 'ระยะ (ม.)', 'ความยาว · ความลาด'], datum: 'ระดับอ้างอิง RL', key: 'แปลนตำแหน่ง',
-    leg: ['ท่อที่เสนอ', 'ผิวพื้น', 'ท่อระบายน้ำเดิมที่ตัดผ่าน', 'ชนท่อระบายน้ำเดิม', 'ระดับน้ำ'], clash: 'ชน', clear: 'ไม่ชน', grating: 'ตะแกรง', in: 'เข้า', out: 'ออก', water: 'น้ำ', top: 'หลังถัง', bottom: 'ก้นถัง' },
+    leg: ['ท่อที่เสนอ', 'ผิวพื้น', 'ท่อระบายน้ำเดิมที่ตัดผ่าน', 'ชนท่อระบายน้ำเดิม', 'ระดับน้ำ'], clash: 'ชน', clear: 'ไม่ชน', grating: 'ตะแกรง', in: 'เข้า', out: 'ออก', water: 'น้ำ', top: 'หลังถัง', bottom: 'ก้นถัง',
+    stages: ['สภาพปัจจุบัน', 'เก็บตัวอย่างปี 2026', 'แบบสุดท้าย (แนวคิด)'], stageTip: ['สิ่งที่มีอยู่หน้างานวันนี้', 'จุดที่เก็บตัวอย่างน้ำในปี 2026', 'งานใหม่ที่เสนอและจุดเก็บตัวอย่างใหม่ (แนวคิด ยังไม่ได้สร้าง)'],
+    walk: 'ไล่ดูจุดเก็บตัวอย่าง', of: 'จาก', prev: '‹ ก่อนหน้า', next: 'ถัดไป ›', byResult: 'แสดงสีจุดเก็บตัวอย่างตามผลตรวจ', risk: 'ความเสี่ยง', samples: (n) => `${n} ตัวอย่าง`, params: (n) => `ตรวจ ${n} พารามิเตอร์`,
+    take: 'จุดตักน้ำ', tested: 'รายการตรวจ', limit: 'ค่ามาตรฐาน', result: 'ผล', noResult: 'ยังไม่ได้รับผลจากห้องแล็บ', pass: 'ผ่านเกณฑ์', fail: 'เกินเกณฑ์', drains: 'สิ่งที่ระบายมาที่จุดนี้ (ไฮไลต์)',
+    level: (a, b, as) => `ตักน้ำที่ระดับประมาณ ${a} (ต่ำกว่าพื้น ${b} ม.${as ? ' ค่าสมมติ' : ''})`, sampleLeg: 'จุดเก็บตัวอย่าง', g21: 'G2.1 ฝั่งน้ำมัน (จ่ายน้ำมัน เปลี่ยนน้ำมันเครื่อง ซ่อมบำรุง): แถบสี วงแหวน และแนวน้ำ', g22: 'G2.2 ฝั่งน้ำเสีย (ห้องน้ำ ครัว ร้านค้า): แถบสี วงแหวน และแนวน้ำ',
+    st: { existing: 'จุดเก็บตัวอย่างเดิม', new: 'จุดเก็บตัวอย่างใหม่', construction: 'จุดเก็บตัวอย่างที่จะก่อสร้าง (แบบสุดท้าย)', ows: 'OWS ใหม่ หรือระบบบำบัดใหม่ (แบบสุดท้าย)' }, mgl: 'มก./ล.', resultOn: (d, lab) => `ผลตรวจ ${d}${lab ? ` (${lab})` : ''}:` },
 };
 const CSS = `
 .v3 { position: absolute; inset: 0; overflow: hidden; touch-action: none; }
@@ -67,6 +77,24 @@ const CSS = `
 .v3-sect .sf svg text { font: 600 10px var(--font-body); fill: var(--ink); }
 .v3-sect .lg { display: flex; flex-wrap: wrap; gap: 4px 16px; margin-bottom: 6px; }
 .v3-sect .lg i { display: inline-block; width: 18px; height: 3px; margin-right: 6px; vertical-align: middle; }
+/* water sampling points: stage switch, walk-through, result table */
+.v3-stage { position: absolute; left: 50%; bottom: 12px; transform: translateX(-50%); z-index: 7; display: flex; border: 1px solid var(--rule); border-radius: 8px; overflow: hidden; background: var(--panel); }
+.v3-stage button { border: 0; border-radius: 0; font-size: 12.5px; padding: 6px 12px; }
+.v3-stage button + button { border-left: 1px solid var(--rule); }
+.v3-stage button.on { background: var(--accent); color: #fff; }
+.v3-views button.v3-walk { border-color: #e8590c; color: #b8430a; font-weight: 600; }
+.v3-info .risk { display: inline-block; font: 700 11px var(--font-body); letter-spacing: .04em; padding: 1px 7px; border-radius: 4px; color: #fff; background: #dc2626; margin-right: 6px; }
+.v3-info .risk.MEDIUM { background: #d97706; } .v3-info .risk.LOW { background: #16a34a; }
+.v3-info .chips { display: flex; flex-wrap: wrap; gap: 4px; margin: 3px 0 5px; }
+.v3-info .chips span { font-size: 11.5px; padding: 0 6px; border-radius: 10px; border: 1px solid var(--rule); }
+.v3-info .g21 { color: #c8102e; font-weight: 600; } .v3-info .g22 { color: #0b8fbf; font-weight: 600; }
+.v3-info table { border-collapse: collapse; margin: 4px 0; font-size: 12px; }
+.v3-info td, .v3-info th { padding: 1px 8px 1px 0; text-align: left; }
+.v3-info td.bad { color: #dc2626; font-weight: 600; } .v3-info td.ok { color: #16a34a; }
+.v3-info .nav { display: flex; gap: 6px; align-items: center; margin-top: 6px; }
+.v3-panel .leg { display: grid; gap: 2px; padding: 0 0 4px; color: var(--muted); font-size: 11.5px; }
+.v3-panel .leg b { color: var(--ink); font-weight: 600; }
+@media (max-width: 760px) { .v3-stage { bottom: auto; top: 88px; } .v3-stage button { padding: 5px 7px; font-size: 11.5px; } }
 @media (max-width: 760px) { .v3-sect .sf { grid-template-columns: 1fr; } }
 @media (max-width: 760px) { .v3-views { max-width: calc(100% - 20px); top: 46px; } .v3-panel { width: 210px; } .v3-info { max-height: 40%; } .v3-n { bottom: auto; top: 132px; right: 10px; } }
 `;
@@ -121,14 +149,15 @@ export async function show(view, url, w, lang = 'en') {
     lab.append(i); if (colour) { const sw = el('i'); sw.style.background = colour; lab.append(sw); } lab.append(el('span', {}, text)); rows.append(lab); return i;
   };
   const colourOf = (g) => { let c = null; g.traverse((o) => { if (!c && (o.isMesh || o.isLineSegments) && o.material?.color) c = '#' + o.material.color.getHexString(THREE.SRGBColorSpace); }); return c; };
-  for (const g of layers) { g.visible = g.userData.on !== false; check(name(g.userData), g.visible, (on) => { g.visible = on; }, colourOf(g)); }
+  const layerBox = new Map();
+  for (const g of layers) { g.visible = g.userData.on !== false; layerBox.set(g.name, check(name(g.userData), g.visible, (on) => { g.visible = on; }, colourOf(g))); }
   rows.append(el('hr'));
   const lab = el('div', { class: 'v3-lab' }); box.append(lab);
   const marks = [];
   const layerOf = (o) => { let p = o; while (p && !p.userData?.layer) p = p.parent; return p; };
   root.traverse((o) => {
     const u = o.userData || {};
-    if (u.tag && u.at) { const s = el('span', {}, (l === 'th' && u.tagTh) || u.tag); lab.append(s); marks.push({ s, p: new THREE.Vector3(...u.at), kind: 'tag', layer: layerOf(o) }); }
+    if (u.tag && u.at) { const s = el('span', {}, (l === 'th' && u.tagTh) || u.tag); lab.append(s); marks.push({ s, p: new THREE.Vector3(...u.at), kind: 'tag', layer: layerOf(o), o }); }
     if (u.lvl && o.isMesh) { const b = new THREE.Box3().setFromObject(o), c = b.getCenter(new THREE.Vector3()); const s = el('span', { class: 'v3-lvl' }, u.lvl); lab.append(s); marks.push({ s, p: new THREE.Vector3(c.x, b.max.y + 0.25, c.z), kind: 'lvl', layer: layerOf(o) }); }
   });
   const showKind = { tag: true, lvl: false };
@@ -144,14 +173,18 @@ export async function show(view, url, w, lang = 'en') {
   // ---- information card
   const card = el('div', { class: 'v3-info' }); box.append(card);
   let picked = null, pickedMat = null;
-  const unpick = () => { if (picked) { picked.material = pickedMat; picked = null; } };
+  const lit = [];   // things lit up because they drain to the picked sampling point
+  const unpick = () => { if (picked) { picked.material = pickedMat; picked = null; } for (const [m, mt] of lit.splice(0)) m.material = mt; };
+  let sampleSummary = () => {}, pickSample = () => {};
   const idle = () => {
     unpick(); card.replaceChildren();
     card.append(el('p', {}, t.hint));
     if (meta.datum) card.append(el('p', { class: 's' }, name(meta.datum)));
     if (meta.note) card.append(el('p', { class: 's' }, name(meta.note) + (meta.built ? ` ${t.built} ${meta.built}.` : '')));
+    if (meta.sampling) sampleSummary();
   };
   const pick = (o) => {
+    if (o.userData.sample) return pickSample(o);
     unpick(); picked = o; pickedMat = o.material;
     const m = o.material.clone(); m.emissive = new THREE.Color(0xff9d00); m.emissiveIntensity = 0.55; m.opacity = Math.max(m.opacity, 0.9); o.material = m;
     const u = o.userData; card.replaceChildren();
@@ -170,7 +203,7 @@ export async function show(view, url, w, lang = 'en') {
     ray.setFromCamera(new THREE.Vector2(((e.clientX - r.left) / r.width) * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1), camera);
     const hits = ray.intersectObject(root, true).filter((h) => h.object.isMesh && h.object.userData.en && !h.object.userData.nopick && shown(h.object));
     // what is under the ground wins over the building or fuel-tank outline in front of it
-    const hit = hits.find((h) => !['building', 'fuel'].includes(h.object.userData.kind)) || hits[0];
+    const hit = hits.find((h) => h.object.userData.sample) || hits.find((h) => !['building', 'fuel'].includes(h.object.userData.kind)) || hits[0];
     hit ? pick(hit.object) : idle();
   });
 
@@ -181,6 +214,112 @@ export async function show(view, url, w, lang = 'en') {
     sb.onclick = () => { ov.hidden = false; drawSection(ov, meta.sections[0], l, t); };
     ov.addEventListener('click', (e) => { if (e.target.closest('.x')) ov.hidden = true; });
     ['pointerdown', 'wheel'].forEach((k) => ov.addEventListener(k, (e) => e.stopPropagation()));
+  }
+
+  // ---- water sampling points (scene userData "sampling", made in tools/models/sampling.mjs from <code>/sampling.json)
+  if (meta.sampling) {
+    const S = meta.sampling, f2s = (v) => (Math.abs(v) < 0.005 ? '±0.00' : (v > 0 ? '+' : '-') + Math.abs(v).toFixed(2));
+    const heads = [], byId = new Map();
+    root.traverse((o) => { const u = o.userData; if (o.isMesh && u.sample) { if (!byId.has(u.sample.id)) byId.set(u.sample.id, []); byId.get(u.sample.id).push(o); if (u.tag) heads.push(o); } });
+    const order0 = S.order.filter((id) => byId.has(id));
+    const visibleOrder = () => order0.filter((id) => { const st = byId.get(id)[0].userData.stage; return st === 'future' ? stageAt === 2 : st === 'now' ? stageAt !== 2 : true; });
+    let order = order0;
+    const verdict = (sm) => {
+      const v = sm.result?.values; if (!v) return 'pending';
+      let all = true;
+      for (const k of sm.params) { const x = v[k], [lo, hi] = sm.limits[k]; if (x == null) { all = false; continue; } if ((lo != null && x < lo) || (hi != null && x > hi)) return 'fail'; }
+      return all ? 'pass' : 'pending';
+    };
+    // stages: Existing / 2026 sampling / Final design (concept)
+    const lay = (id) => layers.find((g) => g.name === id);
+    const setLayer = (id, on) => { const g = lay(id); if (g) { g.visible = on; const c = layerBox.get(id); if (c) c.checked = on; } };
+    const staged = []; root.traverse((o) => { if (o.userData?.stage) staged.push(o); });   // 'now' = 2026 sampling only, 'future' = final design only
+    let stageAt = 1;
+    const proposedAll = lay('proposed');
+    const bar = el('div', { class: 'v3-stage' }), sbtn = [];
+    const stage = (k) => {
+      sbtn.forEach((b, i) => b.classList.toggle('on', i === k));
+      setLayer('sampling', k >= 1); if (k === 2) setLayer('proposed', true);   // proposed options a site already shows (Kathu KFC option) keep their own switch
+      for (const o of staged) o.visible = o.userData.stage === 'future' ? k === 2 : k === 1;
+      stageAt = k; walkAt = -1; idle();
+    };
+    t.stages.forEach((s0, i) => { if (i === 2 && !S.hasFuture && !proposedAll) return; const b = el('button', { type: 'button', title: t.stageTip[i] }, s0); b.onclick = () => stage(i); sbtn[i] = b; bar.append(b); });
+    box.append(bar);
+    // legend and the result colouring switch
+    const leg = el('div', { class: 'leg' });
+    leg.append(el('b', {}, t.sampleLeg));
+    const key = (c, txt, shape) => { const r = el('span'), i = el('i'); i.style.cssText = `display:inline-block;width:10px;height:10px;margin-right:6px;vertical-align:-1px;background:${c};${shape}`; r.append(i, txt); leg.append(r); };
+    key('#e02020', t.st.existing, 'border-radius:50%'); key('#ffc000', t.st.new, 'border-radius:50%'); key('#00b0f0', t.st.construction, '');
+    key('#ff66cc', t.st.ows, 'clip-path:polygon(50% 0,100% 100%,0 100%)');
+    key('#e71224', t.g21, 'height:4px;vertical-align:2px'); key('#33ccff', t.g22, 'height:4px;vertical-align:2px');
+    rows.append(el('hr'), leg);
+    const RES = { pass: 0x16a34a, fail: 0xdc2626, pending: 0x9ca3af }, resMats = {}, keep = new Map();
+    check(t.byResult, false, (on) => {
+      for (const [id, list] of byId) for (const o of list) {
+        if (!o.userData.tag) continue;   // only the head changes colour
+        if (on) { if (!keep.has(o)) keep.set(o, o.material); const k = verdict(o.userData.sample); resMats[k] ||= new THREE.MeshStandardMaterial({ color: RES[k], roughness: 0.6 }); o.material = resMats[k]; }
+        else if (keep.has(o)) { o.material = keep.get(o); keep.delete(o); }
+      }
+    });
+    // summary on the idle card, in the deck's words ("2.1 – 2 samples – 4 parameters tested")
+    sampleSummary = () => {
+      const p0 = el('p');
+      if (S.risk) p0.append(el('span', { class: 'risk ' + S.risk }, `${S.risk}`));
+      card.insertBefore(p0, card.firstChild);
+      let after = p0;
+      for (const c of (stageAt === 2 ? S.futureCounts : S.counts)) { const p = el('p'); p.append(el('span', { class: c.group === 'G2.1' ? 'g21' : 'g22' }, c.group.replace(/G/g, '')), ` – ${t.samples(c.samples)} – ${t.params(c.params)}`); after.after(p); after = p; }
+      if (S.source) card.append(el('p', { class: 's' }, name(S.source)));
+    };
+    // the card of one sampling point
+    let walkAt = -1;
+    pickSample = (o) => {
+      unpick(); const sm = o.userData.sample, list = byId.get(sm.id) || [o];
+      const head = list.find((q) => q.userData.tag) || o; picked = head; pickedMat = head.material;
+      const m = head.material.clone(); m.emissive = new THREE.Color(0xffffff); m.emissiveIntensity = 0.25; head.material = m;
+      for (const n of sm.upstream || []) root.traverse((q) => {
+        const u = q.userData; if (!q.isMesh || u.sample || !u.en || !(u.en === n || u.en.startsWith(n) || u.tag === n)) return;
+        const mm = q.material.clone(); mm.emissive = new THREE.Color(0x00c2ff); mm.emissiveIntensity = 0.7; mm.opacity = Math.max(mm.opacity, 0.9); lit.push([q, q.material]); q.material = mm;
+      });
+      card.replaceChildren();
+      const x = el('button', { type: 'button', class: 'x', title: t.close, 'aria-label': t.close }, '×'); x.onclick = () => { walkAt = -1; idle(); };
+      card.append(x, el('b', {}, name(o.userData)));
+      const gl = el('p'); sm.group.split('+').forEach((g, i) => { if (i) gl.append(' + '); gl.append(el('span', { class: g === 'G2.1' ? 'g21' : 'g22' }, name(S.groups[g]))); }); card.append(gl);
+      if (sm.where) card.append(el('p', {}, `${t.take}: ${name(sm.where)}`));
+      card.append(el('p', {}, `${t.samples(sm.samples)} · ${t.level(f2s(sm.level), (sm.ground - sm.level).toFixed(2), sm.levelAssumed)}`));
+      const v = sm.result?.values || null, tb = el('table'), hr = el('tr');
+      for (const h of [t.tested, t.limit, ...(v ? [t.result] : [])]) hr.append(el('th', {}, h));
+      tb.append(hr);
+      for (const k of sm.params) {
+        const [lo, hi] = sm.limits[k], tr = el('tr'), unit = k === 'pH' ? '' : ` ${t.mgl}`;
+        tr.append(el('td', {}, name(S.params[k])), el('td', {}, lo != null && hi != null ? `${lo} – ${hi}` : `≤ ${hi}${unit}`));
+        if (v) { const xv = v[k], bad = xv != null && ((lo != null && xv < lo) || (hi != null && xv > hi)); tr.append(el('td', { class: xv == null ? '' : bad ? 'bad' : 'ok', title: xv == null ? '' : bad ? t.fail : t.pass }, xv == null ? '–' : String(xv))); }
+        tb.append(tr);
+      }
+      if (v) card.append(el('p', {}, t.resultOn(sm.result.date || '', sm.result.lab || '')));
+      card.append(tb);
+      if (!v) card.append(el('p', { class: 's' }, t.noResult));
+      if (sm.upstream?.length) card.append(el('p', {}, `${t.drains}: ${sm.upstream.join(', ')}`));
+      if (sm.note) card.append(el('p', {}, name(sm.note)));
+      const src = (l === 'th' ? o.userData.infoTh : o.userData.infoEn) || []; if (src.length) card.append(el('p', { class: 's' }, src[src.length - 1]));
+      if (walkAt >= 0) {
+        const nav = el('div', { class: 'nav' }), a = el('button', { type: 'button' }, t.prev), b = el('button', { type: 'button' }, t.next);
+        a.disabled = walkAt === 0; b.disabled = walkAt === order.length - 1;
+        a.onclick = () => walk(walkAt - 1); b.onclick = () => walk(walkAt + 1);
+        nav.append(a, el('span', {}, `${walkAt + 1} ${t.of} ${order.length}`), b); card.append(nav);
+      }
+    };
+    // walk-through: fly to each point in turn, in the order of sampling.json
+    const walk = (i) => {
+      if (stageAt === 0) stage(1);
+      order = visibleOrder(); setLayer('sampling', true);
+      walkAt = Math.max(0, Math.min(order.length - 1, i));
+      const list = byId.get(order[walkAt]), o = list.find((q) => q.userData.tag) || list[0];
+      const sm = o.userData.sample, b = new THREE.Box3(); list.forEach((q) => b.expandByObject(q)); const c = b.getCenter(new THREE.Vector3());
+      const tgt = [c.x, sm.ground, c.z], pos = [c.x + 6, sm.ground + 9, c.z + 12];
+      go(scaled(pos), scaled(tgt), 700); pickSample(o);
+    };
+    const wb = el('button', { type: 'button', class: 'v3-walk' }, `▶ ${t.walk}`); wb.onclick = () => walk(walkAt < 0 ? 0 : walkAt); vbar.append(wb);
+    stage(1);
   }
 
   // ---- north arrow (turns with the view)
@@ -204,7 +343,7 @@ export async function show(view, url, w, lang = 'en') {
     controls.update(); renderer.render(scene, camera);
     const W = box.clientWidth, H = box.clientHeight, ky = root.scale.y;
     for (const m of marks) {
-      let on = showKind[m.kind] && (!m.layer || m.layer.visible);
+      let on = showKind[m.kind] && (!m.layer || m.layer.visible) && (!m.o || m.o.visible);
       if (on) { v.set(m.p.x, m.p.y * ky, m.p.z).project(camera); on = v.z < 1 && Math.abs(v.x) < 1.05 && Math.abs(v.y) < 1.05; }
       m.s.style.display = on ? '' : 'none';
       if (on) m.s.style.transform = `translate(${((v.x + 1) / 2 * W).toFixed(1)}px, ${((1 - v.y) / 2 * H).toFixed(1)}px) translate(-50%, -50%)`;

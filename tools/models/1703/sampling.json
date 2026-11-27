@@ -1,0 +1,304 @@
+{
+ "risk": "HIGH",
+ "source": {
+  "en": "Caltex deck \"Caltex WWT Improvement - SPP Sites R1\" (Thada, 15 Oct 2026), the site slide and its FUTURE slide; point counts as in the Sampling Counts R2 sheet. Each marker is put on the outlet, trap or tank it sits on in the deck.",
+  "th": "เอกสารของ Caltex \"Caltex WWT Improvement - SPP Sites R1\" (คุณธาดา 15 ต.ค. 2026) หน้าสถานีและหน้า FUTURE จำนวนจุดตามตาราง Sampling Counts R2 แต่ละจุดวางบนบ่อทางออก บ่อดัก หรือถังที่จุดนั้นอยู่ในเอกสาร"
+ },
+ "points": [
+  {
+   "id": "S1",
+   "group": "G2.1+G2.2",
+   "status": "existing",
+   "samples": 1,
+   "src": "deck",
+   "stage": "now",
+   "at": "Oil trap (3 chambers) · west outfall (entrance side)",
+   "where": {
+    "en": "at the outlet chamber of the trap, where the water leaves for the public drain",
+    "th": "ที่ช่องทางออกของบ่อดัก ก่อนน้ำออกสู่ท่อสาธารณะ"
+   }
+  },
+  {
+   "id": "S2",
+   "group": "G2.1+G2.2",
+   "status": "existing",
+   "samples": 1,
+   "src": "deck",
+   "stage": "now",
+   "at": "Oil trap (3 chambers) · east outfall (exit side)",
+   "where": {
+    "en": "at the outlet chamber of the trap, where the water leaves for the public drain",
+    "th": "ที่ช่องทางออกของบ่อดัก ก่อนน้ำออกสู่ท่อสาธารณะ"
+   },
+   "upstream": [
+    "SP-T-15,000 L",
+    "KFC",
+    "Shop row"
+   ],
+   "note": {
+    "en": "19 Nov 2026: water level high; the pipe from the OWS to the public sewer is likely broken or clogged. Aqua also sampled the combined tank to find the cause (not on the deck map).",
+    "th": "สำรวจ 19 พ.ย. 2026: ระดับน้ำสูง ท่อจาก OWS ไปท่อสาธารณะน่าจะแตกหรืออุดตัน Aqua เก็บตัวอย่างถังรวมเพิ่มเพื่อหาสาเหตุ (ไม่มีในแผนผังของเอกสาร)"
+   }
+  },
+  {
+   "id": "S3",
+   "group": "G2.2",
+   "status": "new",
+   "samples": 1,
+   "src": "deck",
+   "stage": "now",
+   "at": "Manhole E10",
+   "where": {
+    "en": "in manhole E10 on the east drain, beside the KFC kitchen",
+    "th": "ในบ่อพัก E10 รางด้านตะวันออก ข้างครัว KFC"
+   },
+   "upstream": [
+    "KFC",
+    "SP-T-15,000 L",
+    "KFC grease trap"
+   ]
+  },
+  {
+   "id": "F1",
+   "group": "G2.1",
+   "status": "existing",
+   "samples": 1,
+   "src": "deck",
+   "stage": "future",
+   "at": "Oil trap (3 chambers) · west outfall (entrance side)",
+   "where": {
+    "en": "at the outlet chamber of the trap, where the water leaves for the public drain",
+    "th": "ที่ช่องทางออกของบ่อดัก ก่อนน้ำออกสู่ท่อสาธารณะ"
+   },
+   "upstream": [
+    "Pump canopy"
+   ]
+  },
+  {
+   "id": "F2",
+   "group": "G2.2",
+   "status": "existing",
+   "samples": 1,
+   "src": "deck",
+   "stage": "future",
+   "at": "Oil trap (3 chambers) · east outfall (exit side)",
+   "where": {
+    "en": "at the outlet chamber of the trap, where the water leaves for the public drain",
+    "th": "ที่ช่องทางออกของบ่อดัก ก่อนน้ำออกสู่ท่อสาธารณะ"
+   },
+   "upstream": [
+    "SP-T-20,000 L",
+    "SP-T-18,000 L",
+    "Shop row",
+    "KFC"
+   ]
+  },
+  {
+   "id": "F3",
+   "group": "G2.1",
+   "status": "new",
+   "samples": 1,
+   "src": "deck",
+   "stage": "future",
+   "at": "Manhole M6",
+   "where": {
+    "en": "in manhole M6, on the car wash water line",
+    "th": "ในบ่อพัก M6 บนแนวน้ำจากที่ล้างรถ"
+   }
+  },
+  {
+   "id": "F4",
+   "group": "G2.1",
+   "status": "construction",
+   "samples": 1,
+   "src": "deck",
+   "x": 112.9,
+   "y": 27.1,
+   "where": {
+    "en": "new sampling chamber at the front, by manhole SE4",
+    "th": "บ่อเก็บตัวอย่างใหม่ด้านหน้า ข้างบ่อพัก SE4"
+   },
+   "upstream": [
+    "Pump canopy"
+   ]
+  },
+  {
+   "id": "F5",
+   "group": "G2.2",
+   "status": "new",
+   "samples": 1,
+   "src": "deck",
+   "stage": "future",
+   "x": 129.0,
+   "y": 116.5,
+   "where": {
+    "en": "after the new treatment behind the shops (the deck draws it just outside the east boundary)",
+    "th": "ต่อจากระบบบำบัดใหม่หลังร้านค้า (ในเอกสารวาดไว้นอกแนวเขตด้านตะวันออกเล็กน้อย)"
+   },
+   "upstream": [
+    "SP-T-20,000 L"
+   ]
+  }
+ ],
+ "routes": [
+  {
+   "group": "G2.1",
+   "pts": [
+    [
+     61.93,
+     29.92
+    ],
+    [
+     62.12,
+     116.69
+    ]
+   ]
+  },
+  {
+   "group": "G2.1",
+   "pts": [
+    [
+     61.68,
+     93.35
+    ],
+    [
+     110.45,
+     93.3
+    ]
+   ]
+  },
+  {
+   "group": "G2.1",
+   "pts": [
+    [
+     109.64,
+     94.31
+    ],
+    [
+     107.54,
+     24.63
+    ]
+   ]
+  },
+  {
+   "group": "G2.1",
+   "pts": [
+    [
+     66.54,
+     26.17
+    ],
+    [
+     110.47,
+     26.14
+    ]
+   ]
+  },
+  {
+   "group": "G2.2",
+   "pts": [
+    [
+     95.69,
+     136.73
+    ],
+    [
+     131.22,
+     136.84
+    ]
+   ]
+  },
+  {
+   "group": "G2.2",
+   "pts": [
+    [
+     130.63,
+     102.72
+    ],
+    [
+     130.63,
+     137.69
+    ]
+   ]
+  },
+  {
+   "group": "G2.2",
+   "pts": [
+    [
+     130.62,
+     29.12
+    ],
+    [
+     130.77,
+     104.64
+    ]
+   ]
+  },
+  {
+   "group": "G2.2",
+   "pts": [
+    [
+     125.27,
+     31.21
+    ],
+    [
+     125.22,
+     49.68
+    ]
+   ]
+  },
+  {
+   "group": "G2.1",
+   "pts": [
+    [
+     111.63,
+     94.0
+    ],
+    [
+     99.38,
+     127.43
+    ]
+   ]
+  },
+  {
+   "group": "G2.1",
+   "pts": [
+    [
+     116.95,
+     112.49
+    ],
+    [
+     126.55,
+     112.58
+    ]
+   ]
+  }
+ ],
+ "future": [
+  {
+   "type": "ows",
+   "x": 128.6,
+   "y": 121.5,
+   "note": {
+    "en": "Behind the shops, by the SP-T-20,000 L tank: new treatment for the shop and toilet water (the deck draws it on the east boundary).",
+    "th": "หลังร้านค้า ข้างถัง SP-T-20,000 L: ระบบบำบัดใหม่สำหรับน้ำจากร้านค้าและห้องน้ำ (ในเอกสารวาดบนแนวเขตด้านตะวันออก)"
+   }
+  },
+  {
+   "type": "ows",
+   "x": 125.1,
+   "y": 41.3,
+   "note": {
+    "en": "Beside KFC: new treatment after the KFC tanks.",
+    "th": "ข้าง KFC: ระบบบำบัดใหม่ต่อจากถังของ KFC"
+   }
+  },
+  {
+   "type": "ows",
+   "x": 62.4,
+   "y": 120.3,
+   "note": {
+    "en": "West side by the car wash: new OWS for the car wash water.",
+    "th": "ด้านตะวันตกข้างที่ล้างรถ: OWS ใหม่สำหรับน้ำจากการล้างรถ"
+   }
+  }
+ ]
+}
