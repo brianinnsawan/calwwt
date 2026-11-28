@@ -107,6 +107,8 @@ image agrees); price sign is one solid pylon on a 0.5 m plinth (no posts; propor
 water-tank screen has three sides and closes on the new firewall along the south boundary (almost see-through, 3.0 m assumed);
 the as-built lying tank behind building A removed (no tank there); at the west end the kerb line (run G) no longer joins the
 front strip: its last manhole runs to the west oil trap (S2), and the three west cross links (not on the sheet) were removed.
+Garbage room (Brian, 28 Nov 2026, garbage room sanitary plan): no grease trap or treatment tank; the design tank T10 is
+removed and the floor drain's 3" PVC waste pipe runs to the manhole on the firewall drain.
 Still to ask: the four cross lines east of building B (pipes or paving joints?) and which two tanks by the office face the
 other way.
 
