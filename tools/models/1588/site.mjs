@@ -7,7 +7,7 @@
 //      WITHOUT any label: a lying tank with three covers in front of building A, and two round outlines plus a square pit
 //      east of building B. Its scale box says "NO"; the boundary measures 94.056 m against the written 94056, so it is 1:250.
 //   B  1588-SN-103-wastewater-layout.pdf = SN-103 "wastewater collection layout", FOR SUBMISSION 29/03/2019 (Contour / U Plus).
-//      A DESIGN drawing, not an as-built: treatment tanks 7.50, 6.00, 4.00 and 1.00 m3, grease trap 6.00 m3, pipe routes.
+//      A DESIGN drawing, not an as-built: treatment tanks 7.50, 6.00, 4.00 and 1.00 m3 (the 1.00 at the garbage room was never built), grease trap 6.00 m3, pipe routes.
 //   C  1588-SN-101-drainage-layout.pdf = SN-101 design drainage layout (same submission set). Used only for the direction of
 //      flow (its slope arrows); the as-built sheet A replaces everything else on it.
 // NO LEVELS are written on any of the three sheets. Every depth in this file is an assumption and is marked as one.
@@ -48,11 +48,8 @@ const DESIGN = [
     box: [[76.52, 39.61], [76.52, 40.52], [77.42, 40.53]],
     asBuilt: { en: 'The as-built drainage sheet shows two round outlines and a square pit 1 to 2.5 m east of here. This tank was probably built as one of them. Confirm on site.', th: 'แบบก่อสร้างจริงแสดงแนววงกลม 2 วงและบ่อสี่เหลี่ยม ห่างไปทางตะวันออก 1 ถึง 2.5 ม. ถังนี้น่าจะสร้างจริงเป็นหนึ่งในนั้น ต้องยืนยันหน้างาน' },
     outNote: { en: 'On the sheet the line ends at a round symbol in the planting strip. The sheet does not say what it joins.', th: 'ในแบบ เส้นท่อไปสิ้นสุดที่สัญลักษณ์วงกลมในแถบจัดสวน แบบไม่ได้ระบุว่าต่อกับอะไร' } },
-  { id: 'T10', vol: 1.0, x: 98.97, y: 40.12, r: 0.61, where: { en: 'garbage room', th: 'ห้องพักขยะ' }, serves: { en: 'Takes the wash water from the garbage room.', th: 'รับน้ำล้างจากห้องพักขยะ' },
-    inPts: [[95.94, 40.12], [98.36, 40.12]], outPts: [[99.58, 40.12], [101.19, 40.12], [101.89, 39.42], [101.88, 37.93]],
-    box: [[99.06, 40.38], [99.06, 40.88], [99.78, 40.89]],
-    asBuilt: { en: 'The garbage room of the design is not on the as-built sheet. That sheet shows a smaller room just east of this spot and no tank. Confirm on site whether this tank exists.', th: 'ห้องพักขยะตามแบบออกแบบไม่มีในแบบก่อสร้างจริง แบบก่อสร้างจริงแสดงห้องขนาดเล็กกว่าอยู่ถัดไปทางตะวันออก และไม่มีถัง ต้องยืนยันหน้างานว่ามีถังนี้หรือไม่' },
-    outNote: { en: 'As designed the pipe runs through the spot where the as-built sheet shows the small room, so the layout here changed. Check on site.', th: 'ตามแบบออกแบบ ท่อเดินผ่านตำแหน่งที่แบบก่อสร้างจริงแสดงห้องขนาดเล็ก แสดงว่าผังบริเวณนี้เปลี่ยนไป ต้องตรวจสอบหน้างาน' } },
+  // T10 (1.00 m³ tank at the garbage room on SN-103) was never built: the garbage room has no grease trap or treatment tank,
+  // its floor drain goes straight to the site drain (Brian, 28 Nov 2026, garbage room sanitary plan). See the garbage room below.
 ];
 // Tank models approved by Chevron for Porto Go (Biotech spec pack, Aug 2019, in Sites\1588 Samut Sakhon\03 Drawings\Tank documents;
 // also a layout on the site page): BG-600 grease trap; BO-1000, BO-4000, BO-6000 upright treatment tanks; BO-R-7500 lying tank.
@@ -61,7 +58,7 @@ const BIOTECH = {
   T75: { en: 'Approved model (Biotech spec pack, Aug 2019): BO-R-7500, a LYING 7,500 L tank with a DLX-80 air pump. The lying tank outline on the as-built sheet behind building A does not exist on site (Brian, 28 Nov 2026).', th: 'รุ่นที่อนุมัติ (เอกสาร Biotech ส.ค. 2019): BO-R-7500 ถังแบบนอน 7,500 ลิตร พร้อมเครื่องเติมอากาศ DLX-80 แนวถังแบบนอนด้านหลังอาคาร A ในแบบก่อสร้างจริงไม่มีอยู่จริงที่หน้างาน (Brian, 28 พ.ย. 2026)' },
   T60: { en: 'Approved model (Biotech spec pack, Aug 2019): BO-6000, 6,000 L, with a DLX-120 air pump.', th: 'รุ่นที่อนุมัติ (เอกสาร Biotech ส.ค. 2019): BO-6000 ขนาด 6,000 ลิตร พร้อมเครื่องเติมอากาศ DLX-120' },
   T40: { en: 'Approved model (Biotech spec pack, Aug 2019): BO-4000, 4,000 L, with a DLX-80 air pump.', th: 'รุ่นที่อนุมัติ (เอกสาร Biotech ส.ค. 2019): BO-4000 ขนาด 4,000 ลิตร พร้อมเครื่องเติมอากาศ DLX-80' },
-  T10: { en: 'Approved model (Biotech spec pack, Aug 2019): BO-1000, 1,000 L, with a DL-40 air pump.', th: 'รุ่นที่อนุมัติ (เอกสาร Biotech ส.ค. 2019): BO-1000 ขนาด 1,000 ลิตร พร้อมเครื่องเติมอากาศ DL-40' },
+  // T10: the pack also approved a BO-1000 for the garbage room; it was not installed (Brian, 28 Nov 2026).
 };
 const GT = { x: 72.86, y: 39.36, side: 1.1, depth: 1.2 };   // design grease trap: 1.1 m square on the sheet
 const GT_IN = [[70.05, 41.50], [70.05, 39.70], [70.39, 39.36], [71.75, 39.36], [72.31, 39.36]];
@@ -135,7 +132,7 @@ export default {
     { id: 'plan', from: [66, 46.9, 140], to: [66, 47, 0] },
     { id: 'a', en: 'Building A tanks', th: 'ถังที่อาคาร A', from: [52, 20.5, 13], to: [53, 38, -1] },
     { id: 'b', en: 'Building B tanks', th: 'ถังที่อาคาร B', from: [80.5, 26.5, 10], to: [76.3, 38.6, -1] },
-    { id: 'garbage', en: 'Garbage room tank (design)', th: 'ถังที่ห้องพักขยะ (ตามแบบออกแบบ)', from: [103.5, 31.5, 6.5], to: [99.3, 39.8, -0.6] },
+    { id: 'garbage', en: 'Garbage room floor drain', th: 'ท่อระบายพื้นห้องพักขยะ', from: [103.5, 31.5, 6.5], to: [99.3, 39.8, -0.6] },
     { id: 'bld', en: 'Buildings, kiosks and water tanks', th: 'อาคาร ซุ้มร้านค้า และถังน้ำ', from: [30, 58, 14], to: [52, 40, 1] },
     { id: 'carwash', en: 'Car wash (south-east plot)', th: 'ล้างรถ (แปลงตะวันออกเฉียงใต้)', from: [92, 2, 18], to: [113, 22, 1] },
     { id: 'fuel', from: [85, 49, 6], to: [72.7, 65.8, -1.8] },
@@ -413,6 +410,21 @@ export default {
       info: arc(['Garbage room: concrete floor, light steel frame with mesh doors on the parking side and a metal-sheet roof (as in the site video). 3.7 × 2.2 m on the 2021 plan; about 2.4 m to the eaves.'],
         ['ห้องพักขยะ: พื้นคอนกรีต โครงเหล็กเบา ประตูตะแกรงด้านที่จอดรถ หลังคาเมทัลชีท (ตามวิดีโอหน้างาน) ขนาด 3.7 × 2.2 ม. ตามผังปี 2021 สูงถึงชายคาประมาณ 2.4 ม.']) }, V(102.85, 39.66, 3.4));
     add('buildings', tbox(4.4, 2.8, 0.12, 102.85, 39.66, 2.5, 0.2), 'roof', { en: 'Garbage room roof', th: 'หลังคาห้องพักขยะ', nopick: 1 });
+    // Garbage room drainage (Brian, 28 Nov 2026; garbage room sanitary plan "แบบแปลนสุขาภิบาลห้องพักขยะ", 1:50): NO grease trap or
+    // treatment tank. A floor drain (FD) in the corner by the firewall, then a 3" PVC waste pipe at 1:200 out through the west
+    // wall and back to the manhole on the drain along the firewall. Levels assumed (floor +0.50 on the plan; the model's ground is ±0.00).
+    {
+      const fd = [101.22, 38.82], mh = [100.33, 36.95], mhL = levelAt.get(key(...mh)) ?? -0.8;
+      const pts = [[...fd, -0.30], [mh[0], fd[1], -0.31], [mh[0], mh[1] + 0.45, Math.max(mhL + 0.05, -0.33)]];
+      pipe('sewer', pts, 0.045, 'sewerRaw', { en: 'Garbage room waste pipe (PVC 3")', th: 'ท่อน้ำทิ้งห้องพักขยะ (PVC 3")', tag: 'Garbage room drain', tagTh: 'ท่อระบายห้องพักขยะ', kind: 'pipe',
+        info: (m) => notes([`About ${m} m. Waste pipe PVC 3" from the floor drain of the garbage room to the manhole on the drain along the firewall, slope 1:200 (garbage room sanitary plan).`,
+          'The garbage room has NO grease trap and NO treatment tank (Brian, 28 Nov 2026): its wash water goes untreated into the site drain, which runs to the south-west oil trap. The 1.00 m³ tank drawn here on the 2019 design sheet SN-103 was never built.',
+          `Levels assumed: about ${as(-0.30)} at the floor drain, joining the manhole at about ${as(last(pts)[2])}.`],
+          [`ยาวประมาณ ${m} ม. ท่อน้ำทิ้ง PVC 3" จากรูระบายน้ำทิ้งพื้นห้องพักขยะไปบ่อพักบนท่อระบายน้ำตามแนวกำแพงกันไฟ ลาด 1:200 (แบบแปลนสุขาภิบาลห้องพักขยะ)`,
+            'ห้องพักขยะไม่มีถังดักไขมันและไม่มีถังบำบัด (Brian, 28 พ.ย. 2026) น้ำล้างไหลลงท่อระบายน้ำของสถานีโดยไม่ผ่านการบำบัด แล้วไปบ่อดักน้ำมันมุมตะวันตกเฉียงใต้ ถัง 1.00 ลบ.ม. ในแบบออกแบบ SN-103 ปี 2019 ไม่ได้ก่อสร้าง',
+            `ระดับเป็นค่าสมมติ: ประมาณ ${as(-0.30)} ที่รูระบาย ต่อเข้าบ่อพักที่ประมาณ ${as(last(pts)[2])}`], P) });
+      add('sewer', merge([cylGeo(0.06, 0.3, fd[0], fd[1], -0.3, 12), cylGeo(0.08, 0.02, fd[0], fd[1], 0, 12)]), 'cover', { en: 'Floor drain (garbage room)', th: 'รูระบายน้ำทิ้งพื้น (ห้องพักขยะ)', nopick: 1 });
+    }
 
     // Clean-water tanks (2 × 10,000 L, circles of Ø2.0 m on the 2021 plan) inside a white slatted screen with a 1.2 m door
     [[89.67, 39.12], [92.32, 39.17]].forEach(([x, y], i) => add('water', cylGeo(1.0, 3.2, x, y, 0.15, 32), 'waterTank', { en: `Clean-water tank ${i + 1} (10,000 L)`, th: `ถังน้ำดี ${i + 1} (10,000 ลิตร)`, kind: 'tank',
