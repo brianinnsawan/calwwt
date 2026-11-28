@@ -102,6 +102,13 @@ DWG / 1000 + (-359.08, 21.93), boundary corners within 0.15 m) and the 360 video
 stall roof with two sinks and under-sink grease traps, lean-tos and lockers behind the office, benches and clutter,
 garbage room, two fenced 10,000 L clean-water tanks, pump canopy (moved about 2.4 m south), highway and price signs, car
 wash. The second canopy is only an outline (not built).
+28 Nov 2026 corrections from Brian: the coffee shop (Chao Doi) moved 5 m west, about 6.5 m clear of the toilets (satellite
+image agrees); price sign is one solid pylon on a 0.5 m plinth (no posts; proportions in the video match the sheet's 2.0 x 8.0 m);
+water-tank screen has three sides and closes on the new firewall along the south boundary (almost see-through, 3.0 m assumed);
+the as-built lying tank behind building A removed (no tank there); at the west end the kerb line (run G) no longer joins the
+front strip: its last manhole runs to the west oil trap (S2), and the three west cross links (not on the sheet) were removed.
+Still to ask: the four cross lines east of building B (pipes or paving joints?) and which two tanks by the office face the
+other way.
 
 ## 1156 Samut Prakan (rough first version, 26 Nov 2026, NO DRAWINGS)
 There are no drawings of this site. Outlines come from the Esri World Imagery satellite image (zoom 19, 0.29 m a pixel),

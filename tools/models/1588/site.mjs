@@ -36,12 +36,12 @@ const DESIGN = [
   { id: 'T75', vol: 7.5, x: 42.66, y: 37.94, r: 1.165, where: { en: 'west end of building A', th: 'ปลายด้านตะวันตกของอาคาร A' }, serves: { en: 'Takes the wastewater from the west toilets of building A.', th: 'รับน้ำเสียจากห้องน้ำฝั่งตะวันตกของอาคาร A' },
     inPts: [[46.73, 41.37], [43.27, 41.37], [42.66, 40.76], [42.66, 39.10]], outPts: [[42.66, 36.78], [42.66, 34.93], [42.05, 34.32], [38.58, 34.33]],
     box: [[42.30, 37.74], [41.09, 37.74], [41.07, 36.80]],
-    asBuilt: { en: 'The as-built drainage sheet shows no tank at this spot; it shows one lying tank in front of building A instead.', th: 'แบบก่อสร้างจริงไม่แสดงถังที่ตำแหน่งนี้ แต่แสดงถังแบบนอน 1 ใบหน้าอาคาร A แทน' },
+    asBuilt: { en: 'The as-built drainage sheet shows no tank at this spot. (It draws a lying tank along the back of building A, but Brian confirmed on 28 Nov 2026 that no tank exists there.)', th: 'แบบก่อสร้างจริงไม่แสดงถังที่ตำแหน่งนี้ (แบบเขียนถังแบบนอนไว้ด้านหลังอาคาร A แต่ Brian ยืนยันเมื่อ 28 พ.ย. 2026 ว่าไม่มีถังที่นั่น)' },
     outNote: { en: 'On the sheet the line ends at a round symbol about 1.7 m outside the south boundary. The sheet does not say what it joins; on the as-built sheet the buried site drain runs along this boundary.', th: 'ในแบบ เส้นท่อไปสิ้นสุดที่สัญลักษณ์วงกลมนอกแนวเขตด้านใต้ประมาณ 1.7 ม. แบบไม่ได้ระบุว่าต่อกับอะไร ในแบบก่อสร้างจริงมีท่อระบายน้ำฝังใต้ดินเดินตามแนวเขตนี้' } },
   { id: 'T60', vol: 6.0, x: 63.79, y: 38.14, r: 1.03, where: { en: 'between buildings A and B', th: 'ระหว่างอาคาร A กับอาคาร B' }, serves: { en: 'Takes the wastewater from the east toilets of building A.', th: 'รับน้ำเสียจากห้องน้ำฝั่งตะวันออกของอาคาร A' },
     inPts: [[59.72, 41.47], [63.19, 41.47], [63.79, 40.87], [63.79, 39.17]], outPts: [[63.79, 37.11], [63.79, 33.76], [63.19, 33.16], [59.71, 33.16]],
     box: [[64.03, 37.93], [65.13, 37.93], [65.13, 37.00]],
-    asBuilt: { en: 'The as-built drainage sheet shows no tank at this spot; it shows one lying tank in front of building A instead.', th: 'แบบก่อสร้างจริงไม่แสดงถังที่ตำแหน่งนี้ แต่แสดงถังแบบนอน 1 ใบหน้าอาคาร A แทน' },
+    asBuilt: { en: 'The as-built drainage sheet shows no tank at this spot. (It draws a lying tank along the back of building A, but Brian confirmed on 28 Nov 2026 that no tank exists there.)', th: 'แบบก่อสร้างจริงไม่แสดงถังที่ตำแหน่งนี้ (แบบเขียนถังแบบนอนไว้ด้านหลังอาคาร A แต่ Brian ยืนยันเมื่อ 28 พ.ย. 2026 ว่าไม่มีถังที่นั่น)' },
     outNote: { en: 'On the sheet the line ends at a round symbol about 3 m outside the south boundary. The sheet does not say what it joins; on the as-built sheet the buried site drain runs along this boundary.', th: 'ในแบบ เส้นท่อไปสิ้นสุดที่สัญลักษณ์วงกลมนอกแนวเขตด้านใต้ประมาณ 3 ม. แบบไม่ได้ระบุว่าต่อกับอะไร ในแบบก่อสร้างจริงมีท่อระบายน้ำฝังใต้ดินเดินตามแนวเขตนี้' } },
   { id: 'T40', vol: 4.0, x: 76.33, y: 39.37, r: 0.935, where: { en: 'east of building B', th: 'ด้านตะวันออกของอาคาร B' }, serves: { en: 'Takes the water that has passed the grease trap of building B.', th: 'รับน้ำที่ผ่านถังดักไขมันของอาคาร B' },
     inPts: null, outPts: [[77.27, 39.36], [80.52, 39.36]],
@@ -58,7 +58,7 @@ const DESIGN = [
 // also a layout on the site page): BG-600 grease trap; BO-1000, BO-4000, BO-6000 upright treatment tanks; BO-R-7500 lying tank.
 // The FX-10-D1.5 water tank in the pack is struck out. Matched to the SN-103 tanks by volume.
 const BIOTECH = {
-  T75: { en: 'Approved model (Biotech spec pack, Aug 2019): BO-R-7500, a LYING 7,500 L tank with a DLX-80 air pump. The as-built sheet\'s lying tank in front of building A is probably this one.', th: 'รุ่นที่อนุมัติ (เอกสาร Biotech ส.ค. 2019): BO-R-7500 ถังแบบนอน 7,500 ลิตร พร้อมเครื่องเติมอากาศ DLX-80 ถังแบบนอนหน้าอาคาร A ในแบบก่อสร้างจริงน่าจะเป็นถังนี้' },
+  T75: { en: 'Approved model (Biotech spec pack, Aug 2019): BO-R-7500, a LYING 7,500 L tank with a DLX-80 air pump. The lying tank outline on the as-built sheet behind building A does not exist on site (Brian, 28 Nov 2026).', th: 'รุ่นที่อนุมัติ (เอกสาร Biotech ส.ค. 2019): BO-R-7500 ถังแบบนอน 7,500 ลิตร พร้อมเครื่องเติมอากาศ DLX-80 แนวถังแบบนอนด้านหลังอาคาร A ในแบบก่อสร้างจริงไม่มีอยู่จริงที่หน้างาน (Brian, 28 พ.ย. 2026)' },
   T60: { en: 'Approved model (Biotech spec pack, Aug 2019): BO-6000, 6,000 L, with a DLX-120 air pump.', th: 'รุ่นที่อนุมัติ (เอกสาร Biotech ส.ค. 2019): BO-6000 ขนาด 6,000 ลิตร พร้อมเครื่องเติมอากาศ DLX-120' },
   T40: { en: 'Approved model (Biotech spec pack, Aug 2019): BO-4000, 4,000 L, with a DLX-80 air pump.', th: 'รุ่นที่อนุมัติ (เอกสาร Biotech ส.ค. 2019): BO-4000 ขนาด 4,000 ลิตร พร้อมเครื่องเติมอากาศ DLX-80' },
   T10: { en: 'Approved model (Biotech spec pack, Aug 2019): BO-1000, 1,000 L, with a DL-40 air pump.', th: 'รุ่นที่อนุมัติ (เอกสาร Biotech ส.ค. 2019): BO-1000 ขนาด 1,000 ลิตร พร้อมเครื่องเติมอากาศ DL-40' },
@@ -73,6 +73,7 @@ const KIND = {
   pipe: { en: 'buried RC pipe', th: 'ท่อ คสล. ฝังใต้ดิน' },
   vee: { en: 'RC pipe with a V gutter over it', th: 'ท่อ คสล. ราง V' },
   slot: { en: 'RC pipe, narrow-mouth channel', th: 'ท่อ คสล. รางปากแคบ' },
+  link: { en: 'buried pipe from the last kerb-line manhole to the west oil trap. This link is NOT drawn on the as-built sheet: route from Brian (28 Nov 2026), size taken as the line before it', th: 'ท่อฝังใต้ดินจากบ่อพักสุดท้ายของแนวขอบคันหินไปบ่อดักน้ำมันด้านตะวันตก แบบก่อสร้างจริงไม่ได้เขียนท่อช่วงนี้ แนวท่อตาม Brian (28 พ.ย. 2026) ขนาดถือตามท่อช่วงก่อนหน้า' },
   both: { en: 'buried RC pipe with a V gutter beside it', th: 'ท่อ คสล. ฝังใต้ดิน และราง V ขนานกัน' },
 };
 const RUNS = [
@@ -85,19 +86,21 @@ const RUNS = [
   { id: 'S', en: 'south end of the south-east plot', th: 'ปลายด้านใต้ของแปลงตะวันออกเฉียงใต้', start: 'E', pts: [[121.39, 7.20], [112.97, 6.56], [104.64, 6.00]], parts: [[0, 2, 0.30, 'pipe']] },
   { id: 'R', en: 'west side of the south-east plot', th: 'ด้านตะวันตกของแปลงตะวันออกเฉียงใต้', start: 'S', pts: [[104.64, 6.00], [105.20, 15.98], [105.75, 25.97], [106.34, 37.02]], parts: [[0, 3, 0.30, 'pipe']] },
   { id: 'F', en: 'front strip, along the south boundary', th: 'แถบด้านหน้า ตามแนวเขตด้านใต้', start: 'R', pts: [[106.34, 37.02], [100.33, 36.95], [93.92, 36.91], [87.98, 36.85], [82.03, 36.80], [76.08, 36.75], [73.09, 36.72], [65.57, 36.66], [62.34, 36.63], [53.72, 36.55], [44.04, 36.47], [36.18, 36.40], [30.24, 36.35], [24.29, 36.30], [18.34, 36.25], [11.40, 36.60]], parts: [[0, 6, 0.30, 'pipe'], [6, 11, 0.40, 'pipe'], [11, 15, 0.50, 'pipe']] },
-  { id: 'G', en: 'kerb line round the parking and buildings A and B', th: 'แนวขอบคันหินรอบที่จอดรถและอาคาร A และ B', start: DRAIN_START, pts: [[105.78, 40.96], [98.24, 40.89], [93.89, 40.86], [87.94, 40.80], [81.99, 40.75], [76.05, 40.70], [76.00, 46.80], [69.02, 46.74], [59.50, 46.66], [49.97, 46.57], [40.44, 46.49], [40.52, 38.49], [36.17, 38.45], [30.22, 38.40], [24.27, 38.35], [18.32, 38.30], [18.34, 36.25]], parts: [[0, 10, 0.30, 'vee'], [10, 16, 0.50, 'vee']] },
+  { id: 'G', en: 'kerb line round the parking and buildings A and B', th: 'แนวขอบคันหินรอบที่จอดรถและอาคาร A และ B', start: DRAIN_START, pts: [[105.78, 40.96], [98.24, 40.89], [93.89, 40.86], [87.94, 40.80], [81.99, 40.75], [76.05, 40.70], [76.00, 46.80], [69.02, 46.74], [59.50, 46.66], [49.97, 46.57], [40.44, 46.49], [40.52, 38.49], [36.17, 38.45], [30.22, 38.40], [24.27, 38.35], [18.32, 38.30], [15.40, 40.60], [12.30, 43.20]], parts: [[0, 10, 0.30, 'vee'], [10, 15, 0.50, 'vee'], [15, 17, 0.50, 'link']] },
   { id: 'H', en: 'south edge of the forecourt, east part', th: 'ขอบลานด้านใต้ ช่วงตะวันออก', start: DRAIN_START, pts: [[105.78, 40.96], [110.97, 41.02], [122.97, 41.13]], parts: [[0, 2, 0.40, 'slot']] },
 ];
 // run points that are not a sump of their own (a size change, or the end at an outfall pit)
-const NO_SUMP = new Set(['81.2,88.86', '17.81,88.86', '15,88.3', '9.6,43.95', '11.4,36.6']);
+const NO_SUMP = new Set(['81.2,88.86', '17.81,88.86', '15,88.3', '9.6,43.95', '11.4,36.6', '15.4,40.6', '12.3,43.2']);
 // short pipes drawn between a kerb-line sump and the front-strip sump beside it
-const CROSS = [[[24.27, 38.35], [24.29, 36.30]], [[30.22, 38.40], [30.24, 36.35]], [[36.17, 38.45], [36.18, 36.40]], [[76.05, 40.70], [76.08, 36.75]], [[81.99, 40.75], [82.03, 36.80]], [[87.94, 40.80], [87.98, 36.85]], [[93.89, 40.86], [93.92, 36.91]]];
+// (28 Nov 2026, Brian: the three links drawn here at the west end, x 24 to 36, are not on the sheet and do not exist; removed.
+//  The kerb line's last manhole goes to the west oil trap instead, see run G.)
+const CROSS = [[[76.05, 40.70], [76.08, 36.75]], [[81.99, 40.75], [82.03, 36.80]], [[87.94, 40.80], [87.98, 36.85]], [[93.89, 40.86], [93.92, 36.91]]];
 // second sump at each pump island, joined to the canopy line
 const ISLAND = [[56.87, 67.56], [46.87, 67.56], [36.87, 67.56], [26.87, 67.56]];
 // grated pits (three gratings each) where the drains leave the site towards the highway: [x, y, rotation, run that ends here]
 const PITS = [
   { x: 16.11, y: 88.86, rot: 0, runs: ['N', 'W'], en: 'north-west', th: 'มุมตะวันตกเฉียงเหนือ' },
-  { x: 10.65, y: 43.56, rot: 6.3, runs: ['X'], en: 'west', th: 'ด้านตะวันตก' },
+  { x: 10.65, y: 43.56, rot: 6.3, runs: ['X', 'G'], en: 'west', th: 'ด้านตะวันตก' },
   { x: 9.72, y: 36.69, rot: -7.1, runs: ['F'], en: 'south-west', th: 'มุมตะวันตกเฉียงใต้' },
 ];
 
@@ -151,27 +154,8 @@ export default {
     const last = (a) => a[a.length - 1];
 
     // ---------- tanks shown (without a name) on the as-built sheet
-    { // lying tank in front of building A: end arcs at x = 50.29 and 57.19, 2.00 m across, three covers
-      const x = 53.74, y = 37.52, rot = 0.5, len = 6.9, r = 1.0, top = -COVER, axis = top - r;
-      const parts = [capsuleGeo(r, len, x, y, axis, rot)];   // lying capsule, slightly rounded ends
-      add('asbuilt', merge(parts), 'tankOlder', { en: 'Lying tank in front of building A (as-built sheet, not named)', th: 'ถังแบบนอนหน้าอาคาร A (ตามแบบก่อสร้างจริง ไม่ระบุชื่อ)', tag: 'Lying tank (not named)', tagTh: 'ถังแบบนอน (ไม่ระบุชื่อ)', kind: 'tank',
-        info: ab(['Outline of a lying tank with three round covers, along the south wall of building A (toilets). The outline is 6.90 m long and 2.00 m across.',
-          'The as-built drainage sheet shows the outline only: no name, size, level or pipes.',
-          'The 2019 design sheet SN-103 shows no tank here. It shows two upright tanks instead: 7.50 m³ at the west end of building A and 6.00 m³ at the east end. This lying tank may have been built in their place. Confirm on site which tanks exist.',
-          'The approved tank list (Biotech spec pack, Aug 2019) has one lying tank, the BO-R-7500 (7,500 L), for the west toilets of building A: this outline is probably that tank.',
-          'As drawn, its north edge is about 0.2 m under the wall line of building A, and a manhole of the buried site drain sits on its south edge. Check on site.',
-          `Depth assumed: ${COVER.toFixed(2)} m of cover, so top ${as(top)} and underside ${as(top - 2 * r)}.`],
-        ['แนวถังแบบนอน มีฝากลม 3 ฝา อยู่ตามแนวผนังด้านใต้ของอาคาร A (ห้องน้ำ) แนวถังยาว 6.90 ม. กว้าง 2.00 ม.',
-          'แบบก่อสร้างจริงแสดงเฉพาะแนวถัง ไม่มีชื่อ ขนาด ระดับ หรือท่อ',
-          'แบบออกแบบ SN-103 ปี 2019 ไม่มีถังที่ตำแหน่งนี้ แต่แสดงถังแบบตั้ง 2 ใบ: 7.50 ลบ.ม. ที่ปลายด้านตะวันตกของอาคาร A และ 6.00 ลบ.ม. ที่ปลายด้านตะวันออก ถังแบบนอนนี้อาจสร้างแทนถังทั้งสองใบ ต้องยืนยันหน้างานว่ามีถังใดอยู่จริง',
-          'รายการถังที่อนุมัติ (เอกสาร Biotech ส.ค. 2019) มีถังแบบนอน 1 ใบ คือ BO-R-7500 (7,500 ลิตร) สำหรับห้องน้ำฝั่งตะวันตกของอาคาร A แนวถังนี้น่าจะเป็นถังดังกล่าว',
-          'ตามที่เขียนในแบบ ขอบถังด้านเหนือล้ำเข้าไปใต้แนวผนังอาคาร A ประมาณ 0.2 ม. และมีบ่อพักของท่อระบายน้ำฝังใต้ดินอยู่ตรงขอบถังด้านใต้ ต้องตรวจสอบหน้างาน',
-          `ความลึกเป็นค่าสมมติ: ดินกลบ ${COVER.toFixed(2)} ม. หลังถัง ${as(top)} ใต้ถัง ${as(top - 2 * r)}`]) }, V(x, y, 0.7));
-      for (const [mx, my] of [[51.25, 37.50], [53.54, 37.52], [56.49, 37.55]]) {
-        add('asbuilt', cylGeo(0.295, COVER, mx, my, top), 'tankOlder', { en: 'Lying tank access', th: 'ช่องเปิดถังแบบนอน', nopick: 1 });
-        add('asbuilt', cylGeo(0.33, 0.03, mx, my, 0), 'cover', { en: 'Lying tank cover', th: 'ฝาถังแบบนอน', nopick: 1 });
-      }
-    }
+    // The as-built sheet also draws a lying tank outline (6.90 × 2.00 m, three covers) along the south wall of building A.
+    // Brian (28 Nov 2026): there is no underground tank there; the sheet is wrong. Removed from the model.
     [[75.12, 38.13, 'west', 'ตะวันตก'], [77.49, 38.15, 'east', 'ตะวันออก']].forEach(([x, y, w, wTh], i) => {
       const r = 1.0, h = 2.0, top = -COVER;
       add('asbuilt', cylGeo(r, h, x, y, top - h), 'tankOlder', { en: `Round tank at building B, ${w} one (as-built sheet, not named)`, th: `ถังกลมที่อาคาร B ใบด้าน${wTh} (ตามแบบก่อสร้างจริง ไม่ระบุชื่อ)`, ...(i ? {} : { tag: 'Round tanks (not named)', tagTh: 'ถังกลม (ไม่ระบุชื่อ)' }), kind: 'tank',
@@ -275,8 +259,8 @@ export default {
     }
     // cross pipes and the pump-island sumps
     const lvlOf = (p) => levelAt.get(key(p[0], p[1]));
-    add('drains', merge(CROSS.map(([a, b]) => pipeGeo([[...a, lvlOf(a)], [...b, lvlOf(b)]], 0.1).geometry)), 'drain', { en: 'Cross pipes from the kerb-line manholes to the front-strip drain', th: 'ท่อเชื่อมจากบ่อพักแนวขอบคันหินไปท่อระบายน้ำแถบด้านหน้า', kind: 'drain',
-      info: ab(['Seven short lines drawn on the as-built sheet between a kerb-line manhole and the front-strip manhole beside it. No size or level is written; shown as 0.20 m pipes between the assumed levels of the two manholes.'], ['เส้นสั้น 7 เส้นในแบบก่อสร้างจริง ระหว่างบ่อพักแนวขอบคันหินกับบ่อพักแถบด้านหน้าที่อยู่ข้างกัน ไม่มีขนาดหรือระดับระบุ แสดงเป็นท่อ 0.20 ม. ระหว่างระดับสมมติของบ่อพักทั้งสอง']) });
+    add('drains', merge(CROSS.map(([a, b]) => pipeGeo([[...a, lvlOf(a)], [...b, lvlOf(b)]], 0.1).geometry)), 'drain', { en: 'Cross pipes east of building B (kerb line to front strip)', th: 'ท่อเชื่อมจากบ่อพักแนวขอบคันหินไปท่อระบายน้ำแถบด้านหน้า', kind: 'drain',
+      info: ab(['Four short lines drawn on the as-built sheet, east of building B, between a kerb-line manhole and the front-strip manhole beside it. No size or level is written; shown as 0.20 m pipes between the assumed levels of the two manholes. They may be paving joints rather than pipes: to confirm on site.', 'The model first also had three such links at the west end; they are not on the sheet and do not exist (Brian, 28 Nov 2026), so they were removed.'], ['เส้นสั้น 4 เส้นในแบบก่อสร้างจริง ด้านตะวันออกของอาคาร B ระหว่างบ่อพักแนวขอบคันหินกับบ่อพักแถบด้านหน้าที่อยู่ข้างกัน ไม่มีขนาดหรือระดับระบุ แสดงเป็นท่อ 0.20 ม. ระหว่างระดับสมมติของบ่อพักทั้งสอง อาจเป็นรอยต่อพื้นมากกว่าท่อ ควรตรวจสอบที่หน้างาน', 'โมเดลแรกมีท่อเชื่อมแบบนี้อีก 3 เส้นที่ปลายด้านตะวันตก ซึ่งไม่มีในแบบและไม่มีอยู่จริง (Brian, 28 พ.ย. 2026) จึงลบออก']) });
     ISLAND.forEach(([x, y], i) => { const l = lvlOf([x === 36.87 ? 36.88 : x, 65.79]); sump(x, y, r2(l + 0.01), `C${i + 1}a`); });
     add('drains', merge(ISLAND.map(([x, y]) => { const l = lvlOf([x === 36.87 ? 36.88 : x, 65.79]); return pipeGeo([[x, y, l + 0.01], [x, 65.79, l]], 0.1).geometry; })), 'drain', { en: 'Short pipes from the pump-island manholes', th: 'ท่อสั้นจากบ่อพักที่แท่นหัวจ่าย', kind: 'drain',
       info: ab(['Each pump island has a second manhole joined to the canopy drain by a short line on the as-built sheet. No size or level is written; shown as 0.20 m pipes (assumed).'], ['แท่นหัวจ่ายแต่ละแท่นมีบ่อพักอีก 1 บ่อ ต่อกับท่อระบายน้ำใต้หลังคาด้วยเส้นสั้นในแบบก่อสร้างจริง ไม่มีขนาดหรือระดับระบุ แสดงเป็นท่อ 0.20 ม. (ค่าสมมติ)']) });
@@ -365,20 +349,20 @@ export default {
 
     // Coffee shop (new, after 2021; not on any drawing): white flat-roofed box with a green glass shopfront to the parking,
     // at the highway end of the building row (Brian, 28 Nov 2026: video 7:20, looking towards the toilets; his still).
-    add('buildings', tbox(6.8, 4.2, 3.6, 39.2, 40.6, 0, ROT_A), 'kioskWhite', { en: 'Coffee shop', th: 'ร้านกาแฟ', tag: 'Coffee shop', tagTh: 'ร้านกาแฟ', kind: 'building',
-      info: vid(['Coffee shop built after the station (not on the 2021 plan): single storey, white flat-roofed box with a deep white fascia and a green glass shopfront facing the parking, a low step along its front. At the highway end of the building row, west of the kiosks and the toilets (Brian, 28 Nov 2026). About 6.8 × 4.2 m and 3.6 m high, judged from the video.'],
-        ['ร้านกาแฟที่สร้างภายหลังสถานี (ไม่มีในผังปี 2021): ชั้นเดียว กล่องสีขาวหลังคาแบน ขอบหลังคาสีขาวลึก หน้าร้านกระจกสีเขียวหันออกที่จอดรถ มีขั้นบันไดเตี้ยตลอดหน้าร้าน อยู่ปลายแถวอาคารด้านทางหลวง ทางตะวันตกของซุ้มร้านค้าและห้องน้ำ (Brian, 28 พ.ย. 2026) ขนาดประมาณ 6.8 × 4.2 ม. สูง 3.6 ม. ประมาณจากวิดีโอ']) }, V(39.2, 40.6, 4.4));
-    add('buildings', tbox(6.6, 0.08, 2.2, 39.2, 42.72, 0.2, ROT_A), 'glassGreen', { en: 'Coffee shop front', th: 'หน้าร้านกาแฟ', nopick: 1 });
-    add('paving', tbox(6.8, 0.6, 0.15, 39.2, 43.0, 0, ROT_A), 'walkway', { en: 'Coffee shop step', th: 'ขั้นหน้าร้านกาแฟ', nopick: 1 });
+    add('buildings', tbox(6.8, 4.2, 3.6, 34.2, 40.6, 0, ROT_A), 'kioskWhite', { en: 'Coffee shop', th: 'ร้านกาแฟ', tag: 'Coffee shop', tagTh: 'ร้านกาแฟ', kind: 'building',
+      info: vid(['Coffee shop built after the station (not on the 2021 plan): single storey, white flat-roofed box with a deep white fascia and a green glass shopfront facing the parking, a low step along its front. At the highway end of the building row, west of the kiosks and the toilets, about 6.5 m clear of the toilet building (Brian, 28 Nov 2026: at least 5 m, probably 6 to 7 m; checked on the satellite image). About 6.8 × 4.2 m and 3.6 m high, judged from the video.'],
+        ['ร้านกาแฟที่สร้างภายหลังสถานี (ไม่มีในผังปี 2021): ชั้นเดียว กล่องสีขาวหลังคาแบน ขอบหลังคาสีขาวลึก หน้าร้านกระจกสีเขียวหันออกที่จอดรถ มีขั้นบันไดเตี้ยตลอดหน้าร้าน อยู่ปลายแถวอาคารด้านทางหลวง ทางตะวันตกของซุ้มร้านค้าและห้องน้ำ ห่างจากอาคารห้องน้ำประมาณ 6.5 ม. (Brian, 28 พ.ย. 2026: อย่างน้อย 5 ม. น่าจะ 6 ถึง 7 ม. ตรวจกับภาพถ่ายดาวเทียม) ขนาดประมาณ 6.8 × 4.2 ม. สูง 3.6 ม. ประมาณจากวิดีโอ']) }, V(34.2, 40.6, 4.4));
+    add('buildings', tbox(6.6, 0.08, 2.2, 34.2, 42.72, 0.2, ROT_A), 'glassGreen', { en: 'Coffee shop front', th: 'หน้าร้านกาแฟ', nopick: 1 });
+    add('paving', tbox(6.8, 0.6, 0.15, 34.2, 43.0, 0, ROT_A), 'walkway', { en: 'Coffee shop step', th: 'ขั้นหน้าร้านกาแฟ', nopick: 1 });
 
     // Coffee shop front and side (Brian's stills, video 7:55 and 8:02): dark-green awning over a timber deck with a low
     // bench step, artificial-grass strips in the paving; on its highway side a grey water tank and a food cart under a tent.
-    add('buildings', merge([tbox(6.8, 1.6, 0.08, 39.2, 43.5, 2.9, ROT_A), ...[36.0, 42.4].map((x) => cylGeo(0.04, 2.9, x, 44.25, 0, 6))]), 'awningGreen', { en: 'Coffee shop awning', th: 'กันสาดร้านกาแฟ', kind: 'building',
+    add('buildings', merge([tbox(6.8, 1.6, 0.08, 34.2, 43.5, 2.9, ROT_A), ...[31.0, 37.4].map((x) => cylGeo(0.04, 2.9, x, 44.25, 0, 6))]), 'awningGreen', { en: 'Coffee shop awning', th: 'กันสาดร้านกาแฟ', kind: 'building',
       info: vid(['Dark-green awning on thin steel arms over the coffee shop front and its timber deck.'], ['กันสาดสีเขียวเข้มบนแขนเหล็กเหนือหน้าร้านกาแฟและพื้นไม้']) });
-    add('paving', tbox(6.4, 1.2, 0.35, 39.2, 43.1, 0, ROT_A), 'deck', { en: 'Coffee shop timber deck', th: 'พื้นไม้หน้าร้านกาแฟ', nopick: 1 });
-    add('water', cylGeo(0.6, 2.0, 35.1, 41.6, 0, 20), 'waterTankGrey', { en: 'Grey water tank (coffee shop)', th: 'ถังน้ำสีเทา (ร้านกาแฟ)', kind: 'tank',
+    add('paving', tbox(6.4, 1.2, 0.35, 34.2, 43.1, 0, ROT_A), 'deck', { en: 'Coffee shop timber deck', th: 'พื้นไม้หน้าร้านกาแฟ', nopick: 1 });
+    add('water', cylGeo(0.6, 2.0, 30.1, 41.6, 0, 20), 'waterTankGrey', { en: 'Grey water tank (coffee shop)', th: 'ถังน้ำสีเทา (ร้านกาแฟ)', kind: 'tank',
       info: vid(['Grey plastic water tank (about 1,000 to 1,500 L) on the highway side of the coffee shop, with a pump and blue pipes at its foot.'], ['ถังน้ำพลาสติกสีเทา (ประมาณ 1,000 ถึง 1,500 ลิตร) ด้านทางหลวงของร้านกาแฟ มีปั๊มและท่อสีฟ้าที่ฐาน']) });
-    add('buildings', merge([tbox(1.6, 0.9, 0.9, 34.6, 39.2, 0, ROT_A), cylGeo(0.03, 2.4, 34.6, 39.2, 0, 6), tbox(2.4, 2.4, 0.06, 34.6, 39.2, 2.3, ROT_A + 10)]), 'clutter', { en: 'Food cart under a tent', th: 'รถเข็นขายอาหารใต้เต็นท์', kind: 'building',
+    add('buildings', merge([tbox(1.6, 0.9, 0.9, 29.6, 39.2, 0, ROT_A), cylGeo(0.03, 2.4, 29.6, 39.2, 0, 6), tbox(2.4, 2.4, 0.06, 29.6, 39.2, 2.3, ROT_A + 10)]), 'clutter', { en: 'Food cart under a tent', th: 'รถเข็นขายอาหารใต้เต็นท์', kind: 'building',
       info: vid(['Food cart with blue tubs and boxes under a brown sun tent, on the highway side of the coffee shop.'], ['รถเข็นขายอาหารพร้อมถังและกล่องสีฟ้า ใต้เต็นท์กันแดดสีน้ำตาล ด้านทางหลวงของร้านกาแฟ']) });
 
     // Lean-to sheds and storage behind the buildings (video 1:00 to 2:00, Brian's still at 8:06 and the lean-to beside the
@@ -436,12 +420,18 @@ export default {
       info: arc(['Above-ground clean-water tank, 10,000 L, Ø2.0 m on the 2021 plan (written "Water Tank 10000L"); height about 3.2 m is assumed. Not wastewater: shown because it stands where digging might go.'],
         ['ถังน้ำดีบนดิน 10,000 ลิตร Ø2.0 ม. ตามผังปี 2021 (เขียนว่า "Water Tank 10000L") ความสูงประมาณ 3.2 ม. เป็นค่าสมมติ ไม่ใช่น้ำเสีย แสดงไว้เพราะตั้งอยู่ในแนวที่อาจต้องขุด']) }, i === 0 ? V(91, 39.15, 4.2) : null));
     {
-      const x0 = 88.2, x1 = 93.8, y0 = 37.75, y1 = 40.55, h = 2.4, t = 0.08;
-      add('buildings', merge([tbox(x1 - x0, t, h, (x0 + x1) / 2, y1, 0, 0), tbox(t, y1 - y0, h, x0, (y0 + y1) / 2, 0, 0), tbox(t, y1 - y0, h, x1, (y0 + y1) / 2, 0, 0), tbox(x1 - x0 - 1.4, t, h, (x0 + x1) / 2 + 0.7, y0, 0, 0)]), 'screen',
+      // Three sides only (Brian, 28 Nov 2026): the screen runs back to the firewall on the south boundary, which is its fourth side.
+      const x0 = 88.2, x1 = 93.8, y0 = 36.68, y1 = 40.55, h = 2.4, t = 0.08;
+      add('buildings', merge([tbox(x1 - x0 - 1.4, t, h, (x0 + x1) / 2 + 0.7, y1, 0, 0), tbox(t, y1 - y0, h, x0, (y0 + y1) / 2, 0, 0), tbox(t, y1 - y0, h, x1, (y0 + y1) / 2, 0, 0)]), 'screen',
         { en: 'Screen wall round the clean-water tanks', th: 'ผนังบังถังน้ำดี', kind: 'building',
-          info: arc(['Screen round the water tanks (drawing "ผนังบังถังน้ำดี"): steel posts with white composite-timber slats, a 1.2 × 2.0 m door. Taken as 2.4 m high round the two tanks; its exact outline is not on the 2021 plan.'],
-            ['ผนังบังถังน้ำดี (แบบ "ผนังบังถังน้ำดี"): เสาเหล็กกรุไม้เทียมสีขาวเว้นร่อง ประตู 1.2 × 2.0 ม. ในที่นี้ถือว่าสูง 2.4 ม. ล้อมถังทั้งสองใบ แนวที่แน่นอนไม่มีในผังปี 2021']) });
+          info: arc(['Screen round the water tanks (drawing "ผนังบังถังน้ำดี"): steel posts with white composite-timber slats, a 1.2 × 2.0 m door. It has three sides: it runs back to the firewall on the south boundary, which closes the fourth side (Brian, 28 Nov 2026). Taken as 2.4 m high; the door is shown on the parking side (its real place is not known).'],
+            ['ผนังบังถังน้ำดี (แบบ "ผนังบังถังน้ำดี"): เสาเหล็กกรุไม้เทียมสีขาวเว้นร่อง ประตู 1.2 × 2.0 ม. มี 3 ด้าน โดยต่อไปชนกำแพงกันไฟที่แนวเขตด้านใต้ ซึ่งเป็นด้านที่ 4 (Brian, 28 พ.ย. 2026) ในที่นี้ถือว่าสูง 2.4 ม. แสดงประตูด้านที่จอดรถ (ตำแหน่งจริงไม่ทราบ)']) });
     }
+    // Firewall along the south boundary, behind the building row (Brian, 28 Nov 2026). Drawn almost see-through so that the
+    // lean-tos, tanks and drains along it stay visible. Height and thickness assumed.
+    add('buildings', tbox(98.1, 0.2, 3.0, 56.92, 36.29, 0, 0.5), 'firewall', { en: 'Firewall (south boundary)', th: 'กำแพงกันไฟ (แนวเขตด้านใต้)', kind: 'building',
+      info: arc(['Firewall along the south boundary behind the toilets, the office and the water tanks. The water-tank screen closes against it. Height about 3.0 m and thickness 0.2 m are assumed. Drawn almost see-through so that what stands along it can be seen.'],
+        ['กำแพงกันไฟตามแนวเขตด้านใต้ ด้านหลังห้องน้ำ สำนักงาน และถังน้ำ ผนังบังถังน้ำดีต่อชนกำแพงนี้ ความสูงประมาณ 3.0 ม. และหนา 0.2 ม. เป็นค่าสมมติ แสดงแบบเกือบโปร่งใสเพื่อให้เห็นสิ่งที่อยู่ตามแนวกำแพง']) });
 
     // Pump canopy (building C): 39 × 9 m roof on the 2021 plan (the first model had it about 2.4 m too far north; the fuel
     // tanks were already right). Ceiling +5.50, top +6.50 (1 m fascia), four islands 1.2 × 8.0 m at 10 m centres.
@@ -458,10 +448,13 @@ export default {
     add('buildings', cylGeo(0.4, 12.8, 15.0, 42.47, 0, 20), 'column', { en: 'Highway sign (20 m)', th: 'ป้ายเสาสูงริมทางหลวง (20 ม.)', tag: 'Highway sign (20 m)', tagTh: 'ป้ายริมทางหลวง (20 ม.)', kind: 'building',
       info: arc(['Caltex highway sign, 20.0 m high, panel 4.60 m wide and 7.21 m high on a single steel pipe column, piled footing (drawing HS-ST-002). Plain panel, no logo.'], ['ป้ายคาลเท็กซ์ริมทางหลวง สูง 20.0 ม. แผ่นป้ายกว้าง 4.60 ม. สูง 7.21 ม. บนเสาท่อเหล็กต้นเดียว ฐานรากเสาเข็ม (แบบ HS-ST-002) แสดงเป็นแผ่นเรียบไม่มีโลโก้']) }, V(15.0, 42.47, 20.6));
     add('buildings', tbox(4.6, 0.6, 7.21, 15.0, 42.47, 12.79, 0), 'signPanel', { en: 'Highway sign panel', th: 'แผ่นป้ายริมทางหลวง', nopick: 1 });
-    // Price sign (PRICE SIGN sheet): 2.0 m wide, 8.0 m high, on the island by the entrance
-    add('buildings', merge([tbox(2.0, 0.55, 5.3, 14.42, 65.03, 2.7, 0)]), 'signPanel', { en: 'Price sign (8 m)', th: 'ป้ายราคา (8 ม.)', tag: 'Price sign', tagTh: 'ป้ายราคา', kind: 'building',
-      info: arc(['Price and product sign, 2.0 m wide and 8.0 m high, steel frame on a piled footing, by the entrance (drawing PRICE SIGN, 2019).'], ['ป้ายราคาและผลิตภัณฑ์ กว้าง 2.0 ม. สูง 8.0 ม. โครงเหล็กบนฐานรากเสาเข็ม ข้างทางเข้า (แบบ PRICE SIGN ปี 2019)']) }, V(14.42, 65.03, 8.6));
-    add('buildings', merge([tbox(0.2, 0.2, 2.7, 13.62, 65.03, 0, 0), tbox(0.2, 0.2, 2.7, 15.22, 65.03, 0, 0)]), 'column', { en: 'Price sign posts', th: 'เสาป้ายราคา', nopick: 1 });
+    // Price sign (PRICE SIGN sheet, 2.0 m wide, 8.0 m high): one solid pylon standing on a low concrete plinth, NOT on posts
+    // (Brian, 28 Nov 2026; video 6:56 to 7:10). Its proportions in the video (about 3.75 high to 1 wide, plinth about a quarter
+    // of the width) agree with the sheet's 2.0 × 8.0 m, so the height is kept: plinth 0.5 m + panel 7.5 m.
+    add('buildings', tbox(2.0, 0.55, 7.5, 14.42, 65.03, 0.5, 0), 'signPanel', { en: 'Price sign (8 m)', th: 'ป้ายราคา (8 ม.)', tag: 'Price sign', tagTh: 'ป้ายราคา', kind: 'building',
+      info: arc(['Price and product sign by the entrance: one solid pylon (Caltex / Techron / rewards at the top, the fuel prices below), 2.0 m wide and 8.0 m high on drawing PRICE SIGN (2019), standing on a low concrete plinth about 2.4 × 1.0 × 0.5 m. Not on posts (Brian, 28 Nov 2026). The proportions in the site video agree with the drawing.'],
+        ['ป้ายราคาและผลิตภัณฑ์ข้างทางเข้า: ป้ายแท่งเดียวทึบ (คาลเท็กซ์ / Techron / rewards ด้านบน ราคาน้ำมันด้านล่าง) กว้าง 2.0 ม. สูง 8.0 ม. ตามแบบ PRICE SIGN (2019) ตั้งบนฐานคอนกรีตเตี้ยประมาณ 2.4 × 1.0 × 0.5 ม. ไม่ได้ตั้งบนเสา (Brian, 28 พ.ย. 2026) สัดส่วนในวิดีโอหน้างานตรงกับแบบ']) }, V(14.42, 65.03, 8.6));
+    add('buildings', tbox(2.4, 1.0, 0.5, 14.42, 65.03, 0, 0), 'kerbPlain', { en: 'Price sign plinth', th: 'ฐานป้ายราคา', nopick: 1 });
 
     // Car wash in the south-east plot (video 3:00 to 4:30): self-service bays against the plot's west wall near its north end
     // (red booth with coin units, a blue water tank and two coin vacuums) and a white self-service wash kiosk at the south end.
