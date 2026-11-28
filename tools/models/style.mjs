@@ -50,6 +50,7 @@ export const MATERIALS = {
   kiosk: [0xc0392b, 0.85],       // red steel container shop / car-wash booth
   kioskWhite: [0xf2f2ee, 0.9],   // white kiosk or booth
   screen: [0xf4f4f0, 0.6],
+  firewall: [0xb8b0a4, 0.15],     // boundary firewall: almost see-through so what stands along it shows
   glassGreen: [0x2e8b57, 0.6],   // green-tinted shop glazing (coffee shop front)
   awningGreen: [0x1f5a4a],       // dark-green shop awning
   roofSheet: [0x8a949c, 0.85],   // light metal-sheet lean-to or stall roof
