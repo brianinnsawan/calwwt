@@ -94,8 +94,11 @@ Sources: `LAY-SN-101` (SPP as-built, 13/09/2019: drains, manholes, pipe sizes, 1
 outlines, and four tank outlines with no names) and `SN-103` (2019 design sheet for submission: the named tanks and the
 wastewater pipes). `SN-101` (design) only for flow direction.
 The two sheets do not agree: the as-built shows one lying tank in front of building A where the design has two upright
-tanks. Both are in the model, the as-built outlines in their own layer. No sheet has any level: the ground is flat at
-±0.00 and every depth is assumed. No north arrow.
+tanks. No sheet has any level: the ground is flat at ±0.00 and every depth is assumed. No north arrow.
+28 Nov 2026 (Brian, tank register R3): each tank is shown ONCE. The as-built lying tank along building A does not exist;
+the two round outlines east of building B are the office's two tanks (approved BG-600 grease trap + BO-4000, which is which
+not known), drawn there instead of at SN-103's design places; the square outline beside them does not exist. The site's
+own "asbuilt" layer is gone. The 2 × 10,000 L clean-water tanks are the ones from the 2021 plan (screened, ~14 m further east).
 28 Nov 2026 (Brian): buildings from the 2021 Porto Go architect plan (DWG in `03 Drawings\_Working\calwwt\`, model =
 DWG / 1000 + (-359.08, 21.93), boundary corners within 0.15 m) and the 360 video (2160p stills; coffee shop at 7:20 to
 8:06): toilet block A with gables and porches, office B, walkway roof, red kiosks, coffee shop with deck and awning,
@@ -209,10 +212,14 @@ model = DWG + (-1223.1, -878.8), the canopy corners agree exactly), the 360 vide
 canopy (red fascia, columns at the island centres), office, car wash shed with slab, tank and drying room (the drying room
 may stand over the SP-T-1600 tank: check), garbage room, monopole and CX-45 signs, EV chargers. Still to confirm with Brian
 which building was built after the station.
+28 Nov 2026 (Brian): the unnamed 7.20 x 2.00 m outline beside the SP-T-18,000 L tank is the clean-water (fresh water) tank
+(the W PVC 4" water line runs into it on the toilet sanitary plan); now in layer "water", light blue.
 
 ## 1642 Phun Phon (first version, 26 Nov 2026, from DWG saved as DXF)
 Sources: `A-104` (site plan with the treatment tank and clean-water tank positions, 1:200, drawn in metres) and `A-103`
-(water supply: 20,000 L water tank, Grundfos CMB5-46PT pump, HDPE 1"). `6-9` is a Bio-San catalogue sheet only.
+(water supply: 20,000 L water tank, Grundfos CMB5-46PT pump, HDPE 1"). `6-9`: its layouts are three Biotech details
+(BG-2200 grease trap Ø1.635, BG-800 grease trap Ø1.185, CAB-15-D2.0-M2 15,000 L aeration tank Ø2.0 x 5.0 m, three Ø600
+lids, wire-rope tie-downs); model space has a Bio-San catalogue.
 Brian saved the DWGs as DXF into `Sites\1642 Phun Phon Phuket\03 Drawings\_Working\calwwt\cad\`; read with `dxf/`.
 From Brian (26 Nov 2026): the clean-water tank is under the disabled parking bay (A-104 block on layer "Tank", two lids,
 outline about 2.7 x 4.0 m); the tank under the walkway behind the toilets (block "mc-12a_pl", layer FIBERGLASS TANK, three
@@ -220,11 +227,16 @@ lids) is the septic tank; the sales building is two storeys, the office one stor
 (entrance side and exit side) at the outlet pipe. The A-103 legend symbol for the water tank looks like the septic tank
 block: go by Brian.
 Also in it: the strapped tank in the front lawn (three MH-600 lids, +0.40; not named, taken as the shops' treatment tank
-after the four round tanks in the east planter), two round Bio-San-style tanks at the office, every grated manhole and
+after the four round tanks in the east planter), every grated manhole and
 drain run, the three outlet pits at the road (two are the sampled oil traps; the east-corner one is drawn the same way,
 to confirm), four fuel tanks (the middle two have two lids), buildings, canopy and islands.
 Assumed: every pipe level and size (no levels on any sheet: drains 0.30 m, 0.40 m cover at the start, 1:200; tank pipes
 0.3 m under the tank top), tank depths, round tank sizes, building heights. North from the A-104 arrow (314.6).
+28 Nov 2026 (Brian, tank register R3): the office has ONE toilet, so ONE office tank (A-104's second round symbol, the one
+with no outlet, is left out; the one kept is drawn at the BG-2200 size, model not known). The four east-planter tanks are
+Biotech BG-2200 or BG-800 grease traps, which is which (and how many of each) not known; A-104 draws all four at the
+BG-800 size (Ø1.19), so they are shown at that size. The front-lawn tank matches the 6-9 CAB-15-D2.0-M2 (length 5.0 m,
+three lids, straps) and is shown Ø2.0 x 5.0 m (was 2.3 m across); model to confirm on site.
 
 1156 drive-through exit (Brian, 26 Nov 2026): KFC east wall at x -4.0, toilets x 3.9 to 11.8; KFC sidewalk 3 rows of 40 cm
 tiles + 15 cm kerb, lane 4.0 m, toilet walkway 6 rows + 15 cm kerb; red pick-up booth with its window, flat roof over the

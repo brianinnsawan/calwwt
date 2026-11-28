@@ -4,15 +4,17 @@
 // Sources (PDF sheets in portal-proposal/public/sites/layouts/1588/, read with tools/models/pdf/pdf-lines.py at 1:250):
 //   A  1588-LAY-SN-101-drainage-layout.pdf = LAY-SN-101 "site drainage layout", status AS BUILT, rev 1(SPP) 13/09/2019.
 //      Site drains, sumps, pipe sizes, the 1:200 slope marks, buildings, canopy, fuel tank outlines. Its background also shows,
-//      WITHOUT any label: a lying tank with three covers in front of building A, and two round outlines plus a square pit
-//      east of building B. Its scale box says "NO"; the boundary measures 94.056 m against the written 94056, so it is 1:250.
+//      WITHOUT any label: a lying tank with three covers in front of building A (Brian, 28 Nov 2026: no tank there), and two
+//      round outlines plus a square outline east of building B (Brian, 28 Nov 2026: the two round ones are the office's two
+//      tanks; the square one does not exist). Its scale box says "NO"; the boundary measures 94.056 m against the written 94056, so it is 1:250.
 //   B  1588-SN-103-wastewater-layout.pdf = SN-103 "wastewater collection layout", FOR SUBMISSION 29/03/2019 (Contour / U Plus).
 //      A DESIGN drawing, not an as-built: treatment tanks 7.50, 6.00, 4.00 and 1.00 m3 (the 1.00 at the garbage room was never built), grease trap 6.00 m3, pipe routes.
 //   C  1588-SN-101-drainage-layout.pdf = SN-101 design drainage layout (same submission set). Used only for the direction of
 //      flow (its slope arrows); the as-built sheet A replaces everything else on it.
 // NO LEVELS are written on any of the three sheets. Every depth in this file is an assumption and is marked as one.
-// Sheets A and B do not agree on the wastewater tanks; both are shown and flagged: the named tanks of design sheet B in
-// layer "tanks", the unnamed outlines of as-built sheet A in this site's own layer "asbuilt".
+// Sheets A and B do not agree on the wastewater tanks. Each real tank is shown ONCE (28 Nov 2026, Brian: no double counting):
+// building A's tanks at their design places on sheet B (the as-built sheet shows none there); building B's two tanks at the
+// as-built places on sheet A, with the models approved for building B (BG-600 grease trap, BO-4000 treatment tank).
 //
 // Positions are sheet A's x, y in metres (x right, y up the sheet, origin bottom-left of the page at 1:250).
 // Sheet B was moved by (-1.997, -4.098) m so its site boundary sits on sheet A's (checked on three corners).
@@ -43,11 +45,6 @@ const DESIGN = [
     box: [[64.03, 37.93], [65.13, 37.93], [65.13, 37.00]],
     asBuilt: { en: 'The as-built drainage sheet shows no tank at this spot. (It draws a lying tank along the back of building A, but Brian confirmed on 28 Nov 2026 that no tank exists there.)', th: 'แบบก่อสร้างจริงไม่แสดงถังที่ตำแหน่งนี้ (แบบเขียนถังแบบนอนไว้ด้านหลังอาคาร A แต่ Brian ยืนยันเมื่อ 28 พ.ย. 2026 ว่าไม่มีถังที่นั่น)' },
     outNote: { en: 'On the sheet the line ends at a round symbol about 3 m outside the south boundary. The sheet does not say what it joins; on the as-built sheet the buried site drain runs along this boundary.', th: 'ในแบบ เส้นท่อไปสิ้นสุดที่สัญลักษณ์วงกลมนอกแนวเขตด้านใต้ประมาณ 3 ม. แบบไม่ได้ระบุว่าต่อกับอะไร ในแบบก่อสร้างจริงมีท่อระบายน้ำฝังใต้ดินเดินตามแนวเขตนี้' } },
-  { id: 'T40', vol: 4.0, x: 76.33, y: 39.37, r: 0.935, where: { en: 'east of building B', th: 'ด้านตะวันออกของอาคาร B' }, serves: { en: 'Takes the water that has passed the grease trap of building B.', th: 'รับน้ำที่ผ่านถังดักไขมันของอาคาร B' },
-    inPts: null, outPts: [[77.27, 39.36], [80.52, 39.36]],
-    box: [[76.52, 39.61], [76.52, 40.52], [77.42, 40.53]],
-    asBuilt: { en: 'The as-built drainage sheet shows two round outlines and a square pit 1 to 2.5 m east of here. This tank was probably built as one of them. Confirm on site.', th: 'แบบก่อสร้างจริงแสดงแนววงกลม 2 วงและบ่อสี่เหลี่ยม ห่างไปทางตะวันออก 1 ถึง 2.5 ม. ถังนี้น่าจะสร้างจริงเป็นหนึ่งในนั้น ต้องยืนยันหน้างาน' },
-    outNote: { en: 'On the sheet the line ends at a round symbol in the planting strip. The sheet does not say what it joins.', th: 'ในแบบ เส้นท่อไปสิ้นสุดที่สัญลักษณ์วงกลมในแถบจัดสวน แบบไม่ได้ระบุว่าต่อกับอะไร' } },
   // T10 (1.00 m³ tank at the garbage room on SN-103) was never built: the garbage room has no grease trap or treatment tank,
   // its floor drain goes straight to the site drain (Brian, 28 Nov 2026, garbage room sanitary plan). See the garbage room below.
 ];
@@ -57,12 +54,15 @@ const DESIGN = [
 const BIOTECH = {
   T75: { en: 'Approved model (Biotech spec pack, Aug 2019): BO-R-7500, a LYING 7,500 L tank with a DLX-80 air pump. The lying tank outline on the as-built sheet behind building A does not exist on site (Brian, 28 Nov 2026).', th: 'รุ่นที่อนุมัติ (เอกสาร Biotech ส.ค. 2019): BO-R-7500 ถังแบบนอน 7,500 ลิตร พร้อมเครื่องเติมอากาศ DLX-80 แนวถังแบบนอนด้านหลังอาคาร A ในแบบก่อสร้างจริงไม่มีอยู่จริงที่หน้างาน (Brian, 28 พ.ย. 2026)' },
   T60: { en: 'Approved model (Biotech spec pack, Aug 2019): BO-6000, 6,000 L, with a DLX-120 air pump.', th: 'รุ่นที่อนุมัติ (เอกสาร Biotech ส.ค. 2019): BO-6000 ขนาด 6,000 ลิตร พร้อมเครื่องเติมอากาศ DLX-120' },
-  T40: { en: 'Approved model (Biotech spec pack, Aug 2019): BO-4000, 4,000 L, with a DLX-80 air pump.', th: 'รุ่นที่อนุมัติ (เอกสาร Biotech ส.ค. 2019): BO-4000 ขนาด 4,000 ลิตร พร้อมเครื่องเติมอากาศ DLX-80' },
   // T10: the pack also approved a BO-1000 for the garbage room; it was not installed (Brian, 28 Nov 2026).
 };
-const GT = { x: 72.86, y: 39.36, side: 1.1, depth: 1.2 };   // design grease trap: 1.1 m square on the sheet
-const GT_IN = [[70.05, 41.50], [70.05, 39.70], [70.39, 39.36], [71.75, 39.36], [72.31, 39.36]];
-const GT_OUT = [[73.41, 39.36], [75.40, 39.37]];
+// building B (office): the two round tanks drawn on the as-built sheet (Ø2.0 m, no names), west one first in the flow.
+// SN-103 designed a grease trap (labelled 6.00 m³, 1.1 m square, at 72.86, 39.36) and the 4.00 m³ tank (Ø1.87, at 76.33, 39.37)
+// 1 to 2.5 m west of them; they are the same two tanks, so the design ones are not drawn.
+const B_TANKS = [[75.12, 38.13, 'west', 'ตะวันตก'], [77.49, 38.15, 'east', 'ตะวันออก']];
+const B_IN = [[70.05, 41.50], [70.05, 39.70], [70.39, 39.36], [71.75, 39.36], [73.70, 39.36], [74.40, 38.85]];   // SN-103 route from building B, then on to the west tank
+const B_LINK = [[76.10, 38.13], [76.51, 38.15]];
+const B_OUT = [[78.45, 38.45], [79.30, 39.36], [80.52, 39.36]];   // ends at SN-103's round symbol in the planting strip
 
 // ---- site drains from the as-built sheet. Points are sumps (or the pit / a size change) in flow direction.
 // part: [first point, last point, pipe size written on the sheet, what the sheet calls it]
@@ -111,8 +111,8 @@ export default {
     th: 'ในแบบทุกแผ่นไม่มีระดับระบุ โมเดลนี้ถือว่าพื้นทั้งสถานีเรียบที่ ±0.00 ความลึกทุกค่าเป็นค่าสมมติ: ถังมีดินกลบ 0.5 ม. ท่อน้ำเสียมีดินกลบ 0.5 ม. ลาด 1:100 ท่อระบายน้ำลึก 0.5 ม. ที่ต้นทาง ลาด 1:200 (ความลาดตามที่ระบุในแบบก่อสร้างจริง) ระดับที่มีเครื่องหมาย "~" เป็นค่าสมมติ ไม่ได้มาจากแบบ',
   },
   note: {
-    en: 'First version, from PDF drawings only. Drains, manholes, buildings and the blue tank outlines (not named) are from the as-built drainage sheet LAY-SN-101 (2019). The teal tanks, the grease trap and the wastewater pipes are from SN-103, a 2019 design drawing issued for submission, NOT an as-built: positions are as designed and must be confirmed on site. The two sheets do not agree on the tanks. No levels are on any sheet, so all depths are assumed. Check on site before any digging; not for setting out.',
-    th: 'ฉบับแรก จัดทำจากแบบ PDF เท่านั้น ท่อระบายน้ำ บ่อพัก อาคาร และแนวถังสีน้ำเงิน (ไม่ระบุชื่อ) มาจากแบบก่อสร้างจริง LAY-SN-101 (ปี 2019) ถังสีเขียวอมฟ้า ถังดักไขมัน และท่อน้ำเสียมาจาก SN-103 ซึ่งเป็นแบบออกแบบปี 2019 สำหรับยื่นขออนุญาต ไม่ใช่แบบก่อสร้างจริง ตำแหน่งเป็นไปตามแบบออกแบบ ต้องยืนยันหน้างาน แบบสองแผ่นนี้แสดงถังไม่ตรงกัน ไม่มีระดับในแบบทุกแผ่น ความลึกทั้งหมดจึงเป็นค่าสมมติ ต้องตรวจสอบหน้างานก่อนขุด ห้ามใช้วางผัง',
+    en: 'First version, from PDF drawings only. Drains, manholes, buildings and the two building B (office) tanks are from the as-built drainage sheet LAY-SN-101 (2019). Building A\'s tanks and the wastewater pipes are from SN-103, a 2019 design drawing issued for submission, NOT an as-built: positions are as designed and must be confirmed on site. Each tank is shown once. No levels are on any sheet, so all depths are assumed. Check on site before any digging; not for setting out.',
+    th: 'ฉบับแรก จัดทำจากแบบ PDF เท่านั้น ท่อระบายน้ำ บ่อพัก อาคาร และถังสองใบของอาคาร B (สำนักงาน) มาจากแบบก่อสร้างจริง LAY-SN-101 (ปี 2019) ถังของอาคาร A และท่อน้ำเสียมาจาก SN-103 ซึ่งเป็นแบบออกแบบปี 2019 สำหรับยื่นขออนุญาต ไม่ใช่แบบก่อสร้างจริง ตำแหน่งเป็นไปตามแบบออกแบบ ต้องยืนยันหน้างาน แสดงถังแต่ละใบเพียงครั้งเดียว ไม่มีระดับในแบบทุกแผ่น ความลึกทั้งหมดจึงเป็นค่าสมมติ ต้องตรวจสอบหน้างานก่อนขุด ห้ามใช้วางผัง',
   },
   built: '2026-11-25',
   // no north arrow on any of the three sheets, so no `north`; the highway is on the left (west side of the sheet)
@@ -123,10 +123,8 @@ export default {
     points: [[14.4, 89.5, 0], [124.6, 70, 0], [121.7, 6.9, 0], [7.9, 35.8, 0], [66, 48, 0]],
     names: { siteGround: { en: 'Forecourt and paving (taken as flat)', th: 'ลานและพื้นผิว (ถือว่าเรียบ)' }, road: { en: 'Highway side', th: 'ด้านทางหลวง' } },
   },
-  // names, order and colours: ../style.mjs. 'asbuilt' is this site's own layer: tank outlines that the as-built sheet shows
-  // but does not name, kept apart from the named tanks of the 2019 design so that each set can be switched off.
-  layers: ['tanks', 'sewer', 'drains', 'water', 'fuel', 'buildings', 'paving',
-    { id: 'asbuilt', en: 'Tank outlines on the as-built sheet (not named there)', th: 'แนวถังตามแบบก่อสร้างจริง (ในแบบไม่ระบุชื่อ)' }, 'plan', 'ground'],
+  // names, order and colours: ../style.mjs (the site's own "asbuilt" layer was dropped on 28 Nov 2026: each tank is shown once)
+  layers: ['tanks', 'sewer', 'drains', 'water', 'fuel', 'buildings', 'paving', 'plan', 'ground'],
   views: [
     { id: 'site', from: [66, -62, 85], to: [66, 44, 0] },
     { id: 'plan', from: [66, 46.9, 140], to: [66, 47, 0] },
@@ -150,24 +148,8 @@ export default {
     const grade = (pts, start, fall) => { let l = start; return pts.map(([x, y], i) => { if (i) l -= Math.hypot(x - pts[i - 1][0], y - pts[i - 1][1]) * fall; return [x, y, r2(l)]; }); };
     const last = (a) => a[a.length - 1];
 
-    // ---------- tanks shown (without a name) on the as-built sheet
-    // The as-built sheet also draws a lying tank outline (6.90 × 2.00 m, three covers) along the south wall of building A.
-    // Brian (28 Nov 2026): there is no underground tank there; the sheet is wrong. Removed from the model.
-    [[75.12, 38.13, 'west', 'ตะวันตก'], [77.49, 38.15, 'east', 'ตะวันออก']].forEach(([x, y, w, wTh], i) => {
-      const r = 1.0, h = 2.0, top = -COVER;
-      add('asbuilt', cylGeo(r, h, x, y, top - h), 'tankOlder', { en: `Round tank at building B, ${w} one (as-built sheet, not named)`, th: `ถังกลมที่อาคาร B ใบด้าน${wTh} (ตามแบบก่อสร้างจริง ไม่ระบุชื่อ)`, ...(i ? {} : { tag: 'Round tanks (not named)', tagTh: 'ถังกลม (ไม่ระบุชื่อ)' }), kind: 'tank',
-        info: ab(['Round outline 2.00 m across, east of building B. One of two side by side, with a 1.5 m square pit next to them.',
-          'The as-built drainage sheet shows the outline only: no name, size, level or pipes.',
-          'The 2019 design sheet SN-103 shows a grease trap (6.00 m³) and a treatment tank (4.00 m³) for building B, 1 to 2.5 m west of here. These two outlines are probably those as built, but the sheet does not say which is which. Confirm on site.',
-          `Depth assumed: ${COVER.toFixed(2)} m of cover and ${h.toFixed(2)} m high, so top ${as(top)} and underside ${as(top - h)}.`],
-        ['แนววงกลมกว้าง 2.00 ม. ด้านตะวันออกของอาคาร B เป็น 1 ใน 2 ใบที่อยู่ติดกัน และมีบ่อสี่เหลี่ยม 1.5 ม. อยู่ข้างกัน',
-          'แบบก่อสร้างจริงแสดงเฉพาะแนวถัง ไม่มีชื่อ ขนาด ระดับ หรือท่อ',
-          'แบบออกแบบ SN-103 ปี 2019 แสดงถังดักไขมัน (6.00 ลบ.ม.) และถังบำบัด (4.00 ลบ.ม.) ของอาคาร B ห่างไปทางตะวันตก 1 ถึง 2.5 ม. แนวถังสองใบนี้น่าจะเป็นถังดังกล่าวที่สร้างจริง แต่แบบไม่ได้ระบุว่าใบใดเป็นถังใด ต้องยืนยันหน้างาน',
-          `ความลึกเป็นค่าสมมติ: ดินกลบ ${COVER.toFixed(2)} ม. ถังสูง ${h.toFixed(2)} ม. หลังถัง ${as(top)} ใต้ถัง ${as(top - h)}`]) }, i ? null : V(76.3, 38.14, 0.7));
-    });
-    add('asbuilt', boxGeo(1.5, 1.5, 1.5, 79.62, 38.245, -1.5, 0.5), 'manhole', { en: 'Square pit at building B (as-built sheet, not named)', th: 'บ่อสี่เหลี่ยมที่อาคาร B (ตามแบบก่อสร้างจริง ไม่ระบุชื่อ)', tag: 'Square pit (not named)', tagTh: 'บ่อสี่เหลี่ยม (ไม่ระบุชื่อ)', kind: 'tank',
-      info: ab(['Square outline 1.50 × 1.50 m beside the two round tanks, east of building B.', 'Not named on the as-built sheet. It could be a grease trap, a sump or a sampling pit. Confirm on site.', `Drawn 1.50 m deep from the ground (assumed), so the bottom is ${as(-1.5)}.`],
-        ['แนวสี่เหลี่ยม 1.50 × 1.50 ม. ข้างถังกลมสองใบ ด้านตะวันออกของอาคาร B', 'แบบก่อสร้างจริงไม่ระบุชื่อ อาจเป็นถังดักไขมัน บ่อพัก หรือบ่อเก็บตัวอย่างน้ำ ต้องยืนยันหน้างาน', `แสดงลึก 1.50 ม. จากผิวพื้น (ค่าสมมติ) ก้นบ่อ ${as(-1.5)}`]) }, V(79.62, 38.245, 0.7));
+    // ---------- the as-built sheet's unnamed outlines (28 Nov 2026, Brian): the lying tank along building A does not exist;
+    // the two round ones east of building B are building B's tanks (drawn below); the square one beside them does not exist.
 
     // ---------- tanks, grease trap and pipes as designed on SN-103 (2019, for submission)
     const NOTE_DES = { en: 'No size or level is written on the sheet: shown as a 150 mm pipe with 0.50 m of cover at its start, falling 1:100 (assumed).', th: 'ในแบบไม่มีขนาดหรือระดับระบุ แสดงเป็นท่อ 150 มม. มีดินกลบ 0.50 ม. ที่ต้นทาง ลาด 1:100 (ค่าสมมติ)' };
@@ -184,12 +166,6 @@ export default {
       return g;
     };
 
-    // building B: kitchen -> grease trap -> 4.00 m3 tank
-    const gIn = sewerIn(GT_IN, PIPE_START, 'Design: pipe from building B to the grease trap', 'ตามแบบออกแบบ: ท่อจากอาคาร B ไปถังดักไขมัน');
-    node(GT_IN[0][0], GT_IN[0][1], gIn[0][2], 'Design: start symbol inside building B', 'ตามแบบออกแบบ: สัญลักษณ์จุดเริ่มในอาคาร B');
-    const gtIn = last(gIn)[2], gtOut = r2(gtIn - 0.05);
-    const gOut = sewerIn(GT_OUT, gtOut, 'Design: pipe from the grease trap to the 4.00 m³ tank', 'ตามแบบออกแบบ: ท่อจากถังดักไขมันไปถัง 4.00 ลบ.ม.');
-
     for (const t of DESIGN) {
       const volTxt = t.vol.toFixed(2), h = r2(t.vol / (Math.PI * t.r * t.r)), top = -COVER, name = { en: `Design: treatment tank ${volTxt} m³ (${t.where.en})`, th: `ตามแบบออกแบบ: ถังบำบัด ${volTxt} ลบ.ม. (${t.where.th})` };
       let inL;
@@ -197,7 +173,7 @@ export default {
         const g = sewerIn(t.inPts, PIPE_START, `Design: pipe into the ${volTxt} m³ tank`, `ตามแบบออกแบบ: ท่อเข้าถัง ${volTxt} ลบ.ม.`);
         node(t.inPts[0][0], t.inPts[0][1], g[0][2], `Design: start symbol of the pipe into the ${volTxt} m³ tank`, `ตามแบบออกแบบ: สัญลักษณ์จุดเริ่มของท่อเข้าถัง ${volTxt} ลบ.ม.`);
         inL = last(g)[2];
-      } else inL = last(gOut)[2];
+      } else inL = PIPE_START;
       const outL = r2(inL - 0.05);
       const o = sewerOut(t.outPts, outL, `Design: pipe out of the ${volTxt} m³ tank`, `ตามแบบออกแบบ: ท่อออกจากถัง ${volTxt} ลบ.ม.`, t.outNote.en, t.outNote.th, t.id !== 'T10');
       node(last(t.outPts)[0], last(t.outPts)[1], last(o)[2], `Design: end symbol of the pipe out of the ${volTxt} m³ tank`, `ตามแบบออกแบบ: สัญลักษณ์จุดสิ้นสุดของท่อออกจากถัง ${volTxt} ลบ.ม.`, 1);
@@ -213,26 +189,41 @@ export default {
           BIOTECH[t.id].th,
           `แบบระบุเฉพาะปริมาตร ในโมเดลแสดงเป็นถังทรงกระบอกตั้ง กว้าง ${(2 * t.r).toFixed(2)} ม. (ตามวงกลมในแบบ) สูง ${h.toFixed(2)} ม. ซึ่งจุได้ ${volTxt} ลบ.ม. ถังจริงจะสูงกว่านี้เล็กน้อย`,
           `ความลึกเป็นค่าสมมติ: ดินกลบ ${COVER.toFixed(2)} ม. หลังถัง ${as(top)} ใต้ถัง ${as(top - h)} ท่อเข้า ${as(inL)} ท่อออก ${as(outL)} (ค่าสมมติ)`,
-          t.asBuilt.th]) }, V(t.x, t.y, t.id === 'T40' ? 1.3 : 0.7));
+          t.asBuilt.th]) }, V(t.x, t.y, 0.7));
       // small box drawn on a thin line from the tank
       const b = last(t.box);
       add('tanks', merge([boxGeo(0.25, 0.25, 0.3, b[0], b[1], 0, 0), pipeGeo(t.box.map(([x, y]) => [x, y, -0.3]), 0.02).geometry]), 'airPump', { en: `Design: small box beside the ${volTxt} m³ tank`, th: `ตามแบบออกแบบ: กล่องเล็กข้างถัง ${volTxt} ลบ.ม.`, kind: 'air',
         info: des(['A small box on a thin line from the tank, drawn on SN-103 without a label. Probably the air pump or the vent of the tank. Confirm on site.', 'Shown at ground level with its line 0.3 m down (assumed).'], ['กล่องเล็กบนเส้นบางจากถัง เขียนในแบบ SN-103 โดยไม่มีชื่อ น่าจะเป็นปั๊มลมหรือท่ออากาศของถัง ต้องยืนยันหน้างาน', 'แสดงที่ระดับพื้น เส้นท่ออยู่ลึก 0.3 ม. (ค่าสมมติ)']) });
     }
 
-    // grease trap of building B (added after the tanks so that the layer's legend colour is the treatment-tank colour)
-    add('tanks', boxGeo(GT.side, GT.side, GT.depth, GT.x, GT.y, -GT.depth, 0), 'grease', { en: 'Design: grease trap labelled 6.00 m³ (building B)', th: 'ตามแบบออกแบบ: ถังดักไขมันระบุ 6.00 ลบ.ม. (อาคาร B)', tag: 'Grease trap', tagTh: 'ถังดักไขมัน', kind: 'tank',
-      info: des(['Grease trap for building B, labelled 6.00 m³ on SN-103 (issued for submission 29/03/2019).',
-        'On the sheet it is a 1.10 m square with a round cover about 1.0 m across. That is far too small to hold 6.00 m³, so either the label or the symbol is not to scale. Check on site.',
-        'The approved model (Biotech spec pack, Aug 2019) is a BG-600 grease trap, 600 L: so the 6.00 m³ label is probably a slip for 0.60 m³.',
-        `Shown here as the 1.10 m square, ${GT.depth.toFixed(2)} m deep from the ground (assumed). Pipe in ${as(gtIn)}, pipe out ${as(gtOut)} (assumed).`,
-        'As drawn it overlaps the south-east corner of building B on the as-built sheet. The as-built sheet shows two round outlines and a square pit 2 to 7 m east of here instead.'],
-      ['ถังดักไขมันของอาคาร B ในแบบ SN-103 ระบุ 6.00 ลบ.ม. (ออกแบบเพื่อยื่นขออนุญาต 29/03/2019)',
-        'ในแบบเขียนเป็นสี่เหลี่ยม 1.10 ม. มีฝากลมกว้างประมาณ 1.0 ม. ซึ่งเล็กเกินไปสำหรับ 6.00 ลบ.ม. แสดงว่าตัวเลขหรือสัญลักษณ์ไม่ตรงมาตราส่วน ต้องตรวจสอบหน้างาน',
-        'รุ่นที่อนุมัติ (เอกสาร Biotech ส.ค. 2019) คือถังดักไขมัน BG-600 ขนาด 600 ลิตร ตัวเลข 6.00 ลบ.ม. จึงน่าจะพิมพ์ผิดจาก 0.60 ลบ.ม.',
-        `ในโมเดลแสดงเป็นสี่เหลี่ยม 1.10 ม. ลึก ${GT.depth.toFixed(2)} ม. จากผิวพื้น (ค่าสมมติ) ท่อเข้า ${as(gtIn)} ท่อออก ${as(gtOut)} (ค่าสมมติ)`,
-        'ตามที่เขียน ตำแหน่งนี้ทับมุมตะวันออกเฉียงใต้ของอาคาร B ในแบบก่อสร้างจริง แบบก่อสร้างจริงแสดงแนววงกลม 2 วงและบ่อสี่เหลี่ยม ห่างไปทางตะวันออก 2 ถึง 7 ม. แทน']) }, V(GT.x, GT.y, 1.9));
-    add('tanks', cylGeo(0.5, 0.03, GT.x, GT.y, 0), 'cover', { en: 'Grease trap cover (design)', th: 'ฝาถังดักไขมัน (ตามแบบออกแบบ)', nopick: 1 });
+    // ---------- building B (office): its two tanks, at the round outlines of the as-built sheet (no names there).
+    // Approved for building B (Biotech spec pack, Aug 2019): BG-600 grease trap + BO-4000 treatment tank. Which round tank is
+    // which is not on any sheet; the pipes take them in flow order (west first). Brian (28 Nov 2026): these are the office tanks.
+    {
+      const r = 1.0, h = 2.0, top = -COVER;
+      const NOTE_B = { en: 'Route assumed: SN-103 draws the pipe from building B to its design tank places 1 to 2.5 m west of here; it is shown running on to the as-built tanks. 150 mm pipe, 0.50 m of cover at the start, falling 1:100 (assumed).', th: 'แนวท่อเป็นค่าสมมติ: SN-103 เขียนท่อจากอาคาร B ไปตำแหน่งถังตามแบบ ห่างไปทางตะวันตก 1 ถึง 2.5 ม. ในโมเดลแสดงต่อไปถึงถังตามแบบก่อสร้างจริง ท่อ 150 มม. ดินกลบ 0.50 ม. ที่ต้นทาง ลาด 1:100 (ค่าสมมติ)' };
+      const bp = (pts, start, en, th, treated, tag) => { const g = grade(pts, start, PIPE_FALL);
+        pipe('sewer', g, PIPE_R, treated ? 'sewerTreated' : 'sewerRaw', { en, th, ...(tag ? { tag: 'Treated water out', tagTh: 'น้ำที่บำบัดแล้ว' } : {}), kind: 'pipe',
+          info: (m) => notes([`About ${m} m. Underside ${as(g[0][2])} at the start and ${as(last(g)[2])} at the end.`, NOTE_B.en], [`ยาวประมาณ ${m} ม. ท้องท่อ ${as(g[0][2])} ที่ต้นทาง และ ${as(last(g)[2])} ที่ปลายทาง`, NOTE_B.th], P) });
+        return g; };
+      const gIn = bp(B_IN, PIPE_START, 'Pipe from building B to its tanks', 'ท่อจากอาคาร B ไปถังของอาคาร B');
+      node(B_IN[0][0], B_IN[0][1], gIn[0][2], 'Design: start symbol inside building B', 'ตามแบบออกแบบ: สัญลักษณ์จุดเริ่มในอาคาร B');
+      const gLink = bp(B_LINK, r2(last(gIn)[2] - 0.05), 'Pipe between the two building B tanks', 'ท่อระหว่างถังสองใบของอาคาร B');
+      const gOut = bp(B_OUT, r2(last(gLink)[2] - 0.05), 'Pipe out of the building B tanks', 'ท่อออกจากถังของอาคาร B', 1, 1);
+      node(last(B_OUT)[0], last(B_OUT)[1], last(gOut)[2], 'Design: end symbol of the pipe out of the building B tanks', 'ตามแบบออกแบบ: สัญลักษณ์จุดสิ้นสุดของท่อออกจากถังของอาคาร B', 1);
+      B_TANKS.forEach(([x, y, w, wTh], i) => {
+        add('tanks', cylGeo(r, h, x, y, top - h), 'tank', { en: `Building B (office) tank, ${w} one`, th: `ถังของอาคาร B (สำนักงาน) ใบด้าน${wTh}`, ...(i ? {} : { tag: 'Office tanks (BG-600 + BO-4000)', tagTh: 'ถังสำนักงาน (BG-600 + BO-4000)' }), kind: 'tank',
+          info: ab(['One of building B\'s (office) two underground tanks: a round outline 2.00 m across just east of the building, side by side with the other.',
+            'Approved for building B (Biotech spec pack, Aug 2019): a BG-600 grease trap (600 L) and a BO-4000 treatment tank (4,000 L, DLX-80 air pump). The sheet does not say which round tank is which; the pipes here take the west one first. Confirm on site.',
+            'The 2019 design sheet SN-103 put these two tanks 1 to 2.5 m further west (its grease trap label "6.00 m³" is probably a slip for 0.60 m³). They are the same two tanks, so they are shown once, here (Brian, 28 Nov 2026).',
+            `Depth assumed: ${COVER.toFixed(2)} m of cover and ${h.toFixed(2)} m high, so top ${as(top)} and underside ${as(top - h)}.`],
+          ['ถังใต้ดิน 1 ใน 2 ใบของอาคาร B (สำนักงาน): แนววงกลมกว้าง 2.00 ม. ด้านตะวันออกของอาคาร วางคู่กับอีกใบ',
+            'รุ่นที่อนุมัติสำหรับอาคาร B (เอกสาร Biotech ส.ค. 2019): ถังดักไขมัน BG-600 (600 ลิตร) และถังบำบัด BO-4000 (4,000 ลิตร เครื่องเติมอากาศ DLX-80) แบบไม่ได้ระบุว่าใบใดเป็นรุ่นใด ในโมเดลท่อเข้าใบด้านตะวันตกก่อน ต้องยืนยันหน้างาน',
+            'แบบออกแบบ SN-103 ปี 2019 วางถังสองใบนี้ไว้ทางตะวันตกอีก 1 ถึง 2.5 ม. (ตัวเลขถังดักไขมัน "6.00 ลบ.ม." น่าจะพิมพ์ผิดจาก 0.60 ลบ.ม.) เป็นถังชุดเดียวกัน จึงแสดงเพียงครั้งเดียวที่นี่ (Brian, 28 พ.ย. 2026)',
+            `ความลึกเป็นค่าสมมติ: ดินกลบ ${COVER.toFixed(2)} ม. ถังสูง ${h.toFixed(2)} ม. หลังถัง ${as(top)} ใต้ถัง ${as(top - h)}`]) }, i ? null : V(76.3, 38.14, 1.3));
+        add('tanks', cylGeo(0.3, 0.03, x, y, 0), 'cover', { en: 'Building B tank cover', th: 'ฝาถังอาคาร B', nopick: 1 });
+      });
+    }
 
     // ---------- site drains, sumps and outfall pits (as-built sheet; depths assumed)
     const ends = {}, levelAt = new Map(), key = (x, y) => `${+x.toFixed(2)},${+y.toFixed(2)}`;

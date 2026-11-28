@@ -8,8 +8,11 @@
 //      tanks (blocks "mc-12a_pl" on layer FIBERGLASS TANK, the strapped front tank, the round tanks) and three outlet pits.
 //   B  A-103 "ผังแสดงระบบจ่ายน้ำประปา" (water supply, 1:200): same plan with the water pipes; legend: 20,000 L water storage
 //      tank, Grundfos CMB5-46PT pump, HDPE 1" pipe. Floor levels +0.35 (shops, mart, toilets).
-//   C  6-9 "แบบขยายถังบำบัด": the Bio-San catalogue sheet (all grease trap and aeration tank sizes); it does not say which
-//      model is installed here.
+//   C  6-9 "แบบขยายถังบำบัด": its layouts (paper space) are three Biotech details: grease trap 2,200 L (BG-2200, Ø1.635 m),
+//      grease trap 800 L (BG-800, Ø1.185 m) and a 15,000 L contact aeration biofilter tank (CAB-15-D2.0-M2, Ø2.0 × 5.0 m,
+//      three Ø600 lids, wire-rope tie-downs); model space also holds a Bio-San catalogue. It does not say which tank is where.
+//   From Brian (28 Nov 2026): the office has one toilet, so one office tank (A-104 draws two round symbols there); the four
+//   round tanks in the east planter are BG-2200 or BG-800 grease traps, but which is which (and how many of each) is not known.
 //   From Brian (26 Nov 2026, from the site visit of 21 Nov): the clean-water tank is under the disabled parking bay beside the
 //   building (two lids); the tank under the walkway behind the toilets (three lids) is the septic tank; the sales building is
 //   two storeys, the office one storey; Aqua sampled both oil traps (entrance side and exit side) at their outlet pipe.
@@ -95,7 +98,7 @@ export default {
     { id: 'septic', en: 'Septic tank behind the toilets', th: 'ถังบำบัดหลังห้องน้ำ', from: [1184, -6, 9], to: [1193.5, 5, -1] },
     { id: 'front', en: 'Front tank and exit-side oil trap', th: 'ถังด้านหน้าและบ่อดักน้ำมันฝั่งทางออก', from: [1176, -46, 11], to: [1187, -31, -1] },
     { id: 'water', en: 'Clean-water tank', th: 'ถังเก็บน้ำดี', from: [1172, -9, 7], to: [1182, 0, -1.5] },
-    { id: 'office', en: 'Office tanks and entrance-side oil trap', th: 'ถังที่สำนักงานและบ่อดักน้ำมันฝั่งทางเข้า', from: [1146, -40, 12], to: [1134, -24, -1] },
+    { id: 'office', en: 'Office tank and entrance-side oil trap', th: 'ถังที่สำนักงานและบ่อดักน้ำมันฝั่งทางเข้า', from: [1146, -40, 12], to: [1134, -24, -1] },
     { id: 'fuel', from: [1152, -16, 8], to: [1138.5, -3.4, -1.8] },
     { id: 'under', from: [1150, -62, -11], to: [1168, -18, -0.5] },
   ],
@@ -132,42 +135,53 @@ export default {
 
     // ---------- the strapped tank in the front lawn (A-104: three MH-600 lids, tie-down straps, FLEX 4" ends, "+0.40")
     {
-      const x = 1191.46, y = -30.48, rot = 3.6, len = 5.0, r = 1.14, g0 = 0.40, top = r2(g0 - 0.30), axis = top - r, inL = r2(top - 0.25), outL = r2(inL - 0.10);
+      const x = 1191.46, y = -30.48, rot = 3.6, len = 5.0, r = 1.0, g0 = 0.40, top = r2(g0 - 0.30), axis = top - r, inL = r2(top - 0.25), outL = r2(inL - 0.10);
       add('tanks', capsuleGeo(r, len, x, y, axis, rot, 0.28), 'tank', { en: 'Treatment tank in the front lawn', th: 'ถังบำบัดในสนามหญ้าด้านหน้า', tag: 'Front tank', tagTh: 'ถังด้านหน้า', kind: 'tank',
-        info: lines([`Lying tank in the lawn in front of the sales building, ${len.toFixed(1)} × 2.3 m outline on A-104 (about 18,000 L), three lids, strapped down to its base. Lawn level +0.40.`,
-          'The pipe drawn into its east end comes down the east planter past the four round tanks beside the shops; its west end goes along the front of the building to the exit-side oil trap.',
+        info: lines([`Lying tank in the lawn in front of the sales building, ${len.toFixed(1)} × 2.3 m outline on A-104 (tank and its straps), three lids, strapped down to its base. Lawn level +0.40.`,
+          'Most likely the Biotech CAB-15-D2.0-M2 on sheet 6-9: a 15,000 L contact aeration biofilter tank, Ø2.0 × 5.0 m, three Ø600 lids, tied down with wire-rope slings (designed for 6.3 m³/day, BOD in 489 → out 15 mg/L). The length, lids and straps all match; shown at that size. Confirm the model on site.',
+          'The pipe drawn into its east end comes down the east planter past the four grease traps beside the shops; its west end goes along the front of the building to the exit-side oil trap.',
           `Top of tank about ${lv(top)}, pipe in about ${lv(inL)}, out about ${lv(outL)} (assumed).`,
-          'Not named on the drawing. Taken as the treatment tank for the shops and mart (after their grease traps): confirm on site.'],
-        [`ถังนอนในสนามหญ้าหน้าอาคารขาย แนวใน A-104 ขนาด ${len.toFixed(1)} × 2.3 ม. (ประมาณ 18,000 ลิตร) มีฝา 3 ฝา ยึดกับฐานด้วยสายรัด ระดับสนามหญ้า +0.40`,
-          'ท่อที่เข้าปลายด้านตะวันออกมาจากแนวกระบะต้นไม้ด้านตะวันออก ผ่านถังกลม 4 ถังข้างร้านค้า ปลายด้านตะวันตกไปตามหน้าอาคารถึงบ่อดักน้ำมันฝั่งทางออก',
+          'Not named on A-104. Taken as the treatment tank for the shops and mart (after their grease traps): confirm on site.'],
+        [`ถังนอนในสนามหญ้าหน้าอาคารขาย แนวใน A-104 ขนาด ${len.toFixed(1)} × 2.3 ม. (ตัวถังและสายรัด) มีฝา 3 ฝา ยึดกับฐานด้วยสายรัด ระดับสนามหญ้า +0.40`,
+          'น่าจะเป็น Biotech CAB-15-D2.0-M2 ตามแผ่น 6-9: ถังบำบัดแบบเติมอากาศมีตัวกลาง 15,000 ลิตร Ø2.0 × 5.0 ม. ฝา Ø600 3 ฝา ยึดด้วยลวดสลิง (ออกแบบ 6.3 ลบ.ม./วัน BOD เข้า 489 ออก 15 มก./ล.) ความยาว ฝา และสายรัดตรงกัน จึงแสดงตามขนาดนี้ ต้องยืนยันรุ่นหน้างาน',
+          'ท่อที่เข้าปลายด้านตะวันออกมาจากแนวกระบะต้นไม้ด้านตะวันออก ผ่านถังดักไขมัน 4 ถังข้างร้านค้า ปลายด้านตะวันตกไปตามหน้าอาคารถึงบ่อดักน้ำมันฝั่งทางออก',
           `หลังถังประมาณ ${lv(top)} ท่อเข้าประมาณ ${lv(inL)} ท่อออกประมาณ ${lv(outL)} (ค่าสมมติ)`,
-          'ในแบบไม่ได้ระบุชื่อ ถือว่าเป็นถังบำบัดของร้านค้าและมินิมาร์ท (หลังถังดักไขมัน) ต้องยืนยันหน้างาน'], P) }, V(x, y, g0 + 0.8));
+          'ใน A-104 ไม่ได้ระบุชื่อ ถือว่าเป็นถังบำบัดของร้านค้าและมินิมาร์ท (หลังถังดักไขมัน) ต้องยืนยันหน้างาน'], P) }, V(x, y, g0 + 0.8));
       for (const [lx, ly] of [[1189.71, -30.59], [1191.21, -30.49], [1193.20, -30.37]]) lid(lx, ly, top, 0.3, 'Front tank lid', 'ฝาถังด้านหน้า');
       pipe('sewer', [[1198.85, -2.2, -0.05], [1198.95, -6.0], [1199.25, -10.4], [1199.95, -21.7], [1200.1, -27.0], [1199.95, -30.22], [1194.0, -30.40, inL]], 0.05, 'sewerRaw', { en: 'East planter pipe to the front tank', th: 'ท่อในกระบะต้นไม้ด้านตะวันออกไปถังด้านหน้า', kind: 'pipe',
-        info: (m) => lines([`Thin line drawn down the east planter (past the four round tanks) and west into the front tank. About ${m} m.`, ASSUMED_PIPE.en], [`เส้นท่อเล็กที่เขียนลงตามกระบะต้นไม้ด้านตะวันออก (ผ่านถังกลม 4 ถัง) แล้วไปทางตะวันตกเข้าถังด้านหน้า ยาวประมาณ ${m} ม.`, ASSUMED_PIPE.th], P) });
+        info: (m) => lines([`Thin line drawn down the east planter (past the four grease traps) and west into the front tank. About ${m} m.`, ASSUMED_PIPE.en], [`เส้นท่อเล็กที่เขียนลงตามกระบะต้นไม้ด้านตะวันออก (ผ่านถังดักไขมัน 4 ถัง) แล้วไปทางตะวันตกเข้าถังด้านหน้า ยาวประมาณ ${m} ม.`, ASSUMED_PIPE.th], P) });
       pipe('sewer', [[1188.9, -30.62, outL], [1185.75, -30.75], [1185.75, -29.45], [1181.7, -29.45], [1181.55, -30.55, outL - 0.12]], 0.05, 'sewerTreated', { en: 'Front tank outlet to the exit-side oil trap', th: 'ท่อออกจากถังด้านหน้าไปบ่อดักน้ำมันฝั่งทางออก', kind: 'pipe',
         info: (m) => lines([`West along the front of the building and into the exit-side oil trap. About ${m} m.`, ASSUMED_PIPE.en], [`ไปทางตะวันตกตามหน้าอาคารเข้าบ่อดักน้ำมันฝั่งทางออก ยาวประมาณ ${m} ม.`, ASSUMED_PIPE.th], P) });
     }
 
-    // ---------- round tanks beside the shops (east planter) and at the office (Bio-San style symbol on A-104)
+    // ---------- round tanks beside the shops (east planter): Brian (28 Nov 2026) BG-2200 or BG-800 grease traps, mix not known.
+    // A-104 draws all four with the same Ø1.19 m symbol (the BG-800 size on sheet 6-9), so they are shown at that size.
     [[1198.41, -2.77], [1198.61, -6.00], [1198.89, -10.39], [1199.61, -21.72]].forEach(([x, y], i) => {
       const g0 = ground(x, y);
-      add('tanks', cylGeo(0.6, 1.3, x, y, g0 - 0.1 - 1.3), 'grease', { en: `Round tank ${i + 1} in the east planter`, th: `ถังกลม ${i + 1} ในกระบะต้นไม้ด้านตะวันออก`, ...(i === 0 ? { tag: 'Grease traps (shops)', tagTh: 'ถังดักไขมัน (ร้านค้า)' } : {}), kind: 'tank',
-        info: lines([`Round tank in the planter along the east side of the shops (one of four), drawn with the Bio-San symbol. Shown 1.2 m across and 1.3 m deep (assumed).`, 'Most likely the grease trap of the shop or mart beside it; the drawing does not name it.'],
-          [`ถังกลมในกระบะต้นไม้ด้านตะวันออกของร้านค้า (1 ใน 4 ถัง) เขียนด้วยสัญลักษณ์ Bio-San แสดงกว้าง 1.2 ม. ลึก 1.3 ม. (ค่าสมมติ)`, 'น่าจะเป็นถังดักไขมันของร้านค้าหรือมินิมาร์ทข้างเคียง ในแบบไม่ได้ระบุชื่อ'], P) }, i === 0 ? V(x, y, g0 + 0.8) : null);
-      add('tanks', cylGeo(0.28, 0.03, x, y, g0), 'cover', { en: 'Round tank lid', th: 'ฝาถังกลม', nopick: 1 });
+      add('tanks', cylGeo(0.59, 1.4, x, y, g0 - 0.1 - 1.4), 'grease', { en: `Grease trap ${i + 1} in the east planter (BG-2200 or BG-800)`, th: `ถังดักไขมัน ${i + 1} ในกระบะต้นไม้ด้านตะวันออก (BG-2200 หรือ BG-800)`, ...(i === 0 ? { tag: 'Grease traps (shops) · BG-2200 or BG-800', tagTh: 'ถังดักไขมัน (ร้านค้า) · BG-2200 หรือ BG-800' } : {}), kind: 'tank',
+        info: lines([`Round grease trap in the planter along the east side of the shops (one of four), for the shop or mart beside it.`,
+          'Biotech BG-2200 (2,200 L, Ø1.635 m) or BG-800 (800 L, Ø1.185 m): both are detailed on sheet 6-9. Which of the four is which, and how many of each, is not known (Brian, 28 Nov 2026), so the four together hold between 3,200 and 8,800 L.',
+          'A-104 draws all four with the same Ø1.19 m symbol (the BG-800 size), so they are shown at that size, 1.4 m deep (assumed). Check on site: lift the lids and read the label.'],
+          [`ถังดักไขมันทรงกลมในกระบะต้นไม้ด้านตะวันออกของร้านค้า (1 ใน 4 ถัง) ของร้านค้าหรือมินิมาร์ทข้างเคียง`,
+            'Biotech BG-2200 (2,200 ลิตร Ø1.635 ม.) หรือ BG-800 (800 ลิตร Ø1.185 ม.) มีแบบขยายทั้งสองรุ่นในแผ่น 6-9 ไม่ทราบว่าถังใดเป็นรุ่นใด และรุ่นละกี่ถัง (Brian, 28 พ.ย. 2026) ทั้ง 4 ถังรวมกันจึงจุได้ระหว่าง 3,200 ถึง 8,800 ลิตร',
+            'ใน A-104 เขียนทั้ง 4 ถังด้วยสัญลักษณ์ Ø1.19 ม. เท่ากัน (ขนาด BG-800) จึงแสดงตามขนาดนั้น ลึก 1.4 ม. (ค่าสมมติ) ต้องตรวจสอบหน้างาน: เปิดฝาดูป้ายรุ่น'], P) }, i === 0 ? V(x, y, g0 + 0.8) : null);
+      add('tanks', cylGeo(0.28, 0.03, x, y, g0), 'cover', { en: 'Grease trap lid', th: 'ฝาถังดักไขมัน', nopick: 1 });
     });
-    [[1134.67, -19.45, 'Office tank 1', 'ถังสำนักงาน 1', 'The office WC pipe comes in from the north; its outlet goes south-west to manhole W4 on the west drain.', 'ท่อจากห้องน้ำสำนักงานเข้าทางด้านเหนือ ท่อออกไปทางตะวันตกเฉียงใต้ลงบ่อพัก W4 บนท่อระบายน้ำด้านตะวันตก'],
-      [1136.49, -20.39, 'Office tank 2', 'ถังสำนักงาน 2', 'A pipe from the office comes in from the north; no outlet pipe is drawn from it.', 'มีท่อจากสำนักงานเข้าทางด้านเหนือ ไม่ได้เขียนท่อออกจากถังนี้']].forEach(([x, y, en, th, n, nTh], i) => {
-      const g0 = ground(x, y);
-      add('tanks', cylGeo(0.82, 1.6, x, y, g0 - 0.1 - 1.6), 'tank', { en, th, ...(i === 0 ? { tag: 'Office tanks', tagTh: 'ถังสำนักงาน' } : {}), kind: 'tank',
-        info: lines([`Round tank south of the office, 1.64 m across (outline on A-104), drawn with the Bio-San symbol; shown 1.6 m deep (assumed).`, n, 'Which Bio-San model is not written: sheet 6-9 is the catalogue of all sizes.'],
-          [`ถังกลมด้านใต้ของสำนักงาน กว้าง 1.64 ม. (แนวจาก A-104) เขียนด้วยสัญลักษณ์ Bio-San แสดงลึก 1.6 ม. (ค่าสมมติ)`, nTh, 'ไม่ได้ระบุรุ่น Bio-San แผ่น 6-9 เป็นแค็ตตาล็อกทุกขนาด'], P) }, i === 0 ? V(x, y, g0 + 0.8) : null);
+    // ---------- office tank. A-104 draws two round symbols south of the office, but the office has ONE toilet, so ONE tank
+    // (Brian, 28 Nov 2026). The second symbol (east, with no outlet drawn) is left out.
+    {
+      const x = 1134.67, y = -19.45, g0 = ground(x, y);
+      add('tanks', cylGeo(0.82, 1.6, x, y, g0 - 0.1 - 1.6), 'tank', { en: 'Office tank', th: 'ถังสำนักงาน', tag: 'Office tank', tagTh: 'ถังสำนักงาน', kind: 'tank',
+        info: lines(['Round tank south of the office, for the office\'s one toilet. 1.64 m across on A-104; shown 1.6 m deep (assumed).',
+          'The office WC pipe comes in from the north; its outlet goes south-west to manhole W4 on the west drain.',
+          'The model is not written. The symbol is the same size as the Biotech BG-2200 on sheet 6-9 (Ø1.635 m). A-104 draws a second round tank beside it, but the office has only one toilet, so there is one tank (Brian, 28 Nov 2026).'],
+          ['ถังกลมด้านใต้ของสำนักงาน สำหรับห้องน้ำ 1 ห้องของสำนักงาน กว้าง 1.64 ม. ตาม A-104 แสดงลึก 1.6 ม. (ค่าสมมติ)',
+            'ท่อจากห้องน้ำสำนักงานเข้าทางด้านเหนือ ท่อออกไปทางตะวันตกเฉียงใต้ลงบ่อพัก W4 บนท่อระบายน้ำด้านตะวันตก',
+            'ไม่ได้ระบุรุ่น สัญลักษณ์มีขนาดเท่ากับ Biotech BG-2200 ในแผ่น 6-9 (Ø1.635 ม.) ใน A-104 เขียนถังกลมอีกใบข้างกัน แต่สำนักงานมีห้องน้ำเพียง 1 ห้อง จึงมีถังเดียว (Brian, 28 พ.ย. 2026)'], P) }, V(x, y, g0 + 0.8));
       add('tanks', cylGeo(0.28, 0.03, x, y, g0), 'cover', { en: 'Office tank lid', th: 'ฝาถังสำนักงาน', nopick: 1 });
-    });
-    pipe('sewer', [[1134.55, -17.65, -0.15], [1134.6, -18.7, -0.20]], 0.05, 'sewerRaw', { en: 'Office WC to office tank 1', th: 'ท่อจากห้องน้ำสำนักงานเข้าถังสำนักงาน 1', kind: 'pipe', info: lines(['Short 4" pipe from the office WC.', ASSUMED_PIPE.en], ['ท่อ 4 นิ้วสั้นๆ จากห้องน้ำสำนักงาน', ASSUMED_PIPE.th], P) });
-    pipe('sewer', [[1136.5, -17.65, -0.15], [1136.5, -19.6, -0.20]], 0.05, 'sewerRaw', { en: 'Office to office tank 2', th: 'ท่อจากสำนักงานเข้าถังสำนักงาน 2', kind: 'pipe', info: lines(['Short 4" pipe from the office.', ASSUMED_PIPE.en], ['ท่อ 4 นิ้วสั้นๆ จากสำนักงาน', ASSUMED_PIPE.th], P) });
-    pipe('sewer', [[1134.4, -20.25, -0.30], [1134.0, -21.2], [1132.0, -22.85, -0.40]], 0.05, 'sewerTreated', { en: 'Office tank 1 outlet to manhole W4', th: 'ท่อออกจากถังสำนักงาน 1 ลงบ่อพัก W4', kind: 'pipe',
+    }
+    pipe('sewer', [[1134.55, -17.65, -0.15], [1134.6, -18.7, -0.20]], 0.05, 'sewerRaw', { en: 'Office WC to the office tank', th: 'ท่อจากห้องน้ำสำนักงานเข้าถังสำนักงาน', kind: 'pipe', info: lines(['Short 4" pipe from the office WC.', ASSUMED_PIPE.en], ['ท่อ 4 นิ้วสั้นๆ จากห้องน้ำสำนักงาน', ASSUMED_PIPE.th], P) });
+    pipe('sewer', [[1134.4, -20.25, -0.30], [1134.0, -21.2], [1132.0, -22.85, -0.40]], 0.05, 'sewerTreated', { en: 'Office tank outlet to manhole W4', th: 'ท่อออกจากถังสำนักงานลงบ่อพัก W4', kind: 'pipe',
       info: (m) => lines([`South-west into manhole W4 on the west drain. About ${m} m.`, ASSUMED_PIPE.en], [`ไปทางตะวันตกเฉียงใต้เข้าบ่อพัก W4 บนท่อระบายน้ำด้านตะวันตก ยาวประมาณ ${m} ม.`, ASSUMED_PIPE.th], P) });
 
     // ---------- clean-water tank under the disabled parking bay (A-104 block on the "Tank" layer; Brian: water tank)

@@ -116,7 +116,7 @@ export default {
     const GROUND_EN = `Ground is taken as ${lv(G0)} over the whole site (see the levels note), so depths are approximate.`;
     const GROUND_TH = `ถือว่าระดับพื้นทั้งสถานีอยู่ที่ ${lv(G0)} (ดูหมายเหตุเรื่องระดับ) ความลึกจึงเป็นค่าประมาณ`;
 
-    // ---------- the three large treatment tanks (lying), plus the unnamed outline beside the 18,000 L tank
+    // ---------- the three large treatment tanks (lying), plus the clean-water tank beside the 18,000 L tank
     const lying = (t, top) => {
       const r = t.dia / 2, axis = top - r, [ux, uy] = unit(t.rot), cap = 0.5;
       const parts = [capsuleGeo(r, t.len, t.x, t.y, axis, t.rot)];   // lying capsule, slightly rounded ends
@@ -143,16 +143,20 @@ export default {
           ...(t.extra ? [t.extra.th] : []), SITE_VISIT_TANK.th], P) }, V(t.x, t.y, G0 + 0.7));
       covers(t, top);
     }
-    { // outline with two covers drawn west of the 18,000 L tank: no name, no level, no pipe into it
-      const t = { id: 'Unnamed tank', x: 113.15, y: 135.15, rot: -0.8, len: 7.2, dia: 2.0, covers: [[110.65, 135.2], [115.7, 135.15]] }, top = -1.05;
-      add('tanks', lying(t, top), 'tank', { en: 'Tank outline with no name · behind the toilets', th: 'แนวถังที่ไม่มีชื่อ · หลังห้องน้ำ', tag: 'Tank (no name on the layout)', tagTh: 'ถัง (ผังไม่ระบุชื่อ)', kind: 'tank',
-        info: lines(['A second tank outline with two covers is drawn beside the SP-T-18,000 L tank: 7.20 m long, 2.00 m across.',
-          'The layout gives it no name and no level, and draws no pipe into or out of it. The 4" pipe from the north grease traps passes along its north edge.',
-          'Shown at the same depth as the SP-T-18,000 L tank (assumed). Check on site what this tank is and whether it is connected.'],
-        ['มีแนวถังอีกใบพร้อมฝา 2 ฝา เขียนอยู่ข้างถัง SP-T-18,000 L: ยาว 7.20 ม. กว้าง 2.00 ม.',
-          'ผังไม่ได้ระบุชื่อหรือระดับ และไม่ได้เขียนท่อเข้าหรือท่อออก ท่อ 4 นิ้วจากถังดักไขมันด้านหลังเดินผ่านขอบด้านเหนือของถังนี้',
-          'แสดงที่ความลึกเดียวกับถัง SP-T-18,000 L (ค่าสมมติ) ต้องตรวจสอบหน้างานว่าเป็นถังอะไรและต่อใช้งานอยู่หรือไม่'], P) }, V(t.x, t.y, G0 + 0.7));
-      covers(t, top);
+    { // outline with two covers drawn west of the 18,000 L tank. Brian (28 Nov 2026): it is the clean-water (fresh water) tank;
+      // on the toilet sanitary plan the green water line (W PVC 4") runs into it, the soil pipes pass it to the SP-T-18,000 L.
+      const t = { id: 'Clean-water tank', x: 113.15, y: 135.15, rot: -0.8, len: 7.2, dia: 2.0, covers: [[110.65, 135.2], [115.7, 135.15]] }, top = -1.05;
+      add('water', lying(t, top), 'waterTank', { en: 'Clean-water tank · behind the toilets', th: 'ถังเก็บน้ำดี · หลังห้องน้ำ', tag: 'Clean-water tank', tagTh: 'ถังเก็บน้ำดี', kind: 'tank',
+        info: lines(['Underground clean-water (fresh water) tank beside the SP-T-18,000 L treatment tank: 7.20 m long, 2.00 m across, two covers (outline on the layout, which gives it no name).',
+          'Brian (28 Nov 2026): this is the fresh water tank, not a wastewater tank. On the toilet sanitary plan the water supply line (W PVC 4") runs into it and on to the toilets; the soil pipes pass it and go into the SP-T-18,000 L tank.',
+          'Capacity and maker are not written on any drawing on file. Shown at the same depth as the SP-T-18,000 L tank (assumed). Not wastewater: shown because it is in the way of any digging here.'],
+        ['ถังเก็บน้ำดีใต้ดินข้างถังบำบัด SP-T-18,000 L: ยาว 7.20 ม. กว้าง 2.00 ม. มีฝา 2 ฝา (แนวตามผัง ซึ่งไม่ได้ระบุชื่อ)',
+          'Brian (28 พ.ย. 2026): ถังนี้คือถังน้ำดี ไม่ใช่ถังน้ำเสีย ในแบบสุขาภิบาลห้องน้ำ ท่อน้ำประปา (W PVC 4 นิ้ว) เข้าถังนี้แล้วไปห้องน้ำ ส่วนท่อโสโครกเดินผ่านไปเข้าถัง SP-T-18,000 L',
+          'ไม่มีขนาดความจุและผู้ผลิตในแบบที่มี แสดงที่ความลึกเดียวกับถัง SP-T-18,000 L (ค่าสมมติ) ไม่ใช่ระบบน้ำเสีย แสดงไว้เพราะกีดขวางงานขุดบริเวณนี้'], P) }, V(t.x, t.y, G0 + 0.7));
+      for (const [mx, my] of t.covers) {
+        if (G0 > top) add('water', cylGeo(0.3, G0 - top, mx, my, top), 'waterTank', { en: 'Water tank access', th: 'ช่องเปิดถังน้ำ', nopick: 1 });
+        add('water', cylGeo(0.33, 0.03, mx, my, G0), 'cover', { en: 'Water tank cover', th: 'ฝาถังน้ำ', nopick: 1 });
+      }
     }
 
     // ---------- round tanks: grease traps and the two small SP-T-1600 tanks
